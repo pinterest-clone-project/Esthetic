@@ -1,0 +1,6 @@
+@backend_pinterest_HostAddress = http://localhost:5202
+
+GET {{backend_pinterest_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
