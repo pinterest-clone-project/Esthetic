@@ -1,0 +1,5 @@
+2026-03-26 19:28:36.626 +02:00 [INF] Now listening on: https://localhost:7063
+2026-03-26 19:28:36.668 +02:00 [INF] Now listening on: http://localhost:5202
+2026-03-26 19:28:36.718 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-26 19:28:36.720 +02:00 [INF] Hosting environment: Development
+2026-03-26 19:28:36.722 +02:00 [INF] Content root path: D:\Programming\Pinterest-clone-diploma\backend-pinterest\backend-pinterest
