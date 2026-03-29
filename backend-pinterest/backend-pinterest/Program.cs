@@ -1,3 +1,4 @@
+using backend_pinterest.Extensions;
 using Serilog;
 using Serilog.Events;
 
@@ -16,29 +17,19 @@ try
         .ReadFrom.Services(services)
     );
 
-    // Add services to the container.
-
-    builder.Services.AddControllers();
+    builder.ConfigureApplicationBuilder();
 
     var app = builder.Build();
 
-    // Configure the HTTP request pipeline.
-
-    app.UseSerilogRequestLogging();
-
-    app.UseAuthorization();
-
-    app.MapControllers();
+    app.ConfigureApplication();
 
     app.Run();
 }
-catch (Exception ex)
+catch (Exception ex) when (ex is not Microsoft.Extensions.Hosting.HostAbortedException)
 {
-    Log.Fatal(ex, "Application falied to start");
+    Log.Fatal(ex, "Application failed to start");
 }
 finally
 {
     Log.CloseAndFlush();
 }
-
-
