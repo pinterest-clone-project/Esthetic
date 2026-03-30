@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="Application/Application.csproj" Id="50ae3d61-5968-4b87-8b76-b33d75d3c53e" />
   <Project Path="backend-pinterest/backend-pinterest.csproj" />
+  <Project Path="Domain/Domain.csproj" Id="02b9593c-99c9-4125-a748-ee58a2f8c627" />
+  <Project Path="Infrastructure/Infrastructure.csproj" Id="1c1103bf-9cd1-4b49-b2b2-373ec7c43b49" />
 </Solution>

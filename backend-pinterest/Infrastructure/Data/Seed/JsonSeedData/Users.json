@@ -1,0 +1,147 @@
+[
+  {
+    "UserName": "johndoe",
+    "FirstName": "John",
+    "LastName": "Doe",
+    "Email": "johndoe@example.com",
+    "Password": "Password123!",
+    "PhoneNumber": "+1234567890",
+    "Image": "https://thispersondoesnotexist.com/"
+  },
+  {
+    "UserName": "janedoe",
+    "FirstName": "Jane",
+    "LastName": "Doe",
+    "Email": "janedoe@example.com",
+    "Password": "SecurePass456!Q",
+    "PhoneNumber": "+1234567891",
+    "Image": "https://thispersondoesnotexist.com/"
+  },
+  {
+    "UserName": "bobjohnson",
+    "FirstName": "Bob",
+    "LastName": "Johnson",
+    "Email": "bob.johnson@example.com",
+    "Password": "BobPass789!",
+    "PhoneNumber": "+1234567892",
+    "Image": "https://thispersondoesnotexist.com/"
+  },
+  {
+    "UserName": "alicewong",
+    "FirstName": "Alice",
+    "LastName": "Wong",
+    "Email": "alice.wong@example.com",
+    "Password": "AlicePass321!",
+    "PhoneNumber": "+1234567893",
+    "Image": "https://thispersondoesnotexist.com/"
+  },
+  {
+    "UserName": "charlessmith",
+    "FirstName": "Charles",
+    "LastName": "Smith",
+    "Email": "charles.smith@example.com",
+    "Password": "CharlesPass654!",
+    "PhoneNumber": "+1234567894",
+    "Image": "https://thispersondoesnotexist.com/"
+  },
+  {
+    "UserName": "maryjones",
+    "FirstName": "Mary",
+    "LastName": "Jones",
+    "Email": "mary.jones@example.com",
+    "Password": "MaryPass987!",
+    "PhoneNumber": "+1234567895",
+    "Image": "https://thispersondoesnotexist.com/"
+  },
+  {
+    "UserName": "davidbrown",
+    "FirstName": "David",
+    "LastName": "Brown",
+    "Email": "david.brown@example.com",
+    "Password": "DavidPass147!",
+    "PhoneNumber": "+1234567896",
+    "Image": "https://thispersondoesnotexist.com/"
+  },
+  {
+    "UserName": "emilydavis",
+    "FirstName": "Emily",
+    "LastName": "Davis",
+    "Email": "emily.davis@example.com",
+    "Password": "EmilyPass258!",
+    "PhoneNumber": "+1234567897",
+    "Image": "https://thispersondoesnotexist.com/"
+  },
+  {
+    "UserName": "michaelmiller",
+    "FirstName": "Michael",
+    "LastName": "Miller",
+    "Email": "michael.miller@example.com",
+    "Password": "MichaelPass369!",
+    "PhoneNumber": "+1234567898",
+    "Image": "https://thispersondoesnotexist.com/"
+  },
+  {
+    "UserName": "saragarcia",
+    "FirstName": "Sara",
+    "LastName": "Garcia",
+    "Email": "sara.garcia@example.com",
+    "Password": "SaraPass741!",
+    "PhoneNumber": "+1234567899",
+    "Image": "https://thispersondoesnotexist.com/"
+  },
+  {
+    "UserName": "williamperez",
+    "FirstName": "William",
+    "LastName": "Perez",
+    "Email": "william.perez@example.com",
+    "Password": "WilliamPass852!",
+    "PhoneNumber": "+1234567800",
+    "Image": "https://thispersondoesnotexist.com/"
+  },
+  {
+    "UserName": "karenmartinez",
+    "FirstName": "Karen",
+    "LastName": "Martinez",
+    "Email": "karen.martinez@example.com",
+    "Password": "KarenPass963!",
+    "PhoneNumber": "+1234567801",
+    "Image": "https://thispersondoesnotexist.com/"
+  },
+  {
+    "UserName": "jameslee",
+    "FirstName": "James",
+    "LastName": "Lee",
+    "Email": "james.lee@example.com",
+    "Password": "JamesPass159!",
+    "PhoneNumber": "+1234567802",
+    "Image": "https://thispersondoesnotexist.com/"
+  },
+  {
+    "UserName": "angelawilson",
+    "FirstName": "Angela",
+    "LastName": "Wilson",
+    "Email": "angela.wilson@example.com",
+    "Password": "AngelaPass357!",
+    "PhoneNumber": "+1234567803",
+    "Image": "https://thispersondoesnotexist.com/"
+  },
+  {
+    "UserName": "georgeclark",
+    "FirstName": "George",
+    "LastName": "Clark",
+    "Email": "george.clark@example.com",
+    "Password": "GeorgePass753!",
+    "PhoneNumber": "+1234567804",
+    "Image": "https://thispersondoesnotexist.com/"
+  },
+  {
+    "UserName": "admin",
+    "FirstName": "Admin",
+    "LastName": "Admin",
+    "Email": "admin@example.com",
+    "Password": "Admin123!",
+    "PhoneNumber": "+1234567890",
+    "Image": "https://thispersondoesnotexist.com/",
+    "Roles": [ "Admin" ]
+  }
+]
