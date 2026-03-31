@@ -84,3 +84,56 @@ graph LR
     D -->|Return Entity| C
     C -->|Return DTO| B
     B -->|201 Created| A
+````````
+
+## 🧰 Redis — швидкий старт і перевірка
+
+В цьому проекті Redis використовується як `IDistributedCache` (StackExchange.Redis). Нижче інструкція як швидко підняти Redis локально через Docker та як працювати з ним через `redis-cli`.
+
+### 1) Запустити Redis через Docker
+
+Відкрийте термінал (CMD або PowerShell) і виконайте:
+
+```bash
+docker run --name my-redis -p 6379:6379 -d redis
+```
+
+Це завантажить образ Redis і запустить його на порту `6379`.
+
+### 2) Перевірити, чи Redis працює
+
+```bash
+docker exec -it my-redis redis-cli ping
+```
+
+Якщо отримаєте `PONG` — Redis працює.
+
+### 3) Консольний доступ (redis-cli)
+
+Підключитися до контейнера:
+
+```bash
+docker exec -it my-redis redis-cli
+```
+
+Подивитися всі ключі у базі:
+
+```bash
+keys *
+```
+
+Отримати значення конкретного ключа:
+
+```bash
+get "Pinterest_users:all"
+```
+
+### 4) Режим реального часу (monitor)
+
+Якщо хочете бачити в реальному часі команди, які ваш додаток надсилає в Redis (GET/SET), у консолі `redis-cli` запустіть:
+
+```bash
+monitor
+```
+
+Потім зробіть запит у браузері або Postman — в консолі з'являться відповідні команди.

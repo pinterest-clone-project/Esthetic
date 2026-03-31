@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
 using Quartz;
+using Application.Behaviors;
 using Infrastructure.Data;
 using Domain.Entities.Identity;
 using Infrastructure.Jobs;
@@ -14,6 +14,7 @@ using Application.Interfaces;
 using Infrastructure.Services;
 using Infrastructure.Data.Repositories;
 using FluentValidation;
+using MediatR;
 
 namespace backend_pinterest.Extensions;
 
@@ -72,11 +73,21 @@ public static class WebApplicationBuilderExtensions
         #region Infrastructure & MediatR
         services.AddHttpClient();
         services.AddHttpContextAccessor();
+
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = config.GetConnectionString("Redis");
+            options.InstanceName = "Pinterest_";
+        });
+
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         services.AddMediatR(cfg =>
-            cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
-        );
+        {
+            cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>));
+            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(CacheInvalidationBehavior<,>));
+        });
         #endregion
 
         #region Controllers
