@@ -15,6 +15,8 @@ using Infrastructure.Services;
 using Infrastructure.Data.Repositories;
 using FluentValidation;
 using MediatR;
+using Infrastructure.Middleware;
+using backend_pinterest.Extensions;
 
 namespace backend_pinterest.Extensions;
 
@@ -85,6 +87,7 @@ public static class WebApplicationBuilderExtensions
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(CacheInvalidationBehavior<,>));
         });
@@ -92,6 +95,10 @@ public static class WebApplicationBuilderExtensions
 
         #region Controllers
         services.AddControllers();
+
+        // Global exception handler registration (uses IExceptionHandler implementations)
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+        services.AddProblemDetails();
 
         services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
         #endregion

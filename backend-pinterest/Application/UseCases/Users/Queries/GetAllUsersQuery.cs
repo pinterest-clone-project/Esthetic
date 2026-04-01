@@ -1,6 +1,6 @@
 using MediatR;
 using Domain.Interfaces.Caching;
-using Application.UseCases.Users.Response;
+using Application.UseCases.Users.Responses;
 
 namespace Application.UseCases.Users.Queries;
 

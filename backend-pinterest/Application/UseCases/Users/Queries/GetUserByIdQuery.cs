@@ -1,5 +1,5 @@
 using MediatR;
-using Application.UseCases.Users.Response;
+using Application.UseCases.Users.Responses;
 
 namespace Application.UseCases.Users.Queries;
 

@@ -2,7 +2,6 @@ using Application.UseCases.Users.Commands;
 using Application.UseCases.Users.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Application.UseCases.Users.Requests;
 
 namespace backend_pinterest.Controllers;
 
@@ -11,9 +10,9 @@ namespace backend_pinterest.Controllers;
 public class UsersController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateUserRequest request)
+    public async Task<IActionResult> Create([FromBody] CreateUserCommand request)
     {
-        var user = await mediator.Send(new CreateUserCommand(request));
+        var user = await mediator.Send(request);
         return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);
     }
 
@@ -33,9 +32,10 @@ public class UsersController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserRequest request)
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserCommand request)
     {
-        await mediator.Send(new UpdateUserCommand(id, request));
+        var command = request with { Id = id };
+        await mediator.Send(command);
         return NoContent();
     }
 

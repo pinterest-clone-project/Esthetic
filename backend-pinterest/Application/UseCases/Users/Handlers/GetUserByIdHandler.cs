@@ -2,7 +2,7 @@ using MediatR;
 using Domain.Interfaces;
 using Application.UseCases.Users.Queries;
 using AutoMapper;
-using Application.UseCases.Users.Response;
+using Application.UseCases.Users.Responses;
 
 namespace Application.UseCases.Users.Handlers;
 

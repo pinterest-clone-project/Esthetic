@@ -1,5 +1,5 @@
-﻿using Application.UseCases.Users.Requests;
-using Application.UseCases.Users.Response;
+﻿using Application.UseCases.Users.Commands;
+using Application.UseCases.Users.Responses;
 using AutoMapper;
 using Domain.Entities.Identity;
 
@@ -11,8 +11,8 @@ public class UserMapper : Profile
     {
         CreateMap<UserEntity, UserResponse>();
 
-        CreateMap<CreateUserRequest, UserEntity>();
-        CreateMap<UpdateUserRequest, UserEntity>()
+        CreateMap<CreateUserCommand, UserEntity>();
+        CreateMap<UpdateUserCommand, UserEntity>()
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
     }
 }
