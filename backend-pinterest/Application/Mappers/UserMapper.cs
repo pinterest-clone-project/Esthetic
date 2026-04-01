@@ -1,6 +1,5 @@
-﻿using Application.UseCases.Users.Commands;
-using Application.UseCases.Users.Dto;
-using Application.UseCases.Users.Requests;
+﻿using Application.UseCases.Users.Requests;
+using Application.UseCases.Users.Response;
 using AutoMapper;
 using Domain.Entities.Identity;
 
@@ -10,7 +9,7 @@ public class UserMapper : Profile
 {
     public UserMapper()
     {
-        CreateMap<UserEntity, UserDto>();
+        CreateMap<UserEntity, UserResponse>();
 
         CreateMap<CreateUserRequest, UserEntity>();
         CreateMap<UpdateUserRequest, UserEntity>()

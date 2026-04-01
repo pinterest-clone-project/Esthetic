@@ -12,6 +12,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }
+    public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
