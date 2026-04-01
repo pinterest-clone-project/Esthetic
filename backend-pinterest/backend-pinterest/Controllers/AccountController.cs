@@ -14,4 +14,13 @@ public class AccountController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(command);
         return Ok(result);
     }
+
+    [HttpPost]
+    [Route("register")]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Register([FromForm] RegisterCommand command)
+    {
+        var result = await mediator.Send(command);
+        return Ok(result);
+    }
 }

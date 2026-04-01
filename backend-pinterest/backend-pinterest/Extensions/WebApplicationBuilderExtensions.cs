@@ -94,9 +94,12 @@ public static class WebApplicationBuilderExtensions
         #endregion
 
         #region Controllers
-        services.AddControllers();
+        services.AddControllers()
+        .ConfigureApiBehaviorOptions(options =>
+        {
+            options.SuppressModelStateInvalidFilter = true;
+        });
 
-        // Global exception handler registration (uses IExceptionHandler implementations)
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
 
