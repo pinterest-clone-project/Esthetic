@@ -137,3 +137,138 @@ monitor
 ```
 
 Потім зробіть запит у браузері або Postman — в консолі з'являться відповідні команди.
+
+---
+
+## ✅ Валідація
+
+В проекті використовується **FluentValidation** у зв'язці з **MediatR Pipeline**.
+Це означає що валідація відбувається **автоматично** перед кожним Handler — контролери та хендлери не містять жодної валідаційної логіки.
+
+---
+
+### 🔄 Як працює flow валідації
+```
+HTTP Request
+    ↓
+API Controller  →  надсилає Command через MediatR
+    ↓
+ValidationBehavior  →  шукає валідатор для команди
+    ↓
+    ❌ є помилки  →  кидає ValidationException
+                          ↓
+                   GlobalExceptionHandler
+                          ↓
+                   400 Bad Request + JSON з помилками
+
+    ✅ все ок  →  Handler виконується
+                          ↓
+                   200/201 відповідь
+```
+
+---
+
+### 📂 Де знаходяться валідатори
+
+Кожен валідатор лежить **поруч зі своєю командою**:
+```
+Application/
+└── UseCases/
+    └── Account/
+        ├── Commands/
+        │   ├── LoginCommand.cs
+        │   └── RegisterCommand.cs
+        └── Validators/
+            ├── LoginCommandValidator.cs     ← валідатор для LoginCommand
+            └── RegisterCommandValidator.cs  ← валідатор для RegisterCommand
+```
+
+---
+
+### ✏️ Як написати валідатор
+```csharp
+public class CreatePinCommandValidator : AbstractValidator<CreatePinCommand>
+{
+    public CreatePinCommandValidator()
+    {
+        RuleFor(x => x.Title)
+            .NotEmpty()
+            .WithMessage("Назва є обов'язковою")
+            .MaximumLength(100)
+            .WithMessage("Назва не може бути довшою за 100 символів");
+
+        RuleFor(x => x.Description)
+            .MaximumLength(500)
+            .WithMessage("Опис не може бути довшим за 500 символів");
+
+        RuleFor(x => x.ImageFile)
+            .NotNull()
+            .WithMessage("Зображення є обов'язковим");
+    }
+}
+```
+
+> [!IMPORTANT]
+> Валідатор **реєструється автоматично** через `AddValidatorsFromAssemblies` — нічого додатково реєструвати не потрібно.
+
+---
+
+### 🌐 Формат відповіді при помилці валідації
+
+**400 Bad Request:**
+```json
+{
+  "status": 400,
+  "title": "Помилка валідації",
+  "errors": {
+    "Email": ["Невірний формат Email"],
+    "Password": ["Пароль повинен містити мінімум 6 символів"]
+  }
+}
+```
+
+---
+
+### ⚠️ Інші HTTP помилки
+
+Окрім валідації, GlobalExceptionHandler обробляє й інші винятки:
+
+| Виняток | Статус | Коли кидати |
+|---------|--------|-------------|
+| `ValidationException` | 400 | Невалідні поля форми |
+| `BadRequestException` | 400 | Логічна помилка (email вже зайнятий) |
+| `UnauthorizedException` | 401 | Невірний логін або пароль |
+| `NotFoundException` | 404 | Об'єкт не знайдено в БД |
+
+
+
+---
+
+### 🚫 Важливо — чого НЕ робити
+```csharp
+// ❌ Не валідуй в контролері
+[HttpPost]
+public async Task<IActionResult> Create([FromBody] CreatePinCommand command)
+{
+    if (string.IsNullOrEmpty(command.Title)) // ← так не треба
+        return BadRequest("Title is required");
+    ...
+}
+
+// ❌ Не валідуй в Handler
+public async Task<Unit> Handle(CreatePinCommand request, ...)
+{
+    if (string.IsNullOrEmpty(request.Title)) // ← так не треба
+        throw new Exception("Title is required");
+    ...
+}
+
+// ✅ Правильно — окремий валідатор, все інше чисте
+public class CreatePinCommandValidator : AbstractValidator<CreatePinCommand>
+{
+    public CreatePinCommandValidator()
+    {
+        RuleFor(x => x.Title).NotEmpty();
+    }
+}
+```
