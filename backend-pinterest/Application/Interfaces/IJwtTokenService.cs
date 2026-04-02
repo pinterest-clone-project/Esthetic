@@ -1,8 +1,10 @@
-﻿using Domain.Entities.Identity;
+﻿using Application.Models.UserDTO;
+using Domain.Entities.Identity;
 
 namespace Application.Interfaces;
 
 public interface IJwtTokenService
 {
-    Task<string> CreateTokenAsync(UserEntity user);
+    Task<TokenDTO> CreateTokenAsync(UserEntity user);
+    Task<TokenDTO?> RefreshTokenAsync(string refreshToken);
 }

@@ -29,6 +29,8 @@ public static class WebApplicationExtensions
         #endregion
 
         #region OpenAPI + Swagger
+        app.MapOpenApi();
+
         app.UseSwaggerUI(options =>
         {
             options.SwaggerEndpoint("/openapi/v1.json", "v1");
@@ -39,7 +41,9 @@ public static class WebApplicationExtensions
         #region Middleware
         app.UseSerilogRequestLogging();
 
-        app.MapOpenApi();
+        app.UseExceptionHandler();
+
+        app.UseHttpsRedirection();
 
         app.UseAuthentication();
         app.UseAuthorization();

@@ -1,8 +1,6 @@
-using System;
+namespace Application.UseCases.Users.Responses;
 
-namespace Application.UseCases.Users.Dto;
-
-public class UserDto
+public class UserResponse
 {
     public Guid Id { get; set; }
     public string? UserName { get; set; }
