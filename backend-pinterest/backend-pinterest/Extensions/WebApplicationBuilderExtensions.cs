@@ -138,6 +138,9 @@ public static class WebApplicationBuilderExtensions
 
         #region Application services
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IAccountRepository, AccountRepository>();
+
+
         services.AddScoped<IImageService, ImageService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IDbSeederService, DbSeederService>();

@@ -1,6 +1,6 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
-using Application.Models.UserDTO;
+using Application.Models.DTO.User;
 using Application.UseCases.Account.Commands;
 using FluentValidation.Results;
 using MediatR;

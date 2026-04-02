@@ -1,6 +1,6 @@
 using MediatR;
-using Application.UseCases.Users.Responses;
+using Application.Models.DTO.User;
 
 namespace Application.UseCases.Users.Queries;
 
-public record GetUserByIdQuery(Guid Id) : IRequest<UserResponse?>;
+public record GetUserByIdQuery(Guid Id) : IRequest<UserDTO?>;

@@ -1,4 +1,4 @@
-﻿using Application.Models.UserDTO;
+﻿using Application.Models.DTO.User;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UseCases\Account\Responses\" />
     <Folder Include="UseCases\Account\Queries\" />
   </ItemGroup>
 

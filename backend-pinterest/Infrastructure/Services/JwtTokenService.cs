@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-using Application.Models.UserDTO;
+using Application.Models.DTO.User;
 using Domain.Constants;
 using Domain.Entities.Identity;
 using Infrastructure.Data;

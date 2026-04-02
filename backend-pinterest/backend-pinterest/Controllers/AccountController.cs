@@ -1,5 +1,4 @@
-﻿using Application.Models.UserDTO;
-using Application.UseCases.Account.Commands;
+﻿using Application.UseCases.Account.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +30,16 @@ public class AccountController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> Refresh([FromBody] RefreshCommand command)
     {
         var result = await mediator.Send(command);
+        return Ok(result);
+    }
+
+    [Authorize]
+    [HttpPut("edit/{id:Guid}")]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Edit(Guid id, [FromForm] EditCommand command)
+    {
+        var commandWithId = command with { Id = id };
+        var result = await mediator.Send(commandWithId);
         return Ok(result);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Application.Models.UserDTO;
+﻿namespace Application.Models.DTO.User;
 
 public class TokenDTO
 {
