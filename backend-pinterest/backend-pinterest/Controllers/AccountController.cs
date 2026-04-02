@@ -42,4 +42,20 @@ public class AccountController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(commandWithId);
         return Ok(result);
     }
+
+    [HttpPost("forgot-password")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordCommand command)
+    {
+        var result = await mediator.Send(command);
+        if (result)
+            return Ok();
+        else
+            return BadRequest(new
+            {
+                Status = 400,
+                IsValid = false,
+                Errors = new { Email = "Користувача з такою поштою не існує" }
+            });
+    }
 }
