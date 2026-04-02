@@ -14,4 +14,8 @@ public class AccountRepository : BaseRepository<UserEntity>, IAccountRepository
         await UpdateAsync(user);
         return user;
     }
+    public async Task<UserEntity?> GetByEmailAsync(string email)
+    {
+        return await _db.Users.FirstOrDefaultAsync(u => u.Email == email && !u.IsDeleted);
+    }
 }

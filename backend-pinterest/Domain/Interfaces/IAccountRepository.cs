@@ -5,4 +5,5 @@ namespace Domain.Interfaces;
 public interface IAccountRepository : IBaseRepository<UserEntity>
 {
     Task<UserEntity> EditAsync(UserEntity user);
+    Task<UserEntity?> GetByEmailAsync(string email);
 }
