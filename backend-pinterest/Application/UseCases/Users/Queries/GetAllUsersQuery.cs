@@ -8,5 +8,5 @@ namespace Application.UseCases.Users.Queries;
 public record GetAllUsersQuery() : IRequest<List<UserResponse>>, ICacheableQuery
 {
     public string CacheKey => CacheKeys.AllUsers;
-    public TimeSpan? Expiration => TimeSpan.FromMinutes(5);
+    public TimeSpan? Expiration => AppTimeToLive.UserCacheExpiration;
 }
