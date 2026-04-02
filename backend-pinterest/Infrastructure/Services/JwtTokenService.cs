@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models.UserDTO;
+using Domain.Constants;
 using Domain.Entities.Identity;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
@@ -42,7 +43,7 @@ public class JwtTokenService(
 
         var accessToken = new JwtSecurityToken(
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(1),
+            expires: DateTime.UtcNow.AddMinutes(AppTimeToLive.AccessTokenMinutes),
             signingCredentials: signingCredentials
         );
 
@@ -60,7 +61,7 @@ public class JwtTokenService(
         {
             Token = refreshToken,
             UserId = user.Id,
-            ExpiresAt = DateTime.UtcNow.AddDays(30),
+            ExpiresAt = DateTime.UtcNow.AddDays(AppTimeToLive.RefreshTokenDays),
             CreatedAt = DateTime.UtcNow
         };
 
@@ -89,7 +90,8 @@ public class JwtTokenService(
         var claims = new List<Claim>
         {
             new Claim("email", user.Email ?? ""),
-            new Claim("name", $"{user.FirstName} {user.LastName}"),
+            new Claim("firstName", $"{user.FirstName}"),
+            new Claim("lastName", $"{user.LastName}"),
             new Claim("image", user.Image != null? user.Image : "")
         };
 
@@ -105,7 +107,7 @@ public class JwtTokenService(
 
         var accessToken = new JwtSecurityToken(
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(1),
+            expires: DateTime.UtcNow.AddMinutes(AppTimeToLive.AccessTokenMinutes),
             signingCredentials: signingCredentials
         );
 
