@@ -26,10 +26,10 @@ public class EditHandler(
             throw new ValidationException(failures);
         }
 
-        user.FirstName = request.FirstName;
-        user.LastName = request.LastName;
-        user.Email = request.Email;
-        user.Bio = request.Bio;
+        user.FirstName = request.FirstName ?? user.FirstName;
+        user.LastName = request.LastName ?? user.LastName;
+        user.Email = request.Email ?? user.Email;
+        user.Bio = request.Bio ?? user.Bio;
 
         if (request.ImageFile != null)
             user.Image = await imageService.SaveImageAsync(request.ImageFile);

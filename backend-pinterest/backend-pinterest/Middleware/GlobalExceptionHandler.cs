@@ -12,7 +12,7 @@ public class GlobalExceptionHandler : IExceptionHandler
     {
         var (status, title) = exception switch
         {
-            ValidationException => (400, "Помилка валідації"),
+            ValidationException => (400, "Помилка"),
             UnauthorizedException => (401, "Помилка автентифікації"),
             NotFoundException => (404, "Не знайдено"),
             _ => (500, "Внутрішня помилка сервера")
