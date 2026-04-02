@@ -43,7 +43,7 @@ public class JwtTokenService(
 
         var accessToken = new JwtSecurityToken(
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(AppTimeToLive.AccessTokenMinutes),
+            expires: AppTimeToLive.AccessTokenTime,
             signingCredentials: signingCredentials
         );
 
@@ -61,7 +61,7 @@ public class JwtTokenService(
         {
             Token = refreshToken,
             UserId = user.Id,
-            ExpiresAt = DateTime.UtcNow.AddDays(AppTimeToLive.RefreshTokenDays),
+            ExpiresAt = AppTimeToLive.RefreshTokenTime,
             CreatedAt = DateTime.UtcNow
         };
 
@@ -107,7 +107,7 @@ public class JwtTokenService(
 
         var accessToken = new JwtSecurityToken(
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(AppTimeToLive.AccessTokenMinutes),
+            expires: AppTimeToLive.AccessTokenTime,
             signingCredentials: signingCredentials
         );
 

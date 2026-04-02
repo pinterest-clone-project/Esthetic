@@ -2,6 +2,6 @@
 
 public static class AppTimeToLive
 {
-    public const int AccessTokenMinutes = 1;
-    public const int RefreshTokenDays = 7;
+    public static readonly DateTime AccessTokenTime = DateTime.UtcNow.AddMinutes(15);
+    public static readonly DateTime RefreshTokenTime = DateTime.UtcNow.AddDays(30);
 }
