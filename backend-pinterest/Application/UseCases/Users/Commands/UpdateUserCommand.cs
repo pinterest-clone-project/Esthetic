@@ -1,3 +1,4 @@
+using Domain.Constants;
 using Domain.Interfaces.Caching;
 using MediatR;
 using System.Text.Json.Serialization;
@@ -14,5 +15,5 @@ public record UpdateUserCommand : IRequest<Unit>, ICacheInvalidator
     public string? LastName { get; init; }
 
     [JsonIgnore]
-    public string CacheKey => "users:all";
+    public string CacheKey => CacheKeys.AllUsers;
 }
