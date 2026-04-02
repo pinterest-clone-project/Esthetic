@@ -1,5 +1,7 @@
-﻿using Application.UseCases.Account.Commands;
+﻿using Application.Models.UserDTO;
+using Application.UseCases.Account.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend_pinterest.Controllers;
@@ -19,6 +21,14 @@ public class AccountController(IMediator mediator) : ControllerBase
     [Route("register")]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> Register([FromForm] RegisterCommand command)
+    {
+        var result = await mediator.Send(command);
+        return Ok(result);
+    }
+
+    [Authorize]
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh([FromBody] RefreshCommand command)
     {
         var result = await mediator.Send(command);
         return Ok(result);
