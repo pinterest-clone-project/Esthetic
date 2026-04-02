@@ -7,7 +7,7 @@ namespace Infrastructure.Data.Repositories;
 
 public class BaseRepository<T> : IBaseRepository<T> where T : class, IEntity
 {
-    private readonly AppDbContext _db;
+    protected readonly AppDbContext _db;
 
     public BaseRepository(AppDbContext db)
     {

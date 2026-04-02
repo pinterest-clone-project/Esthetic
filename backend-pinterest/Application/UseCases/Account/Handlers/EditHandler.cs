@@ -4,6 +4,7 @@ using Application.Models.DTO.User;
 using Application.UseCases.Account.Commands;
 using AutoMapper;
 using Domain.Entities.Identity;
+using Domain.Interfaces;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -13,11 +14,11 @@ namespace Application.UseCases.Account.Handlers;
 public class EditHandler(
     IImageService imageService,
     IJwtTokenService tokenService,
-    UserManager<UserEntity> userManager) : IRequestHandler<EditCommand, TokenDTO>
+    IAccountRepository accountRepository) : IRequestHandler<EditCommand, TokenDTO>
 {
     public async Task<TokenDTO> Handle(EditCommand request, CancellationToken cancellationToken)
     {
-        var user = await userManager.FindByIdAsync(request.Id.ToString());
+        var user = await accountRepository.GetByIdAsync(request.Id);
 
         if (user == null)
         {
@@ -34,17 +35,8 @@ public class EditHandler(
         if (request.ImageFile != null)
             user.Image = await imageService.SaveImageAsync(request.ImageFile);
 
-        var result = await userManager.UpdateAsync(user);
+        var result = await accountRepository.EditAsync(user);
 
-        if (!result.Succeeded)
-        {
-            var failures = result.Errors
-                .Select(e => new ValidationFailure("Edit", e.Description))
-                .ToList();
-
-            throw new ValidationException(failures);
-        }
-
-        return await tokenService.CreateTokenAsync(user);
+        return await tokenService.CreateTokenAsync(result);
     }
 }
