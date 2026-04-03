@@ -26,6 +26,7 @@ public class EditHandler(
         user.Email = request.Email ?? user.Email;
         user.Bio = request.Bio ?? user.Bio;
         user.IsPrivate = request.IsPrivate ?? user.IsPrivate;
+        user.PhoneNumber = request.PhoneNumber ?? user.PhoneNumber;
 
         if (request.ImageFile != null)
             user.Image = await imageService.SaveImageAsync(request.ImageFile);

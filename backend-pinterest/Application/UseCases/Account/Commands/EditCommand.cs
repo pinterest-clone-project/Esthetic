@@ -17,6 +17,7 @@ public record EditCommand : IRequest<TokenDTO>
     public string? Password { get; init; }
     public string? Bio { get; init; }
     public bool? IsPrivate { get; init; }
+    public string? PhoneNumber { get; init; }
 
     [FromForm]
     public IFormFile? ImageFile { get; init; }
