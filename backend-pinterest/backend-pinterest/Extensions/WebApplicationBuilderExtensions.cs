@@ -67,6 +67,40 @@ public static class WebApplicationBuilderExtensions
                     Encoding.UTF8.GetBytes(config["Jwt:Key"]!)
                 )
             };
+
+            options.Events = new JwtBearerEvents
+            {
+                OnChallenge = async context =>
+                {
+                    context.HandleResponse();
+
+                    context.Response.StatusCode = 401;
+                    context.Response.ContentType = "application/json";
+
+                    var response = new
+                    {
+                        status = 401,
+                        title = "Помилка автентифікації",
+                        detail = "Токен відсутній або недійсний"
+                    };
+
+                    await context.Response.WriteAsJsonAsync(response);
+                },
+                OnForbidden = async context =>
+                {
+                    context.Response.StatusCode = 403;
+                    context.Response.ContentType = "application/json";
+
+                    var response = new
+                    {
+                        status = 403,
+                        title = "Доступ заборонено",
+                        detail = "У вас немає прав для цієї дії"
+                    };
+
+                    await context.Response.WriteAsJsonAsync(response);
+                }
+            };
         });
         #endregion
 
@@ -128,6 +162,10 @@ public static class WebApplicationBuilderExtensions
                 .ForJob(jobKey)
                 .WithIdentity($"{nameof(DbSeedJob)}-trigger")
                 .StartNow());
+
+            q.AddJob<SendEmailJob>(opts => opts
+                .WithIdentity(nameof(SendEmailJob))
+                .StoreDurably()); 
         });
 
         services.AddQuartzHostedService(opt =>
@@ -138,6 +176,10 @@ public static class WebApplicationBuilderExtensions
 
         #region Application services
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IAccountRepository, AccountRepository>();
+
+        services.AddScoped<IEmailJobScheduler, EmailJobScheduler>();
+
         services.AddScoped<IImageService, ImageService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IDbSeederService, DbSeederService>();

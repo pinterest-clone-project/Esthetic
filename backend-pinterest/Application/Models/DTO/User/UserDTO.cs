@@ -1,6 +1,6 @@
-namespace Application.UseCases.Users.Responses;
+namespace Application.Models.DTO.User;
 
-public class UserResponse
+public class UserDTO
 {
     public Guid Id { get; set; }
     public string? UserName { get; set; }

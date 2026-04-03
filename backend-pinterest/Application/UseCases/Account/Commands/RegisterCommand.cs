@@ -1,4 +1,4 @@
-﻿using Application.Models.UserDTO;
+﻿using Application.Models.DTO.User;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +13,7 @@ public record RegisterCommand : IRequest<TokenDTO>
     public string? Bio { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
+    public string? PhoneNumber { get; set; } = string.Empty;
 
     [FromForm]
     public IFormFile? ImageFile { get; set; } = null;

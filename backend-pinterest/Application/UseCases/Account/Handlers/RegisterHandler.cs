@@ -1,6 +1,6 @@
-﻿using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
-using Application.Models.UserDTO;
+using Application.Models.DTO.User;
 using Application.UseCases.Account.Commands;
 using AutoMapper;
 using Domain.Constants;
@@ -31,11 +31,8 @@ public class RegisterHandler(
         var createResult = await userManager.CreateAsync(user, request.Password);
         if (!createResult.Succeeded)
         {
-            var failures = createResult.Errors
-                .Select(e => new ValidationFailure("Registration", e.Description))
-                .ToList();
-
-            throw new ValidationException(failures);
+            var errors = string.Join(", ", createResult.Errors.Select(e => e.Description));
+            throw new BadRequestException(errors);
         }
 
         if (!await roleManager.RoleExistsAsync(Roles.User))

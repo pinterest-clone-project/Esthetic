@@ -1,5 +1,5 @@
-﻿using Application.Interfaces;
-using Application.Models.SMTP;
+﻿using Application.Common.SMTP;
+using Application.Interfaces;
 using MailKit.Net.Smtp;
 using MimeKit;
 

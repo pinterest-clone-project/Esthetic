@@ -1,4 +1,4 @@
-﻿namespace Application.Models.SMTP;
+﻿namespace Application.Common.SMTP;
 
 public class EmailMessage
 {

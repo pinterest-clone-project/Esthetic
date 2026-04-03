@@ -1,4 +1,4 @@
-﻿using Application.Models.SMTP;
+﻿using Application.Common.SMTP;
 
 namespace Application.Interfaces;
 

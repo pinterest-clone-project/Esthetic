@@ -1,4 +1,4 @@
-﻿using Application.Models.UserDTO;
+﻿using Application.Models.DTO.User;
 using Domain.Entities.Identity;
 
 namespace Application.Interfaces;
