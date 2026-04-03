@@ -1,9 +1,14 @@
 const ACCESS_TOKEN_KEY = 'accessToken';
 const REFRESH_TOKEN_KEY = 'refreshToken';
 
+const FETCH_ERROR = 'FETCH_ERROR';
+const PARSING_ERROR = 'PARSING_ERROR';
+
 const APP_COMMON_CONSTANTS = {
     ACCESS_TOKEN_KEY,
-    REFRESH_TOKEN_KEY
+    REFRESH_TOKEN_KEY,
+    FETCH_ERROR,
+    PARSING_ERROR,
 };
 
 export default APP_COMMON_CONSTANTS;
