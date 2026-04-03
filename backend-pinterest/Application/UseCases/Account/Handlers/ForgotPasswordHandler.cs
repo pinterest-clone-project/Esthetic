@@ -14,9 +14,9 @@ namespace Application.UseCases.Account.Handlers;
 public class ForgotPasswordHandler(
     IAccountRepository accountRepository,
     IEmailJobScheduler emailJobScheduler,
-    UserManager<UserEntity> userManager) : IRequestHandler<ForgotPasswordCommand, bool>
+    UserManager<UserEntity> userManager) : IRequestHandler<ForgotPasswordCommand, Unit>
 {
-    public async Task<bool> Handle(
+    public async Task<Unit> Handle(
         ForgotPasswordCommand request,
         CancellationToken cancellationToken)
     {
@@ -32,8 +32,8 @@ public class ForgotPasswordHandler(
 
         await userManager.SetAuthenticationTokenAsync(
             user,
-            "PasswordReset",
-            "ResetCode",
+            AuthTokenConstants.PasswordResetProvider,
+            AuthTokenConstants.PasswordResetCode,
             tokenValue);
 
         await emailJobScheduler.ScheduleAsync(
@@ -41,6 +41,6 @@ public class ForgotPasswordHandler(
             subject: "Password Reset",
             body: EmailTemplates.ForgotPassword(code));
 
-        return true;
+        return Unit.Value;
     }
 }

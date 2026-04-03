@@ -31,11 +31,8 @@ public class RegisterHandler(
         var createResult = await userManager.CreateAsync(user, request.Password);
         if (!createResult.Succeeded)
         {
-            var failures = createResult.Errors
-                .Select(e => new ValidationFailure("Registration", e.Description))
-                .ToList();
-
-            throw new ValidationException(failures);
+            var errors = string.Join(", ", createResult.Errors.Select(e => e.Description));
+            throw new BadRequestException(errors);
         }
 
         if (!await roleManager.RoleExistsAsync(Roles.User))
