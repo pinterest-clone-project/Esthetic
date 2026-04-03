@@ -1,13 +1,9 @@
-﻿using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models.DTO.User;
 using Application.UseCases.Account.Commands;
-using AutoMapper;
-using Domain.Entities.Identity;
 using Domain.Interfaces;
-using FluentValidation.Results;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 
 namespace Application.UseCases.Account.Handlers;
 
@@ -22,9 +18,7 @@ public class EditHandler(
 
         if (user == null)
         {
-            var failures = new List<ValidationFailure> { new ValidationFailure("Edit", "User was not found.") };
-
-            throw new ValidationException(failures);
+            throw new NotFoundException("Користувача не знайдено");
         }
 
         user.FirstName = request.FirstName ?? user.FirstName;

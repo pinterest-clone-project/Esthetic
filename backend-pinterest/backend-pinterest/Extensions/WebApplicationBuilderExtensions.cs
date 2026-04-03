@@ -128,6 +128,11 @@ public static class WebApplicationBuilderExtensions
                 .ForJob(jobKey)
                 .WithIdentity($"{nameof(DbSeedJob)}-trigger")
                 .StartNow());
+
+            // register SendEmailJob so it can be scheduled dynamically
+            q.AddJob<SendEmailJob>(opts => opts
+                .WithIdentity(nameof(SendEmailJob))
+                .StoreDurably()); // job exists without a trigger
         });
 
         services.AddQuartzHostedService(opt =>
@@ -140,6 +145,8 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IAccountRepository, AccountRepository>();
 
+        // Scheduler service for sending emails via Quartz
+        services.AddScoped<IEmailJobScheduler, EmailJobScheduler>();
 
         services.AddScoped<IImageService, ImageService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();

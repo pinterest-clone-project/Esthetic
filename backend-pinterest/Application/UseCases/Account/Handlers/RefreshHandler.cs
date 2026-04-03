@@ -1,8 +1,7 @@
-﻿using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models.DTO.User;
 using Application.UseCases.Account.Commands;
-using FluentValidation.Results;
 using MediatR;
 
 namespace Application.UseCases.Account.Handlers;
@@ -15,9 +14,7 @@ public class RefreshHandler(IJwtTokenService tokenService) : IRequestHandler<Ref
 
         if (result == null || string.IsNullOrWhiteSpace(result.AccessToken))
         {
-            var failures = new List<ValidationFailure> { new ValidationFailure("RefreshToken", "Invalid refresh token.") };
-
-            throw new ValidationException(failures);
+            throw new UnauthorizedException("Refresh token недійсний або прострочений");
         }
 
         return result;
