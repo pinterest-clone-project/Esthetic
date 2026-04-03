@@ -1,7 +1,9 @@
-﻿using Application.UseCases.Account.Commands;
+﻿using Application.Common.Exceptions;
+using Application.UseCases.Account.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace backend_pinterest.Controllers;
 
@@ -34,12 +36,15 @@ public class AccountController(IMediator mediator) : ControllerBase
     }
 
     [Authorize]
-    [HttpPut("edit/{id:Guid}")]
+    [HttpPut("edit")]
     [Consumes("multipart/form-data")]
-    public async Task<IActionResult> Edit(Guid id, [FromForm] EditCommand command)
+    public async Task<IActionResult> Edit([FromForm] EditCommand command)
     {
-        var commandWithId = command with { Id = id };
-        var result = await mediator.Send(commandWithId);
+        var request = this.Request;
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new UnauthorizedException("Користувач не автентифікований");
+
+        var commadWithId = command with { Id = Guid.Parse(userId) };
+        var result = await mediator.Send(commadWithId);
         return Ok(result);
     }
 

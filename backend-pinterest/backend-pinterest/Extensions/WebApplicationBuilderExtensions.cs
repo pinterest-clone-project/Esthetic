@@ -67,6 +67,40 @@ public static class WebApplicationBuilderExtensions
                     Encoding.UTF8.GetBytes(config["Jwt:Key"]!)
                 )
             };
+
+            options.Events = new JwtBearerEvents
+            {
+                OnChallenge = async context =>
+                {
+                    context.HandleResponse();
+
+                    context.Response.StatusCode = 401;
+                    context.Response.ContentType = "application/json";
+
+                    var response = new
+                    {
+                        status = 401,
+                        title = "Помилка автентифікації",
+                        detail = "Токен відсутній або недійсний"
+                    };
+
+                    await context.Response.WriteAsJsonAsync(response);
+                },
+                OnForbidden = async context =>
+                {
+                    context.Response.StatusCode = 403;
+                    context.Response.ContentType = "application/json";
+
+                    var response = new
+                    {
+                        status = 403,
+                        title = "Доступ заборонено",
+                        detail = "У вас немає прав для цієї дії"
+                    };
+
+                    await context.Response.WriteAsJsonAsync(response);
+                }
+            };
         });
         #endregion
 
