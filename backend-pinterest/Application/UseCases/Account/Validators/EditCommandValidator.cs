@@ -21,11 +21,6 @@ public class EditCommandValidator : AbstractValidator<EditCommand>
             .WithMessage("Невірний формат Email")
             .MaximumLength(255)
             .WithMessage("Email не може бути довшим за 255 символів");
-        RuleFor(x => x.Password)
-            .MinimumLength(6)
-            .WithMessage("Пароль повинен містити мінімум 6 символів")
-            .MaximumLength(100)
-            .WithMessage("Пароль не може бути довшим 100 символів");
         RuleFor(x => x.PhoneNumber)
             .Matches(@"^\+?[0-9\s\-\(\)]{7,20}$")
             .WithMessage("Невірний формат номера телефону")
