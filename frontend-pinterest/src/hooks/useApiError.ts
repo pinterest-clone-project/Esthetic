@@ -1,7 +1,5 @@
-// hooks/useApiError.ts
 import { useEffect } from "react";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import toast from "react-hot-toast";
 import {parseError} from "../utils/parseError.ts";
 
 export const useApiError = (error: FetchBaseQueryError | undefined) => {
@@ -15,34 +13,34 @@ export const useApiError = (error: FetchBaseQueryError | undefined) => {
                 if (parsed.errors) {
                     Object.values(parsed.errors)
                         .flat()
-                        .forEach(msg => toast.error(msg));
+                        .forEach(msg => console.error(msg));
                 } else {
-                    toast.error(parsed.detail ?? parsed.title);
+                    console.error(parsed.detail ?? parsed.title);
                 }
                 break;
 
             case 401:
-                toast.error("Сесія закінчилась, увійдіть знову");
+                console.error("Сесія закінчилась, увійдіть знову");
                 break;
 
             case 403:
-                toast.error("У вас немає доступу до цієї дії");
+                console.error("У вас немає доступу до цієї дії");
                 break;
 
             case 404:
-                toast.error(parsed.detail ?? "Ресурс не знайдено");
+                console.error(parsed.detail ?? "Ресурс не знайдено");
                 break;
 
             case 500:
-                toast.error("Помилка сервера, спробуйте пізніше");
+                console.error("Помилка сервера, спробуйте пізніше");
                 break;
 
             case 0:
-                toast.error(parsed.title);
+                console.error(parsed.title);
                 break;
 
             default:
-                toast.error(parsed.title);
+                console.error(parsed.title);
         }
     }, [error]);
 };
