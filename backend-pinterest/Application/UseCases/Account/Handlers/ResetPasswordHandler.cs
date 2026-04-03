@@ -15,7 +15,7 @@ public class ResetPasswordHandler(
 {
     public async Task<Unit> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
     {
-        var user = await accountRepository.GetByEmailAsync(request.Email);
+        var user = await accountRepository.GetByEmailAsync(request.Email, cancellationToken);
 
         if (user == null)
         {

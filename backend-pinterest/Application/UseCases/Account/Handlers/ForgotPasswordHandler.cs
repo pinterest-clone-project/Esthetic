@@ -20,7 +20,7 @@ public class ForgotPasswordHandler(
         ForgotPasswordCommand request,
         CancellationToken cancellationToken)
     {
-        var user = await accountRepository.GetByEmailAsync(request.Email);
+        var user = await accountRepository.GetByEmailAsync(request.Email, cancellationToken);
 
         if (user == null)
             throw new NotFoundException("Користувача не знайдено");

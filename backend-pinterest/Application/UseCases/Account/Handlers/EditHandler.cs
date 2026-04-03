@@ -14,7 +14,7 @@ public class EditHandler(
 {
     public async Task<TokenDTO> Handle(EditCommand request, CancellationToken cancellationToken)
     {
-        var user = await accountRepository.GetByIdAsync(request.Id);
+        var user = await accountRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (user == null)
         {
@@ -29,7 +29,7 @@ public class EditHandler(
         if (request.ImageFile != null)
             user.Image = await imageService.SaveImageAsync(request.ImageFile);
 
-        var result = await accountRepository.EditAsync(user);
+        var result = await accountRepository.EditAsync(user, cancellationToken);
 
         return await tokenService.CreateTokenAsync(result);
     }

@@ -4,6 +4,6 @@ namespace Domain.Interfaces;
 
 public interface IAccountRepository : IBaseRepository<UserEntity>
 {
-    Task<UserEntity> EditAsync(UserEntity user);
-    Task<UserEntity?> GetByEmailAsync(string email);
+    Task<UserEntity> EditAsync(UserEntity user, CancellationToken ct = default);
+    Task<UserEntity?> GetByEmailAsync(string email, CancellationToken ct = default);
 }
