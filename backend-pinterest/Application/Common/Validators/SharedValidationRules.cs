@@ -4,19 +4,17 @@ namespace Application.Common.Validators;
 
 public static class SharedValidationRules
 {
-    public static IRuleBuilderOptions<T, string?> EmailRules<T>(this IRuleBuilder<T, string?> rule) =>
+    public static IRuleBuilderOptions<T, string?> EmailRules<T>(this IRuleBuilder<T, string?> rule, string fieldName) =>
         rule
-            .NotEmpty()
-            .WithMessage("Email є обов'язковим")
+            .IsRequired(fieldName)
             .EmailAddress()
             .WithMessage("Невірний формат Email")
             .MaximumLength(255)
             .WithMessage("Email не може бути довшим за 255 символів");
 
-    public static IRuleBuilderOptions<T, string?> PasswordRules<T>(this IRuleBuilder<T, string?> rule) =>
+    public static IRuleBuilderOptions<T, string?> PasswordRules<T>(this IRuleBuilder<T, string?> rule, string fieldName) =>
         rule
-            .NotEmpty()
-            .WithMessage("Пароль є обов'язковим")
+            .IsRequired(fieldName)
             .MinimumLength(6)
             .WithMessage("Пароль повинен містити мінімум 6 символів")
             .MaximumLength(100)
@@ -32,8 +30,7 @@ public static class SharedValidationRules
 
     public static IRuleBuilderOptions<T, string?> NameRules<T>(this IRuleBuilder<T, string?> rule, string fieldName) =>
         rule
-            .NotEmpty()
-            .WithMessage($"{fieldName} є обов'язковим")
+            .IsRequired(fieldName)
             .MaximumLength(50)
             .WithMessage($"{fieldName} не може бути довшим за 50 символів")
             .When(x => x is string s && !string.IsNullOrEmpty(s));
@@ -42,4 +39,10 @@ public static class SharedValidationRules
         rule
             .MaximumLength(500)
             .WithMessage("Біографія не може бути довшою за 500 символів");
+
+    public static IRuleBuilderOptions<T, string?> IsRequired<T>(this IRuleBuilder<T, string?> rule, string fieldName) =>
+        rule
+            .NotEmpty()
+            .WithMessage($"{fieldName} є обов'язковим");
+
 }

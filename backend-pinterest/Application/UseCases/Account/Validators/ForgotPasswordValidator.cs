@@ -8,6 +8,6 @@ public class ForgotPasswordValidator : AbstractValidator<ForgotPasswordCommand>
 {
     public ForgotPasswordValidator()
     {
-        RuleFor(x => x.Email).EmailRules();
+        RuleFor(x => x.Email).EmailRules("Email");
     }
 }

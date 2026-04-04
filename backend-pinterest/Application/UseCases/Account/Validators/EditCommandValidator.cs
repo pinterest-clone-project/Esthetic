@@ -11,7 +11,7 @@ public class EditCommandValidator : AbstractValidator<EditCommand>
         RuleFor(x => x.FirstName).NameRules("Ім'я");
         RuleFor(x => x.LastName).NameRules("Прізвище");
         RuleFor(x => x.Bio).BioRules();
-        RuleFor(x => x.Email).EmailRules();
+        RuleFor(x => x.Email).EmailRules("Email");
         RuleFor(x => x.PhoneNumber).PhoneRules();
     }
 }

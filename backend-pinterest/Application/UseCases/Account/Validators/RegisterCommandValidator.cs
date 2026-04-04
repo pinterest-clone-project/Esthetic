@@ -12,8 +12,8 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
         RuleFor(x => x.FirstName).NameRules("Ім'я");
         RuleFor(x => x.LastName).NameRules("Прізвище");
         RuleFor(x => x.Bio).BioRules();
-        RuleFor(x => x.Email).EmailRules();
-        RuleFor(x => x.Password).PasswordRules();
+        RuleFor(x => x.Email).EmailRules("Email");
+        RuleFor(x => x.Password).PasswordRules("Пароль");
         RuleFor(x => x.PhoneNumber).PhoneRules();
     }
 }
