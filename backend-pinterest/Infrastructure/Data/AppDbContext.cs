@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Identity;
+﻿using Domain.Entities;
+using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     {
     }
     public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
+    public DbSet<TagEntity> Tags { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
