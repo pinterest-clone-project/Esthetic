@@ -6,14 +6,13 @@ import {api} from "../services/api.ts";
 
 export const store = configureStore({
     reducer: {
-        auth: authReducer,
-
         [api.reducerPath]: api.reducer,
+        auth: authReducer,
     },
 
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(
-            api.middleware
+            api.middleware,
         )
 });
 
