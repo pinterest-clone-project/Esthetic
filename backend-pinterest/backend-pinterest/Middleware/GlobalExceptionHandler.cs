@@ -16,6 +16,7 @@ public class GlobalExceptionHandler : IExceptionHandler
             BadRequestException => (400, "Невірний запит"),
             UnauthorizedException => (401, "Помилка автентифікації"),
             NotFoundException => (404, "Не знайдено"),
+            DomainException => (422, "Порушення бізнес-правил"),
             _ => (500, "Внутрішня помилка сервера")
         };
 
