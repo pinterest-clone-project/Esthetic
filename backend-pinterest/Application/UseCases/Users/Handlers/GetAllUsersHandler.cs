@@ -12,7 +12,7 @@ public class GetAllUsersHandler(
 {
     public async Task<List<UserDTO>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
-        var users = await userRepository.GetAllAsync();
+        var users = await userRepository.GetAllAsync(cancellationToken);
         return mapper.Map<List<UserDTO>>(users);
     }
 }

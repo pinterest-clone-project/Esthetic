@@ -9,7 +9,7 @@ public class DeleteUserHandler(
 {
     public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
-        await userRepository.DeleteAsync(request.Id);
+        await userRepository.DeleteAsync(request.Id, cancellationToken);
         return Unit.Value;
     }
 }
