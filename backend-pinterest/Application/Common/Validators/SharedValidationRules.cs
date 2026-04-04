@@ -8,9 +8,9 @@ public static class SharedValidationRules
         rule
             .IsRequired(fieldName)
             .EmailAddress()
-            .WithMessage("Невірний формат Email")
+            .WithMessage($"Невірний формат {fieldName}")
             .MaximumLength(255)
-            .WithMessage("Email не може бути довшим за 255 символів");
+            .WithMessage($"{fieldName} не може бути довшим за 255 символів");
 
     public static IRuleBuilderOptions<T, string?> PasswordRules<T>(this IRuleBuilder<T, string?> rule, string fieldName) =>
         rule
