@@ -10,11 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.11.2",
     "@tailwindcss/vite": "^4.2.2",
     "i": "^0.3.7",
+    "jwt-decode": "^4.0.0",
     "npm": "^11.12.1",
+    "object-to-formdata": "^4.5.1",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react-dom": "^19.2.4",
+    "react-redux": "^9.2.0",
+    "react-router": "^7.14.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",

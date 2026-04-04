@@ -1,12 +1,16 @@
 import './App.css'
+import {Route, Routes} from "react-router";
+import TestingPage from "./pages/TestingPage.tsx";
 
-function App() {
+const App = () => {
 
   return (
     <>
-      <div>
-        <h1 className="bg-amber-400">Hello</h1>
-      </div>
+      <Routes>
+          <Route path="/">
+            <Route path="testing" element={<TestingPage />} />
+          </Route>
+      </Routes>
     </>
   )
 }
