@@ -177,6 +177,7 @@ public static class WebApplicationBuilderExtensions
         #region Application services
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<ITagRepository, TagRepository>();
 
         services.AddScoped<IEmailJobScheduler, EmailJobScheduler>();
 
