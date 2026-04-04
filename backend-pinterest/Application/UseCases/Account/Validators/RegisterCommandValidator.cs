@@ -1,4 +1,5 @@
-﻿using Application.UseCases.Account.Commands;
+﻿using Application.Common.Validators;
+using Application.UseCases.Account.Commands;
 using FluentValidation;
 
 namespace Application.UseCases.Account.Validators;
@@ -7,43 +8,12 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {
     public RegisterCommandValidator()
     {
-        RuleFor(x => x.Username)
-            .NotEmpty()
-            .WithMessage("Ім'я користувача є обов'язковим")
-            .MaximumLength(50)
-            .WithMessage("Ім'я користувача не може бути довшим за 50 символів");
-        RuleFor(x => x.FirstName)
-            .NotEmpty()
-            .WithMessage("Ім'я є обов'язковим")
-            .MaximumLength(50)
-            .WithMessage("Ім'я не може бути довшим за 50 символів");
-        RuleFor(x => x.LastName)
-            .NotEmpty()
-            .WithMessage("Прізвище є обов'язковим")
-            .MaximumLength(50)
-            .WithMessage("Прізвище не може бути довшим за 50 символів");
-        RuleFor(x => x.Bio)
-            .MaximumLength(500)
-            .WithMessage("Біографія не може бути довшим 500 символів");
-        RuleFor(x => x.Email)
-            .NotEmpty()
-            .WithMessage("Email є обов'язковим")
-            .EmailAddress()
-            .WithMessage("Невірний формат Email")
-            .MaximumLength(255)
-            .WithMessage("Email не може бути довшим за 255 символів");
-        RuleFor(x => x.Password)
-            .NotEmpty()
-            .WithMessage("Пароль є обов'язковим")
-            .MinimumLength(6)
-            .WithMessage("Пароль повинен містити мінімум 6 символів")
-            .MaximumLength(100)
-            .WithMessage("Пароль не може бути довшим 100 символів");
-        RuleFor(x => x.PhoneNumber)
-            .Matches(@"^\+?[0-9\s\-\(\)]{7,20}$")
-            .WithMessage("Невірний формат номера телефону")
-            .MaximumLength(20)
-            .WithMessage("Номер телефону не може бути довшим 20 символів")
-            .When(x => !string.IsNullOrEmpty(x.PhoneNumber));
+        RuleFor(x => x.Username).NameRules("Ім'я користувача");
+        RuleFor(x => x.FirstName).NameRules("Ім'я");
+        RuleFor(x => x.LastName).NameRules("Прізвище");
+        RuleFor(x => x.Bio).BioRules();
+        RuleFor(x => x.Email).EmailRules();
+        RuleFor(x => x.Password).PasswordRules();
+        RuleFor(x => x.PhoneNumber).PhoneRules();
     }
 }
