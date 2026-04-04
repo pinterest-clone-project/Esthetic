@@ -1,6 +1,7 @@
 import './App.css'
 import {Route, Routes} from "react-router";
-import TestingPage from "./pages/TestingPage.tsx";
+import HomePage from "./pages/home/HomePage.tsx";
+import NotFoundPage from "./pages/NotFoundPage.tsx";
 
 const App = () => {
 
@@ -8,8 +9,11 @@ const App = () => {
     <>
       <Routes>
           <Route path="/">
-            <Route index element={<TestingPage />} />
+            <Route index element={<HomePage />} />
+
           </Route>
+
+          <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   )

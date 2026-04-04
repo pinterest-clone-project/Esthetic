@@ -1,4 +1,4 @@
-const TestingPage = () => {
+const HomePage = () => {
     return (
         <div>
             <h1>TestingPage</h1>
@@ -6,4 +6,4 @@ const TestingPage = () => {
     )
 }
 
-export default TestingPage
+export default HomePage
