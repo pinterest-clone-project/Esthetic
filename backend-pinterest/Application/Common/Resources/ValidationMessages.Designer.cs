@@ -106,6 +106,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You do not have permission for this action.
+        /// </summary>
+        internal static string ErrorNoPermission {
+            get {
+                return ResourceManager.GetString("ErrorNoPermission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not found.
         /// </summary>
         internal static string ErrorNotFound {

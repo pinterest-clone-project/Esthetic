@@ -192,4 +192,7 @@
   <data name="ErrorTokenInvalid" xml:space="preserve">
     <value>Токен відсутній або недійсний</value>
   </data>
+  <data name="ErrorNoPermission" xml:space="preserve">
+    <value>У вас немає прав для цієї дії</value>
+  </data>
 </root>

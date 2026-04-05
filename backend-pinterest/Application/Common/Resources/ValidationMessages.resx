@@ -192,4 +192,7 @@
   <data name="ErrorTokenInvalid" xml:space="preserve">
     <value>Token is missing or invalid</value>
   </data>
+  <data name="ErrorNoPermission" xml:space="preserve">
+    <value>You do not have permission for this action</value>
+  </data>
 </root>
