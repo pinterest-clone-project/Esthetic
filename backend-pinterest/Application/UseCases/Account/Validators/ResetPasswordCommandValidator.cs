@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace Application.UseCases.Account.Validators;
 
-public class ResetPasswordValidator : AbstractValidator<ResetPasswordCommand>
+public class ResetPasswordCommandValidator : AbstractValidator<ResetPasswordCommand>
 {
-    public ResetPasswordValidator()
+    public ResetPasswordCommandValidator()
     {
         RuleFor(x => x.Email).EmailRules(ValidationMessages.FieldEmail);
         RuleFor(x => x.Code).IsRequired(ValidationMessages.FieldCode);
