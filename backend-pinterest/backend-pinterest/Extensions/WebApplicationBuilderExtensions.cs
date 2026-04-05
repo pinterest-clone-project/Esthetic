@@ -1,26 +1,23 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Application.Behaviors;
+using Application.Interfaces;
+using Domain.Constants;
+using Domain.Entities.Identity;
+using Domain.Interfaces;
+using FluentValidation;
+using Infrastructure.Data;
+using Infrastructure.Data.Repositories;
+using Infrastructure.Jobs;
+using Infrastructure.Middleware;
+using Infrastructure.Services;
+using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-using System.Text;
 using Quartz;
-using Application.Behaviors;
-using Infrastructure.Data;
-using Domain.Entities.Identity;
-using Infrastructure.Jobs;
-using Domain.Interfaces;
-using Application.Interfaces;
-using Infrastructure.Services;
-using Infrastructure.Data.Repositories;
-using FluentValidation;
-using MediatR;
-using Infrastructure.Middleware;
-using backend_pinterest.Extensions;
-using Microsoft.AspNetCore.Localization;
 using System.Globalization;
-using Domain.Constants;
-using System.Linq;
+using System.Text;
 
 namespace backend_pinterest.Extensions;
 
@@ -114,7 +111,6 @@ public static class WebApplicationBuilderExtensions
         services.AddHttpClient();
         services.AddHttpContextAccessor();
 
-        // Localization
         services.AddLocalization();
         services.Configure<RequestLocalizationOptions>(options =>
         {

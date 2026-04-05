@@ -70,6 +70,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Validation error.
+        /// </summary>
+        internal static string ErrorValidation {
+            get {
+                return ResourceManager.GetString("ErrorValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Biography.
         /// </summary>
         internal static string FieldBio {

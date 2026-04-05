@@ -168,4 +168,7 @@
   <data name="FieldNewPassword" xml:space="preserve">
     <value>Новий пароль</value>
   </data>
+  <data name="ErrorValidation" xml:space="preserve">
+    <value>Помилка валідації</value>
+  </data>
 </root>
