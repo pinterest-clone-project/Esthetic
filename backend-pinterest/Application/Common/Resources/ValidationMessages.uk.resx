@@ -180,4 +180,7 @@
   <data name="ErrorNotFound" xml:space="preserve">
     <value>Не знайдено</value>
   </data>
+  <data name="ErrorDomain" xml:space="preserve">
+    <value>Порушення бізнес-правил</value>
+  </data>
 </root>

@@ -180,4 +180,7 @@
   <data name="ErrorNotFound" xml:space="preserve">
     <value>Not found</value>
   </data>
+  <data name="ErrorDomain" xml:space="preserve">
+    <value>Business rule violation</value>
+  </data>
 </root>

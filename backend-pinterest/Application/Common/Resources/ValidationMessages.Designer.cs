@@ -79,6 +79,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Business rule violation.
+        /// </summary>
+        internal static string ErrorDomain {
+            get {
+                return ResourceManager.GetString("ErrorDomain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not found.
         /// </summary>
         internal static string ErrorNotFound {
