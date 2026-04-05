@@ -17,6 +17,10 @@ using FluentValidation;
 using MediatR;
 using Infrastructure.Middleware;
 using backend_pinterest.Extensions;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
+using Domain.Constants;
+using System.Linq;
 
 namespace backend_pinterest.Extensions;
 
@@ -109,6 +113,17 @@ public static class WebApplicationBuilderExtensions
         #region Infrastructure & MediatR
         services.AddHttpClient();
         services.AddHttpContextAccessor();
+
+        // Localization
+        services.AddLocalization();
+        services.Configure<RequestLocalizationOptions>(options =>
+        {
+            var supported = SupportedCultures.AllCultures.Select(c => new CultureInfo(c)).ToArray();
+            options.SetDefaultCulture(SupportedCultures.English)
+                   .AddSupportedCultures(supported.Select(c => c.Name).ToArray())
+                   .AddSupportedUICultures(supported.Select(c => c.Name).ToArray());
+            options.ApplyCurrentCultureToResponseHeaders = true;
+        });
 
         services.AddStackExchangeRedisCache(options =>
         {
