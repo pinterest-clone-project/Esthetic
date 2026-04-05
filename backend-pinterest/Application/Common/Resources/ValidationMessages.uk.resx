@@ -186,4 +186,7 @@
   <data name="ErrorInternal" xml:space="preserve">
     <value>Внутрішня помилка сервера</value>
   </data>
+  <data name="ErrorForbidden" xml:space="preserve">
+    <value>Доступ заборонено</value>
+  </data>
 </root>

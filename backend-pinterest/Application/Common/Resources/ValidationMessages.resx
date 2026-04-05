@@ -186,4 +186,7 @@
   <data name="ErrorInternal" xml:space="preserve">
     <value>Internal server error</value>
   </data>
+  <data name="ErrorForbidden" xml:space="preserve">
+    <value>Access denied</value>
+  </data>
 </root>
