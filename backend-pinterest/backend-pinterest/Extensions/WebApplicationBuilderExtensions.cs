@@ -1,4 +1,5 @@
 ﻿using Application.Behaviors;
+using Application.Common.Validators;
 using Application.Interfaces;
 using Domain.Constants;
 using Domain.Entities.Identity;
@@ -78,28 +79,24 @@ public static class WebApplicationBuilderExtensions
                     context.Response.StatusCode = 401;
                     context.Response.ContentType = "application/json";
 
-                    var response = new
+                    await context.Response.WriteAsJsonAsync(new
                     {
                         status = 401,
-                        title = "Помилка автентифікації",
-                        detail = "Токен відсутній або недійсний"
-                    };
-
-                    await context.Response.WriteAsJsonAsync(response);
+                        title = ValidationMessages.ErrorUnauthorized,
+                        detail = ValidationMessages.ErrorTokenInvalid
+                    });
                 },
                 OnForbidden = async context =>
                 {
                     context.Response.StatusCode = 403;
                     context.Response.ContentType = "application/json";
 
-                    var response = new
+                    await context.Response.WriteAsJsonAsync(new
                     {
                         status = 403,
-                        title = "Доступ заборонено",
-                        detail = "У вас немає прав для цієї дії"
-                    };
-
-                    await context.Response.WriteAsJsonAsync(response);
+                        title = ValidationMessages.ErrorForbidden,
+                        detail = ValidationMessages.ErrorNoPermission
+                    });
                 }
             };
         });
