@@ -61,7 +61,7 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Невірний формат Email.
+        ///   Looks up a localized string similar to Invalid email format.
         /// </summary>
         internal static string EmailFormat {
             get {
@@ -70,7 +70,7 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Невірний email або пароль.
+        ///   Looks up a localized string similar to Invalid email or password.
         /// </summary>
         internal static string InvalidCredentials {
             get {
@@ -79,7 +79,7 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} не може бути довшим за {1} символів.
+        ///   Looks up a localized string similar to {0} cannot be longer than {1} characters.
         /// </summary>
         internal static string MaxLength {
             get {
@@ -88,7 +88,7 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} повинен містити мінімум {1} символів.
+        ///   Looks up a localized string similar to {0} must be at least {1} characters.
         /// </summary>
         internal static string MinLength {
             get {
@@ -97,7 +97,7 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} не знайдено.
+        ///   Looks up a localized string similar to {0} not found.
         /// </summary>
         internal static string NotFound {
             get {
@@ -106,7 +106,7 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Невірний формат номера телефону.
+        ///   Looks up a localized string similar to Invalid phone number format.
         /// </summary>
         internal static string PhoneFormat {
             get {
@@ -115,7 +115,7 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} є обов&apos;язковим.
+        ///   Looks up a localized string similar to {0} is required.
         /// </summary>
         internal static string Required {
             get {
