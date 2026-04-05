@@ -36,6 +36,17 @@ public static class ValidationMessages
     public static string FieldCode => Get("FieldCode");
     public static string FieldRefreshToken => Get("FieldRefreshToken");
 
+    public static string ErrorValidation => Get("ErrorValidation");
+    public static string ErrorBadRequest => Get("ErrorBadRequest");
+    public static string ErrorUnauthorized => Get("ErrorUnauthorized");
+    public static string ErrorNotFound => Get("ErrorNotFound");
+    public static string ErrorDomain => Get("ErrorDomain");
+    public static string ErrorInternal => Get("ErrorInternal");
+    public static string ErrorForbidden => Get("ErrorForbidden");
+
+    public static string ErrorTokenInvalid => Get("ErrorTokenInvalid");
+    public static string ErrorNoPermission => Get("ErrorNoPermission");
+
     private static string Get(string key)
         => _manager.GetString(key, CultureInfo.CurrentCulture) ?? key;
 }
