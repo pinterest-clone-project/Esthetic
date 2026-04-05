@@ -171,4 +171,7 @@
   <data name="ErrorValidation" xml:space="preserve">
     <value>Validation error</value>
   </data>
+  <data name="ErrorBadRequest" xml:space="preserve">
+    <value>Bad request</value>
+  </data>
 </root>

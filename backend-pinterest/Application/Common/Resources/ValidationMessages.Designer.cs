@@ -70,6 +70,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bad request.
+        /// </summary>
+        internal static string ErrorBadRequest {
+            get {
+                return ResourceManager.GetString("ErrorBadRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation error.
         /// </summary>
         internal static string ErrorValidation {

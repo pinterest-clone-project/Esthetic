@@ -171,4 +171,7 @@
   <data name="ErrorValidation" xml:space="preserve">
     <value>Помилка валідації</value>
   </data>
+  <data name="ErrorBadRequest" xml:space="preserve">
+    <value>Невірний запит</value>
+  </data>
 </root>
