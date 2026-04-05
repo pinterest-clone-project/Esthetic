@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Domain.Constants;
 
 namespace Application.Common.Validators;
 
@@ -8,41 +9,40 @@ public static class SharedValidationRules
         rule
             .IsRequired(fieldName)
             .EmailAddress()
-            .WithMessage($"Невірний формат {fieldName}")
-            .MaximumLength(255)
-            .WithMessage($"{fieldName} не може бути довшим за 255 символів");
+            .WithMessage(ValidationMessages.EmailFormat)
+            .MaximumLength(FieldLengths.EmailMax)
+            .WithMessage(ValidationMessages.MaxLength(fieldName, FieldLengths.EmailMax));
 
     public static IRuleBuilderOptions<T, string?> PasswordRules<T>(this IRuleBuilder<T, string?> rule, string fieldName) =>
         rule
             .IsRequired(fieldName)
-            .MinimumLength(6)
-            .WithMessage("Пароль повинен містити мінімум 6 символів")
-            .MaximumLength(100)
-            .WithMessage("Пароль не може бути довшим за 100 символів");
+            .MinimumLength(FieldLengths.PasswordMin)
+            .WithMessage(ValidationMessages.MinLength(fieldName, FieldLengths.PasswordMin))
+            .MaximumLength(FieldLengths.PasswordMax)
+            .WithMessage(ValidationMessages.MaxLength(fieldName, FieldLengths.PasswordMax));
 
     public static IRuleBuilderOptions<T, string?> PhoneRules<T>(this IRuleBuilder<T, string?> rule) =>
         rule
             .Matches(@"^\+?[0-9\s\-\(\)]{7,20}$")
-            .WithMessage("Невірний формат номера телефону")
-            .MaximumLength(20)
-            .WithMessage("Номер телефону не може бути довшим за 20 символів")
+            .WithMessage(ValidationMessages.PhoneFormat)
+            .MaximumLength(FieldLengths.PhoneMax)
+            .WithMessage(ValidationMessages.MaxLength(ValidationMessages.FieldPhone, FieldLengths.PhoneMax))
             .When(x => x is string s && !string.IsNullOrEmpty(s));
 
     public static IRuleBuilderOptions<T, string?> NameRules<T>(this IRuleBuilder<T, string?> rule, string fieldName) =>
         rule
             .IsRequired(fieldName)
-            .MaximumLength(50)
-            .WithMessage($"{fieldName} не може бути довшим за 50 символів")
+            .MaximumLength(FieldLengths.NameMax)
+            .WithMessage(ValidationMessages.MaxLength(fieldName, FieldLengths.NameMax))
             .When(x => x is string s && !string.IsNullOrEmpty(s));
 
     public static IRuleBuilderOptions<T, string?> BioRules<T>(this IRuleBuilder<T, string?> rule) =>
         rule
-            .MaximumLength(500)
-            .WithMessage("Біографія не може бути довшою за 500 символів");
+            .MaximumLength(FieldLengths.BioMax)
+            .WithMessage(ValidationMessages.MaxLength(ValidationMessages.FieldBio, FieldLengths.BioMax));
 
     public static IRuleBuilderOptions<T, string?> IsRequired<T>(this IRuleBuilder<T, string?> rule, string fieldName) =>
         rule
             .NotEmpty()
-            .WithMessage($"{fieldName} є обов'язковим");
-
+            .WithMessage(ValidationMessages.Required(fieldName));
 }

@@ -70,6 +70,96 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Biography.
+        /// </summary>
+        internal static string FieldBio {
+            get {
+                return ResourceManager.GetString("FieldBio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code.
+        /// </summary>
+        internal static string FieldCode {
+            get {
+                return ResourceManager.GetString("FieldCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        internal static string FieldEmail {
+            get {
+                return ResourceManager.GetString("FieldEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First name.
+        /// </summary>
+        internal static string FieldFirstName {
+            get {
+                return ResourceManager.GetString("FieldFirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last name.
+        /// </summary>
+        internal static string FieldLastName {
+            get {
+                return ResourceManager.GetString("FieldLastName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New password.
+        /// </summary>
+        internal static string FieldNewPassword {
+            get {
+                return ResourceManager.GetString("FieldNewPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        internal static string FieldPassword {
+            get {
+                return ResourceManager.GetString("FieldPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone.
+        /// </summary>
+        internal static string FieldPhone {
+            get {
+                return ResourceManager.GetString("FieldPhone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh token.
+        /// </summary>
+        internal static string FieldRefreshToken {
+            get {
+                return ResourceManager.GetString("FieldRefreshToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username.
+        /// </summary>
+        internal static string FieldUsername {
+            get {
+                return ResourceManager.GetString("FieldUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid email or password.
         /// </summary>
         internal static string InvalidCredentials {
