@@ -79,6 +79,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authentication error.
+        /// </summary>
+        internal static string ErrorUnauthorized {
+            get {
+                return ResourceManager.GetString("ErrorUnauthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation error.
         /// </summary>
         internal static string ErrorValidation {

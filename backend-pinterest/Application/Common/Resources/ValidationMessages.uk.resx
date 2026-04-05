@@ -174,4 +174,7 @@
   <data name="ErrorBadRequest" xml:space="preserve">
     <value>Невірний запит</value>
   </data>
+  <data name="ErrorUnauthorized" xml:space="preserve">
+    <value>Помилка автентифікації</value>
+  </data>
 </root>

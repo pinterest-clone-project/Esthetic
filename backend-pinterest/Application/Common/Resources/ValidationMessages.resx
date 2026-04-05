@@ -174,4 +174,7 @@
   <data name="ErrorBadRequest" xml:space="preserve">
     <value>Bad request</value>
   </data>
+  <data name="ErrorUnauthorized" xml:space="preserve">
+    <value>Authentication error</value>
+  </data>
 </root>
