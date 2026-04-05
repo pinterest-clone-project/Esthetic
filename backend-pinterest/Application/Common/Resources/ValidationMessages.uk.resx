@@ -177,4 +177,7 @@
   <data name="ErrorUnauthorized" xml:space="preserve">
     <value>Помилка автентифікації</value>
   </data>
+  <data name="ErrorNotFound" xml:space="preserve">
+    <value>Не знайдено</value>
+  </data>
 </root>

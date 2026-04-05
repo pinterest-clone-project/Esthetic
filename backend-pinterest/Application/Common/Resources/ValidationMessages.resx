@@ -177,4 +177,7 @@
   <data name="ErrorUnauthorized" xml:space="preserve">
     <value>Authentication error</value>
   </data>
+  <data name="ErrorNotFound" xml:space="preserve">
+    <value>Not found</value>
+  </data>
 </root>
