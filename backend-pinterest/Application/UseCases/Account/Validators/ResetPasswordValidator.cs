@@ -8,8 +8,8 @@ public class ResetPasswordValidator : AbstractValidator<ResetPasswordCommand>
 {
     public ResetPasswordValidator()
     {
-        RuleFor(x => x.Email).EmailRules("Email");
-        RuleFor(x => x.Code).IsRequired("Код");
-        RuleFor(x => x.NewPassword).PasswordRules("Новий пароль");
+        RuleFor(x => x.Email).EmailRules(ValidationMessages.FieldEmail);
+        RuleFor(x => x.Code).IsRequired(ValidationMessages.FieldCode);
+        RuleFor(x => x.NewPassword).PasswordRules(ValidationMessages.FieldNewPassword);
     }
 }
