@@ -183,4 +183,7 @@
   <data name="ErrorDomain" xml:space="preserve">
     <value>Business rule violation</value>
   </data>
+  <data name="ErrorInternal" xml:space="preserve">
+    <value>Internal server error</value>
+  </data>
 </root>
