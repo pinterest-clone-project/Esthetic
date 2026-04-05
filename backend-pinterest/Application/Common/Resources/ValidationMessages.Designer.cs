@@ -115,6 +115,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Token is missing or invalid.
+        /// </summary>
+        internal static string ErrorTokenInvalid {
+            get {
+                return ResourceManager.GetString("ErrorTokenInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Authentication error.
         /// </summary>
         internal static string ErrorUnauthorized {

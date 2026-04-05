@@ -189,4 +189,7 @@
   <data name="ErrorForbidden" xml:space="preserve">
     <value>Access denied</value>
   </data>
+  <data name="ErrorTokenInvalid" xml:space="preserve">
+    <value>Token is missing or invalid</value>
+  </data>
 </root>
