@@ -1,8 +1,7 @@
+using Application.Interfaces.Caching;
 using Domain.Constants;
-using Domain.Interfaces.Caching;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Text.Json.Serialization;
 
 namespace Application.UseCases.Users.Commands;
 
