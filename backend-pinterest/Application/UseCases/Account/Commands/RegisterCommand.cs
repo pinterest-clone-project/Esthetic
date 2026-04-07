@@ -1,11 +1,12 @@
-﻿using Application.Models.DTO.User;
+﻿using Application.Interfaces.Transaction;
+using Application.Models.DTO.User;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.UseCases.Account.Commands;
 
-public record RegisterCommand : IRequest<TokenDTO>
+public record RegisterCommand : IRequest<TokenDTO>, ITransactionalCommand
 {
     public string Username { get; set; } = string.Empty;
     public string FirstName { get; set; } = string.Empty;
