@@ -7,9 +7,7 @@ using MediatR;
 
 namespace Application.UseCases.Tags.Queries;
 
-public record GetAllTagsQuery() : IRequest<List<TagDTO>>, ICacheableQuery
+public record GetAllTagsQuery() : IRequest<List<TagDTO>>
 {
-    public string CacheKey => CacheKeys.AllTags;
-    public TimeSpan? Expiration => AppTimeToLive.UserCacheExpiration;
 }
 
