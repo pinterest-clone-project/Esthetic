@@ -1,22 +1,24 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Application.Behaviors;
+using Application.Common.Validators;
+using Application.Interfaces;
+using Domain.Constants;
+using Domain.Entities.Identity;
+using Domain.Interfaces;
+using FluentValidation;
+using Infrastructure.Data;
+using Infrastructure.Data.Repositories;
+using Infrastructure.Jobs;
+using Infrastructure.Middleware;
+using Infrastructure.Services;
+using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-using System.Text;
 using Quartz;
-using Application.Behaviors;
-using Infrastructure.Data;
-using Domain.Entities.Identity;
-using Infrastructure.Jobs;
-using Domain.Interfaces;
-using Application.Interfaces;
-using Infrastructure.Services;
-using Infrastructure.Data.Repositories;
-using FluentValidation;
-using MediatR;
-using Infrastructure.Middleware;
-using backend_pinterest.Extensions;
+using System.Globalization;
+using System.Text;
 
 namespace backend_pinterest.Extensions;
 
@@ -31,6 +33,9 @@ public static class WebApplicationBuilderExtensions
         services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(config.GetConnectionString("DefaultConnection"))
         );
+
+        services.AddScoped<IAppDbContext>(sp =>
+            sp.GetRequiredService<AppDbContext>());
         #endregion
 
         #region Identity
@@ -77,28 +82,24 @@ public static class WebApplicationBuilderExtensions
                     context.Response.StatusCode = 401;
                     context.Response.ContentType = "application/json";
 
-                    var response = new
+                    await context.Response.WriteAsJsonAsync(new
                     {
                         status = 401,
-                        title = "Помилка автентифікації",
-                        detail = "Токен відсутній або недійсний"
-                    };
-
-                    await context.Response.WriteAsJsonAsync(response);
+                        title = ValidationMessages.ErrorUnauthorized,
+                        detail = ValidationMessages.ErrorTokenInvalid
+                    });
                 },
                 OnForbidden = async context =>
                 {
                     context.Response.StatusCode = 403;
                     context.Response.ContentType = "application/json";
 
-                    var response = new
+                    await context.Response.WriteAsJsonAsync(new
                     {
                         status = 403,
-                        title = "Доступ заборонено",
-                        detail = "У вас немає прав для цієї дії"
-                    };
-
-                    await context.Response.WriteAsJsonAsync(response);
+                        title = ValidationMessages.ErrorForbidden,
+                        detail = ValidationMessages.ErrorNoPermission
+                    });
                 }
             };
         });
@@ -109,6 +110,16 @@ public static class WebApplicationBuilderExtensions
         #region Infrastructure & MediatR
         services.AddHttpClient();
         services.AddHttpContextAccessor();
+
+        services.AddLocalization();
+        services.Configure<RequestLocalizationOptions>(options =>
+        {
+            var supported = SupportedCultures.AllCultures.Select(c => new CultureInfo(c)).ToArray();
+            options.SetDefaultCulture(SupportedCultures.English)
+                   .AddSupportedCultures(supported.Select(c => c.Name).ToArray())
+                   .AddSupportedUICultures(supported.Select(c => c.Name).ToArray());
+            options.ApplyCurrentCultureToResponseHeaders = true;
+        });
 
         services.AddStackExchangeRedisCache(options =>
         {
@@ -122,6 +133,7 @@ public static class WebApplicationBuilderExtensions
         {
             cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(CacheInvalidationBehavior<,>));
         });

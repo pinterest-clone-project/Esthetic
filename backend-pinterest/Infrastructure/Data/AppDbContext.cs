@@ -1,19 +1,27 @@
-﻿using Domain.Entities;
+﻿using Application.Interfaces;
+using Domain.Entities;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Infrastructure.Data;
 
 public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
         IdentityUserClaim<Guid>, UserRoleEntity, UserLoginEntity,
-        IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
+        IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>, IAppDbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }
     public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
+
+    public IDbContextTransaction? CurrentTransaction => Database.CurrentTransaction;
+
+    public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken ct = default)
+        => await Database.BeginTransactionAsync(ct);
+
     public DbSet<TagEntity> Tags { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -1,4 +1,4 @@
-﻿namespace Domain.Interfaces.Caching;
+﻿namespace Application.Interfaces.Caching;
 
 public interface ICacheInvalidator
 {

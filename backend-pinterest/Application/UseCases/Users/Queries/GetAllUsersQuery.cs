@@ -1,7 +1,7 @@
-using MediatR;
-using Domain.Interfaces.Caching;
-using Domain.Constants;
+using Application.Interfaces.Caching;
 using Application.Models.DTO.User;
+using Domain.Constants;
+using MediatR;
 
 namespace Application.UseCases.Users.Queries;
 

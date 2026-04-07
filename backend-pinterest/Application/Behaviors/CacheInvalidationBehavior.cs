@@ -1,4 +1,4 @@
-﻿using Domain.Interfaces.Caching;
+﻿using Application.Interfaces.Caching;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
 

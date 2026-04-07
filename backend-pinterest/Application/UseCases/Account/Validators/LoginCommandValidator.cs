@@ -8,7 +8,7 @@ public class LoginCommandValidator : AbstractValidator<LoginCommand>
 {
     public LoginCommandValidator()
     {
-        RuleFor(x => x.Email).EmailRules("Email");
-        RuleFor(x => x.Password).PasswordRules("Пароль");
+        RuleFor(x => x.Email).EmailRules(ValidationMessages.FieldEmail);
+        RuleFor(x => x.Password).PasswordRules(ValidationMessages.FieldPassword);
     }
 }
