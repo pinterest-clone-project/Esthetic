@@ -33,6 +33,9 @@ public static class WebApplicationBuilderExtensions
         services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(config.GetConnectionString("DefaultConnection"))
         );
+
+        services.AddScoped<IAppDbContext>(sp =>
+            sp.GetRequiredService<AppDbContext>());
         #endregion
 
         #region Identity
