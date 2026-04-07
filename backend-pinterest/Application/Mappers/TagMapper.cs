@@ -10,5 +10,6 @@ public class TagMapper : Profile
     public TagMapper()
     {
         CreateMap<TagEntity, TagDTO>();
+        CreateMap<CreateTagDTO, TagEntity>();
     }
 }
