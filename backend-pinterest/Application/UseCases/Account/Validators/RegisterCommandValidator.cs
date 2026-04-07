@@ -8,12 +8,12 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {
     public RegisterCommandValidator()
     {
-        RuleFor(x => x.Username).NameRules("Ім'я користувача");
-        RuleFor(x => x.FirstName).NameRules("Ім'я");
-        RuleFor(x => x.LastName).NameRules("Прізвище");
+        RuleFor(x => x.Username).NameRules(ValidationMessages.FieldUsername);
+        RuleFor(x => x.FirstName).NameRules(ValidationMessages.FieldFirstName);
+        RuleFor(x => x.LastName).NameRules(ValidationMessages.FieldLastName);
         RuleFor(x => x.Bio).BioRules();
-        RuleFor(x => x.Email).EmailRules("Email");
-        RuleFor(x => x.Password).PasswordRules("Пароль");
+        RuleFor(x => x.Email).EmailRules(ValidationMessages.FieldEmail);
+        RuleFor(x => x.Password).PasswordRules(ValidationMessages.FieldPassword);
         RuleFor(x => x.PhoneNumber).PhoneRules();
     }
 }

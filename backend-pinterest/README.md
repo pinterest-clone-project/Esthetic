@@ -17,160 +17,119 @@
 ## 📂 Структура шарів
 
 ### 1️⃣ Domain
-**Доменний рівень — серце програми.** Він описує поведінку бізнес-об'єктів і містить тільки бізнес-модель, без прив'язки до бази даних або фреймворків.
+**Доменний рівень — серце програми.** Містить тільки бізнес-модель без прив'язки до бази даних або фреймворків.
 
-* **Суб'єкти (domain entities)** — наприклад `Domain/Entities/Identity/UserEntity.cs`.
-* **Об'єкти-значення (value objects)** — якщо потрібні, тримати поруч з доменом.
-* **Події домену (domain events)** — наприклад, `MessageSentEvent` для повідомлень (за потреби додаються у `Domain/Events`).
+* **Entities** — `Domain/Entities/Identity/UserEntity.cs`
+* **Constants** — `FieldLengths`, `JwtClaims`, `AuthTokenConstants`, `AppTimeToLive` — `Domain/Constants/`
+* **Exceptions** — `DomainException` — `Domain/Exceptions/`
+* **Interfaces** — контракти репозиторіїв — `Domain/Interfaces/`
 
 > [!IMPORTANT]
-> **Правило:** домен нічого не знає про API, БД чи інфраструктурні сервіси.
-
-**Приклад із проекту:**
-`UserEntity` в `Domain/Entities/Identity/UserEntity.cs` описує що таке користувач у бізнес-контексті (ім'я, email, bio, roles тощо).
+> **Правило:** домен нічого не знає про API, БД чи інфраструктурні сервіси. Жодних зовнішніх залежностей.
 
 ---
 
 ### 2️⃣ Application
-Цей шар визначає варіанти використання системи (**UseCases**). Він управляє бізнес-операціями, але не реалізує технічні деталі.
+Визначає варіанти використання системи (**UseCases**). Управляє бізнес-операціями, але не реалізує технічні деталі.
 
-* **Команди/Запити (Commands/Queries)** — інкапсулюють дії, наприклад `Application/UseCases/Users/Commands/CreateUserCommand.cs`.
-* **Handler-и** — виконують логіку UseCase, напр. `Application/UseCases/Users/Handlers/CreateUserHandler.cs`.
-* **DTO (request/response)** — контракти між клієнтом і API: `Application/UseCases/Users/Dto/CreateUserRequest.cs`, `UserDto.cs`.
-* **Інтерфейси (порти)** — наприклад `Domain/Interfaces/IUserRepository.cs` (контракт для репозиторію).
-* **AutoMapper профілі** — `Application/Mappers/UserMapper.cs` (мапінги DTO ↔ Entity).
+* **Commands/Queries** — `Application/UseCases/Account/Commands/`
+* **Handlers** — `Application/UseCases/Account/Handlers/`
+* **Validators** — `Application/UseCases/Account/Validators/`
+* **Behaviors** — `ValidationBehavior`, `CachingBehavior`, `CacheInvalidationBehavior` — `Application/Behaviors/`
+* **Common/Exceptions** — `ValidationException`, `BadRequestException`, `NotFoundException`, `UnauthorizedException`
+* **Common/Validators** — `SharedValidationRules`, `ValidationMessages` (локалізація через `.resx`)
+* **Common/Emails** — `EmailTemplates` — HTML шаблони листів
+* **Common/Tokens** — `PasswordResetToken` — парсинг токенів
+* **Interfaces** — `IJwtTokenService`, `IImageService`, `IEmailJobScheduler`, `ISmtpService`
+* **Mappers** — AutoMapper профілі
 
 **Принцип залежностей:** Application залежить від Domain, але не від Infrastructure.
-
-**Типовий flow у шарі Application:**
-1. Контролер відправляє `CreateUserCommand(CreateUserRequest)` через MediatR.
-2. Handler мапить DTO → Entity (AutoMapper), викликає репозиторій через інтерфейс, повертає `UserDto`.
 
 ---
 
 ### 3️⃣ Infrastructure
-Інфраструктура реалізує технічні деталі: доступ до БД, зовнішні сервіси, файлове сховище.
+Реалізує технічні деталі: доступ до БД, зовнішні сервіси, файлове сховище.
 
-* `Infrastructure/Data/AppDbContext.cs` — EF Core DbContext.
-* **Репозиторії** — реалізаціїпортів, напр. `Infrastructure/Data/Repositories/UserRepository.cs` реалізує `IUserRepository`.
-* **Інтеграції зовнішніх API, сервіси:** `Infrastructure/Services/*` (ImageService, JwtTokenService, SmtpService).
-* Quartz jobs, міграції, інші технічні реалізації.
+* `Infrastructure/Data/AppDbContext.cs` — EF Core DbContext
+* **Configurations** — `IEntityTypeConfiguration` для кожної сутності — `Infrastructure/Data/Configurations/`
+* **Repositories** — реалізації інтерфейсів з Domain — `Infrastructure/Data/Repositories/`
+* **Services** — `JwtTokenService`, `ImageService`, `SmtpService`, `EmailJobScheduler` — `Infrastructure/Services/`
+* **Jobs** — `DbSeedJob`, `SendEmailJob` (Quartz) — `Infrastructure/Jobs/`
+* **Middleware** — `GlobalExceptionHandler` — `Infrastructure/Middleware/`
 
-> **Правило:** інфраструктура знає про домен і application (виконує їхні контракти), але домен/додаток не знають про інфраструктуру.
+> **Правило:** інфраструктура знає про Domain і Application, але не навпаки.
 
 ---
 
 ### 4️⃣ API
-**Рівень презентації — точка входу в систему.** Він відповідає лише за HTTP/маршрути та перетворення запиту в команду/запит для Application.
+**Точка входу в систему.** Відповідає лише за HTTP маршрути та перетворення запиту в команду.
 
-* **Контролери:** `backend-pinterest/Controllers/UsersController.cs` — біндять DTO з тіла запиту і викликають MediatR.
-* **Middleware:** JWT/Authentication, глобальний exception handler, CORS.
+* **Controllers** — викликають MediatR, не містять бізнес-логіки
+* **Extensions** — `WebApplicationBuilderExtensions`, `WebApplicationExtensions`
 
 **Правила:**
-* Контролер не містить бізнес-логіки — він викликає Application (через MediatR).
-* Контролер повертає DTO (не доменні ентіті).
+* Контролер не містить бізнес-логіки
+* Контролер повертає DTO, не доменні сутності
 
 ---
 
 ## 🔄 Повний шлях даних
-
-Тут візуалізовано логіку проходження запиту через шари архітектури.
-
 ```mermaid
 graph LR
-    A[Client] -->|POST /api/users| B(API Controller)
-    B -->|Send Command| C(Application Handler)
-    C -->|Map & Save| D(Infrastructure / DB)
-    D -->|Return Entity| C
-    C -->|Return DTO| B
-    B -->|201 Created| A
-````````
-
-## 🧰 Redis — швидкий старт і перевірка
-
-В цьому проекті Redis використовується як `IDistributedCache` (StackExchange.Redis). Нижче інструкція як швидко підняти Redis локально через Docker та як працювати з ним через `redis-cli`.
-
-### 1) Запустити Redis через Docker
-
-Відкрийте термінал (CMD або PowerShell) і виконайте:
-
-```bash
-docker run --name my-redis -p 6379:6379 -d redis
+    A[Client] -->|HTTP Request| B(API Controller)
+    B -->|Send Command| C(ValidationBehavior)
+    C -->|❌ Invalid| E(GlobalExceptionHandler)
+    E -->|400/401/404/422| A
+    C -->|✅ Valid| D(Application Handler)
+    D -->|Map & Save| F(Infrastructure / DB)
+    F -->|Return Entity| D
+    D -->|Return DTO| B
+    B -->|200/201| A
 ```
 
-Це завантажить образ Redis і запустить його на порту `6379`.
+---
 
-### 2) Перевірити, чи Redis працює
+## 🌍 Локалізація
 
-```bash
-docker exec -it my-redis redis-cli ping
+Всі повідомлення про помилки зберігаються в ресурсних файлах і автоматично перемикаються залежно від заголовку запиту.
+```
+Application/Common/Resources/
+├── ValidationMessages.resx      ← англійська (дефолт)
+└── ValidationMessages.uk.resx   ← українська
 ```
 
-Якщо отримаєте `PONG` — Redis працює.
-
-### 3) Консольний доступ (redis-cli)
-
-Підключитися до контейнера:
-
-```bash
-docker exec -it my-redis redis-cli
+Клієнт передає заголовок для вибору мови:
+```http
+Accept-Language: en   → English errors
+Accept-Language: uk   → Українські помилки
 ```
-
-Подивитися всі ключі у базі:
-
-```bash
-keys *
-```
-
-Отримати значення конкретного ключа:
-
-```bash
-get "Pinterest_users:all"
-```
-
-### 4) Режим реального часу (monitor)
-
-Якщо хочете бачити в реальному часі команди, які ваш додаток надсилає в Redis (GET/SET), у консолі `redis-cli` запустіть:
-
-```bash
-monitor
-```
-
-Потім зробіть запит у браузері або Postman — в консолі з'являться відповідні команди.
 
 ---
 
 ## ✅ Валідація
 
-В проекті використовується **FluentValidation** у зв'язці з **MediatR Pipeline**.
-Це означає що валідація відбувається **автоматично** перед кожним Handler — контролери та хендлери не містять жодної валідаційної логіки.
+Використовується **FluentValidation** у зв'язці з **MediatR Pipeline**. Валідація відбувається автоматично перед кожним Handler.
 
----
-
-### 🔄 Як працює flow валідації
+### 🔄 Flow валідації
 ```
 HTTP Request
     ↓
-API Controller  →  надсилає Command через MediatR
+API Controller → надсилає Command через MediatR
     ↓
-ValidationBehavior  →  шукає валідатор для команди
+ValidationBehavior → шукає валідатор для команди
     ↓
-    ❌ є помилки  →  кидає ValidationException
-                          ↓
-                   GlobalExceptionHandler
-                          ↓
-                   400 Bad Request + JSON з помилками
+    ❌ є помилки → ValidationException
+                        ↓
+                 GlobalExceptionHandler
+                        ↓
+                 400 + JSON з помилками
 
-    ✅ все ок  →  Handler виконується
-                          ↓
-                   200/201 відповідь
+    ✅ все ок → Handler виконується
+                        ↓
+                 200/201 відповідь
 ```
 
----
-
 ### 📂 Де знаходяться валідатори
-
-Кожен валідатор лежить **поруч зі своєю командою**:
 ```
 Application/
 └── UseCases/
@@ -179,59 +138,32 @@ Application/
         │   ├── LoginCommand.cs
         │   └── RegisterCommand.cs
         └── Validators/
-            ├── LoginCommandValidator.cs     ← валідатор для LoginCommand
-            └── RegisterCommandValidator.cs  ← валідатор для RegisterCommand
+            ├── LoginCommandValidator.cs
+            └── RegisterCommandValidator.cs
 ```
 
----
-
 ### ✏️ Як написати валідатор
+
+Використовуй `SharedValidationRules` — спільні правила з локалізованими повідомленнями:
 ```csharp
-public class CreatePinCommandValidator : AbstractValidator<CreatePinCommand>
+public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {
-    public CreatePinCommandValidator()
+    public RegisterCommandValidator()
     {
-        RuleFor(x => x.Title)
-            .NotEmpty()
-            .WithMessage("Назва є обов'язковою")
-            .MaximumLength(100)
-            .WithMessage("Назва не може бути довшою за 100 символів");
-
-        RuleFor(x => x.Description)
-            .MaximumLength(500)
-            .WithMessage("Опис не може бути довшим за 500 символів");
-
-        RuleFor(x => x.ImageFile)
-            .NotNull()
-            .WithMessage("Зображення є обов'язковим");
+        RuleFor(x => x.Email).EmailRules(ValidationMessages.FieldEmail);
+        RuleFor(x => x.Password).PasswordRules(ValidationMessages.FieldPassword);
+        RuleFor(x => x.FirstName).NameRules(ValidationMessages.FieldFirstName);
+        RuleFor(x => x.LastName).NameRules(ValidationMessages.FieldLastName);
+        RuleFor(x => x.PhoneNumber).PhoneRules();
+        RuleFor(x => x.Bio).BioRules();
     }
 }
 ```
 
 > [!IMPORTANT]
-> Валідатор **реєструється автоматично** через `AddValidatorsFromAssemblies` — нічого додатково реєструвати не потрібно.
+> Валідатор реєструється автоматично через `AddValidatorsFromAssemblies` — нічого додатково реєструвати не потрібно.
 
----
-
-### 🌐 Формат відповіді при помилці валідації
-
-**400 Bad Request:**
-```json
-{
-  "status": 400,
-  "title": "Помилка валідації",
-  "errors": {
-    "Email": ["Невірний формат Email"],
-    "Password": ["Пароль повинен містити мінімум 6 символів"]
-  }
-}
-```
-
----
-
-### ⚠️ Інші HTTP помилки
-
-Окрім валідації, GlobalExceptionHandler обробляє й інші винятки:
+### ⚠️ Обробка помилок
 
 | Виняток | Статус | Коли кидати |
 |---------|--------|-------------|
@@ -239,36 +171,52 @@ public class CreatePinCommandValidator : AbstractValidator<CreatePinCommand>
 | `BadRequestException` | 400 | Логічна помилка (email вже зайнятий) |
 | `UnauthorizedException` | 401 | Невірний логін або пароль |
 | `NotFoundException` | 404 | Об'єкт не знайдено в БД |
+| `DomainException` | 422 | Порушення бізнес-правил |
+---
 
+## 🧰 Redis — швидкий старт
 
+Redis використовується як `IDistributedCache` для кешування запитів через `CachingBehavior`.
+
+### Запустити Redis через Docker
+```bash
+docker run --name my-redis -p 6379:6379 -d redis
+```
+
+### Перевірити що працює
+```bash
+docker exec -it my-redis redis-cli ping
+# → PONG
+```
+
+### Корисні команди
+```bash
+# підключитись
+docker exec -it my-redis redis-cli
+
+# переглянути всі ключі
+keys *
+
+# отримати значення ключа
+get "Pinterest_users:all"
+
+# режим реального часу
+monitor
+```
 
 ---
 
-### 🚫 Важливо — чого НЕ робити
-```csharp
-// ❌ Не валідуй в контролері
-[HttpPost]
-public async Task<IActionResult> Create([FromBody] CreatePinCommand command)
-{
-    if (string.IsNullOrEmpty(command.Title)) // ← так не треба
-        return BadRequest("Title is required");
-    ...
-}
+## 📧 Фонова відправка листів
 
-// ❌ Не валідуй в Handler
-public async Task<Unit> Handle(CreatePinCommand request, ...)
-{
-    if (string.IsNullOrEmpty(request.Title)) // ← так не треба
-        throw new Exception("Title is required");
-    ...
-}
-
-// ✅ Правильно — окремий валідатор, все інше чисте
-public class CreatePinCommandValidator : AbstractValidator<CreatePinCommand>
-{
-    public CreatePinCommandValidator()
-    {
-        RuleFor(x => x.Title).NotEmpty();
-    }
-}
+Листи відправляються через **Quartz** у фоні — Handler не чекає завершення відправки.
 ```
+Handler
+    ↓
+IEmailJobScheduler.ScheduleAsync()   ← миттєво повертається
+    ↓
+Quartz → SendEmailJob                ← відправляє у фоні
+    ↓
+SmtpService.SendEmailAsync()
+```
+
+HTML шаблони листів знаходяться в `Application/Common/Emails/EmailTemplates.cs`.

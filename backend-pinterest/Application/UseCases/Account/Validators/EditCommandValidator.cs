@@ -8,10 +8,10 @@ public class EditCommandValidator : AbstractValidator<EditCommand>
 {
     public EditCommandValidator()
     {
-        RuleFor(x => x.FirstName).NameRules("Ім'я");
-        RuleFor(x => x.LastName).NameRules("Прізвище");
+        RuleFor(x => x.FirstName).NameRules(ValidationMessages.FieldFirstName);
+        RuleFor(x => x.LastName).NameRules(ValidationMessages.FieldLastName);
         RuleFor(x => x.Bio).BioRules();
-        RuleFor(x => x.Email).EmailRules("Email");
+        RuleFor(x => x.Email).EmailRules(ValidationMessages.FieldEmail);
         RuleFor(x => x.PhoneNumber).PhoneRules();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Application.Models.DTO.User;
+﻿using Application.Interfaces.Transaction;
+using Application.Models.DTO.User;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,7 @@ using System.Text.Json.Serialization;
 
 namespace Application.UseCases.Account.Commands;
 
-public record EditCommand : IRequest<TokenDTO>
+public record EditCommand : IRequest<TokenDTO>, ITransactionalCommand
 {
     [BindNever]
     public Guid Id { get; init; }

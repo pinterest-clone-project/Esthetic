@@ -11,6 +11,7 @@ import type {ITokenResponse} from "../types/account/responses/ITokenResponse.ts"
 const rawBaseQuery = fetchBaseQuery({
     baseUrl: `${APP_ENV.API_BASE_URL}/api/`,
     prepareHeaders: (headers) => {
+        headers.set("Accept-Language", "en");
         const token = storage.getAccessToken();
         if (token) {
             headers.set("authorization", `Bearer ${token}`);

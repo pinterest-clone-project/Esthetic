@@ -6,16 +6,14 @@ using Application.Models.DTO.User;
 
 namespace Application.UseCases.Users.Handlers;
 
-public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, UserDTO?>
+public class GetUserByIdHandler(
+    IUserRepository userRepository,
+    IMapper mapper) : IRequestHandler<GetUserByIdQuery, UserDTO?>
 {
-    private readonly IUserRepository _repo;
-    private readonly IMapper _mapper;
-    public GetUserByIdHandler(IUserRepository repo, IMapper mapper) => (_repo, _mapper) = (repo, mapper);
-
     public async Task<UserDTO?> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _repo.GetByIdAsync(request.Id);
+        var user = await userRepository.GetByIdAsync(request.Id, cancellationToken);
         if (user == null) return null;
-        return _mapper.Map<UserDTO>(user);
+        return mapper.Map<UserDTO>(user);
     }
 }

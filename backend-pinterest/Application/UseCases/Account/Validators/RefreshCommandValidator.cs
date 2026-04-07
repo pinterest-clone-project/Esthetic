@@ -8,6 +8,6 @@ public class RefreshCommandValidator : AbstractValidator<RefreshCommand>
 {
     public RefreshCommandValidator()
     {
-        RuleFor(x => x.RefreshToken).IsRequired("Токен оновлення");
+        RuleFor(x => x.RefreshToken).IsRequired(ValidationMessages.FieldRefreshToken);
     }
 }
