@@ -61,6 +61,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The code has expired.
+        /// </summary>
+        internal static string CodeHasExpired {
+            get {
+                return ResourceManager.GetString("CodeHasExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid email format.
         /// </summary>
         internal static string EmailFormat {
@@ -237,6 +246,15 @@ namespace Application.Common.Resources {
         internal static string FieldUsername {
             get {
                 return ResourceManager.GetString("FieldUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid confirmation code.
+        /// </summary>
+        internal static string InvalidConfirmationCode {
+            get {
+                return ResourceManager.GetString("InvalidConfirmationCode", resourceCulture);
             }
         }
         

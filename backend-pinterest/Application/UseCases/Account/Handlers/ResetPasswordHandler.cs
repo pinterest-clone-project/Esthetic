@@ -1,5 +1,6 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Tokens;
+using Application.Common.Validators;
 using Application.UseCases.Account.Commands;
 using Domain.Constants;
 using Domain.Entities.Identity;
@@ -19,7 +20,7 @@ public class ResetPasswordHandler(
 
         if (user == null)
         {
-            throw new NotFoundException("Користувача не знайдено");
+            throw new NotFoundException(ValidationMessages.UserNotFound);
         }
 
         var rawToken = await userManager.GetAuthenticationTokenAsync(
@@ -28,13 +29,13 @@ public class ResetPasswordHandler(
             AuthTokenConstants.PasswordResetCode);
 
         var token = PasswordResetToken.Parse(rawToken)
-            ?? throw new BadRequestException("Токен скидання паролю недійсний");
+            ?? throw new BadRequestException(ValidationMessages.InvalidConfirmationCode);
 
         if (!token.IsValid(request.Code))
-            throw new BadRequestException("Невірний код підтвердження");
+            throw new BadRequestException(ValidationMessages.InvalidConfirmationCode);
 
         if (token.IsExpired)
-            throw new BadRequestException("Термін дії коду вийшов");
+            throw new BadRequestException(ValidationMessages.CodeHasExpired);
 
         user.PasswordHash = userManager
             .PasswordHasher.HashPassword(user, request.NewPassword);

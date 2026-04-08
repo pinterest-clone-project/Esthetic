@@ -201,4 +201,10 @@
   <data name="InvalidRefreshToken" xml:space="preserve">
     <value>Refresh token is invalid or expired</value>
   </data>
+  <data name="InvalidConfirmationCode" xml:space="preserve">
+    <value>Invalid confirmation code</value>
+  </data>
+  <data name="CodeHasExpired" xml:space="preserve">
+    <value>The code has expired</value>
+  </data>
 </root>

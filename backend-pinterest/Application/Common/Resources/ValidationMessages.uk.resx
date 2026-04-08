@@ -201,4 +201,10 @@
   <data name="InvalidRefreshToken" xml:space="preserve">
     <value>Refresh token недійсний або прострочений</value>
   </data>
+  <data name="InvalidConfirmationCode" xml:space="preserve">
+    <value>Невірний код підтвердження</value>
+  </data>
+  <data name="CodeHasExpired" xml:space="preserve">
+    <value>Термін дії коду вийшов</value>
+  </data>
 </root>
