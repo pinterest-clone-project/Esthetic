@@ -1,4 +1,5 @@
 ﻿using Application.Common.Exceptions;
+using Application.Common.Validators;
 using Application.Interfaces;
 using Application.Models.DTO.User;
 using Application.UseCases.Account.Commands;
@@ -22,13 +23,13 @@ public class LoginHandler(
         var user = await accountRepository.GetByEmailAsync(request.Email, cancellationToken);
 
         if (user == null)
-            throw new UnauthorizedException("Невірний email або пароль");
+            throw new UnauthorizedException(ValidationMessages.InvalidCredentials);
 
         var isValidPassword = await userManager
             .CheckPasswordAsync(user, request.Password);
 
         if (!isValidPassword)
-            throw new UnauthorizedException("Невірний email або пароль");
+            throw new UnauthorizedException(ValidationMessages.InvalidCredentials);
 
         await userManager.UpdateAsync(user);
 
