@@ -1,5 +1,6 @@
 ﻿using Application.Common.Emails;
 using Application.Common.Exceptions;
+using Application.Common.Validators;
 using Application.Interfaces;
 using Application.UseCases.Account.Commands;
 using Domain.Constants;
@@ -23,7 +24,7 @@ public class ForgotPasswordHandler(
         var user = await accountRepository.GetByEmailAsync(request.Email, cancellationToken);
 
         if (user == null)
-            throw new NotFoundException("Користувача не знайдено");
+            throw new NotFoundException(ValidationMessages.UserNotFound);
 
         var code = RandomNumberGenerator.GetInt32(100000, 1000000).ToString();
 
