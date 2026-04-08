@@ -1,4 +1,5 @@
 ﻿using Application.Common.Exceptions;
+using Application.Common.Validators;
 using Application.UseCases.Account.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -41,7 +42,7 @@ public class AccountController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> Edit([FromForm] EditCommand command)
     {
         var request = this.Request;
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new UnauthorizedException("Користувач не автентифікований");
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
 
         var commadWithId = command with { Id = Guid.Parse(userId) };
         var result = await mediator.Send(commadWithId);
