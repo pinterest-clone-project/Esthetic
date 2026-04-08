@@ -195,4 +195,7 @@
   <data name="ErrorNoPermission" xml:space="preserve">
     <value>У вас немає прав для цієї дії</value>
   </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>Користувача не знайдено</value>
+  </data>
 </root>

@@ -1,4 +1,5 @@
 ﻿using Application.Common.Exceptions;
+using Application.Common.Validators;
 using Application.Interfaces;
 using Application.Models.DTO.User;
 using Application.UseCases.Account.Commands;
@@ -18,7 +19,7 @@ public class EditHandler(
 
         if (user == null)
         {
-            throw new NotFoundException("Користувача не знайдено");
+            throw new NotFoundException(ValidationMessages.UserNotFound);
         }
 
         user.FirstName = request.FirstName ?? user.FirstName;
