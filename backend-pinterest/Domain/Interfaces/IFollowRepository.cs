@@ -2,5 +2,5 @@
 
 public interface IFollowRepository
 {
-    Task FollowAsync(Guid followerId, Guid followedId, CancellationToken ct = default);
+    Task FollowAsync(Guid followerId, Guid followeeId, CancellationToken ct = default);
 }
