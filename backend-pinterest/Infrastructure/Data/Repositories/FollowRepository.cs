@@ -16,4 +16,15 @@ public class FollowRepository(AppDbContext context) : IFollowRepository
 
         await context.SaveChangesAsync();
     }
+
+    public Task UnfollowAsync(Guid followerId, Guid followeeId, CancellationToken ct = default)
+    {
+        var follow = context.Follows.FirstOrDefault(f => f.FollowerId == followerId && f.FolloweeId == followeeId);
+        if (follow != null)
+        {
+            context.Follows.Remove(follow);
+            return context.SaveChangesAsync(ct);
+        }
+        return Task.CompletedTask;
+    }
 }
