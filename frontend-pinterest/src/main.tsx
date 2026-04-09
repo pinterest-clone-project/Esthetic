@@ -4,11 +4,17 @@ import App from './App.tsx'
 import {Provider} from "react-redux";
 import {store} from "./store";
 import {BrowserRouter} from "react-router";
+import {GoogleOAuthProvider} from "@react-oauth/google";
+import {ThemeProvider} from "./context/ThemeContext.tsx";
 
 createRoot(document.getElementById('root')!).render(
-    <Provider store={store}>
-        <BrowserRouter>
-        <App/>
-        </BrowserRouter>
-    </Provider>
+    <ThemeProvider>
+        <Provider store={store}>
+            <BrowserRouter>
+                <GoogleOAuthProvider clientId="911542527173-rsr0s8elapousvqvskvqnmns61j9i3ev.apps.googleusercontent.com">
+                    <App/>
+                </GoogleOAuthProvider>
+            </BrowserRouter>
+        </Provider>`
+    </ThemeProvider>
 )
