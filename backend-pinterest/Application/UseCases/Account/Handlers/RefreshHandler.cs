@@ -1,4 +1,5 @@
 ﻿using Application.Common.Exceptions;
+using Application.Common.Validators;
 using Application.Interfaces;
 using Application.Models.DTO.User;
 using Application.UseCases.Account.Commands;
@@ -14,7 +15,7 @@ public class RefreshHandler(IJwtTokenService tokenService) : IRequestHandler<Ref
 
         if (result == null || string.IsNullOrWhiteSpace(result.AccessToken))
         {
-            throw new UnauthorizedException("Refresh token недійсний або прострочений");
+            throw new UnauthorizedException(ValidationMessages.InvalidRefreshToken);
         }
 
         return result;

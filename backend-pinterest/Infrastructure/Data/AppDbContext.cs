@@ -1,5 +1,7 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
+using Domain.Entities.Base;
+using Domain.Entities.Follow;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -16,6 +18,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     {
     }
     public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
+    public DbSet<FollowEntity> Follows { get; set; }
 
     public IDbContextTransaction? CurrentTransaction => Database.CurrentTransaction;
 
@@ -40,6 +43,21 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
                 .WithMany(u => u.UserLogins)
                 .HasForeignKey(l => l.UserId)
                 .IsRequired();
+        });
+
+        builder.Entity<FollowEntity>(b =>
+        {
+            b.HasKey(f => new { f.FollowerId, f.FolloweeId });
+
+            b.HasOne(f => f.Follower)
+                .WithMany(u => u.Following)
+                .HasForeignKey(f => f.FollowerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            b.HasOne(f => f.Followee)
+                .WithMany(u => u.Followers)
+                .HasForeignKey(f => f.FolloweeId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

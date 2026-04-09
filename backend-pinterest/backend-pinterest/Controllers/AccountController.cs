@@ -1,5 +1,7 @@
 ﻿using Application.Common.Exceptions;
+using Application.Common.Validators;
 using Application.UseCases.Account.Commands;
+using Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,7 +43,31 @@ public class AccountController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> Edit([FromForm] EditCommand command)
     {
         var request = this.Request;
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new UnauthorizedException("Користувач не автентифікований");
+        var userId = User.FindFirstValue(JwtClaims.Id) ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
+
+        var commadWithId = command with { Id = Guid.Parse(userId) };
+        var result = await mediator.Send(commadWithId);
+        return Ok(result);
+    }
+
+    [Authorize]
+    [HttpPut("follow")]
+    public async Task<IActionResult> Follow([FromBody] FollowCommand command)
+    {
+        var request = this.Request;
+        var userId = User.FindFirstValue(JwtClaims.Id) ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
+
+        var commadWithId = command with { Id = Guid.Parse(userId) };
+        var result = await mediator.Send(commadWithId);
+        return Ok(result);
+    }
+
+    [Authorize]
+    [HttpPut("unfollow")]
+    public async Task<IActionResult> Unfollow([FromBody] UnfollowCommand command)
+    {
+        var request = this.Request;
+        var userId = User.FindFirstValue(JwtClaims.Id) ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
 
         var commadWithId = command with { Id = Guid.Parse(userId) };
         var result = await mediator.Send(commadWithId);

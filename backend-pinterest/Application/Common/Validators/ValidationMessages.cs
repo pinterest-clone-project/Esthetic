@@ -46,6 +46,10 @@ public static class ValidationMessages
 
     public static string ErrorTokenInvalid => Get("ErrorTokenInvalid");
     public static string ErrorNoPermission => Get("ErrorNoPermission");
+    public static string UserNotFound => Get("UserNotFound");
+    public static string InvalidRefreshToken => Get("InvalidRefreshToken");
+    public static string InvalidConfirmationCode => Get("InvalidConfirmationCode");
+    public static string CodeHasExpired => Get("CodeHasExpired");
 
     private static string Get(string key)
         => _manager.GetString(key, CultureInfo.CurrentCulture) ?? key;
