@@ -62,6 +62,18 @@ public class AccountController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
+    [HttpPut("unfollow")]
+    public async Task<IActionResult> Unfollow([FromBody] UnfollowCommand command)
+    {
+        var request = this.Request;
+        var userId = User.FindFirstValue(JwtClaims.Id) ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
+
+        var commadWithId = command with { Id = Guid.Parse(userId) };
+        var result = await mediator.Send(commadWithId);
+        return Ok(result);
+    }
+
     [HttpPost("forgot-password")]
     [AllowAnonymous]
     public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordCommand command)
