@@ -220,3 +220,121 @@ SmtpService.SendEmailAsync()
 ```
 
 HTML шаблони листів знаходяться в `Application/Common/Emails/EmailTemplates.cs`.
+
+# 🧪 Робота з локальною базою даних
+
+Щоб запустити проєкт локально з використанням PostgreSQL та Redis через Docker, виконайте наступні кроки.
+
+---
+
+## 🚀 1. Підняти локальні сервіси
+
+Виконайте команду:
+
+```bash
+docker compose up -d
+```
+
+Це запустить:
+- PostgreSQL (база даних)
+- Redis (кеш)
+
+---
+
+## ⚙️ 2. Оновити конфігурацію під локальне середовище
+
+Відкрийте файл `appsettings.json` і замініть на:
+
+```json
+"ConnectionStrings": {
+  //"DefaultConnection": "Host=ep-delicate-smoke-al7y1tqn-pooler.c-3.eu-central-1.aws.neon.tech; Database=neondb; Username=neondb_owner; Password=npg_Gazj73FgJmQV;",
+  "DefaultConnection": "Host=localhost;Port=5432;Database=myapp_db;Username=admin;Password=super_secret_password",
+  "Redis": "localhost:6379"
+},
+//"ImagesDir": "images",
+"ImagesDir": "localImages",
+```
+
+---
+
+## 🗄️ 3. Ініціалізація бази даних
+
+Після цього виконайте міграції:
+
+```powershell
+Update-Database
+```
+
+Це створить структуру бази даних відповідно до поточного стану моделей.
+
+---
+
+## ✅ Готово
+
+Після виконання всіх кроків:
+- база даних працює локально
+- Redis доступний
+- застосунок готовий до запуску
+
+---
+
+
+# 🗄️ Регламент роботи з базою даних (EF Core)
+
+Щоб уникнути конфліктів у файлі `ModelSnapshot.cs` та помилок при злитті гілок, кожен член команди має дотримуватись цієї інструкції.
+
+---
+
+## 🚀 Стандартний робочий цикл
+
+## Виконуйте ці кроки кожного разу, коли вам потрібно змінити структуру БД:
+
+
+## 🛠 Вирішення конфліктів (Conflict Resolution)
+
+Якщо ти створив міграцію, але при спробі зробити push виявилося, що в `main` уже є нові міграції від колег — виникне конфлікт.
+
+**Не намагайтеся виправити Snapshot вручну!** Зробіть наступне:
+
+1. **Відкотіть свою базу до останньої спільної міграції:**
+   ```powershell
+   Update-Database -Migration Назва_Останньої_Спільної_Міграції
+   ```
+
+2. **Видаліть файли своєї локальної міграції:**
+   ```powershell
+   Remove-Migration
+   ```
+
+3. **Підтягніть зміни з основної гілки:**
+   ```powershell
+   git pull origin main
+   ```
+
+4. **Накатіть міграції колег на свою базу:**
+   ```powershell
+   Update-Database
+   ```
+
+5. **Створіть свою міграцію заново:**
+   ```powershell
+   Add-Migration Назва_Твоєї_Міграції
+   ```
+
+6. **Застосуйте та відправляйте:**
+   ```powershell
+   Update-Database
+   git push
+   ```
+
+---
+
+## ⚠️ Важливі правила
+
+- ❌ Заборонено видаляти файли міграцій через Провідник. Використовуйте лише команду:
+  ```powershell
+  Remove-Migration
+  ```
+
+- ❌ Не змінюйте назви файлів міграцій вручну — це зламає `.Designer.cs`.
+

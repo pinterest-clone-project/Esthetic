@@ -1,4 +1,5 @@
 ﻿using Domain.Entities.Base;
+using Domain.Entities.Follow;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities.Identity;
@@ -17,4 +18,6 @@ public class UserEntity : IdentityUser<Guid>, IEntity
     public DateTime? UpdatedAt { get; set; }
     public virtual ICollection<UserRoleEntity>? UserRoles { get; set; }
     public virtual ICollection<UserLoginEntity>? UserLogins { get; set; }
+    public virtual ICollection<FollowEntity>? Following { get; set; }
+    public virtual ICollection<FollowEntity>? Followers { get; set; }
 }
