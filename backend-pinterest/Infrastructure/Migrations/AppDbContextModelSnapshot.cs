@@ -22,24 +22,6 @@ namespace Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Entities.Follow.FollowEntity", b =>
-                {
-                    b.Property<Guid>("FollowerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("FolloweeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("FollowerId", "FolloweeId");
-
-                    b.HasIndex("FolloweeId");
-
-                    b.ToTable("Follows");
-                });
-
             modelBuilder.Entity("Domain.Entities.Identity.RefreshTokenEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -67,7 +49,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Identity.RoleEntity", b =>
@@ -300,25 +282,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.Follow.FollowEntity", b =>
-                {
-                    b.HasOne("Domain.Entities.Identity.UserEntity", "Followee")
-                        .WithMany("Followers")
-                        .HasForeignKey("FolloweeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Identity.UserEntity", "Follower")
-                        .WithMany("Following")
-                        .HasForeignKey("FollowerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Followee");
-
-                    b.Navigation("Follower");
-                });
-
             modelBuilder.Entity("Domain.Entities.Identity.UserLoginEntity", b =>
                 {
                     b.HasOne("Domain.Entities.Identity.UserEntity", "User")
@@ -387,10 +350,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Identity.UserEntity", b =>
                 {
-                    b.Navigation("Followers");
-
-                    b.Navigation("Following");
-
                     b.Navigation("UserLogins");
 
                     b.Navigation("UserRoles");
