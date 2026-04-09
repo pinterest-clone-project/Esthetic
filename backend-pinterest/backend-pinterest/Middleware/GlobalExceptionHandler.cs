@@ -1,4 +1,6 @@
 ﻿using Application.Common.Exceptions;
+using Application.Common.Validators;
+using Domain.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 
 namespace Infrastructure.Middleware;
@@ -12,11 +14,12 @@ public class GlobalExceptionHandler : IExceptionHandler
     {
         var (status, title) = exception switch
         {
-            ValidationException => (400, "Помилка валідації"),
-            BadRequestException => (400, "Невірний запит"),
-            UnauthorizedException => (401, "Помилка автентифікації"),
-            NotFoundException => (404, "Не знайдено"),
-            _ => (500, "Внутрішня помилка сервера")
+            ValidationException => (400, ValidationMessages.ErrorValidation),
+            BadRequestException => (400, ValidationMessages.ErrorBadRequest),
+            UnauthorizedException => (401, ValidationMessages.ErrorUnauthorized),
+            NotFoundException => (404, ValidationMessages.ErrorNotFound),
+            DomainException => (422, ValidationMessages.ErrorDomain),
+            _ => (500, ValidationMessages.ErrorInternal)
         };
 
         context.Response.StatusCode = status;

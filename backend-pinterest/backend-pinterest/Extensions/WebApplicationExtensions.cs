@@ -43,6 +43,8 @@ public static class WebApplicationExtensions
 
         app.UseExceptionHandler();
 
+        app.UseRequestLocalization();
+
         app.UseHttpsRedirection();
 
         app.UseAuthentication();
