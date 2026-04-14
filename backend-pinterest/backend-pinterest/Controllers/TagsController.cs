@@ -38,4 +38,11 @@ public class TagsController(IMediator mediator) : ControllerBase
         await mediator.Send(command);
         return NoContent();
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        await mediator.Send(new DeleteTagCommand(id));
+        return NoContent();
+    }
 }
