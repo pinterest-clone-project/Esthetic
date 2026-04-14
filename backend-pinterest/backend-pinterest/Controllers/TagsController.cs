@@ -30,4 +30,12 @@ public class TagsController(IMediator mediator) : ControllerBase
         if (tag == null) return NotFound();
         return Ok(tag);
     }
+
+    [HttpPut]
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateTagCommand request)
+    {
+        var command = request with { Id = id };
+        await mediator.Send(command);
+        return NoContent();
+    }
 }
