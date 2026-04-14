@@ -6,8 +6,7 @@ using MediatR;
 
 namespace Application.UseCases.Tags.Handlers;
 
-public class DeleteTagHandler(ITagRepository repository, 
-    IMapper mapper) : IRequestHandler<DeleteTagCommand, Unit>
+public class DeleteTagHandler(ITagRepository repository) : IRequestHandler<DeleteTagCommand, Unit>
 {
     public async Task<Unit> Handle(DeleteTagCommand request, CancellationToken cancellationToken)
     {
