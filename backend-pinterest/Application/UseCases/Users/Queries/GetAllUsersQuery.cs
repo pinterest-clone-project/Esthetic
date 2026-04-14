@@ -7,6 +7,6 @@ namespace Application.UseCases.Users.Queries;
 
 public record GetAllUsersQuery() : IRequest<List<UserDTO>>, ICacheableQuery
 {
-    public string CacheKey => CacheKeys.AllTags;
+    public string CacheKey => CacheKeys.AllUsers;
     public TimeSpan? Expiration => AppTimeToLive.UserCacheExpiration;
 }
