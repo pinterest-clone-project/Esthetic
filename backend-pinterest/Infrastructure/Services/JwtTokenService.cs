@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+using Application.Interfaces;
 using Application.Models.DTO.User;
 using Domain.Constants;
 using Domain.Entities.Identity;
@@ -96,6 +96,9 @@ public class JwtTokenService(
     }
     private async Task<string> SaveRefreshTokenAsync(Guid userId)
     {
+        var oldTokens = context.RefreshTokens.Where(t => t.UserId == userId);
+        context.RefreshTokens.RemoveRange(oldTokens);
+
         var tokenBytes = RandomNumberGenerator.GetBytes(64);
         var refreshToken = Convert.ToBase64String(tokenBytes);
 

@@ -1,6 +1,5 @@
-﻿using Application.Interfaces;
+using Application.Interfaces;
 using Domain.Entities;
-using Domain.Entities.Base;
 using Domain.Entities.Follow;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;

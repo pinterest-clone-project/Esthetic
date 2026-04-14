@@ -1,4 +1,4 @@
-﻿using Application.Common.Exceptions;
+using Application.Common.Exceptions;
 using Application.Common.Validators;
 using Application.UseCases.Account.Commands;
 using Domain.Constants;
@@ -51,26 +51,35 @@ public class AccountController(IMediator mediator) : ControllerBase
     }
 
     [Authorize]
-    [HttpPut("follow")]
-    public async Task<IActionResult> Follow([FromBody] FollowCommand command)
+    [HttpPut("follow/{followedId}")]
+    public async Task<IActionResult> Follow([FromRoute] Guid followedId)
     {
-        var request = this.Request;
         var userId = User.FindFirstValue(JwtClaims.Id) ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
 
-        var commadWithId = command with { Id = Guid.Parse(userId) };
-        var result = await mediator.Send(commadWithId);
+        var command = new FollowCommand
+        {
+            Id = Guid.Parse(userId),
+            FollowedId = followedId
+        };
+
+        var result = await mediator.Send(command);
         return Ok(result);
     }
 
     [Authorize]
-    [HttpPut("unfollow")]
-    public async Task<IActionResult> Unfollow([FromBody] UnfollowCommand command)
+    [HttpPut("unfollow/{followedId}")]
+    public async Task<IActionResult> Unfollow([FromRoute] Guid followedId)
     {
-        var request = this.Request;
-        var userId = User.FindFirstValue(JwtClaims.Id) ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
+        var userId = User.FindFirstValue(JwtClaims.Id)
+            ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
 
-        var commadWithId = command with { Id = Guid.Parse(userId) };
-        var result = await mediator.Send(commadWithId);
+        var command = new UnfollowCommand
+        {
+            Id = Guid.Parse(userId),
+            FollowedId = followedId
+        };
+
+        var result = await mediator.Send(command);
         return Ok(result);
     }
 
