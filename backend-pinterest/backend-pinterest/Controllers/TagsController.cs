@@ -22,4 +22,12 @@ public class TagsController(IMediator mediator) : ControllerBase
         var tag = await mediator.Send(new CreateTagCommand(dto));
         return Ok(tag);
     }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var tag = await mediator.Send(new GetTagByIdQuery(id));
+        if (tag == null) return NotFound();
+        return Ok(tag);
+    }
 }
