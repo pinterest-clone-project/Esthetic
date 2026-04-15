@@ -16,5 +16,4 @@ public record UpdateCategoryCommand : IRequest<CategoryDTO>
 
     [FromForm]
     public IFormFile? ImageFile { get; init; }
-
 }

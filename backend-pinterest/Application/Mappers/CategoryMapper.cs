@@ -11,5 +11,7 @@ public class CategoryMapper : Profile
     {
         CreateMap<CategoryEntity, CategoryDTO>();
         CreateMap<CreateCategoryCommand, CategoryEntity>();
+        CreateMap<UpdateCategoryCommand, CategoryEntity>()
+            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
     }
 }
