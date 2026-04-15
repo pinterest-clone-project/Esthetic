@@ -1,6 +1,6 @@
-﻿namespace Application.Interfaces.Caching;
+namespace Application.Interfaces.Caching;
 
 public interface ICacheInvalidator
 {
-    string CacheKey { get; }
+    IReadOnlyList<string> CacheKeys { get; }
 }
