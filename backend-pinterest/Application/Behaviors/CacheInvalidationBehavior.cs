@@ -16,7 +16,7 @@ public class CacheInvalidationBehavior<TRequest, TResponse> : IPipelineBehavior<
         var response = await next();
 
         await Task.WhenAll(
-            request.CacheKeys.Select(key => _cache.RemoveAsync(key, ct))
+            request.CacheKeysInvalidators.Select(key => _cache.RemoveAsync(key, ct))
         );
 
         return response;
