@@ -37,4 +37,11 @@ public class CategoriesController(IMediator mediator) : ControllerBase
         var category = await mediator.Send(commandWithId);
         return Ok(category);
     }
+
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    {
+        await mediator.Send(new DeleteCategoryCommand(id));
+        return NoContent();
+    }
 }
