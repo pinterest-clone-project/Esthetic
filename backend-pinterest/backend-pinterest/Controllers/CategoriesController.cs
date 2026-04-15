@@ -24,13 +24,15 @@ public class CategoriesController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> Create([FromBody] CreateCategoryCommand command)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Create([FromForm] CreateCategoryCommand command)
     {
         var category = await mediator.Send(command);
         return Ok(category);
     }
 
     [HttpPut("update/{id}")]
+    [Consumes("multipart/form-data")]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromForm] UpdateCategoryCommand command)
     {
         var commandWithId = command with { Id = id };

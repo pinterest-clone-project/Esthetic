@@ -1,4 +1,6 @@
-﻿using Application.Models.DTO.Category;
+﻿using Application.Interfaces.Caching;
+using Application.Models.DTO.Category;
+using Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Application.UseCases.Categories.Commands;
 
-public record UpdateCategoryCommand : IRequest<CategoryDTO>
+public record UpdateCategoryCommand : IRequest<CategoryDTO>, ICacheInvalidator
 {
     [BindNever]
     public required Guid Id { get; init; }
@@ -16,4 +18,9 @@ public record UpdateCategoryCommand : IRequest<CategoryDTO>
 
     [FromForm]
     public IFormFile? ImageFile { get; init; }
+    [BindNever]
+    public IReadOnlyList<string> CacheKeysInvalidators =>
+    [
+        CacheKeys.AllCategories,
+    ];
 }
