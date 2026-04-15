@@ -8,10 +8,17 @@ namespace backend_pinterest.Controllers;
 [ApiController]
 public class CategoriesController(IMediator mediator) : ControllerBase
 {
-    [HttpGet]
+    [HttpGet("getAll")]
     public async Task<IActionResult> GetAll()
     {
         var categories = await mediator.Send(new GetAllCategoriesQuery());
         return Ok(categories);
+    }
+
+    [HttpGet("getById/{id}")]
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    {
+        var category = await mediator.Send(new GetCategoryByIdQuery { Id = id });
+        return Ok(category);
     }
 }
