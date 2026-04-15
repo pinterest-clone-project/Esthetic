@@ -1,3 +1,4 @@
+using Application.UseCases.Categories.Commands;
 using Application.UseCases.Categories.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,13 @@ public class CategoriesController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         var category = await mediator.Send(new GetCategoryByIdQuery(id));
+        return Ok(category);
+    }
+
+    [HttpPost("create")]
+    public async Task<IActionResult> Create([FromBody] CreateCategoryCommand command)
+    {
+        var category = await mediator.Send(command);
         return Ok(category);
     }
 }
