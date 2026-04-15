@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Caching;
+using Application.Interfaces.Caching;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
 
@@ -14,7 +14,11 @@ public class CacheInvalidationBehavior<TRequest, TResponse> : IPipelineBehavior<
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken ct)
     {
         var response = await next();
-        await _cache.RemoveAsync(request.CacheKey, ct);
+
+        await Task.WhenAll(
+            request.CacheKeys.Select(key => _cache.RemoveAsync(key, ct))
+        );
+
         return response;
     }
 }
