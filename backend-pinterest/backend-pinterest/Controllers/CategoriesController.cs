@@ -29,4 +29,12 @@ public class CategoriesController(IMediator mediator) : ControllerBase
         var category = await mediator.Send(command);
         return Ok(category);
     }
+
+    [HttpPut("update/{id}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromForm] UpdateCategoryCommand command)
+    {
+        var commandWithId = command with { Id = id };
+        var category = await mediator.Send(commandWithId);
+        return Ok(category);
+    }
 }
