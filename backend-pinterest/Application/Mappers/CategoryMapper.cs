@@ -1,4 +1,5 @@
 using Application.Models.DTO.Category;
+using Application.UseCases.Categories.Commands;
 using AutoMapper;
 using Domain.Entities.Category;
 
@@ -9,5 +10,6 @@ public class CategoryMapper : Profile
     public CategoryMapper()
     {
         CreateMap<CategoryEntity, CategoryDTO>();
+        CreateMap<CreateCategoryCommand, CategoryEntity>();
     }
 }
