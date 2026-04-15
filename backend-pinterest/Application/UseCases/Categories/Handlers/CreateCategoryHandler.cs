@@ -1,6 +1,8 @@
-﻿using Application.Models.DTO.Category;
+﻿using Application.Interfaces;
+using Application.Models.DTO.Category;
 using Application.UseCases.Categories.Commands;
 using AutoMapper;
+using Domain.Entities.Category;
 using Domain.Interfaces;
 using MediatR;
 
@@ -8,10 +10,20 @@ namespace Application.UseCases.Categories.Handlers;
 
 public class CreateCategoryHandler(
     ICategoryRepository categoryRepository,
-    IMapper mapper) : IRequestHandler<CreateCategoryCommand, CategoryDTO>
+    IMapper mapper,
+    IImageService imageService) : IRequestHandler<CreateCategoryCommand, CategoryDTO>
 {
-    public Task<CategoryDTO> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+    public async Task<CategoryDTO> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var category = mapper.Map<CategoryEntity>(request);
+
+        if (request.ImageFile != null)
+        {
+            category.Image = await imageService.SaveImageAsync(request.ImageFile);
+        }
+
+        var createdCategory = await categoryRepository.AddAsync(category);
+
+        return mapper.Map<CategoryDTO>(createdCategory);
     }
 }
