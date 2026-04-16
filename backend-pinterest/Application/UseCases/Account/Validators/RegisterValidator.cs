@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace Application.UseCases.Account.Validators;
 
-public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
+public class RegisterValidator : AbstractValidator<RegisterCommand>
 {
-    public RegisterCommandValidator()
+    public RegisterValidator()
     {
         RuleFor(x => x.Username).NameRules(ValidationMessages.FieldUsername);
         RuleFor(x => x.FirstName).NameRules(ValidationMessages.FieldFirstName);

@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace Application.UseCases.Account.Validators;
 
-public class EditCommandValidator : AbstractValidator<EditCommand>
+public class EditValidator : AbstractValidator<EditCommand>
 {
-    public EditCommandValidator()
+    public EditValidator()
     {
         RuleFor(x => x.FirstName).NameRules(ValidationMessages.FieldFirstName);
         RuleFor(x => x.LastName).NameRules(ValidationMessages.FieldLastName);
