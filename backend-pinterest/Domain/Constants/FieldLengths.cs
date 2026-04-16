@@ -2,8 +2,8 @@
 
 public static class FieldLengths
 {
-    // User fields
     public const int NameMax = 50;
+    // User fields
     public const int BioMax = 500;
     public const int EmailMax = 255;
     public const int PasswordMin = 6;

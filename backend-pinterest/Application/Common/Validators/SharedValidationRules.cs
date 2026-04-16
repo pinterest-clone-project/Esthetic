@@ -33,8 +33,7 @@ public static class SharedValidationRules
         rule
             .IsRequired(fieldName)
             .MaximumLength(FieldLengths.NameMax)
-            .WithMessage(ValidationMessages.MaxLength(fieldName, FieldLengths.NameMax))
-            .When(x => x is string s && !string.IsNullOrEmpty(s));
+            .WithMessage(ValidationMessages.MaxLength(fieldName, FieldLengths.NameMax));
 
     public static IRuleBuilderOptions<T, string?> BioRules<T>(this IRuleBuilder<T, string?> rule) =>
         rule
