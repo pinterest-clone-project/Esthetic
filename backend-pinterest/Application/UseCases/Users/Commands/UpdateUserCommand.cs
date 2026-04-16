@@ -15,5 +15,8 @@ public record UpdateUserCommand : IRequest<Unit>, ICacheInvalidator
     public string? LastName { get; init; }
 
     [BindNever]
-    public string CacheKey => CacheKeys.AllUsers;
+    public IReadOnlyList<string> CacheKeysInvalidators =>
+    [
+        CacheKeys.AllUsers,
+    ];
 }

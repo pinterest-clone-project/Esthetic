@@ -207,4 +207,19 @@
   <data name="CodeHasExpired" xml:space="preserve">
     <value>Термін дії коду вийшов</value>
   </data>
+  <data name="FieldSlug" xml:space="preserve">
+    <value>Слаґ</value>
+  </data>
+  <data name="SlugFormat" xml:space="preserve">
+    <value>Слаґ може містити лише малі літери латиниці, цифри та дефіси (напр. 'my-category')</value>
+  </data>
+  <data name="FieldDescription" xml:space="preserve">
+    <value>Опис</value>
+  </data>
+  <data name="FieldId" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="InvalidId" xml:space="preserve">
+    <value>Недійсний id</value>
+  </data>
 </root>

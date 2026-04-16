@@ -178,6 +178,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        internal static string FieldDescription {
+            get {
+                return ResourceManager.GetString("FieldDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email.
         /// </summary>
         internal static string FieldEmail {
@@ -192,6 +201,15 @@ namespace Application.Common.Resources {
         internal static string FieldFirstName {
             get {
                 return ResourceManager.GetString("FieldFirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Id.
+        /// </summary>
+        internal static string FieldId {
+            get {
+                return ResourceManager.GetString("FieldId", resourceCulture);
             }
         }
         
@@ -241,6 +259,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Slug.
+        /// </summary>
+        internal static string FieldSlug {
+            get {
+                return ResourceManager.GetString("FieldSlug", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Username.
         /// </summary>
         internal static string FieldUsername {
@@ -264,6 +291,15 @@ namespace Application.Common.Resources {
         internal static string InvalidCredentials {
             get {
                 return ResourceManager.GetString("InvalidCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid identifier..
+        /// </summary>
+        internal static string InvalidId {
+            get {
+                return ResourceManager.GetString("InvalidId", resourceCulture);
             }
         }
         
@@ -318,6 +354,15 @@ namespace Application.Common.Resources {
         internal static string Required {
             get {
                 return ResourceManager.GetString("Required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slug may only contain lowercase letters, numbers, and hyphens (e.g. &apos;my-category&apos;)..
+        /// </summary>
+        internal static string SlugFormat {
+            get {
+                return ResourceManager.GetString("SlugFormat", resourceCulture);
             }
         }
         

@@ -207,4 +207,19 @@
   <data name="CodeHasExpired" xml:space="preserve">
     <value>The code has expired</value>
   </data>
+  <data name="FieldSlug" xml:space="preserve">
+    <value>Slug</value>
+  </data>
+  <data name="SlugFormat" xml:space="preserve">
+    <value>Slug may only contain lowercase letters, numbers, and hyphens (e.g. 'my-category').</value>
+  </data>
+  <data name="FieldDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="FieldId" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="InvalidId" xml:space="preserve">
+    <value>Invalid identifier.</value>
+  </data>
 </root>

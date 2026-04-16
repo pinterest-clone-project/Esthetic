@@ -33,8 +33,7 @@ public static class SharedValidationRules
         rule
             .IsRequired(fieldName)
             .MaximumLength(FieldLengths.NameMax)
-            .WithMessage(ValidationMessages.MaxLength(fieldName, FieldLengths.NameMax))
-            .When(x => x is string s && !string.IsNullOrEmpty(s));
+            .WithMessage(ValidationMessages.MaxLength(fieldName, FieldLengths.NameMax));
 
     public static IRuleBuilderOptions<T, string?> BioRules<T>(this IRuleBuilder<T, string?> rule) =>
         rule
@@ -45,4 +44,15 @@ public static class SharedValidationRules
         rule
             .NotEmpty()
             .WithMessage(ValidationMessages.Required(fieldName));
+    public static IRuleBuilderOptions<T, string?> SlugRules<T>(this IRuleBuilder<T, string?> rule, string fieldName) =>
+        rule
+            .IsRequired(fieldName)
+            .MaximumLength(FieldLengths.SlugMax)
+            .WithMessage(ValidationMessages.MaxLength(fieldName, FieldLengths.SlugMax))
+            .Matches(@"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+            .WithMessage(ValidationMessages.SlugFormat);
+    public static IRuleBuilderOptions<T, Guid> IdRules<T>(this IRuleBuilder<T, Guid> rule) =>
+    rule
+        .NotEmpty()
+        .WithMessage(ValidationMessages.InvalidId);
 }
