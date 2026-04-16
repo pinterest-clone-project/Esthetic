@@ -52,4 +52,8 @@ public static class SharedValidationRules
             .WithMessage(ValidationMessages.MaxLength(fieldName, FieldLengths.SlugMax))
             .Matches(@"^[a-z0-9]+(?:-[a-z0-9]+)*$")
             .WithMessage(ValidationMessages.SlugFormat);
+    public static IRuleBuilderOptions<T, Guid> IdRules<T>(this IRuleBuilder<T, Guid> rule) =>
+    rule
+        .NotEmpty()
+        .WithMessage(ValidationMessages.InvalidId);
 }
