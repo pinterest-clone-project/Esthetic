@@ -213,4 +213,7 @@
   <data name="SlugFormat" xml:space="preserve">
     <value>Slug may only contain lowercase letters, numbers, and hyphens (e.g. 'my-category').</value>
   </data>
+  <data name="FieldDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
 </root>

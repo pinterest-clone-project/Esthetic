@@ -213,4 +213,7 @@
   <data name="SlugFormat" xml:space="preserve">
     <value>Слаґ може містити лише малі літери латиниці, цифри та дефіси (напр. 'my-category').</value>
   </data>
+  <data name="FieldDescription" xml:space="preserve">
+    <value>Опис</value>
+  </data>
 </root>
