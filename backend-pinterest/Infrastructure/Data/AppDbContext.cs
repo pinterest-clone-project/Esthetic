@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Entities.Category;
 using Domain.Entities.Follow;
 using Domain.Entities.Identity;
+using Domain.Entities.Pins;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     }
     public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
     public DbSet<FollowEntity> Follows { get; set; }
+    public DbSet<PinEntity> Pins { get; set; }
     public DbSet<CategoryEntity> Categories { get; set; }
 
     public IDbContextTransaction? CurrentTransaction => Database.CurrentTransaction;
