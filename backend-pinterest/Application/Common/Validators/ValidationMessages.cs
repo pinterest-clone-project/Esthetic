@@ -54,7 +54,8 @@ public static class ValidationMessages
     public static string FieldSlug => Get("FieldSlug");
     public static string FieldDescription => Get("FieldDescription");
     public static string SlugFormat => Get("SlugFormat");
-
+    public static string FieldId => Get("FieldId");
+    public static string InvalidId => Get("InvalidId");
     private static string Get(string key)
         => _manager.GetString(key, CultureInfo.CurrentCulture) ?? key;
 }
