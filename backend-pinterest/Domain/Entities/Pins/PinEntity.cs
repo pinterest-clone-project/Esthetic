@@ -13,6 +13,4 @@ public class PinEntity : BaseEntity
     public string? Description { get; set; } = null;
     public string? Media_Url { get; set; } = null;
     public string? Source_Url { get; set; } = null;
-    public bool IsDeleted { get; set; } = false;
-    public DateTime CreatedAt { get; set; } = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
 }
