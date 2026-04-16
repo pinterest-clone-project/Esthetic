@@ -7,7 +7,7 @@ namespace Domain.Entities.Pins;
 [Table("tbl_pins")]
 public class PinEntity : BaseEntity
 {
-    public Guid creator_Id { get; set; }
+    public Guid CreatorId { get; set; }
     public UserEntity Creator { get; set; } = null!;
     public string? Title { get; set; } = null;
     public string? Description { get; set; } = null;
