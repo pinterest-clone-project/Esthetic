@@ -45,4 +45,11 @@ public static class SharedValidationRules
         rule
             .NotEmpty()
             .WithMessage(ValidationMessages.Required(fieldName));
+    public static IRuleBuilderOptions<T, string?> SlugRules<T>(this IRuleBuilder<T, string?> rule, string fieldName) =>
+        rule
+            .IsRequired(fieldName)
+            .MaximumLength(FieldLengths.SlugMax)
+            .WithMessage(ValidationMessages.MaxLength(fieldName, FieldLengths.SlugMax))
+            .Matches(@"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+            .WithMessage(ValidationMessages.SlugFormat);
 }
