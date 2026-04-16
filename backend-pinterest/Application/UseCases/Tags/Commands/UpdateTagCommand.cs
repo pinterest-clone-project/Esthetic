@@ -1,14 +1,17 @@
 ﻿
 using Application.Interfaces.Caching;
-using Application.Models.DTO.Tag;
 using Domain.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Application.UseCases.Tags.Commands;
 
-public record CreateTagCommand() : IRequest<TagDTO>, ICacheInvalidator
+public record UpdateTagCommand : IRequest<Unit>, ICacheInvalidator
 {
-    public required string Name { get; init; }
+    [BindNever]
+    public Guid Id { get; init; }
+    public string? Name { get; init; }
+
     public IReadOnlyList<string> CacheKeysInvalidators =>
     [
         CacheKeys.AllTags,

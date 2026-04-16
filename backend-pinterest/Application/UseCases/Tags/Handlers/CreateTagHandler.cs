@@ -8,17 +8,13 @@ using MediatR;
 
 namespace Application.UseCases.Tags.Handlers;
 
-public class CreateTagHandler : IRequestHandler<CreateTagCommand, TagDTO> 
+public class CreateTagHandler(
+    ITagRepository repository, IMapper mapper) : IRequestHandler<CreateTagCommand, TagDTO> 
 {
-    private readonly ITagRepository _repo;
-    private readonly IMapper _mapper;
-
-    public CreateTagHandler(ITagRepository repo, IMapper mapper) => (_repo, _mapper) = (repo, mapper);
-
     public async Task<TagDTO> Handle(CreateTagCommand request, CancellationToken cancellationToken)
     {
-        var tag = _mapper.Map<TagEntity>(request.Model);
-        var created = await _repo.AddAsync(tag);
-        return _mapper.Map<TagDTO>(created);
+        var tag = mapper.Map<TagEntity>(request);
+        var created = await repository.AddAsync(tag);
+        return mapper.Map<TagDTO>(created);
     }
 }
