@@ -207,4 +207,7 @@
   <data name="CodeHasExpired" xml:space="preserve">
     <value>Термін дії коду вийшов</value>
   </data>
+  <data name="FieldSlug" xml:space="preserve">
+    <value>Слаґ</value>
+  </data>
 </root>

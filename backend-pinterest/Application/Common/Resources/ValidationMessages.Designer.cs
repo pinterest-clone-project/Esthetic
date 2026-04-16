@@ -241,6 +241,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Slug.
+        /// </summary>
+        internal static string FieldSlug {
+            get {
+                return ResourceManager.GetString("FieldSlug", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Username.
         /// </summary>
         internal static string FieldUsername {
