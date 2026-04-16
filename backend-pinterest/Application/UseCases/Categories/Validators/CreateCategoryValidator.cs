@@ -3,6 +3,6 @@ using FluentValidation;
 
 namespace Application.UseCases.Categories.Validators;
 
-public class CreateValidator : AbstractValidator<CreateCategoryCommand>
+public class CreateCategoryValidator : AbstractValidator<CreateCategoryCommand>
 {
 }
