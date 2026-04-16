@@ -8,5 +8,8 @@ namespace Application.UseCases.Users.Commands;
 public record DeleteUserCommand(Guid Id) : IRequest<Unit>, ICacheInvalidator
 {
     [BindNever]
-    public string CacheKey => CacheKeys.AllUsers;
+    public IReadOnlyList<string> CacheKeysInvalidators =>
+    [
+        CacheKeys.AllUsers,
+    ];
 }
