@@ -219,4 +219,7 @@
   <data name="FieldId" xml:space="preserve">
     <value>Id</value>
   </data>
+  <data name="InvalidId" xml:space="preserve">
+    <value>Invalid identifier.</value>
+  </data>
 </root>
