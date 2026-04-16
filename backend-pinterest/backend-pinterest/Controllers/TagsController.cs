@@ -17,9 +17,9 @@ public class TagsController(IMediator mediator) : ControllerBase
         return Ok(tags);
     }
     [HttpPost]
-    public async Task<IActionResult> Create([FromForm] CreateTagDTO dto)
+    public async Task<IActionResult> Create([FromForm] CreateTagCommand command)
     {
-        var tag = await mediator.Send(new CreateTagCommand(dto));
+        var tag = await mediator.Send(command);
         return Ok(tag);
     }
 
@@ -32,7 +32,7 @@ public class TagsController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateTagCommand request)
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateTagCommand request)
     {
         var command = request with { Id = id };
         await mediator.Send(command);

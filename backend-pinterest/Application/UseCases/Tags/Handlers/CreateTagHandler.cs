@@ -13,7 +13,7 @@ public class CreateTagHandler(
 {
     public async Task<TagDTO> Handle(CreateTagCommand request, CancellationToken cancellationToken)
     {
-        var tag = mapper.Map<TagEntity>(request.Model);
+        var tag = mapper.Map<TagEntity>(request);
         var created = await repository.AddAsync(tag);
         return mapper.Map<TagDTO>(created);
     }
