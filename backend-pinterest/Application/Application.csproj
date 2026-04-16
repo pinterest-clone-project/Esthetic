@@ -30,7 +30,6 @@
 
   <ItemGroup>
     <Folder Include="UseCases\Account\Queries\" />
-    <Folder Include="UseCases\Categories\Validators\" />
   </ItemGroup>
 
   <ItemGroup>
