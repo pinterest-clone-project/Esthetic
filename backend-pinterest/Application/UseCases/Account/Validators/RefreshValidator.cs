@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace Application.UseCases.Account.Validators;
 
-public class RefreshCommandValidator : AbstractValidator<RefreshCommand>
+public class RefreshValidator : AbstractValidator<RefreshCommand>
 {
-    public RefreshCommandValidator()
+    public RefreshValidator()
     {
         RuleFor(x => x.RefreshToken).IsRequired(ValidationMessages.FieldRefreshToken);
     }

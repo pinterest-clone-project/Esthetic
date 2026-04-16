@@ -50,7 +50,12 @@ public static class ValidationMessages
     public static string InvalidRefreshToken => Get("InvalidRefreshToken");
     public static string InvalidConfirmationCode => Get("InvalidConfirmationCode");
     public static string CodeHasExpired => Get("CodeHasExpired");
-
+    public static string FieldName => Get("FieldName");
+    public static string FieldSlug => Get("FieldSlug");
+    public static string FieldDescription => Get("FieldDescription");
+    public static string SlugFormat => Get("SlugFormat");
+    public static string FieldId => Get("FieldId");
+    public static string InvalidId => Get("InvalidId");
     private static string Get(string key)
         => _manager.GetString(key, CultureInfo.CurrentCulture) ?? key;
 }
