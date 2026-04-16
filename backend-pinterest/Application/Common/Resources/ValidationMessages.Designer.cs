@@ -331,6 +331,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Slug may only contain lowercase letters, numbers, and hyphens (e.g. &apos;my-category&apos;)..
+        /// </summary>
+        internal static string SlugFormat {
+            get {
+                return ResourceManager.GetString("SlugFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User not found.
         /// </summary>
         internal static string UserNotFound {
