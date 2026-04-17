@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Application.Common.Sorting.User;
 
-namespace Application.Common.Sorting.User;
-
-internal class UserSortBy
+public enum UserSortBy
 {
+    CreatedAt,
+    UserName
 }
