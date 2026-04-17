@@ -199,6 +199,7 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IDbSeederService, DbSeederService>();
         services.AddScoped<ISmtpService, SmtpService>();
+        services.AddScoped<IPagedService, PagedService>();
         #endregion
 
         #region OpenAPI
