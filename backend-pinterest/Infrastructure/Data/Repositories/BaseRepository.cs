@@ -37,6 +37,12 @@ public class BaseRepository<T>(AppDbContext appDbContext) : IBaseRepository<T> w
         return entity;
     }
 
+    public IQueryable<T> GetQueryable() =>
+        appDbContext.Set<T>()
+            .Where(e => !e.IsDeleted)
+            .AsNoTracking()
+            .AsQueryable();
+
     public async Task UpdateAsync(T entity, CancellationToken ct = default)
     {
         entity.UpdatedAt = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
