@@ -20,10 +20,16 @@ public static class UserQueryExtensions
         }
 
         if (filter.IsPrivate.HasValue)
-            query = query.Where(u => u.IsPrivate == filter.IsPrivate.Value);
+        {
+            var isPrivate = filter.IsPrivate.Value;
+            query = query.Where(u => u.IsPrivate == isPrivate);
+        }
 
         if (filter.IsBlocked.HasValue)
-            query = query.Where(u => u.IsBlocked == filter.IsBlocked.Value);
+        {
+            var isBlocked = filter.IsBlocked.Value;
+            query = query.Where(u => u.IsBlocked == isBlocked);
+        }
 
         return query;
     }
