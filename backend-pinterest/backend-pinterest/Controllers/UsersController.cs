@@ -9,21 +9,21 @@ namespace backend_pinterest.Controllers;
 [Route("api/[controller]")]
 public class UsersController(IMediator mediator) : ControllerBase
 {
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] CreateUserCommand request)
     {
         var user = await mediator.Send(request);
         return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);
     }
 
-    [HttpGet]
+    [HttpGet("getAll")]
     public async Task<IActionResult> GetAll()
     {
         var users = await mediator.Send(new GetAllUsersQuery());
         return Ok(users);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("getById/{id}")]
     public async Task<IActionResult> GetById(Guid id)
     {
         var user = await mediator.Send(new GetUserByIdQuery(id));
@@ -31,7 +31,7 @@ public class UsersController(IMediator mediator) : ControllerBase
         return Ok(user);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("update/{id}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserCommand request)
     {
         var command = request with { Id = id };
@@ -39,7 +39,7 @@ public class UsersController(IMediator mediator) : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("delete/{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
         await mediator.Send(new DeleteUserCommand(id));
