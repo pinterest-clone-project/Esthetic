@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Application.Common.Sorting;
 
-namespace Application.Common.Sorting;
-
-internal class SortDirection
+public enum SortDirection
 {
+    Asc,
+    Desc
 }
