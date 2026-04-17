@@ -45,4 +45,10 @@ public class UsersController(IMediator mediator) : ControllerBase
         await mediator.Send(new DeleteUserCommand(id));
         return NoContent();
     }
+    [HttpGet("search")]
+    public async Task<IActionResult> Search([FromQuery] SearchUsersQuery query)
+    {
+        var result = await mediator.Send(query);
+        return Ok(result);
+    }
 }
