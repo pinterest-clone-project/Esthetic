@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Reflection.Emit;
 
 namespace Infrastructure.Data;
 
@@ -22,6 +23,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     public DbSet<FollowEntity> Follows { get; set; }
     public DbSet<PinEntity> Pins { get; set; }
     public DbSet<CategoryEntity> Categories { get; set; }
+    public DbSet<PinTagEntity> PinTags { get; set; }
 
     public IDbContextTransaction? CurrentTransaction => Database.CurrentTransaction;
 
@@ -61,6 +63,21 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
                 .WithMany(u => u.Followers)
                 .HasForeignKey(f => f.FolloweeId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        builder.Entity<PinTagEntity>(entity =>
+        {
+            entity.HasKey(pt => new { pt.PinId, pt.TagId });
+
+            entity.HasOne(pt => pt.Pin)
+                .WithMany(p => p.PinTags)
+                .HasForeignKey(pt => pt.PinId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(pt => pt.Tag)
+                .WithMany(t => t.PinTags)
+                .HasForeignKey(pt => pt.TagId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }
