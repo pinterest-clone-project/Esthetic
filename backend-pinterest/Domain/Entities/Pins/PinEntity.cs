@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities.Pins;
 
-[Table("tbl_pins")]
+[Table("Pins")]
 public class PinEntity : BaseEntity
 {
     public Guid CreatorId { get; set; }
