@@ -1,9 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Domain.Entities.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Data.Configurations;
 
-internal class UserRoleConfiguration
+public class UserRoleConfiguration : IEntityTypeConfiguration<UserRoleEntity>
 {
+    public void Configure(EntityTypeBuilder<UserRoleEntity> builder)
+    {
+        builder.HasOne(ur => ur.Role)
+            .WithMany(r => r.UserRoles)
+            .HasForeignKey(r => r.RoleId)
+            .IsRequired();
+    }
 }
