@@ -2,7 +2,7 @@
 using Application.Models.DTO.Tag;
 using Application.UseCases.Tags.Commands;
 using AutoMapper;
-using Domain.Entities;
+using Domain.Entities.Tag;
 using Domain.Interfaces;
 using MediatR;
 

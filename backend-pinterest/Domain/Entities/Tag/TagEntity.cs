@@ -1,10 +1,8 @@
-﻿
-
-using Domain.Entities.Base;
-using Domain.Entities.Pins;
+﻿using Domain.Entities.Base;
+using Domain.Entities.PinTag;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities;
+namespace Domain.Entities.Tag;
 
 [Table("Tags")]
 public class TagEntity : BaseEntity

@@ -1,9 +1,10 @@
 using Application.Interfaces;
-using Domain.Entities;
 using Domain.Entities.Category;
 using Domain.Entities.Follow;
 using Domain.Entities.Identity;
 using Domain.Entities.Pins;
+using Domain.Entities.PinTag;
+using Domain.Entities.Tag;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

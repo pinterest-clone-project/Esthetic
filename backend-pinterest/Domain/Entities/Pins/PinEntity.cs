@@ -1,6 +1,7 @@
 using Domain.Entities.Identity;
 using Domain.Entities.Base;
 using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Entities.PinTag;
 
 namespace Domain.Entities.Pins;
 

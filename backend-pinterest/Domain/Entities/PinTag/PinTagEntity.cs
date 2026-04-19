@@ -1,6 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.Entities.Pins;
+using Domain.Entities.Tag;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Pins;
+namespace Domain.Entities.PinTag;
 
 [Table("PinTags")]
 public class PinTagEntity
