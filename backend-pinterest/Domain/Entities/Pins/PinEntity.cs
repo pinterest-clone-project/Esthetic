@@ -1,7 +1,8 @@
-using Domain.Entities.Identity;
 using Domain.Entities.Base;
-using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Entities.Category;
+using Domain.Entities.Identity;
 using Domain.Entities.PinTag;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities.Pins;
 
@@ -12,7 +13,9 @@ public class PinEntity : BaseEntity
     public UserEntity Creator { get; set; } = null!;
     public string? Title { get; set; } = null;
     public string? Description { get; set; } = null;
-    public string? Media_Url { get; set; } = null;
-    public string? Source_Url { get; set; } = null;
+    public string? MediaUrl { get; set; } = null;
+    public string? SourceUrl { get; set; } = null;
     public virtual ICollection<PinTagEntity>? PinTags { get; set; }
+    public Guid? CategoryId { get; set; }
+    public CategoryEntity? Category { get; set; }
 }
