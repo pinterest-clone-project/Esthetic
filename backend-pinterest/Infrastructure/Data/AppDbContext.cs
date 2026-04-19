@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using System.Reflection.Emit;
 
 namespace Infrastructure.Data;
 
@@ -79,6 +78,14 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
                 .WithMany(t => t.PinTags)
                 .HasForeignKey(pt => pt.TagId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<PinEntity>(entity =>
+        {
+            entity.HasOne(p => p.Category)
+                .WithMany(c => c.Pins)
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
     }
 }
