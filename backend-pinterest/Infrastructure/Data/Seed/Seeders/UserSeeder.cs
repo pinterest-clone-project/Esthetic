@@ -35,7 +35,7 @@ public static class UserSeeder
         {
             users = JsonSerializer.Deserialize<List<UserSeedDTO>>(jsonData) ?? [];
         }
-        catch (Exception ex)
+        catch (JsonException ex)
         {
             Console.WriteLine("Error Json Parse Data: {0}", ex.Message);
             return;
