@@ -1,9 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Domain.Entities.Pins;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Data.Configurations;
 
-internal class PinConfiguration
+public class PinConfiguration : IEntityTypeConfiguration<PinEntity>
 {
+    public void Configure(EntityTypeBuilder<PinEntity> builder)
+    {
+        builder.HasOne(p => p.Category)
+            .WithMany(c => c.Pins)
+            .HasForeignKey(p => p.CategoryId)
+            .OnDelete(DeleteBehavior.SetNull);
+    }
 }
