@@ -3,8 +3,8 @@
 using Application.Interfaces;
 using Application.Models.SeedDTO;
 using AutoMapper;
-using Domain.Entities;
 using Domain.Entities.Identity;
+using Domain.Entities.Tag;
 using Microsoft.AspNetCore.Identity;
 using System.Text.Json;
 

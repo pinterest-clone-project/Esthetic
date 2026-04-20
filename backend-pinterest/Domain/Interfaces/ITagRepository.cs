@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+﻿using Domain.Entities.Tag;
 
 namespace Domain.Interfaces;
 

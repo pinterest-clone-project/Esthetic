@@ -1,7 +1,7 @@
 ﻿using Application.Models.SeedDTO;
 using AutoMapper;
-using Domain.Entities;
 using Domain.Entities.Identity;
+using Domain.Entities.Tag;
 
 namespace Application.Mappers;
 
