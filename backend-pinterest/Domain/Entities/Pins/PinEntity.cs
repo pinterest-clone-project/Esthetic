@@ -1,5 +1,6 @@
 using Domain.Entities.Identity;
 using Domain.Entities.Base;
+using Domain.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities.Pins;
@@ -13,4 +14,5 @@ public class PinEntity : BaseEntity
     public string? Description { get; set; } = null;
     public string? Media_Url { get; set; } = null;
     public string? Source_Url { get; set; } = null;
+    public virtual ICollection<TagEntity>? Tags { get; set; }
 }

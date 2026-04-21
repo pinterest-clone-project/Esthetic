@@ -62,5 +62,12 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
                 .HasForeignKey(f => f.FolloweeId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
+
+        builder.Entity<PinEntity>(b =>
+        {
+            b.HasMany(p => p.Tags)
+                .WithMany(t => t.Pins)
+                .UsingEntity(j => j.ToTable("tbl_pin_tags"));
+        });
     }
 }
