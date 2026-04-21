@@ -67,7 +67,7 @@ public class AccountController(IMediator mediator) : ControllerBase
     }
 
     [Authorize]
-    [HttpPut("unfollow/{followedId}")]
+    [HttpDelete("unfollow/{followedId}")]
     public async Task<IActionResult> Unfollow([FromRoute] Guid followedId)
     {
         var userId = User.FindFirstValue(JwtClaims.Id)
