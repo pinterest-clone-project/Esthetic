@@ -1,17 +1,38 @@
 ﻿using Domain.Entities.Like;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data.Repositories;
 
 public class LikeRepository(AppDbContext context) : ILikeRepository
 {
-    public Task LikeAsync(Guid userId, Guid pinId, CancellationToken ct = default)
+    public async Task LikeAsync(Guid userId, Guid pinId, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        var alreadyLiked = await context.Likes
+            .AnyAsync(l => l.UserId == userId && l.PinId == pinId, ct);
+
+        if (!alreadyLiked)
+        {
+            context.Likes.Add(new LikeEntity
+            {
+                UserId = userId,
+                PinId = pinId,
+                CreatedAt = DateTime.UtcNow
+            });
+
+            await context.SaveChangesAsync(ct);
+        }
     }
 
-    public Task UnlikeAsync(Guid userId, Guid pinId, CancellationToken ct = default)
+    public async Task UnlikeAsync(Guid userId, Guid pinId, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        var like = await context.Likes
+            .FirstOrDefaultAsync(l => l.UserId == userId && l.PinId == pinId, ct);
+
+        if (like != null)
+        {
+            context.Likes.Remove(like);
+            await context.SaveChangesAsync(ct);
+        }
     }
 }
