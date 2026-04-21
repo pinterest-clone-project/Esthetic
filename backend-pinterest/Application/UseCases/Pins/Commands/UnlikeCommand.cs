@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Application.UseCases.Pins.Commands;
 
-internal class UnlikeCommand
+public class UnlikeCommand : IRequest<Unit>
 {
+    [BindNever]
+    public Guid UserId { get; init; }
+    public Guid PinId { get; init; }
 }
