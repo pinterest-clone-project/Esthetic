@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260421151911_Add_Likes")]
+    [Migration("20260421153112_Add_Likes")]
     partial class Add_Likes
     {
         /// <inheritdoc />
