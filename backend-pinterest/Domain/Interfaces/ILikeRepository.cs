@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Domain.Interfaces;
 
-namespace Domain.Interfaces;
-
-internal class ILikeRepository
+public interface ILikeRepository
 {
+    Task LikeAsync(Guid userId, Guid pinId, CancellationToken ct = default);
+    Task UnlikeAsync(Guid userId, Guid pinId, CancellationToken ct = default);
 }
