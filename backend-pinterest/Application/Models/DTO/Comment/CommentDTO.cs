@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Application.Models.DTO.Comment;
 
-namespace Application.Models.DTO.Comment;
-
-internal class CommentDTO
+public class CommentDTO
 {
+    public Guid Id { get; set; }
+    public Guid PinId { get; set; }
+    public Guid UserId { get; set; }
+    public string Text { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
 }
