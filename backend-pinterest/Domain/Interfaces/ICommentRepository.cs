@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Domain.Entities.Comment;
 
 namespace Domain.Interfaces;
 
-internal class ICommentRepository
+public interface ICommentRepository : IBaseRepository<CommentEntity>
 {
 }
