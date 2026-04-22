@@ -12,6 +12,7 @@ public record UpdateTagCommand : IRequest<Unit>, ICacheInvalidator
     public Guid Id { get; init; }
     public string? Name { get; init; }
 
+    [BindNever]
     public IReadOnlyList<string> CacheKeysInvalidators =>
     [
         CacheKeys.AllTags,

@@ -1,5 +1,4 @@
-﻿using Application.Models.DTO.Tag;
-using Application.UseCases.Tags.Commands;
+﻿using Application.UseCases.Tags.Commands;
 using Application.UseCases.Tags.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +16,7 @@ public class TagsController(IMediator mediator) : ControllerBase
         return Ok(tags);
     }
     [HttpPost("create")]
+    [Consumes("multipart/form-data")]
     public async Task<IActionResult> Create([FromForm] CreateTagCommand command)
     {
         var tag = await mediator.Send(command);
