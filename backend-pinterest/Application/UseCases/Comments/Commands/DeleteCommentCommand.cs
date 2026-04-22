@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Application.UseCases.Comments.Commands;
 
-internal class DeleteCommentCommand
+public record DeleteCommentCommand : IRequest<Unit>
 {
+    [BindNever]
+    public Guid UserId { get; init; }
+    public Guid CommentId { get; init; }
 }
