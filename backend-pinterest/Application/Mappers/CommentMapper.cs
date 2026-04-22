@@ -1,9 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Application.Models.DTO.Comment;
+using Application.UseCases.Comments.Commands;
+using AutoMapper;
+using Domain.Entities.Comment;
 
 namespace Application.Mappers;
 
-internal class CommentMapper
+public class CommentMapper : Profile
 {
+    public CommentMapper()
+    {
+        CreateMap<CreateCommentCommand, CommentEntity>();
+        CreateMap<CommentEntity, CommentDTO>();
+    }
 }
