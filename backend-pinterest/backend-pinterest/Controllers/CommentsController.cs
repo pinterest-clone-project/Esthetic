@@ -1,6 +1,7 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Validators;
 using Application.UseCases.Comments.Commands;
+using Application.UseCases.Comments.Queries;
 using Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -36,6 +37,14 @@ public class CommentsController(IMediator mediator) : ControllerBase
         };
 
         var result = await mediator.Send(command);
+        return Ok(result);
+    }
+
+    [HttpGet("getComments/{pinId}")]
+    public async Task<IActionResult> GetComments([FromRoute] Guid pinId)
+    {
+        var query = new GetCommentsByPinQuery { PinId = pinId };
+        var result = await mediator.Send(query);
         return Ok(result);
     }
 }
