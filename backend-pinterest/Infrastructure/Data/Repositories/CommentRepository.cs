@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Domain.Entities.Comment;
+using Domain.Interfaces;
 
 namespace Infrastructure.Data.Repositories;
 
-internal class CommentRepository
+public class CommentRepository : BaseRepository<CommentEntity>, ICommentRepository
 {
+    public CommentRepository(AppDbContext db): base(db) { }
 }
