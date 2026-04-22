@@ -1,9 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Application.UseCases.Comments.Commands;
 
-internal class CreateCommentCommand
+public record CreateCommentCommand : IRequest<Unit>
 {
+    [BindNever]
+    public Guid UserId { get; init; }
+    public Guid PinId { get; init; }
+    public required string Text { get; init; }
 }
