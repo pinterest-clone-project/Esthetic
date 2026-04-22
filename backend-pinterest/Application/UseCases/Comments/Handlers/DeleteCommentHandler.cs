@@ -1,9 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Application.UseCases.Comments.Commands;
+using Domain.Interfaces;
+using MediatR;
 
 namespace Application.UseCases.Comments.Handlers;
 
-internal class DeleteCommentHandler
+public class DeleteCommentHandler(
+    ICommentRepository repository) : IRequestHandler<DeleteCommentCommand, Unit>
 {
+    public async Task<Unit> Handle(DeleteCommentCommand request, CancellationToken cancellationToken)
+    {
+        await repository.DeleteAsync(request.CommentId, cancellationToken);
+        return Unit.Value;
+    }
 }
