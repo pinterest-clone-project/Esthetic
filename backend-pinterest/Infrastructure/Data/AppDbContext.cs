@@ -1,5 +1,6 @@
 using Application.Interfaces;
 using Domain.Entities.Category;
+using Domain.Entities.Comment;
 using Domain.Entities.Follow;
 using Domain.Entities.Identity;
 using Domain.Entities.Like;
@@ -27,6 +28,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     public DbSet<CategoryEntity> Categories { get; set; }
     public DbSet<PinTagEntity> PinTags { get; set; }
     public DbSet<LikeEntity> Likes { get; set; }
+    public DbSet<CommentEntity> Comments { get; set; }
 
     public IDbContextTransaction? CurrentTransaction => Database.CurrentTransaction;
 

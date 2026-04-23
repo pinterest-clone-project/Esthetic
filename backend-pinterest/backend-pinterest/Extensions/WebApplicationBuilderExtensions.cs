@@ -13,12 +13,15 @@ using Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Quartz;
 using System.Globalization;
+using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace backend_pinterest.Extensions;
 
@@ -193,6 +196,7 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<IFollowRepository, FollowRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<ILikeRepository, LikeRepository>();
+        services.AddScoped<ICommentRepository, CommentRepository>();
 
         services.AddScoped<IEmailJobScheduler, EmailJobScheduler>();
 
@@ -229,6 +233,33 @@ public static class WebApplicationBuilderExtensions
                 ];
 
                 document.SetReferenceHostDocument();
+                return Task.CompletedTask;
+            });
+
+            options.AddSchemaTransformer((schema, context, _) =>
+            {
+                var type = context.JsonTypeInfo.Type;
+
+                var bindNeverPropNames = type.GetProperties()
+                    .Where(p => p.GetCustomAttributes(typeof(BindNeverAttribute), true).Any())
+                    .Select(p =>
+                    {
+                        var jsonAttr = p.GetCustomAttribute<JsonPropertyNameAttribute>();
+                        return jsonAttr?.Name ?? char.ToLower(p.Name[0]) + p.Name[1..];
+                    })
+                    .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+                if (bindNeverPropNames.Count > 0 && schema.Properties != null)
+                {
+                    foreach (var key in schema.Properties.Keys
+                        .Where(k => bindNeverPropNames.Contains(k))
+                        .ToList())
+                    {
+                        schema.Properties.Remove(key);
+                        schema.Required?.Remove(key);
+                    }
+                }
+
                 return Task.CompletedTask;
             });
         });

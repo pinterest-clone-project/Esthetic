@@ -1,8 +1,8 @@
-﻿using Application.UseCases.Pins.Commands;
+﻿using Application.UseCases.Likes.Commands;
 using Domain.Interfaces;
 using MediatR;
 
-namespace Application.UseCases.Pins.Handlers;
+namespace Application.UseCases.Likes.Handlers;
 
 public class LikeHandler(ILikeRepository likeRepository) : IRequestHandler<LikeCommand, Unit>
 {

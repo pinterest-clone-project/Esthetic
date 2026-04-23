@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Application.UseCases.Pins.Commands;
+namespace Application.UseCases.Likes.Commands;
 
 public class UnlikeCommand : IRequest<Unit>
 {

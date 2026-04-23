@@ -1,5 +1,4 @@
-﻿
-using Application.Models.DTO.Tag;
+﻿using Application.Models.DTO.Tag;
 using Application.UseCases.Tags.Commands;
 using AutoMapper;
 using Domain.Entities.Tag;
@@ -9,7 +8,8 @@ using MediatR;
 namespace Application.UseCases.Tags.Handlers;
 
 public class CreateTagHandler(
-    ITagRepository repository, IMapper mapper) : IRequestHandler<CreateTagCommand, TagDTO> 
+    ITagRepository repository, 
+    IMapper mapper) : IRequestHandler<CreateTagCommand, TagDTO> 
 {
     public async Task<TagDTO> Handle(CreateTagCommand request, CancellationToken cancellationToken)
     {
