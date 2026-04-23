@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Domain.Entities.Report;
+using Domain.Enums;
 
 namespace Domain.Interfaces;
 
-internal class IReportRepository
+public interface IReportRepository : IBaseRepository<ReportEntity>
 {
+    Task UpdateStatusAsync(Guid id, ReportStatus status, CancellationToken ct = default);
+    Task<List<ReportEntity>> GetByReporterIdAsync(Guid reporterId, CancellationToken ct = default);
 }
