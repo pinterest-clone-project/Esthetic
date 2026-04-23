@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Domain.Enums;
 
-namespace Domain.Enums;
-
-internal class ReportStatus
+public enum ReportStatus
 {
+    Pending,
+    Reviewed,
+    Resolved,
+    Dismissed
 }
