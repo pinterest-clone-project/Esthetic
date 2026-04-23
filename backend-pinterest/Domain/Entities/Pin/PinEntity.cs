@@ -6,7 +6,7 @@ using Domain.Entities.Like;
 using Domain.Entities.PinTag;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Pins;
+namespace Domain.Entities.Pin;
 
 [Table("Pins")]
 public class PinEntity : BaseEntity

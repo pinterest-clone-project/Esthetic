@@ -1,6 +1,6 @@
 ﻿using Domain.Entities.Base;
 using Domain.Entities.Identity;
-using Domain.Entities.Pins;
+using Domain.Entities.Pin;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities.Comment;
