@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Application.Models.DTO.Report;
+using MediatR;
 
 namespace Application.UseCases.Reports.Queries;
 
-internal class GetAllReportsQuery
-{
-}
+public record GetAllReportsQuery : IRequest<List<ReportDTO>>;
