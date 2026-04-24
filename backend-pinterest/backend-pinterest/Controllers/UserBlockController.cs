@@ -16,7 +16,7 @@ public class UserBlockController(IMediator mediator) : ControllerBase
         User.FindFirstValue(JwtClaims.Id)
         ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized));
 
-    [HttpPut("{blockedId}")]
+    [HttpPut("block/{blockedId}")]
     public async Task<IActionResult> Block([FromRoute] Guid blockedId)
     {
         var result = await mediator.Send(new BlockUserCommand
@@ -27,7 +27,7 @@ public class UserBlockController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("{blockedId}")]
+    [HttpDelete("unblock/{blockedId}")]
     public async Task<IActionResult> Unblock([FromRoute] Guid blockedId)
     {
         var result = await mediator.Send(new UnblockUserCommand

@@ -16,7 +16,7 @@ public class FollowController(IMediator mediator) : ControllerBase
         User.FindFirstValue(JwtClaims.Id)
         ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized));
 
-    [HttpPut("{followedId}")]
+    [HttpPut("follow/{followedId}")]
     public async Task<IActionResult> Follow([FromRoute] Guid followedId)
     {
         var result = await mediator.Send(new FollowCommand
@@ -27,7 +27,7 @@ public class FollowController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("{followedId}")]
+    [HttpDelete("unfollow/{followedId}")]
     public async Task<IActionResult> Unfollow([FromRoute] Guid followedId)
     {
         var result = await mediator.Send(new UnfollowCommand
