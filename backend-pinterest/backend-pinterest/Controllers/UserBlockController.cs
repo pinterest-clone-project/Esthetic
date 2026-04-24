@@ -26,4 +26,15 @@ public class UserBlockController(IMediator mediator) : ControllerBase
         });
         return Ok(result);
     }
+
+    [HttpDelete("{blockedId}")]
+    public async Task<IActionResult> Unblock([FromRoute] Guid blockedId)
+    {
+        var result = await mediator.Send(new UnblockUserCommand
+        {
+            BlockerId = CurrentUserId,
+            BlockedId = blockedId
+        });
+        return Ok(result);
+    }
 }
