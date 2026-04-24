@@ -42,7 +42,6 @@ public class AccountController(IMediator mediator) : ControllerBase
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> Edit([FromForm] EditCommand command)
     {
-        var request = this.Request;
         var userId = User.FindFirstValue(JwtClaims.Id) ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
 
         var commadWithId = command with { Id = Guid.Parse(userId) };
