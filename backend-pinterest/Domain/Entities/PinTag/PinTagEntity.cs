@@ -1,4 +1,4 @@
-﻿using Domain.Entities.Pins;
+﻿using Domain.Entities.Pin;
 using Domain.Entities.Tag;
 using System.ComponentModel.DataAnnotations.Schema;
 

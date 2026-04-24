@@ -1,4 +1,4 @@
-﻿using Domain.Entities.Pins;
+﻿using Domain.Entities.Pin;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
