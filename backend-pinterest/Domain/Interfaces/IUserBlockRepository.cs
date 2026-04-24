@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Domain.Interfaces;
 
-namespace Domain.Interfaces;
-
-internal class IUserBlockRepository
+public interface IUserBlockRepository
 {
+    Task BlockAsync(Guid blockerId, Guid blockedId, CancellationToken ct = default);
+    Task UnblockAsync(Guid blockerId, Guid blockedId, CancellationToken ct = default);
 }
