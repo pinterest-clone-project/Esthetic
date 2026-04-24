@@ -8,6 +8,7 @@ using Domain.Entities.Pin;
 using Domain.Entities.PinTag;
 using Domain.Entities.Report;
 using Domain.Entities.Tag;
+using Domain.Entities.UserBlock;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     public DbSet<LikeEntity> Likes { get; set; }
     public DbSet<CommentEntity> Comments { get; set; }
     public DbSet<ReportEntity> Reports { get; set; }
+    public DbSet<UserBlockEntity> UserBlocks { get; set; }
 
     public IDbContextTransaction? CurrentTransaction => Database.CurrentTransaction;
 
