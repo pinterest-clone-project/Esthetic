@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Application.UseCases.BlockUsers.Commands;
 
-internal class BlockUserCommand
+public record BlockUserCommand : IRequest<Unit>
 {
+    [BindNever]
+    public Guid BlockerId { get; init; }
+    public Guid BlockedId { get; init; }
 }
