@@ -58,6 +58,40 @@ namespace Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Comment.CommentEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("PinId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PinId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("Domain.Entities.Follow.FollowEntity", b =>
                 {
                     b.Property<Guid>("FollowerId")
@@ -236,9 +270,14 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("UserId1")
+                        .HasColumnType("uuid");
+
                     b.HasKey("LoginProvider", "ProviderKey");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
@@ -263,10 +302,46 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Entities.Like.LikeEntity", b =>
+                {
+                    b.Property<Guid>("PinId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("PinId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Likes");
+                });
+
+            modelBuilder.Entity("Domain.Entities.PinTag.PinTagEntity", b =>
+                {
+                    b.Property<Guid>("PinId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("PinId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("PinTags");
+                });
+
             modelBuilder.Entity("Domain.Entities.Pins.PinEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CategoryId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -281,10 +356,10 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Media_Url")
+                    b.Property<string>("MediaUrl")
                         .HasColumnType("text");
 
-                    b.Property<string>("Source_Url")
+                    b.Property<string>("SourceUrl")
                         .HasColumnType("text");
 
                     b.Property<string>("Title")
@@ -295,12 +370,14 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("tbl_pins");
+                    b.ToTable("Pins");
                 });
 
-            modelBuilder.Entity("Domain.Entities.TagEntity", b =>
+            modelBuilder.Entity("Domain.Entities.Tag.TagEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -321,7 +398,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("tbl_tags");
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -391,6 +468,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+<<<<<<< HEAD
             modelBuilder.Entity("PinEntityTagEntity", b =>
                 {
                     b.Property<Guid>("PinsId")
@@ -404,6 +482,25 @@ namespace Infrastructure.Migrations
                     b.HasIndex("TagsId");
 
                     b.ToTable("tbl_pin_tags", (string)null);
+=======
+            modelBuilder.Entity("Domain.Entities.Comment.CommentEntity", b =>
+                {
+                    b.HasOne("Domain.Entities.Pins.PinEntity", "Pin")
+                        .WithMany("Comments")
+                        .HasForeignKey("PinId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Identity.UserEntity", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pin");
+
+                    b.Navigation("User");
+>>>>>>> 30e64b54934ffbed940f3364bc55c6d749a45c0a
                 });
 
             modelBuilder.Entity("Domain.Entities.Follow.FollowEntity", b =>
@@ -427,9 +524,15 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Identity.UserLoginEntity", b =>
                 {
+                    b.HasOne("Domain.Entities.Identity.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Identity.UserEntity", "User")
                         .WithMany("UserLogins")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -459,13 +562,58 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Like.LikeEntity", b =>
+                {
+                    b.HasOne("Domain.Entities.Pins.PinEntity", "Pin")
+                        .WithMany("Likes")
+                        .HasForeignKey("PinId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Identity.UserEntity", "User")
+                        .WithMany("Likes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pin");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.PinTag.PinTagEntity", b =>
+                {
+                    b.HasOne("Domain.Entities.Pins.PinEntity", "Pin")
+                        .WithMany("PinTags")
+                        .HasForeignKey("PinId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Tag.TagEntity", "Tag")
+                        .WithMany("PinTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pin");
+
+                    b.Navigation("Tag");
+                });
+
             modelBuilder.Entity("Domain.Entities.Pins.PinEntity", b =>
                 {
+                    b.HasOne("Domain.Entities.Category.CategoryEntity", "Category")
+                        .WithMany("Pins")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("Domain.Entities.Identity.UserEntity", "Creator")
                         .WithMany()
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
 
                     b.Navigation("Creator");
                 });
@@ -497,6 +645,7 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
+<<<<<<< HEAD
             modelBuilder.Entity("PinEntityTagEntity", b =>
                 {
                     b.HasOne("Domain.Entities.Pins.PinEntity", null)
@@ -510,6 +659,11 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+=======
+            modelBuilder.Entity("Domain.Entities.Category.CategoryEntity", b =>
+                {
+                    b.Navigation("Pins");
+>>>>>>> 30e64b54934ffbed940f3364bc55c6d749a45c0a
                 });
 
             modelBuilder.Entity("Domain.Entities.Identity.RoleEntity", b =>
@@ -519,13 +673,31 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Identity.UserEntity", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Followers");
 
                     b.Navigation("Following");
 
+                    b.Navigation("Likes");
+
                     b.Navigation("UserLogins");
 
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Pins.PinEntity", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Likes");
+
+                    b.Navigation("PinTags");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Tag.TagEntity", b =>
+                {
+                    b.Navigation("PinTags");
                 });
 #pragma warning restore 612, 618
         }

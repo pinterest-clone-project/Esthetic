@@ -135,13 +135,14 @@
     "Image": "https://thispersondoesnotexist.com/"
   },
   {
-    "UserName": "admin",
-    "FirstName": "Admin",
-    "LastName": "Admin",
-    "Email": "admin@example.com",
-    "Password": "Admin123!",
+    "UserName": "novakvova",
+    "FirstName": "Vova",
+    "LastName": "Novak",
+    "Email": "novakvova@example.com",
+    "Password": "Novakvova123!",
     "PhoneNumber": "+1234567890",
     "Image": "https://thispersondoesnotexist.com/",
+    "LocalImage": "admin.jpg",
     "Roles": [ "Admin" ]
   }
 ]

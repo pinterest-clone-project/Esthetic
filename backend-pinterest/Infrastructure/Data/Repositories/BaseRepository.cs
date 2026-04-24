@@ -1,7 +1,6 @@
-﻿using Domain.Interfaces;
-using Infrastructure.Data;
+﻿using Domain.Entities.Base;
+using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Domain.Entities.Base;
 
 namespace Infrastructure.Data.Repositories;
 
@@ -13,7 +12,6 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class, IEntity
     {
         _db = db;
     }
-
     public async Task<T> AddAsync(T entity, CancellationToken ct = default)
     {
         await _db.Set<T>().AddAsync(entity, ct);
@@ -44,6 +42,12 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class, IEntity
         if (entity == null || entity.IsDeleted) return null;
         return entity;
     }
+
+    public IQueryable<T> GetQueryable() =>
+        _db.Set<T>()
+            .Where(e => !e.IsDeleted)
+            .AsNoTracking()
+            .AsQueryable();
 
     public async Task UpdateAsync(T entity, CancellationToken ct = default)
     {

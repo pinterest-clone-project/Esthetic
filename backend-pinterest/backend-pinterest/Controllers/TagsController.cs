@@ -1,5 +1,4 @@
-﻿using Application.Models.DTO.Tag;
-using Application.UseCases.Tags.Commands;
+﻿using Application.UseCases.Tags.Commands;
 using Application.UseCases.Tags.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -10,20 +9,21 @@ namespace backend_pinterest.Controllers;
 [ApiController]
 public class TagsController(IMediator mediator) : ControllerBase
 {
-    [HttpGet]
+    [HttpGet("getAll")]
     public async Task<IActionResult> GetAll()
     {
         var tags = await mediator.Send(new GetAllTagsQuery());
         return Ok(tags);
     }
-    [HttpPost]
+    [HttpPost("create")]
+    [Consumes("multipart/form-data")]
     public async Task<IActionResult> Create([FromForm] CreateTagCommand command)
     {
         var tag = await mediator.Send(command);
         return Ok(tag);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("getById/{id}")]
     public async Task<IActionResult> GetById(Guid id)
     {
         var tag = await mediator.Send(new GetTagByIdQuery(id));
@@ -31,7 +31,7 @@ public class TagsController(IMediator mediator) : ControllerBase
         return Ok(tag);
     }
 
-    [HttpPut]
+    [HttpPut("update/{id}")]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateTagCommand request)
     {
         var command = request with { Id = id };
@@ -39,7 +39,7 @@ public class TagsController(IMediator mediator) : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("delete/{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
         await mediator.Send(new DeleteTagCommand(id));

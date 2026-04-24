@@ -1,6 +1,4 @@
-﻿
-
-using Domain.Entities;
+﻿using Domain.Entities.Tag;
 using Domain.Interfaces;
 
 namespace Infrastructure.Data.Repositories;

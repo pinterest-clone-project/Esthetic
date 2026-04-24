@@ -8,4 +8,5 @@ public interface IImageService
     Task<string> SaveImageFromUrlAsync(string imageUrl);
     Task DeleteImageAsync(string name);
     Task<string> SaveImageFromBase64Async(string name);
+    Task<string> SaveImageFromPathAsync(string filePath);
 }

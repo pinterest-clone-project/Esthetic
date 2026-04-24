@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Application.Models.SeedDTO;
+﻿namespace Application.Models.SeedDTO;
 
 public class UserSeedDTO
 {
@@ -14,5 +10,6 @@ public class UserSeedDTO
     public string Password { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
     public string Image { get; set; } = string.Empty;
+    public string? LocalImage { get; set; }
     public List<string> Roles { get; set; } = new();
 }

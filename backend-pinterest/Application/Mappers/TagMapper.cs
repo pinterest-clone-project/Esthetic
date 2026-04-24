@@ -3,7 +3,7 @@ using Application.Models.DTO.Tag;
 using Application.UseCases.Tags.Commands;
 using Application.UseCases.Users.Commands;
 using AutoMapper;
-using Domain.Entities;
+using Domain.Entities.Tag;
 
 namespace Application.Mappers;
 

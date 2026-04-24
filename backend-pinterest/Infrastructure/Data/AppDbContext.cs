@@ -1,13 +1,17 @@
 using Application.Interfaces;
-using Domain.Entities;
 using Domain.Entities.Category;
+using Domain.Entities.Comment;
 using Domain.Entities.Follow;
 using Domain.Entities.Identity;
+using Domain.Entities.Like;
 using Domain.Entities.Pins;
+using Domain.Entities.PinTag;
+using Domain.Entities.Tag;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Reflection;
 
 namespace Infrastructure.Data;
 
@@ -22,6 +26,9 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     public DbSet<FollowEntity> Follows { get; set; }
     public DbSet<PinEntity> Pins { get; set; }
     public DbSet<CategoryEntity> Categories { get; set; }
+    public DbSet<PinTagEntity> PinTags { get; set; }
+    public DbSet<LikeEntity> Likes { get; set; }
+    public DbSet<CommentEntity> Comments { get; set; }
 
     public IDbContextTransaction? CurrentTransaction => Database.CurrentTransaction;
 
@@ -32,6 +39,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+<<<<<<< HEAD
         builder.Entity<UserRoleEntity>(ur =>
         {
             ur.HasOne(ur => ur.Role)
@@ -69,5 +77,8 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
                 .WithMany(t => t.Pins)
                 .UsingEntity(j => j.ToTable("tbl_pin_tags"));
         });
+=======
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+>>>>>>> 30e64b54934ffbed940f3364bc55c6d749a45c0a
     }
 }

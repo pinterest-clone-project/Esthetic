@@ -53,6 +53,12 @@ public class ImageService(IConfiguration configuration) : IImageService
         return await SaveImageAsync(imageBytes);
     }
 
+    public async Task<string> SaveImageFromPathAsync(string filePath)
+    {
+        var bytes = await File.ReadAllBytesAsync(filePath);
+        return await SaveImageAsync(bytes);
+    }
+
     public async Task<string> SaveImageFromUrlAsync(string imageUrl)
     {
         using var httpClient = new HttpClient();
