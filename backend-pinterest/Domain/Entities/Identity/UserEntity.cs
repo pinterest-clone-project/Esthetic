@@ -3,6 +3,7 @@ using Domain.Entities.Comment;
 using Domain.Entities.Follow;
 using Domain.Entities.Like;
 using Domain.Entities.Report;
+using Domain.Entities.UserBlock;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities.Identity;
@@ -28,4 +29,6 @@ public class UserEntity : IdentityUser<Guid>, IEntity
     public virtual ICollection<CommentEntity>? Comments { get; set; }
     public virtual ICollection<ReportEntity>? SentReports { get; set; }
     public virtual ICollection<ReportEntity>? ReceivedReports { get; set; }
+    public virtual ICollection<UserBlockEntity>? BlockedUsers { get; set; }
+    public virtual ICollection<UserBlockEntity>? BlockedByUsers { get; set; }
 }
