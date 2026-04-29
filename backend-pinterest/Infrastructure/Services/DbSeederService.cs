@@ -22,5 +22,6 @@ public class DbSeederService(IServiceProvider serviceProvider) : IDbSeederServic
         await RoleSeeder.SeedAsync(context, roleManager);
         await UserSeeder.SeedAsync(context, mapper, imageService, userManager, roleManager);
         await TagSeeder.SeedAsync(context, mapper);
+        await PinSeeder.SeedAsync(context);
     }
 }

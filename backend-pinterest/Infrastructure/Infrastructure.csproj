@@ -39,6 +39,9 @@
     <None Update="Data\Seed\JsonSeedData\Users.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Data\Seed\JsonSeedData\Pins.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
 	<None Update="Data\Seed\SeedImages\**">
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>

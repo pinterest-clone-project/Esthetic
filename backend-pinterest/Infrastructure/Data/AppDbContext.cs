@@ -39,46 +39,6 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-<<<<<<< HEAD
-        builder.Entity<UserRoleEntity>(ur =>
-        {
-            ur.HasOne(ur => ur.Role)
-                .WithMany(r => r.UserRoles)
-                .HasForeignKey(r => r.RoleId)
-                .IsRequired();
-        });
-
-        builder.Entity<UserLoginEntity>(b =>
-        {
-            b.HasOne(l => l.User)
-                .WithMany(u => u.UserLogins)
-                .HasForeignKey(l => l.UserId)
-                .IsRequired();
-        });
-
-        builder.Entity<FollowEntity>(b =>
-        {
-            b.HasKey(f => new { f.FollowerId, f.FolloweeId });
-
-            b.HasOne(f => f.Follower)
-                .WithMany(u => u.Following)
-                .HasForeignKey(f => f.FollowerId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            b.HasOne(f => f.Followee)
-                .WithMany(u => u.Followers)
-                .HasForeignKey(f => f.FolloweeId)
-                .OnDelete(DeleteBehavior.Restrict);
-        });
-
-        builder.Entity<PinEntity>(b =>
-        {
-            b.HasMany(p => p.Tags)
-                .WithMany(t => t.Pins)
-                .UsingEntity(j => j.ToTable("tbl_pin_tags"));
-        });
-=======
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
->>>>>>> 30e64b54934ffbed940f3364bc55c6d749a45c0a
     }
 }
