@@ -4,9 +4,10 @@ using Domain.Entities.Comment;
 using Domain.Entities.Identity;
 using Domain.Entities.Like;
 using Domain.Entities.PinTag;
+using Domain.Entities.Report;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Pins;
+namespace Domain.Entities.Pin;
 
 [Table("Pins")]
 public class PinEntity : BaseEntity
@@ -25,4 +26,5 @@ public class PinEntity : BaseEntity
     public virtual ICollection<PinTagEntity>? PinTags { get; set; }
     public virtual ICollection<LikeEntity>? Likes { get; set; }
     public virtual ICollection<CommentEntity>? Comments { get; set; }
+    public virtual ICollection<ReportEntity>? Reports { get; set; }
 }

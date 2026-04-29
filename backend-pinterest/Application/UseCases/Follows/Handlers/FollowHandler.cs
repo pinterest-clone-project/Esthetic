@@ -1,8 +1,8 @@
-﻿using Application.UseCases.Account.Commands;
+﻿using Application.UseCases.Follows.Commands;
 using Domain.Interfaces;
 using MediatR;
 
-namespace Application.UseCases.Account.Handlers;
+namespace Application.UseCases.Follows.Handlers;
 
 public class FollowHandler(IFollowRepository followRepository) : IRequestHandler<FollowCommand, Unit>
 {

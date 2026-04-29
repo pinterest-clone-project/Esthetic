@@ -1,10 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Application.UseCases.Account.Commands;
+namespace Application.UseCases.Follows.Commands;
 
 public record UnfollowCommand : IRequest<Unit>
 {

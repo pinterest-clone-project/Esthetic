@@ -42,44 +42,10 @@ public class AccountController(IMediator mediator) : ControllerBase
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> Edit([FromForm] EditCommand command)
     {
-        var request = this.Request;
         var userId = User.FindFirstValue(JwtClaims.Id) ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
 
         var commadWithId = command with { Id = Guid.Parse(userId) };
         var result = await mediator.Send(commadWithId);
-        return Ok(result);
-    }
-
-    [Authorize]
-    [HttpPut("follow/{followedId}")]
-    public async Task<IActionResult> Follow([FromRoute] Guid followedId)
-    {
-        var userId = User.FindFirstValue(JwtClaims.Id) ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
-
-        var command = new FollowCommand
-        {
-            Id = Guid.Parse(userId),
-            FollowedId = followedId
-        };
-
-        var result = await mediator.Send(command);
-        return Ok(result);
-    }
-
-    [Authorize]
-    [HttpDelete("unfollow/{followedId}")]
-    public async Task<IActionResult> Unfollow([FromRoute] Guid followedId)
-    {
-        var userId = User.FindFirstValue(JwtClaims.Id)
-            ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
-
-        var command = new UnfollowCommand
-        {
-            Id = Guid.Parse(userId),
-            FollowedId = followedId
-        };
-
-        var result = await mediator.Send(command);
         return Ok(result);
     }
 

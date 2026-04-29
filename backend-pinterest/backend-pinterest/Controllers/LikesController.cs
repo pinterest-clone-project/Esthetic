@@ -14,7 +14,7 @@ namespace backend_pinterest.Controllers;
 public class LikesController(IMediator mediator) : ControllerBase
 {
     [Authorize]
-    [HttpPost("like/{pinId}")]
+    [HttpPut("like/{pinId}")]
     public async Task<IActionResult> Like([FromRoute] Guid pinId)
     {
         var userId = User.FindFirstValue(JwtClaims.Id)
@@ -31,7 +31,7 @@ public class LikesController(IMediator mediator) : ControllerBase
     }
 
     [Authorize]
-    [HttpDelete("like/{pinId}")]
+    [HttpDelete("unlike/{pinId}")]
     public async Task<IActionResult> Unlike([FromRoute] Guid pinId)
     {
         var userId = User.FindFirstValue(JwtClaims.Id)
