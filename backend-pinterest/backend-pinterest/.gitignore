@@ -283,3 +283,6 @@ yarn-debug.log*
 yarn-error.log*
 
 package-lock.json
+
+# Local development settings
+**/appsettings.Development.json
