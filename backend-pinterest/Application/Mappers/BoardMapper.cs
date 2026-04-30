@@ -34,5 +34,8 @@ public class BoardMapper : Profile
 
         CreateMap<CreateBoardCommand, BoardEntity>();
 
+        CreateMap<UpdateBoardCommand, BoardEntity>()
+        .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
     }
 }

@@ -59,5 +59,22 @@ public class BoardsController(IMediator mediator) : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPut("update/{id:guid}")]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Update(Guid id, [FromForm] UpdateBoardCommand command)
+    {
+        var userId = User.FindFirstValue(JwtClaims.Id)
+            ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
+
+        var commandWithIds = command with
+        {
+            Id = id,
+            OwnerId = Guid.Parse(userId)
+        };
+
+        var result = await mediator.Send(commandWithIds);
+        return Ok(result);
+    }
 }
 
