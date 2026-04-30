@@ -33,5 +33,16 @@ public class BoardsController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(new GetBoardByIdQuery(id));
         return Ok(result);
     }
+
+    [HttpGet("getMy")]
+    public async Task<IActionResult> GetMyBoards([FromQuery] GetUserBoardsQuery query)
+    {
+        var userId = User.FindFirstValue(JwtClaims.Id)
+            ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
+
+        var queryWithOwner = query with { OwnerId = Guid.Parse(userId) };
+        var result = await mediator.Send(queryWithOwner);
+        return Ok(result);
+    }
 }
 
