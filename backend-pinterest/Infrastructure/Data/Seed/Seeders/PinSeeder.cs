@@ -1,5 +1,5 @@
 using Domain.Entities.PinTag;
-using Domain.Entities.Pins;
+using Domain.Entities.Pin;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Application.Models.SeedDTO;

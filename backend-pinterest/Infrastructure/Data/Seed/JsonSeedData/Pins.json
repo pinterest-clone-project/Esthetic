@@ -12,5 +12,33 @@
     "MediaUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F12%2Fde%2F08%2F12de08044bcfeb2ae66aafd441c03fc2.jpg%3Fnii%3Dt&f=1&nofb=1&ipt=3903b4cb6b069fda0aaf2cd8b2ffb430de0ec79495b5f00cdb9a5be11475b617",
     "SourceUrl": "https://www.pinterest.com/pin/24488391719814352/",
     "Tags": ["nails", "nail art", "дизайн нігтів", "art"]
+  },
+  {
+    "Title": "Green Sweater",
+    "Description": "A beatiful knitted sweater",
+    "MediaUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fn.nordstrommedia.com%2Fid%2Fsr3%2Fb3123373-09f1-4c55-8c4e-adf3a16b3167.jpeg%3Fh%3D365%26w%3D240%26dpr%3D2&f=1&nofb=1&ipt=073b0a514208d9164a2a3c69b87f1e7bdde35ba8daa7cbd355219db232ee6bbf",
+    "SourceUrl": "https://www.nordstrom.com/browse/women/clothing/sweaters?filterByColor=green",
+    "Tags": ["cozy", "modern", "fashion", "winter outfit"]
+  },
+  {
+    "Title": "Cyberpunk Wallpaper",
+    "Description": "From the show Cyberpunk Edge Runners",
+    "MediaUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwallpapercave.com%2Fwp%2Fwp14641523.jpg&f=1&nofb=1&ipt=aa00440d4915354b5c668ab7c7e8dbe489d9443714a45984f6eaa9a2e2787740",
+    "SourceUrl": "https://wallpapercave.com/cyberpunk-edgerunners-phone-4k-wallpapers",
+    "Tags": ["minimalist", "wanderlust", "digital art", "dark aesthetic"]
+  },
+  {
+    "Title": "V For Vendetta",
+    "Description": "A story about resisting fascism",
+    "MediaUrl": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.goldposter.com%2F2015%2F04%2FV-for-Vendetta_poster_goldposter_com_39.jpg%3Fx-oss-process%3Dimage%2Fresize%2Cm_fill%2Ch_800%2Cw_570%2Fquality%2Cq_80&f=1&nofb=1&ipt=d35a996e11ab7a80cbf2570cc09248c411858b0d6a247d3f5a4f5528ebab6b16",
+    "SourceUrl": "https://dc.fandom.com/wiki/V_(V_for_Vendetta)",
+    "Tags": ["art", "moody", "cinematic", "motivation"]
+  },
+  {
+    "Title": "Arm Warmers",
+    "Description": "Fashinable arm accessories!",
+    "MediaUrl": "https://cdn.media.amplience.net/s/hottopic/35314874_hi?$productMainDesktop$&fmt=auto",
+    "SourceUrl": "https://www.hottopic.com/product/pink-star-fishnet-arm-warmers/35314880.html",
+    "Tags": ["fashion", "street style", "layering", "accessories"]
   }
 ]
