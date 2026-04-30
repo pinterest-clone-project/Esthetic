@@ -1,6 +1,7 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Validators;
 using Application.UseCases.Boards.Commands;
+using Application.UseCases.Boards.Queries;
 using Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -14,7 +15,7 @@ namespace backend_pinterest.Controllers;
 [Authorize]
 public class BoardsController(IMediator mediator) : ControllerBase
 {
-    [HttpPost]
+    [HttpPost("create")]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> Create([FromForm] CreateBoardCommand command)
     {
@@ -23,6 +24,13 @@ public class BoardsController(IMediator mediator) : ControllerBase
 
         var commandWithOwner = command with { OwnerId = Guid.Parse(userId) };
         var result = await mediator.Send(commandWithOwner);
+        return Ok(result);
+    }
+
+    [HttpGet("getById/{id}")]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var result = await mediator.Send(new GetBoardByIdQuery(id));
         return Ok(result);
     }
 }
