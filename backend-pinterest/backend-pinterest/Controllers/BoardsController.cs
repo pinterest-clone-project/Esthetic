@@ -27,14 +27,14 @@ public class BoardsController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("getById/{id}")]
+    [HttpGet("getById/{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
         var result = await mediator.Send(new GetBoardByIdQuery(id));
         return Ok(result);
     }
 
-    [HttpGet("getMy")]
+    [HttpGet("my")]
     public async Task<IActionResult> GetMyBoards([FromQuery] GetUserBoardsQuery query)
     {
         var userId = User.FindFirstValue(JwtClaims.Id)
@@ -43,6 +43,21 @@ public class BoardsController(IMediator mediator) : ControllerBase
         var queryWithOwner = query with { OwnerId = Guid.Parse(userId) };
         var result = await mediator.Send(queryWithOwner);
         return Ok(result);
+    }
+
+    [HttpDelete("delete/{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var userId = User.FindFirstValue(JwtClaims.Id)
+            ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
+
+        await mediator.Send(new DeleteBoardCommand
+        {
+            Id = id,
+            OwnerId = Guid.Parse(userId)
+        });
+
+        return NoContent();
     }
 }
 
