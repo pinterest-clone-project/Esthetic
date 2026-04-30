@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <Folder Include="UseCases\Account\Queries\" />
+    <Folder Include="UseCases\Boards\Queries\" />
     <Folder Include="UseCases\Pins\" />
   </ItemGroup>
 

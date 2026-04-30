@@ -1,4 +1,5 @@
 ﻿using Application.Models.DTO.Board;
+using Application.UseCases.Boards.Commands;
 using AutoMapper;
 using Domain.Entities.Board;
 using System;
@@ -30,5 +31,8 @@ public class BoardMapper : Profile
                     .Select(bp => bp.Pin.MediaUrl)
                     .Where(url => url != null)
                     .ToList()));
+
+        CreateMap<CreateBoardCommand, BoardEntity>();
+
     }
 }
