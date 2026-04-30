@@ -199,6 +199,8 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<IReportRepository, ReportRepository>();
         services.AddScoped<IUserBlockRepository, UserBlockRepository>();
+        services.AddScoped<IBoardRepository, BoardRepository>();
+        services.AddScoped<IBoardPinRepository, BoardPinRepository>();
 
         services.AddScoped<IEmailJobScheduler, EmailJobScheduler>();
 
