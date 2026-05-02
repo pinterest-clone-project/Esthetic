@@ -2,7 +2,6 @@
 using Domain.Entities.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace Domain.Entities.Board;
 
 [Table("Boards")]
@@ -16,7 +15,4 @@ public class BoardEntity : BaseEntity
     public Guid OwnerId { get; set; }
     public UserEntity Owner { get; set; } = null!;
     public virtual ICollection<BoardPinEntity> BoardPins { get; set; } = new List<BoardPinEntity>();
-
 }
-
-

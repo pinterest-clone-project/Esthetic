@@ -1,4 +1,5 @@
 using Domain.Entities.Base;
+using Domain.Entities.Board;
 using Domain.Entities.Category;
 using Domain.Entities.Comment;
 using Domain.Entities.Identity;
@@ -27,4 +28,5 @@ public class PinEntity : BaseEntity
     public virtual ICollection<LikeEntity>? Likes { get; set; }
     public virtual ICollection<CommentEntity>? Comments { get; set; }
     public virtual ICollection<ReportEntity>? Reports { get; set; }
+    public virtual ICollection<BoardPinEntity>? BoardPins { get; set; }
 }
