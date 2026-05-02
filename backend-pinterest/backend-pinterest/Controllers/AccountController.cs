@@ -13,6 +13,10 @@ namespace backend_pinterest.Controllers;
 [ApiController]
 public class AccountController(IMediator mediator) : ControllerBase
 {
+    private Guid CurrentUserId => Guid.Parse(
+        User.FindFirstValue(JwtClaims.Id)
+        ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized));
+
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginCommand command)
     {
@@ -42,9 +46,7 @@ public class AccountController(IMediator mediator) : ControllerBase
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> Edit([FromForm] EditCommand command)
     {
-        var userId = User.FindFirstValue(JwtClaims.Id) ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
-
-        var commadWithId = command with { Id = Guid.Parse(userId) };
+        var commadWithId = command with { Id = CurrentUserId };
         var result = await mediator.Send(commadWithId);
         return Ok(result);
     }
