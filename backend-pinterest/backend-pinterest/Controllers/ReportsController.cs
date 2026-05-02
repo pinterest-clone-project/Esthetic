@@ -28,7 +28,7 @@ public class ReportsController(IMediator mediator) : ControllerBase
     }
 
     [Authorize(Roles = Roles.Admin)]
-    [HttpGet("all")]
+    [HttpGet("getAll")]
     public async Task<IActionResult> GetAllReports()
     {
         var result = await mediator.Send(new GetAllReportsQuery());
