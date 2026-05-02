@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Domain.Entities.BoardSection;
 
 namespace Domain.Interfaces;
 
-internal class IBoardSectionRepository
+public interface IBoardSectionRepository : IBaseRepository<BoardSectionEntity>
 {
 }
