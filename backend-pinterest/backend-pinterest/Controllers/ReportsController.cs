@@ -14,14 +14,15 @@ namespace backend_pinterest.Controllers;
 [ApiController]
 public class ReportsController(IMediator mediator) : ControllerBase
 {
+    private Guid CurrentUserId => Guid.Parse(
+        User.FindFirstValue(JwtClaims.Id)
+        ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized));
+
     [Authorize]
     [HttpGet("my")]
     public async Task<IActionResult> GetMyReports()
     {
-        var userId = User.FindFirstValue(JwtClaims.Id)
-            ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
-
-        var query = new GetMyReportsQuery { ReporterId = Guid.Parse(userId) };
+        var query = new GetMyReportsQuery { ReporterId = CurrentUserId };
         var result = await mediator.Send(query);
         return Ok(result);
     }
@@ -38,10 +39,7 @@ public class ReportsController(IMediator mediator) : ControllerBase
     [HttpPost("create")]
     public async Task<IActionResult> CreateReport([FromBody] CreateReportCommand command)
     {
-        var userId = User.FindFirstValue(JwtClaims.Id)
-            ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
-
-        var commandWithId = command with { ReporterId = Guid.Parse(userId) };
+        var commandWithId = command with { ReporterId = CurrentUserId };
         var result = await mediator.Send(commandWithId);
         return Ok(result);
     }
