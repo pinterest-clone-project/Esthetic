@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Domain.Entities.BoardSection;
+using Domain.Interfaces;
 
 namespace Infrastructure.Data.Repositories;
 
-internal class BoardSectionRepository
+public class BoardSectionRepository : BaseRepository<BoardSectionEntity>, IBoardSectionRepository
 {
+    public BoardSectionRepository(AppDbContext db) : base(db) { }
 }
