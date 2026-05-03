@@ -15,14 +15,15 @@ namespace backend_pinterest.Controllers;
 [Authorize]
 public class BoardsController(IMediator mediator) : ControllerBase
 {
+    private Guid CurrentUserId => Guid.Parse(
+        User.FindFirstValue(JwtClaims.Id)
+        ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized));
+
     [HttpPost("create")]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> Create([FromForm] CreateBoardCommand command)
     {
-        var userId = User.FindFirstValue(JwtClaims.Id)
-            ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
-
-        var commandWithOwner = command with { OwnerId = Guid.Parse(userId) };
+        var commandWithOwner = command with { OwnerId = CurrentUserId };
         var result = await mediator.Send(commandWithOwner);
         return Ok(result);
     }
@@ -37,10 +38,7 @@ public class BoardsController(IMediator mediator) : ControllerBase
     [HttpGet("my")]
     public async Task<IActionResult> GetMyBoards([FromQuery] GetUserBoardsQuery query)
     {
-        var userId = User.FindFirstValue(JwtClaims.Id)
-            ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
-
-        var queryWithOwner = query with { OwnerId = Guid.Parse(userId) };
+        var queryWithOwner = query with { OwnerId = CurrentUserId };
         var result = await mediator.Send(queryWithOwner);
         return Ok(result);
     }
@@ -48,13 +46,10 @@ public class BoardsController(IMediator mediator) : ControllerBase
     [HttpDelete("delete/{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var userId = User.FindFirstValue(JwtClaims.Id)
-            ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
-
         await mediator.Send(new DeleteBoardCommand
         {
             Id = id,
-            OwnerId = Guid.Parse(userId)
+            OwnerId = CurrentUserId
         });
 
         return NoContent();
@@ -64,13 +59,10 @@ public class BoardsController(IMediator mediator) : ControllerBase
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> Update(Guid id, [FromForm] UpdateBoardCommand command)
     {
-        var userId = User.FindFirstValue(JwtClaims.Id)
-            ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
-
         var commandWithIds = command with
         {
             Id = id,
-            OwnerId = Guid.Parse(userId)
+            OwnerId = CurrentUserId
         };
 
         var result = await mediator.Send(commandWithIds);

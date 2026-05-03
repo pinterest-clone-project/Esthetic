@@ -14,6 +14,10 @@ namespace backend_pinterest.Controllers;
 [ApiController]
 public class CommentsController(IMediator mediator) : ControllerBase
 {
+    private Guid CurrentUserId => Guid.Parse(
+        User.FindFirstValue(JwtClaims.Id)
+        ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized));
+
     [Authorize]
     [HttpPost("create")]
     [Consumes("multipart/form-data")]
@@ -27,12 +31,9 @@ public class CommentsController(IMediator mediator) : ControllerBase
     [HttpDelete("delete/{commentId}")]
     public async Task<IActionResult> DeleteComment([FromRoute] Guid commentId)
     {
-        var userId = User.FindFirstValue(JwtClaims.Id)
-            ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
-
         var command = new DeleteCommentCommand
         {
-            UserId = Guid.Parse(userId),
+            UserId = CurrentUserId,
             CommentId = commentId
         };
 

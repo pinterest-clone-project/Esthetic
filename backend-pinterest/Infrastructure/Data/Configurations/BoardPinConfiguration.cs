@@ -14,9 +14,14 @@ public class BoardPinConfiguration : IEntityTypeConfiguration<BoardPinEntity>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(bp => bp.Pin)
-            .WithMany()
+            .WithMany(p => p.BoardPins)
             .HasForeignKey(bp => bp.PinId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(bp => bp.Section)
+            .WithMany(s => s.BoardPins)
+            .HasForeignKey(bp => bp.SectionId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.HasIndex(bp => new { bp.BoardId, bp.PinId })
             .IsUnique();

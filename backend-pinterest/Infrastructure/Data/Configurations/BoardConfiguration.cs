@@ -9,10 +9,20 @@ public class BoardConfiguration : IEntityTypeConfiguration<BoardEntity>
 {
      public void Configure(EntityTypeBuilder<BoardEntity> builder)
      {
-              builder.HasOne(b => b.Owner)
-               .WithMany()
-               .HasForeignKey(b => b.OwnerId)
-               .OnDelete(DeleteBehavior.Cascade);
-      }
+        builder.HasOne(b => b.Owner)
+            .WithMany()
+            .HasForeignKey(b => b.OwnerId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(b => b.BoardPins)
+            .WithOne(bp => bp.Board)
+            .HasForeignKey(bp => bp.BoardId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(b => b.Sections)
+            .WithOne(s => s.Board)
+            .HasForeignKey(s => s.BoardId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
 }
 
