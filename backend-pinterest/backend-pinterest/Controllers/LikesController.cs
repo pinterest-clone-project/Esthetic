@@ -13,16 +13,17 @@ namespace backend_pinterest.Controllers;
 [ApiController]
 public class LikesController(IMediator mediator) : ControllerBase
 {
+    private Guid CurrentUserId => Guid.Parse(
+        User.FindFirstValue(JwtClaims.Id)
+        ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized));
+
     [Authorize]
     [HttpPut("like/{pinId}")]
     public async Task<IActionResult> Like([FromRoute] Guid pinId)
     {
-        var userId = User.FindFirstValue(JwtClaims.Id)
-            ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
-
         var command = new LikeCommand
         {
-            UserId = Guid.Parse(userId),
+            UserId = CurrentUserId,
             PinId = pinId
         };
 
@@ -34,12 +35,9 @@ public class LikesController(IMediator mediator) : ControllerBase
     [HttpDelete("unlike/{pinId}")]
     public async Task<IActionResult> Unlike([FromRoute] Guid pinId)
     {
-        var userId = User.FindFirstValue(JwtClaims.Id)
-            ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
-
         var command = new UnlikeCommand
         {
-            UserId = Guid.Parse(userId),
+            UserId = CurrentUserId,
             PinId = pinId
         };
 

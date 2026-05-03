@@ -1,7 +1,7 @@
 ﻿using Domain.Entities.Base;
+using Domain.Entities.BoardSection;
 using Domain.Entities.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
-
 
 namespace Domain.Entities.Board;
 
@@ -16,7 +16,5 @@ public class BoardEntity : BaseEntity
     public Guid OwnerId { get; set; }
     public UserEntity Owner { get; set; } = null!;
     public virtual ICollection<BoardPinEntity> BoardPins { get; set; } = new List<BoardPinEntity>();
-
+    public virtual ICollection<BoardSectionEntity> Sections { get; set; } = new List<BoardSectionEntity>();
 }
-
-
