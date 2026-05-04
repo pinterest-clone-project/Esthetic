@@ -57,7 +57,11 @@ public class PinSeeder
                         await context.SaveChangesAsync();
                     }
                 }
-                catch (Exception ex)
+                catch (JsonException ex)
+                {
+                    Console.WriteLine("Error Json Parse Data {0}", ex.Message);
+                }
+                catch (NotSupportedException ex)
                 {
                     Console.WriteLine("Error Json Parse Data {0}", ex.Message);
                 }
