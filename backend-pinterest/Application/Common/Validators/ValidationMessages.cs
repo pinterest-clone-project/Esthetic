@@ -35,6 +35,10 @@ public static class ValidationMessages
     public static string FieldBio => Get("FieldBio");
     public static string FieldCode => Get("FieldCode");
     public static string FieldRefreshToken => Get("FieldRefreshToken");
+    public static string FieldTitle => Get("FieldTitle");
+    public static string FieldMediaUrl => Get("FieldMediaUrl");
+    public static string FieldSourceUrl => Get("FieldSourceUrl");
+    public static string FieldPinId => Get("FieldPinId");
 
     public static string ErrorValidation => Get("ErrorValidation");
     public static string ErrorBadRequest => Get("ErrorBadRequest");
