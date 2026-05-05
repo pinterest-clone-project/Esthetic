@@ -52,7 +52,19 @@ public static class SharedValidationRules
             .Matches(@"^[a-z0-9]+(?:-[a-z0-9]+)*$")
             .WithMessage(ValidationMessages.SlugFormat);
     public static IRuleBuilderOptions<T, Guid> IdRules<T>(this IRuleBuilder<T, Guid> rule) =>
-    rule
-        .NotEmpty()
-        .WithMessage(ValidationMessages.InvalidId);
+        rule
+            .NotEmpty()
+            .WithMessage(ValidationMessages.InvalidId);
+
+    public static IRuleBuilderOptions<T, string?> UrlRules<T>(this IRuleBuilder<T, string?> rule, string fieldName) =>
+        rule
+            .Must(url => Uri.TryCreate(url, UriKind.Absolute, out _))
+            .WithMessage(ValidationMessages.Required(fieldName))
+            .When(x => x is string s && !string.IsNullOrEmpty(s));
+
+    public static IRuleBuilderOptions<T, string?> DescriptionRules<T>(this IRuleBuilder<T, string?> rule) =>
+        rule
+            .MaximumLength(FieldLengths.DescriptionMax)
+            .WithMessage(ValidationMessages.MaxLength(ValidationMessages.FieldDescription, FieldLengths.DescriptionMax))
+            .When(x => x is string s && !string.IsNullOrEmpty(s));
 }

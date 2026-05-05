@@ -14,4 +14,7 @@ public static class FieldLengths
     // Category fields
     public const int SlugMax = 100;
     public const int CategoryDescriptionMax = 1000;
+
+    // Pin fields
+    public const int DescriptionMax = 500;
 }
