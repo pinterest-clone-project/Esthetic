@@ -1,0 +1,98 @@
+[
+  {
+    "Name": "Travel",
+    "Slug": "travel",
+    "Description": "Explore breathtaking destinations, travel tips, and wanderlust inspiration from around the world.",
+    "LocalImage": "travel.jpg"
+  },
+  {
+    "Name": "Food & Drink",
+    "Slug": "food-and-drink",
+    "Description": "Delicious recipes, restaurant ideas, and culinary inspiration for every taste and occasion.",
+    "LocalImage": "food.jpg"
+  },
+  {
+    "Name": "Home Decor",
+    "Slug": "home-decor",
+    "Description": "Interior design ideas, DIY projects, and home styling inspiration for every room.",
+    "LocalImage": "home-decor.jpg"
+  },
+  {
+    "Name": "Fashion",
+    "Slug": "fashion",
+    "Description": "Outfit ideas, style trends, and fashion inspiration for every season and occasion.",
+    "LocalImage": "fashion.jpg"
+  },
+  {
+    "Name": "Art & Illustration",
+    "Slug": "art-and-illustration",
+    "Description": "Creative artwork, illustrations, paintings, and artistic inspiration from talented creators.",
+    "LocalImage": "art.jpg"
+  },
+  {
+    "Name": "Photography",
+    "Slug": "photography",
+    "Description": "Stunning photography, camera tips, and visual storytelling from photographers worldwide.",
+    "LocalImage": "photography.jpg"
+  },
+  {
+    "Name": "Fitness & Wellness",
+    "Slug": "fitness-and-wellness",
+    "Description": "Workout routines, healthy living tips, mindfulness practices, and wellness inspiration.",
+    "LocalImage": "fitness.jpg"
+  },
+  {
+    "Name": "Beauty",
+    "Slug": "beauty",
+    "Description": "Makeup tutorials, skincare routines, hairstyle ideas, and beauty tips for everyone.",
+    "LocalImage": "beauty.jpg"
+  },
+  {
+    "Name": "Technology",
+    "Slug": "technology",
+    "Description": "Tech innovations, gadgets, software tools, and digital inspiration for modern life.",
+    "LocalImage": "technology.jpg"
+  },
+  {
+    "Name": "Nature & Outdoors",
+    "Slug": "nature-and-outdoors",
+    "Description": "Landscapes, wildlife, hiking adventures, and the breathtaking beauty of the natural world.",
+    "LocalImage": "nature.jpg"
+  },
+  {
+    "Name": "Architecture",
+    "Slug": "architecture",
+    "Description": "Stunning buildings, urban landscapes, interior spaces, and architectural design from around the globe.",
+    "LocalImage": "architecture.jpg"
+  },
+  {
+    "Name": "DIY & Crafts",
+    "Slug": "diy-and-crafts",
+    "Description": "Handmade projects, creative crafts, upcycling ideas, and step-by-step tutorials.",
+    "LocalImage": "diy.jpg"
+  },
+  {
+    "Name": "Quotes & Motivation",
+    "Slug": "quotes-and-motivation",
+    "Description": "Inspiring quotes, motivational sayings, and words of wisdom to uplift your day.",
+    "LocalImage": "quotes.jpg"
+  },
+  {
+    "Name": "Animals & Pets",
+    "Slug": "animals-and-pets",
+    "Description": "Adorable pet photos, wildlife wonders, and everything that makes animals so loveable.",
+    "LocalImage": "animals.jpg"
+  },
+  {
+    "Name": "Wedding & Events",
+    "Slug": "wedding-and-events",
+    "Description": "Wedding inspiration, event planning ideas, floral arrangements, and celebration aesthetics.",
+    "LocalImage": "wedding.jpg"
+  },
+  {
+    "Name": "Books & Education",
+    "Slug": "books-and-education",
+    "Description": "Book recommendations, study tips, learning resources, and intellectual inspiration.",
+    "LocalImage": "books.jpg"
+  }
+]
