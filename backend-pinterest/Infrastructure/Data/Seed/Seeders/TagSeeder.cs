@@ -1,18 +1,12 @@
-﻿
-
-using Application.Interfaces;
-using Application.Models.SeedDTO;
+﻿using Application.Models.SeedDTO;
 using AutoMapper;
-using Domain.Entities.Identity;
 using Domain.Entities.Tag;
-using Microsoft.AspNetCore.Identity;
 using System.Text.Json;
 
 namespace Infrastructure.Data.Seed.Seeders;
 
 public class TagSeeder
 {
-
     public static async Task SeedAsync(
             AppDbContext context,
             IMapper mapper)
