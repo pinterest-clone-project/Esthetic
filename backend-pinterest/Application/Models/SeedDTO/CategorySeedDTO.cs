@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Application.Models.SeedDTO;
 
-namespace Application.Models.SeedDTO;
-
-internal class CategorySeedDTO
+public class CategorySeedDTO
 {
+    public string Name { get; set; } = string.Empty;
+    public string Slug { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public string LocalImage { get; set; } = string.Empty;
 }
