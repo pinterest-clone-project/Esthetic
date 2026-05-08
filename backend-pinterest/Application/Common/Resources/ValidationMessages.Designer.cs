@@ -412,11 +412,11 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tag not found.
+        ///   Looks up a localized string similar to Tag.
         /// </summary>
-        internal static string TagNotFound {
+        internal static string Tag {
             get {
-                return ResourceManager.GetString("TagNotFound", resourceCulture);
+                return ResourceManager.GetString("Tag", resourceCulture);
             }
         }
         

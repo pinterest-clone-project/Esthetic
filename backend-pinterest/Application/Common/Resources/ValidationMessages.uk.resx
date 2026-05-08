@@ -222,9 +222,6 @@
   <data name="InvalidId" xml:space="preserve">
     <value>Недійсний id</value>
   </data>
-  <data name="TagNotFound" xml:space="preserve">
-    <value>Тег не знайдено</value>
-  </data>
   <data name="BoardTitleField" xml:space="preserve">
     <value>Заголовок</value>
   </data>
@@ -239,5 +236,8 @@
   </data>
   <data name="BoardUpdateOwnBoards" xml:space="preserve">
     <value>Ви можете оновлювати лише власні дошки</value>
+  </data>
+  <data name="Tag" xml:space="preserve">
+    <value>Тег</value>
   </data>
 </root>
