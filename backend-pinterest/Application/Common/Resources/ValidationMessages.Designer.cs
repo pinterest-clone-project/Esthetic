@@ -61,6 +61,24 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        internal static string BoardDescriptionField {
+            get {
+                return ResourceManager.GetString("BoardDescriptionField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        internal static string BoardTitleField {
+            get {
+                return ResourceManager.GetString("BoardTitleField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The code has expired.
         /// </summary>
         internal static string CodeHasExpired {
