@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Resources;
 
 namespace Application.Common.Validators;
@@ -60,6 +60,7 @@ public static class ValidationMessages
     public static string SlugFormat => Get("SlugFormat");
     public static string FieldId => Get("FieldId");
     public static string InvalidId => Get("InvalidId");
+    public static string TagNotFound => Get("TagNotFound");
     private static string Get(string key)
         => _manager.GetString(key, CultureInfo.CurrentCulture) ?? key;
 }
