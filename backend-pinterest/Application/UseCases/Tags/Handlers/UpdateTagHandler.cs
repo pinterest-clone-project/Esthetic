@@ -1,4 +1,5 @@
-﻿
+
+using Application.Common.Exceptions;
 using Application.UseCases.Tags.Commands;
 using AutoMapper;
 using Domain.Interfaces;
@@ -12,7 +13,7 @@ public class UpdateTagHandler(ITagRepository repository,
     public async Task<Unit> Handle(UpdateTagCommand request, CancellationToken cancellationToken)
     {
         var tag = await repository.GetByIdAsync(request.Id);
-        if (tag == null) throw new KeyNotFoundException("Tag not found");
+        if (tag == null) throw new NotFoundException("Tag not found");
         mapper.Map(request, tag);
         await repository.UpdateAsync(tag);
         return Unit.Value;
