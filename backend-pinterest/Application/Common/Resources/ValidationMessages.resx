@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -221,5 +221,8 @@
   </data>
   <data name="InvalidId" xml:space="preserve">
     <value>Invalid identifier.</value>
+  </data>
+  <data name="TagNotFound" xml:space="preserve">
+    <value>Tag not found</value>
   </data>
 </root>

@@ -367,6 +367,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tag not found.
+        /// </summary>
+        internal static string TagNotFound {
+            get {
+                return ResourceManager.GetString("TagNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User not found.
         /// </summary>
         internal static string UserNotFound {
