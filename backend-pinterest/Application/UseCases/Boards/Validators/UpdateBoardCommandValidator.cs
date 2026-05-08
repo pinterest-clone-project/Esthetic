@@ -1,4 +1,5 @@
-﻿using Application.UseCases.Boards.Commands;
+using Application.UseCases.Boards.Commands;
+using Domain.Constants;
 using FluentValidation;
 
 namespace Application.UseCases.Boards.Validators;
@@ -9,7 +10,7 @@ public class UpdateBoardCommandValidator : AbstractValidator<UpdateBoardCommand>
     {
         RuleFor(x => x.Title)
             .NotEmpty().WithMessage("Title cannot be empty")
-            .MaximumLength(100).WithMessage("Title must be at most 100 characters")
+            .MaximumLength(FieldLengths.BoardTitleMax).WithMessage("Title must be at most 100 characters")
             .When(x => x.Title != null);
 
         RuleFor(x => x.Description)
