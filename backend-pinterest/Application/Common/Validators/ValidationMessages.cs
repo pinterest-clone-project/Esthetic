@@ -63,6 +63,8 @@ public static class ValidationMessages
     public static string TagNotFound => Get("TagNotFound");
     public static string BoardTitleField => Get("BoardTitleField");
     public static string BoardDescriptionField => Get("BoardDescriptionField");
+    public static string Board => Get("Board");
+    public static string BoardDelOwnBoards => Get("BoardDelOwnBoards");
     private static string Get(string key)
         => _manager.GetString(key, CultureInfo.CurrentCulture) ?? key;
 }

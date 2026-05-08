@@ -231,4 +231,10 @@
   <data name="BoardDescriptionField" xml:space="preserve">
     <value>Description</value>
   </data>
+  <data name="Board" xml:space="preserve">
+    <value>Board</value>
+  </data>
+  <data name="BoardDelOwnBoards" xml:space="preserve">
+    <value>You can only delete your own boards</value>
+  </data>
 </root>

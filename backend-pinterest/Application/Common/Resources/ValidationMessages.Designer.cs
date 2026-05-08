@@ -61,6 +61,24 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Board.
+        /// </summary>
+        internal static string Board {
+            get {
+                return ResourceManager.GetString("Board", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can only delete your own boards.
+        /// </summary>
+        internal static string BoardDelOwnBoards {
+            get {
+                return ResourceManager.GetString("BoardDelOwnBoards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
         internal static string BoardDescriptionField {

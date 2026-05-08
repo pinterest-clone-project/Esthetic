@@ -231,4 +231,10 @@
   <data name="BoardDescriptionField" xml:space="preserve">
     <value>Опис</value>
   </data>
+  <data name="Board" xml:space="preserve">
+    <value>Дошка</value>
+  </data>
+  <data name="BoardDelOwnBoards" xml:space="preserve">
+    <value>Ви можете видаляти лише власні дошки</value>
+  </data>
 </root>
