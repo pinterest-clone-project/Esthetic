@@ -14,7 +14,7 @@ public class UpdateBoardCommandValidator : AbstractValidator<UpdateBoardCommand>
             .When(x => x.Title != null);
 
         RuleFor(x => x.Description)
-            .MaximumLength(500).WithMessage("Description must be at most 500 characters")
+            .MaximumLength(FieldLengths.BoardDescriptionMax).WithMessage("Description must be at most 500 characters")
             .When(x => x.Description != null);
     }
 }
