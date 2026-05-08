@@ -237,4 +237,7 @@
   <data name="BoardDelOwnBoards" xml:space="preserve">
     <value>You can only delete your own boards</value>
   </data>
+  <data name="BoardUpdateOwnBoards" xml:space="preserve">
+    <value>You can only update your own boards</value>
+  </data>
 </root>

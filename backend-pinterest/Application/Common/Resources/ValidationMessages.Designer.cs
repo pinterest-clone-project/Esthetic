@@ -97,6 +97,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can only update your own boards.
+        /// </summary>
+        internal static string BoardUpdateOwnBoards {
+            get {
+                return ResourceManager.GetString("BoardUpdateOwnBoards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The code has expired.
         /// </summary>
         internal static string CodeHasExpired {

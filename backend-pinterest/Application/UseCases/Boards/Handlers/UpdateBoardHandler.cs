@@ -1,4 +1,5 @@
 ﻿using Application.Common.Exceptions;
+using Application.Common.Validators;
 using Application.Interfaces;
 using Application.Models.DTO.Board;
 using Application.UseCases.Boards.Commands;
@@ -16,10 +17,10 @@ public class UpdateBoardHandler(
     public async Task<BoardDTO> Handle(UpdateBoardCommand request, CancellationToken cancellationToken)
     {
         var board = await boardRepository.GetByIdAsync(request.Id, cancellationToken)
-            ?? throw new NotFoundException("Board not found");
+            ?? throw new NotFoundException(ValidationMessages.NotFound(ValidationMessages.Board));
 
         if (board.OwnerId != request.OwnerId)
-            throw new UnauthorizedException("You can only update your own boards");
+            throw new UnauthorizedException(ValidationMessages.BoardUpdateOwnBoards);
 
         mapper.Map(request, board);
 

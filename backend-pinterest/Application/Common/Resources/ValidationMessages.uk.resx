@@ -237,4 +237,7 @@
   <data name="BoardDelOwnBoards" xml:space="preserve">
     <value>Ви можете видаляти лише власні дошки</value>
   </data>
+  <data name="BoardUpdateOwnBoards" xml:space="preserve">
+    <value>Ви можете оновлювати лише власні дошки</value>
+  </data>
 </root>
