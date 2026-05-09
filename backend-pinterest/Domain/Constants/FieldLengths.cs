@@ -1,4 +1,4 @@
-﻿namespace Domain.Constants;
+namespace Domain.Constants;
 
 public static class FieldLengths
 {
@@ -17,4 +17,8 @@ public static class FieldLengths
 
     // Pin fields
     public const int DescriptionMax = 500;
+
+    // Board fields
+    public const int BoardTitleMax = 100;
+    public const int BoardDescriptionMax = 500;
 }

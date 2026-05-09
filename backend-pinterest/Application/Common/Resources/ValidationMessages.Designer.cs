@@ -61,6 +61,51 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Board.
+        /// </summary>
+        internal static string Board {
+            get {
+                return ResourceManager.GetString("Board", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can only delete your own boards.
+        /// </summary>
+        internal static string BoardDelOwnBoards {
+            get {
+                return ResourceManager.GetString("BoardDelOwnBoards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        internal static string BoardDescriptionField {
+            get {
+                return ResourceManager.GetString("BoardDescriptionField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        internal static string BoardTitleField {
+            get {
+                return ResourceManager.GetString("BoardTitleField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can only update your own boards.
+        /// </summary>
+        internal static string BoardUpdateOwnBoards {
+            get {
+                return ResourceManager.GetString("BoardUpdateOwnBoards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The code has expired.
         /// </summary>
         internal static string CodeHasExpired {
@@ -363,6 +408,15 @@ namespace Application.Common.Resources {
         internal static string SlugFormat {
             get {
                 return ResourceManager.GetString("SlugFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tag.
+        /// </summary>
+        internal static string Tag {
+            get {
+                return ResourceManager.GetString("Tag", resourceCulture);
             }
         }
         
