@@ -1,0 +1,23 @@
+name: Move Issue to In Progress
+on:
+  create:
+
+jobs:
+  move-to-progress:
+    if: github.event.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract Issue Number
+        id: get_issue
+        run: |
+          BRANCH_NAME="${{ github.event.ref }}"
+          ISSUE_NUM=$(echo $BRANCH_NAME | grep -oP '^\d+')
+          echo "issue_number=$ISSUE_NUM" >> $GITHUB_OUTPUT
+
+      - name: Move to In Progress
+        if: steps.get_issue.outputs.issue_number != ''
+        uses: alex-page/github-project-automation-plus@v0.8.3
+        with:
+          project: "pinterest-clone-project"
+          column: "In progress"
+          repo-token: ${{ secrets.PROJECT_TOKEN }}
