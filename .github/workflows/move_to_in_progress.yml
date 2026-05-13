@@ -8,16 +8,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Extract Issue Number
-        id: get_issue
+        id: info
         run: |
-          BRANCH_NAME="${{ github.event.ref }}"
-          ISSUE_NUM=$(echo $BRANCH_NAME | grep -oP '^\d+')
-          echo "issue_number=$ISSUE_NUM" >> $GITHUB_OUTPUT
+          BRANCH="${{ github.event.ref }}"
+          ISSUE_NUM=$(echo $BRANCH | grep -oP '^\d+')
+          echo "num=$ISSUE_NUM" >> $GITHUB_OUTPUT
 
       - name: Move to In Progress
-        if: steps.get_issue.outputs.issue_number != ''
-        uses: alex-page/github-project-automation-plus@v0.8.3
+        if: steps.info.outputs.num != ''
+        uses: leonsteinhaeuser/project-beta-automations@v2.2.1
         with:
-          project: "pinterest-clone-project"
-          column: "In progress"
-          repo-token: ${{ secrets.PROJECT_TOKEN }}
+          gh_token: ${{ secrets.PROJECT_TOKEN }}
+          organization: "pinterest-clone-project"
+          project_number: 1
+          operation_mode: "custom_field"
+          custom_field_name: "Status"
+          custom_field_value: "In progress"
+          issue_number: ${{ steps.info.outputs.num }}
