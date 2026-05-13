@@ -1,7 +1,6 @@
 name: Move Issue to In Progress
 on:
   create:
-
 jobs:
   move-to-progress:
     if: github.event.ref_type == 'branch'
@@ -14,14 +13,31 @@ jobs:
           ISSUE_NUM=$(echo $BRANCH | grep -oP '^\d+')
           echo "num=$ISSUE_NUM" >> $GITHUB_OUTPUT
 
-      - name: Move to In Progress
+      - name: Get Issue Node ID
+        id: node
         if: steps.info.outputs.num != ''
+        run: |
+          NODE_ID=$(gh api graphql -f query='
+            query($owner: String!, $repo: String!, $num: Int!) {
+              repository(owner: $owner, name: $repo) {
+                issue(number: $num) { id }
+              }
+            }' \
+            -f owner="${{ github.repository_owner }}" \
+            -f repo="${{ github.event.repository.name }}" \
+            -F num=${{ steps.info.outputs.num }} \
+            --jq '.data.repository.issue.id')
+          echo "node_id=$NODE_ID" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+
+      - name: Move to In Progress
+        if: steps.node.outputs.node_id != ''
         uses: leonsteinhaeuser/project-beta-automations@v2.2.1
         with:
           gh_token: ${{ secrets.PROJECT_TOKEN }}
           organization: "pinterest-clone-project"
-          project_number: 1
+          project_id: 1
           operation_mode: "custom_field"
-          custom_field_name: "Status"
-          custom_field_value: "In progress"
-          issue_number: ${{ steps.info.outputs.num }}
+          custom_field_values: '[{"name":"Status","value":"In progress"}]'
+          resource_node_id: ${{ steps.node.outputs.node_id }}
