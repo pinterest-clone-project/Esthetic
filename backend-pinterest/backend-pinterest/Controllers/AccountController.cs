@@ -33,7 +33,6 @@ public class AccountController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
-    [Authorize]
     [HttpPost("refresh")]
     public async Task<IActionResult> Refresh([FromBody] RefreshCommand command)
     {

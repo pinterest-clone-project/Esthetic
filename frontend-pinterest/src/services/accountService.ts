@@ -7,6 +7,7 @@ import type {IForgotPasswordRequest} from "../types/account/requests/IForgotPass
 import type {IResetPasswordRequest} from "../types/account/requests/IResetPasswordRequest.ts";
 import type {IRefreshRequest} from "../types/account/requests/IRefreshRequest.ts";
 import {serialize} from "object-to-formdata";
+import {serializePatch} from "../utils/serializePatch.ts";
 
 export const accountService = api.injectEndpoints({
     endpoints: (builder) => ({
@@ -33,8 +34,8 @@ export const accountService = api.injectEndpoints({
         editProfile: builder.mutation<ITokenResponse, IEditRequest>({
             query: (data) => ({
                 url: 'Account/edit',
-                method: 'PUT',
-                body: serialize(data),
+                method: 'PATCH',
+                body: serializePatch(data),
             }),
         }),
 
