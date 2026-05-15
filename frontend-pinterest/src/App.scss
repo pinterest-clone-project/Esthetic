@@ -1,0 +1,39 @@
+// Змінні
+$primary: #646cff;
+$bg: #1a1a2e;
+$text: #e0e0e0;
+
+// Міксин
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: $bg;
+  color: $text;
+  font-family: sans-serif;
+}
+
+// Вкладеність (нестинг) — ключова фіча SASS
+.app {
+  @include flex-center;
+  min-height: 100vh;
+
+  h1 {
+    color: $primary;
+    font-size: 2rem;
+
+    &:hover {
+      opacity: 0.7;
+      cursor: pointer;
+    }
+  }
+}
