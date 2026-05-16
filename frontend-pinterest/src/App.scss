@@ -17,9 +17,9 @@ $text: #e0e0e0;
 }
 
 body {
+  font-family: "Inter", sans-serif;
   background-color: $bg;
   color: $text;
-  font-family: sans-serif;
 }
 
 // Вкладеність (нестинг) — ключова фіча SASS
@@ -37,3 +37,60 @@ body {
     }
   }
 }
+.header{
+  width: 1505px;
+  height: 50px;
+  top: 25px;
+  left: 175px;
+  position: fixed;
+  display: flex;
+  align-items: center;
+}
+
+.logo{
+  width: 44px;
+  height: 44px;
+}
+
+.logo-title{
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 20px;
+  letter-spacing: -0.5px;
+  text-align: center;
+  margin-left: 12px;
+}
+
+.search{
+  margin-left: 80px;
+  width: 586px;
+  height: 40px;
+  top: 30px;
+  left: 484px;
+  border-radius: 10px;
+  background-color: #535353;
+  display: flex;
+  gap: 12px;
+
+  .search-icon{
+    width: 27px;
+    height: 27px;
+    top: 36px;
+    left: 495px;
+    align-self: center;
+    margin-left: 12px;
+  }
+
+  .search-text{
+    width: 47px;
+    height: 45px;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0.0%;
+    color: #A1A1A1;
+    margin-top: 8px;
+  }
+}
+
+
+
