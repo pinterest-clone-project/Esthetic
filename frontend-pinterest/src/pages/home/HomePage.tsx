@@ -1,5 +1,6 @@
 import {useLoginMutation} from "@/services/accountService.ts";
 import {useApiError} from "@/hooks/useApiError.ts";
+import Button from "@/components/button/Button.tsx";
 
 
 const HomePage = () => {
@@ -16,7 +17,7 @@ const HomePage = () => {
                 <h1>SASS працює!</h1>
             </div>
             <h1>TestingPage</h1>
-            <button onClick={handleTest}>Test Login (EN)</button>
+            <Button label="Login" onClick={handleTest}></Button>
         </div>
     );
 };
