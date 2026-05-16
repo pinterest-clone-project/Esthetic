@@ -2,6 +2,7 @@ import {useEditProfileMutation, useLoginMutation} from "../../services/accountSe
 import {useApiError} from "../../hooks/useApiError.ts";
 import {loginStorage} from "../../store/slices/authSlice.ts";
 import {useAppDispatch} from "../../store";
+import Button from "@/components/button/Button.tsx";
 
 
 const HomePage = () => {
@@ -32,7 +33,7 @@ const HomePage = () => {
                 <h1>SASS працює!</h1>
             </div>
             <h1>TestingPage</h1>
-            <button onClick={handleTest}>Test Login (EN)</button>
+            <Button onClick={handleTest} label="Login"></Button>
             <p></p>
             <button onClick={handleEdit}>Test Edit</button>
         </div>
