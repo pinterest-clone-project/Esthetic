@@ -65,4 +65,13 @@ public class AccountController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(command);
         return Ok(result);
     }
+
+
+    [HttpPost("google")]
+    public async Task<IActionResult> Google([FromBody] GoogleCommand command)
+    {
+        var result = await mediator.Send(command);
+        return Ok(result);
+    }
+
 }

@@ -1,3 +1,20 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --color-btn-primary: #1DB954;
+    --color-btn-secondary: #A1A1A1;
+    --color-btn-dark: #535353;
+
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-size-sm: 14px;
+
+    --color-button-text-color: #000000;
+}
+
+@layer base {
+    body {
+        font-family: var(--font-sans);
+    }
+}

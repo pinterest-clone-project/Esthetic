@@ -11,10 +11,10 @@ createRoot(document.getElementById('root')!).render(
     <ThemeProvider>
         <Provider store={store}>
             <BrowserRouter>
-                <GoogleOAuthProvider clientId="911542527173-rsr0s8elapousvqvskvqnmns61j9i3ev.apps.googleusercontent.com">
+                <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
                     <App/>
                 </GoogleOAuthProvider>
             </BrowserRouter>
-        </Provider>`
+        </Provider>
     </ThemeProvider>
 )

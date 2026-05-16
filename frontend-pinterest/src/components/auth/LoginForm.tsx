@@ -1,19 +1,23 @@
 import React, { useState } from "react";
-import {Link} from "react-router";
+import {Link, useNavigate} from "react-router";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
-import {useLoginMutation} from "../../services/accountService.ts";
+import {useGoogleLoginMutation, useLoginMutation} from "@/services/accountService.ts";
+import {useGoogleLogin} from "@react-oauth/google";
+import Button from "@/components/button/Button.tsx";
+import GoogleIcon from "@/asssets/icons/GoogleIcon.tsx";
 
-const LoginPage = () => {
+
+const LoginForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-
+    const navigate = useNavigate();
 
     const [showPassword, setShowPassword] = useState(false);
 
     const [login, {isLoading, error}] = useLoginMutation();
-    /*const [loginByGoogle, {isLoading: isGoogleLoading}] = useLoginByGoogleMutation();*/
+    const [loginByGoogle, {isLoading: isGoogleLoading}] = useGoogleLoginMutation();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -27,36 +31,30 @@ const LoginPage = () => {
             console.log('🔑 Access Token:', result.accessToken);
             console.log('📦 Token payload:', decoded);
 
-            // Save token
             localStorage.setItem("token", result.accessToken);
-
-            // Redirect
-            //window.location.href = "/";
         } catch (err) {
             console.error("Login failed", err);
         }
     };
 
-    /*const loginUseGoogle = useGoogleLogin({
-        onSuccess: async (tokenResponse) =>
-        {
+    const loginWithGoogle = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
             try {
-                await loginByGoogle(tokenResponse.access_token).unwrap();
-                // dispatch(loginSuccess(result.token));
+                const result = await loginByGoogle({ token: tokenResponse.access_token }).unwrap();
+                localStorage.setItem("token", result.accessToken);
+
+                const base64Payload = result.accessToken.split('.')[1];
+                const decoded = JSON.parse(atob(base64Payload));
+                console.log('🔑 Google Access Token:', result.accessToken);
+                console.log('📦 Google Token payload:', decoded);
+
+
                 navigate('/');
             } catch (error) {
-
-                console.log("User server error auth", error);
-                // const serverError = error as ServerError;
-                //
-                // if (serverError?.status === 400 && serverError?.data?.errors) {
-                //     // setServerErrors(serverError.data.errors);
-                // } else {
-                //     message.error("Сталася помилка при вході");
-                // }
+                console.error("Google login failed", error);
             }
         },
-    });*/
+    });
 
     return (
         <div className="flex flex-col dark:bg-gray-950 lg:flex-row min-h-screen bg-white">
@@ -73,33 +71,6 @@ const LoginPage = () => {
                             </Link>
                         </p>
                     </div>
-
-
-                   {/* <div className="flex gap-4 mb-6">
-                        <button
-                            onClick={(event) => {
-                                event.preventDefault();
-                                loginUseGoogle();
-                            }}
-                            disabled={isGoogleLoading}
-                            className="flex items-center justify-center gap-3 w-full py-3.5 px-4 mt-4 bg-white text-gray-700 border border-gray-200 shadow-sm
-                            dark:bg-gray-900 dark:text-gray-200 dark:border-gray-800
-                            hover:bg-gray-50 dark:hover:bg-gray-800 hover:shadow-md
-                            active:scale-[0.98] transition-all duration-200 rounded-2xl font-bold"
-                        >
-                            {isGoogleLoading ? (
-                                <div className="flex items-center gap-2">
-                                    <FontAwesomeIcon icon={faSpinner} className="animate-spin text-yellow-500" />
-                                    <span>Авторизація...</span>
-                                </div>
-                            ) : (
-                                <>
-                                    <FontAwesomeIcon icon={faGoogle} className="text-yellow-500 text-lg" />
-                                    <span>Увійти через Google</span>
-                                </>
-                            )}
-                        </button>
-                    </div>*/}
 
 
                     <div className="relative flex items-center">
@@ -156,13 +127,22 @@ const LoginPage = () => {
                             </div>
                         </div>
 
-                        <button
-                            type="submit" disabled={isLoading}
-                            className="w-full bg-yellow-400 hover:bg-yellow-500 active:scale-[0.98] text-gray-950 font-black py-4 rounded-2xl shadow-xl
-                          shadow-yellow-400/10 transition-all duration-300 mt-8 flex justify-center items-center gap-2"
-                        >
-                            {isLoading ? "Вхід..." : "Увійти"}
-                        </button>
+                        <Button
+                            type="submit"
+                            label={isLoading ? "Вхід..." : "Увійти"}
+                            disabled={isLoading}
+                            fullWidth
+                        />
+
+                        <Button
+                            type="button"
+                            label={isGoogleLoading ? "Авторизація..." : "Увійти через Google"}
+                            disabled={isGoogleLoading}
+                            variant="dark"
+                            fullWidth
+                            onClick={() => loginWithGoogle()}
+                            icon= {<GoogleIcon/>}
+                        />
 
                         {error && <p style={{ color: "red" }}>Invalid email or password</p>}
                     </form>
@@ -172,4 +152,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default LoginForm;
