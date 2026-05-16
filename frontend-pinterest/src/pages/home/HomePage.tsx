@@ -1,15 +1,30 @@
-import {useLoginMutation} from "@/services/accountService.ts";
-import {useApiError} from "@/hooks/useApiError.ts";
-import Button from "@/components/button/Button.tsx";
+import {useEditProfileMutation, useLoginMutation} from "../../services/accountService.ts";
+import {useApiError} from "../../hooks/useApiError.ts";
+import {loginStorage} from "../../store/slices/authSlice.ts";
+import {useAppDispatch} from "../../store";
 
 
 const HomePage = () => {
+    const dispatch = useAppDispatch();
     const [login, { error }] = useLoginMutation();
+    const [edit] = useEditProfileMutation();
     useApiError(error as any);
 
     const handleTest = async () => {
-        await login({ email: "", password: "" });
+        const response = await login({ email: "johndoe@example.com", password: "Password123!" });
+        dispatch(loginStorage(response.data!));
     };
+
+    const handleEdit = async () => {
+        await edit({ firstName: 'Іван', bio: "Люблю сало"});
+
+        // Так значення bio буде видалено
+        // await edit({ firstName: 'Іван', bio: ""});
+        // Так значення bio буде видалено
+        // await edit({ firstName: 'Іван', bio: null});
+        // Так значення bio не буде змінено
+        // await edit({ firstName: 'Іван'});
+    }
 
     return (
         <div>
@@ -17,7 +32,9 @@ const HomePage = () => {
                 <h1>SASS працює!</h1>
             </div>
             <h1>TestingPage</h1>
-            <Button label="Login" onClick={handleTest}></Button>
+            <button onClick={handleTest}>Test Login (EN)</button>
+            <p></p>
+            <button onClick={handleEdit}>Test Edit</button>
         </div>
     );
 };

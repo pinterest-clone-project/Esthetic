@@ -1,4 +1,5 @@
 ﻿using Application.Behaviors;
+using Application.Common.Optional;
 using Application.Common.Validators;
 using Application.Interfaces;
 using Domain.Constants;
@@ -143,7 +144,10 @@ public static class WebApplicationBuilderExtensions
         #endregion
 
         #region Controllers
-        services.AddControllers()
+        services.AddControllers(options =>
+        {
+            options.ModelBinderProviders.Insert(0, new OptionalBinderProvider());
+        })
         .ConfigureApiBehaviorOptions(options =>
         {
             options.SuppressModelStateInvalidFilter = true;

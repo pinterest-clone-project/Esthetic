@@ -22,12 +22,12 @@ public class EditHandler(
             throw new NotFoundException(ValidationMessages.UserNotFound);
         }
 
-        user.FirstName = request.FirstName ?? user.FirstName;
-        user.LastName = request.LastName ?? user.LastName;
-        user.Email = request.Email ?? user.Email;
-        user.Bio = request.Bio ?? user.Bio;
+        user.FirstName = request.FirstName.Apply(user.FirstName);
+        user.LastName = request.LastName.Apply(user.LastName);
+        user.Email = request.Email.Apply(user.Email);
+        user.Bio = request.Bio.Apply(user.Bio);
+        user.PhoneNumber = request.PhoneNumber.Apply(user.PhoneNumber);
         user.IsPrivate = request.IsPrivate ?? user.IsPrivate;
-        user.PhoneNumber = request.PhoneNumber ?? user.PhoneNumber;
 
         if (request.ImageFile != null)
             user.Image = await imageService.SaveImageAsync(request.ImageFile);

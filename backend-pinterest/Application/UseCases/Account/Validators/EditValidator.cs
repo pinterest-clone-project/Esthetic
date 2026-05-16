@@ -8,10 +8,19 @@ public class EditValidator : AbstractValidator<EditCommand>
 {
     public EditValidator()
     {
-        RuleFor(x => x.FirstName).NameRules(ValidationMessages.FieldFirstName);
-        RuleFor(x => x.LastName).NameRules(ValidationMessages.FieldLastName);
-        RuleFor(x => x.Bio).BioRules();
-        RuleFor(x => x.Email).EmailRules(ValidationMessages.FieldEmail);
-        RuleFor(x => x.PhoneNumber).PhoneRules();
+        When(x => x.FirstName.HasValue && !x.FirstName.IsCleared,
+            () => RuleFor(x => x.FirstName.Value).NameRules(ValidationMessages.FieldFirstName));
+
+        When(x => x.LastName.HasValue && !x.LastName.IsCleared,
+            () => RuleFor(x => x.LastName.Value).NameRules(ValidationMessages.FieldLastName));
+
+        When(x => x.Email.HasValue && !x.Email.IsCleared,
+            () => RuleFor(x => x.Email.Value).EmailRules(ValidationMessages.FieldEmail));
+
+        When(x => x.Bio.HasValue && !x.Bio.IsCleared,
+            () => RuleFor(x => x.Bio.Value).BioRules());
+
+        When(x => x.PhoneNumber.HasValue && !x.PhoneNumber.IsCleared,
+            () => RuleFor(x => x.PhoneNumber.Value).PhoneRules());
     }
 }
