@@ -8,8 +8,13 @@ const Header: React.FC = () =>{
             <div className={"logo-title "}>Esthetic</div>
             <div className={"search"}>
                 <img src={searchIcon} className={"search-icon"}></img>
-                <div className={"search-text"}>Search</div>
+                <input className={"search-input"} type={"text"} placeholder={"Search"}></input>
             </div>
+            <nav className={"nav-header"}>
+                <a className={"nav-link"}>About Us</a>
+                <a className={"nav-link"}>For Business</a>
+                <a className={"nav-link"}>News</a>
+            </nav>
         </header>
     )
 }
