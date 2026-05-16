@@ -50,6 +50,10 @@ body {
 .logo{
   width: 44px;
   height: 44px;
+
+  &:hover{
+    cursor: pointer;
+  }
 }
 
 .logo-title{
@@ -59,10 +63,13 @@ body {
   letter-spacing: -0.5px;
   text-align: center;
   margin-left: 12px;
+  &:hover{
+    cursor: pointer;
+  }
 }
 
 .search {
-  margin-left: 80px;
+  margin-left: 120px;
   width: 586px;
   height: 40px;
 
@@ -77,6 +84,10 @@ body {
   .search-icon{
     width: 27px;
     height: 27px;
+
+    &:hover{
+      cursor: pointer;
+    }
   }
 
   .search-input {
@@ -99,7 +110,7 @@ body {
   display: flex;
   gap: 16px;
   align-items: center;
-  margin-left: 120px;
+  margin-left: 190px;
 }
 .nav-link{
   font-weight: 400;
@@ -116,6 +127,29 @@ body {
   }
 }
 
+.header-sign-up-btn{
+  margin-left: 20px;
+  border-radius: 10px;
+  height: 50px;
+  background-color: #1DB954;
+  width: 100px;
+
+  &:hover{
+    outline-color: #535353;
+  }
+}
+
+.header-log-in-btn{
+  margin-left: 20px;
+  border-radius: 10px;
+  height: 50px;
+  background-color: #535353;
+  width: 100px;
+
+  &:hover{
+    outline-color: #1DB954;
+  }
+}
 
 
 
