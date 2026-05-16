@@ -1,6 +1,5 @@
 import {useLoginMutation} from "../../services/accountService.ts";
 import {useApiError} from "../../hooks/useApiError.ts";
-import Header from "../../components/header/Header.tsx";
 
 
 const HomePage = () => {
@@ -13,7 +12,6 @@ const HomePage = () => {
 
     return (
         <div>
-            <Header />
             <div className="app">
 
                 <h1>SASS працює!</h1>
