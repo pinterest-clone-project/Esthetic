@@ -19,9 +19,11 @@ public class UserMapper : Profile
         CreateMap<RegisterCommand, UserEntity>();
 
         CreateMap<GoogleAccountModel, UserEntity>()
-            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email))
-            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
-            .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Name))
-            .ForMember(dest => dest.Image, opt => opt.Ignore());
+        .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email))
+        .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+        .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Name.Split(' ', 2)[0]))
+        .ForMember(dest => dest.LastName, opt => opt.MapFrom(src =>
+            src.Name.Contains(' ') ? src.Name.Split(' ', 2)[1] : null))
+        .ForMember(dest => dest.Image, opt => opt.Ignore());
     }
 }

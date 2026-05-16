@@ -62,6 +62,14 @@ export const accountService = api.injectEndpoints({
             })
         }),
 
+        googleLogin: builder.mutation<ITokenResponse, { token: string }>({
+            query: (body) => ({
+                url: 'Account/google',
+                method: 'POST',
+                body
+            }),
+        }),
+
     })
 });
 
@@ -72,5 +80,6 @@ export const {
     useForgotPasswordMutation,
     useResetPasswordMutation,
     useRefreshMutation,
+    useGoogleLoginMutation
 } = accountService;
 

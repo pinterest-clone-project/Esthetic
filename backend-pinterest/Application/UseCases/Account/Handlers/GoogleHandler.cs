@@ -18,7 +18,8 @@ public class GoogleCommandHandler(
     UserManager<UserEntity> userManager,
     IJwtTokenService tokenService,
     IMapper mapper,
-    IConfiguration configuration)
+    IConfiguration configuration,
+    IImageService imageService)
     : IRequestHandler<GoogleCommand, TokenDTO>
 {
     public async Task<TokenDTO> Handle(
@@ -60,6 +61,12 @@ public class GoogleCommandHandler(
         }
 
         var user = mapper.Map<UserEntity>(googleUser);
+        user.EmailConfirmed = true;
+
+        if (!string.IsNullOrEmpty(googleUser.Picture))
+        {
+            user.Image = await imageService.SaveImageFromUrlAsync(googleUser.Picture);
+        }
 
         var result = await userManager.CreateAsync(user);
 
