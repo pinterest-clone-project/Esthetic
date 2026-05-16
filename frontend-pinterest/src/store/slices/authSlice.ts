@@ -1,8 +1,9 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { ITokenResponse } from "../../types/account/responses/ITokenResponse";
-import type {IAccount} from "../../types/account/IAccount.ts";
-import {parseToken} from "../../utils/parseToken.ts";
-import {storage} from "../../utils/storage.ts";
+import type {IAccount} from "@/types/account/IAccount.ts";
+import {parseToken} from "@/utils/parseToken.ts";
+import {storage} from "@/utils/storage.ts";
+import type {ITokenResponse} from "@/types/account/responses/ITokenResponse.ts";
+
 
 interface AuthState {
     user: IAccount | null;

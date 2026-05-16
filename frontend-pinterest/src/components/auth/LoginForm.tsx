@@ -28,11 +28,7 @@ const LoginForm = () => {
             console.log('🔑 Access Token:', result.accessToken);
             console.log('📦 Token payload:', decoded);
 
-            // Save token
             localStorage.setItem("token", result.accessToken);
-
-            // Redirect
-            //window.location.href = "/";
         } catch (err) {
             console.error("Login failed", err);
         }
@@ -43,6 +39,13 @@ const LoginForm = () => {
             try {
                 const result = await loginByGoogle({ token: tokenResponse.access_token }).unwrap();
                 localStorage.setItem("token", result.accessToken);
+
+                const base64Payload = result.accessToken.split('.')[1];
+                const decoded = JSON.parse(atob(base64Payload));
+                console.log('🔑 Google Access Token:', result.accessToken);
+                console.log('📦 Google Token payload:', decoded);
+
+
                 navigate('/');
             } catch (error) {
                 console.error("Google login failed", error);

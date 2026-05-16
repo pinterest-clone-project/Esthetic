@@ -15,6 +15,6 @@ createRoot(document.getElementById('root')!).render(
                     <App/>
                 </GoogleOAuthProvider>
             </BrowserRouter>
-        </Provider>`
+        </Provider>
     </ThemeProvider>
 )
