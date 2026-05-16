@@ -36,7 +36,7 @@ const Button = ({
         ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
       `}
         >
-            {icon && icon}
+            {icon ? icon : null}
             {label}
         </button>
     );
