@@ -9,6 +9,8 @@
 
     --font-sans: 'Inter', system-ui, sans-serif;
     --font-size-sm: 14px;
+
+    --color-button-text-color: #000000;
 }
 
 @layer base {

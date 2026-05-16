@@ -4,6 +4,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import {useGoogleLoginMutation, useLoginMutation} from "@/services/accountService.ts";
 import {useGoogleLogin} from "@react-oauth/google";
+import Button from "@/components/button/Button.tsx";
+import GoogleIcon from "@/asssets/icons/GoogleIcon.tsx";
+
 
 const LoginForm = () => {
     const [email, setEmail] = useState("");
@@ -124,22 +127,22 @@ const LoginForm = () => {
                             </div>
                         </div>
 
-                        <button
-                            type="submit" disabled={isLoading}
-                            className="w-full bg-yellow-400 hover:bg-yellow-500 active:scale-[0.98] text-gray-950 font-black py-4 rounded-2xl shadow-xl
-                          shadow-yellow-400/10 transition-all duration-300 mt-8 flex justify-center items-center gap-2"
-                        >
-                            {isLoading ? "Вхід..." : "Увійти"}
-                        </button>
+                        <Button
+                            type="submit"
+                            label={isLoading ? "Вхід..." : "Увійти"}
+                            disabled={isLoading}
+                            fullWidth
+                        />
 
-                        <button
-                            type = "button"
-                            onClick={() => loginWithGoogle()}
+                        <Button
+                            type="button"
+                            label={isGoogleLoading ? "Авторизація..." : "Увійти через Google"}
                             disabled={isGoogleLoading}
-                            className="flex items-center justify-center gap-3 w-full py-3.5 px-4 mt-4 bg-white text-gray-700 border border-gray-200 shadow-sm rounded-2xl font-bold"
-                        >
-                            {isGoogleLoading ? "Авторизація..." : "Увійти через Google"}
-                        </button>
+                            variant="dark"
+                            fullWidth
+                            onClick={() => loginWithGoogle()}
+                            icon= {<GoogleIcon/>}
+                        />
 
                         {error && <p style={{ color: "red" }}>Invalid email or password</p>}
                     </form>
