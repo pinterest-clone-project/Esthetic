@@ -1,0 +1,96 @@
+name: Move Issue to In Progress
+on:
+  create:
+
+jobs:
+  move-to-progress:
+    if: github.event.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract Issue Number
+        id: info
+        run: |
+          BRANCH="${{ github.event.ref }}"
+          ISSUE_NUM=$(echo $BRANCH | grep -oP '^\d+')
+          echo "num=$ISSUE_NUM" >> $GITHUB_OUTPUT
+
+      - name: Move Issue to In Progress
+        if: steps.info.outputs.num != ''
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+          ORG: "pinterest-clone-project"
+          PROJECT_NUMBER: 1
+          ISSUE_NUMBER: ${{ steps.info.outputs.num }}
+          REPO: ${{ github.event.repository.name }}
+        run: |
+          # Get issue node ID
+          ISSUE_ID=$(gh api graphql -f query='
+            query($owner: String!, $repo: String!, $num: Int!) {
+              repository(owner: $owner, name: $repo) {
+                issue(number: $num) { id }
+              }
+            }' \
+            -f owner="$ORG" \
+            -f repo="$REPO" \
+            -F num=$ISSUE_NUMBER \
+            --jq '.data.repository.issue.id')
+
+          echo "Issue node ID: $ISSUE_ID"
+
+          # Get project ID and Status field info
+          PROJECT_DATA=$(gh api graphql -f query='
+            query($org: String!, $num: Int!) {
+              organization(login: $org) {
+                projectV2(number: $num) {
+                  id
+                  field(name: "Status") {
+                    ... on ProjectV2SingleSelectField {
+                      id
+                      options { id name }
+                    }
+                  }
+                }
+              }
+            }' \
+            -f org="$ORG" \
+            -F num=$PROJECT_NUMBER)
+
+          PROJECT_ID=$(echo $PROJECT_DATA | jq -r '.data.organization.projectV2.id')
+          FIELD_ID=$(echo $PROJECT_DATA | jq -r '.data.organization.projectV2.field.id')
+          OPTION_ID=$(echo $PROJECT_DATA | jq -r '.data.organization.projectV2.field.options[] | select(.name == "In progress") | .id')
+
+          echo "Project ID: $PROJECT_ID"
+          echo "Field ID: $FIELD_ID"
+          echo "Option ID: $OPTION_ID"
+
+          # Add issue to project (in case it's not there yet)
+          ITEM_ID=$(gh api graphql -f query='
+            mutation($project: ID!, $content: ID!) {
+              addProjectV2ItemById(input: {projectId: $project, contentId: $content}) {
+                item { id }
+              }
+            }' \
+            -f project="$PROJECT_ID" \
+            -f content="$ISSUE_ID" \
+            --jq '.data.addProjectV2ItemById.item.id')
+
+          echo "Item ID: $ITEM_ID"
+
+          # Set Status to "In progress"
+          gh api graphql -f query='
+            mutation($project: ID!, $item: ID!, $field: ID!, $option: String!) {
+              updateProjectV2ItemFieldValue(input: {
+                projectId: $project,
+                itemId: $item,
+                fieldId: $field,
+                value: { singleSelectOptionId: $option }
+              }) {
+                projectV2Item { id }
+              }
+            }' \
+            -f project="$PROJECT_ID" \
+            -f item="$ITEM_ID" \
+            -f field="$FIELD_ID" \
+            -f option="$OPTION_ID"
+
+          echo "Done! Issue #$ISSUE_NUMBER moved to In Progress"
