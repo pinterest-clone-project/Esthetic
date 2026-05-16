@@ -1,5 +1,5 @@
-import {useLoginMutation} from "../../services/accountService.ts";
-import {useApiError} from "../../hooks/useApiError.ts";
+import {useLoginMutation} from "@/services/accountService.ts";
+import {useApiError} from "@/hooks/useApiError.ts";
 
 
 const HomePage = () => {
