@@ -2,6 +2,7 @@
 using Application.Interfaces.Transaction;
 using Application.Models.DTO.User;
 using MediatR;
+using Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -17,6 +18,8 @@ public record EditCommand : IRequest<TokenDTO>, ITransactionalCommand
     public Optional<string> Email { get; init; }
     public Optional<string> Bio { get; init; }
     public Optional<string> PhoneNumber { get; init; }
+    public Optional<Gender> Gender { get; init; }
+    public Optional<DateTime> BirthDate { get; set; }
     public bool? IsPrivate { get; init; }
 
     [FromForm]
