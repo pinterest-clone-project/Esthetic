@@ -33,7 +33,6 @@ public class AccountController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
-    [Authorize]
     [HttpPost("refresh")]
     public async Task<IActionResult> Refresh([FromBody] RefreshCommand command)
     {
@@ -42,7 +41,7 @@ public class AccountController(IMediator mediator) : ControllerBase
     }
 
     [Authorize]
-    [HttpPut("edit")]
+    [HttpPatch("edit")]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> Edit([FromForm] EditCommand command)
     {
@@ -66,4 +65,13 @@ public class AccountController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(command);
         return Ok(result);
     }
+
+
+    [HttpPost("google")]
+    public async Task<IActionResult> Google([FromBody] GoogleCommand command)
+    {
+        var result = await mediator.Send(command);
+        return Ok(result);
+    }
+
 }

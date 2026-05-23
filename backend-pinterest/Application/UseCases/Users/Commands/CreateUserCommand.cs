@@ -1,6 +1,7 @@
 using Application.Interfaces.Caching;
 using Application.Models.DTO.User;
 using Domain.Constants;
+using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -13,6 +14,8 @@ public record CreateUserCommand : IRequest<UserDTO>, ICacheInvalidator
     public string? Email { get; set; }
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
+    public Gender? Gender { get; set; }
+    public DateTime? BirthDate { get; set; }
 
     [BindNever]
     public IReadOnlyList<string> CacheKeysInvalidators =>

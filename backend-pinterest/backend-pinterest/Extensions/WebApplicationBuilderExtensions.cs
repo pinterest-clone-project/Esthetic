@@ -1,4 +1,5 @@
 ﻿using Application.Behaviors;
+using Application.Common.Optional;
 using Application.Common.Validators;
 using Application.Interfaces;
 using Domain.Constants;
@@ -49,6 +50,7 @@ public static class WebApplicationBuilderExtensions
             options.Password.RequireLowercase = false;
             options.Password.RequireUppercase = false;
             options.Password.RequireNonAlphanumeric = false;
+            options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
         })
         .AddEntityFrameworkStores<AppDbContext>()
         .AddDefaultTokenProviders();
@@ -143,7 +145,10 @@ public static class WebApplicationBuilderExtensions
         #endregion
 
         #region Controllers
-        services.AddControllers()
+        services.AddControllers(options =>
+        {
+            options.ModelBinderProviders.Insert(0, new OptionalBinderProvider());
+        })
         .ConfigureApiBehaviorOptions(options =>
         {
             options.SuppressModelStateInvalidFilter = true;

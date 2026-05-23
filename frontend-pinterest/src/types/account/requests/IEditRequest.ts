@@ -1,9 +1,9 @@
-export interface IEditRequest {
+export type IEditRequest = {
     firstName?: string;
     lastName?: string;
     email?: string;
-    bio?: string;
+    bio?: string | null;
     isPrivate?: boolean;
-    phoneNumber?: string;
+    phoneNumber?: string | null;
     imageFile?: File | null;
 }
