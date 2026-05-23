@@ -38,15 +38,15 @@ const Header: React.FC = () => {
 
                 <nav className="hidden md:flex items-center gap-5 shrink-0">
                     <div className="hidden lg:flex items-center gap-5">
-                        <a className="text-white hover:text-green-400 transition font-normal text-sm leading-5 tracking-[-0.5px]">
+                        <a className="text-white hover:text-green-400 hover:cursor-pointer transition font-normal text-sm leading-5 tracking-[-0.5px]">
                             About Us
                         </a>
 
-                        <a className="text-white text-sm hover:text-green-400 transition font-normal leading-5 tracking-[-0.5px]">
+                        <a className="text-white text-sm hover:text-green-400 hover:cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
                             For Business
                         </a>
 
-                        <a className="text-white text-sm hover:text-green-400 transition font-normal leading-5 tracking-[-0.5px]">
+                        <a className="text-white text-sm hover:text-green-400 hover:cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
                             News
                         </a>
                     </div>
