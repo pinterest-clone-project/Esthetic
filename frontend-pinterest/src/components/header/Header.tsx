@@ -38,26 +38,32 @@ const Header: React.FC = () => {
 
                 <nav className="hidden md:flex items-center gap-5 shrink-0">
                     <div className="hidden lg:flex items-center gap-5">
-                        <a className="text-white hover:text-green-400 transition font-normal text-sm leading-5">
+                        <a className="text-white hover:text-green-400 transition font-normal text-sm leading-5 tracking-[-0.5px]">
                             About Us
                         </a>
 
-                        <a className="text-white text-sm hover:text-green-400 transition font-normal leading-5">
+                        <a className="text-white text-sm hover:text-green-400 transition font-normal leading-5 tracking-[-0.5px]">
                             For Business
                         </a>
 
-                        <a className="text-white text-sm hover:text-green-400 transition font-normal\ leading-5">
+                        <a className="text-white text-sm hover:text-green-400 transition font-normal leading-5 tracking-[-0.5px]">
                             News
                         </a>
                     </div>
 
-                    <button className="min-w-[100px] min-h-[50px] bg-green-500 hover:bg-green-400 text-black px-4 py-1.5 rounded-md text-sm font-medium transition">
-                        Sign Up
+                    <button className="min-w-[100px] min-h-[50px] bg-green-500 hover:bg-green-400  px-4 py-1.5 rounded-md text-sm font-medium transition">
+                        <a className={"font-normal text-sm leading-5 text-black tracking-[-0.5px]"}
+                           href="/signup">
+                            Sign Up
+                        </a>
                     </button>
 
-                    <button className="min-w-[100px] min-h-[50px] bg-[#535353] hover:border-zinc-400 text-black px-4 py-1.5 rounded-md text-sm transition"
+                    <button className="min-w-[100px] min-h-[50px] bg-[#535353] hover:border-zinc-400 px-4 py-1.5 rounded-md text-sm transition"
                     >
-                        Login
+                        <a className={"font-normal text-sm leading-5 text-black tracking-[-0.5px]"}
+                        href="/login">
+                            Login
+                        </a>
                     </button>
                 </nav>
 
