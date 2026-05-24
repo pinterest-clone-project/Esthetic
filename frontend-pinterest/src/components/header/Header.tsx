@@ -25,7 +25,7 @@ const Header: React.FC = () => {
                     <div className="flex items-center bg-[#535353] rounded-[10px] px-4 h-9 w-full max-w-[586px] h-[40px]">
                         <img
                             src={searchIcon}
-                            className="w-[27px] h-[27px] opacity-70"
+                            className="w-[27px] h-[27px] opacity-70 hover:cursor-pointer"
                         />
 
                         <input
@@ -51,7 +51,7 @@ const Header: React.FC = () => {
                         </a>
                     </div>
 
-                    <button className="min-w-[100px] min-h-[50px] bg-green-500 hover:bg-green-400  px-4 py-1.5 rounded-md text-sm font-medium transition">
+                    <button className="min-w-[100px] min-h-[50px] bg-btn-primary hover:bg-green-400  px-4 py-1.5 rounded-md text-sm font-medium transition">
                         <a className={"font-normal text-sm leading-5 text-black tracking-[-0.5px]"}
                            href="/signup">
                             Sign Up
