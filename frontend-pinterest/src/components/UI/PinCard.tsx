@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { IPinSummaryResponse } from "../../types/pin/responses/IPinSummaryResponse.ts";
 
 const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -67,4 +68,6 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
         </div>
     );
 };
+
+export default PinCard;
 
