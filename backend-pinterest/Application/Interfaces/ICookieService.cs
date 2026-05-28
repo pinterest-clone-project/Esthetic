@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Application.Models.DTO.User;
 
 namespace Application.Interfaces;
 
-public class ICookieService
+public interface ICookieService
 {
+    void SetTokenCookies(TokenDTO tokens);
+    void ClearTokenCookies();
+    string? GetRefreshToken();
 }
