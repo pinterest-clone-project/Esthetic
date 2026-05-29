@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Application.Models.DTO.User;
+using MediatR;
 
 namespace Application.UseCases.Account.Queries;
 
-internal class GetMeQuery
-{
-}
+public record GetMeQuery(Guid UserId) : IRequest<UserDTO>;
