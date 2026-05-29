@@ -1,9 +1,9 @@
 import { api } from "./api.ts";
-import type { IPinResponse } from "../types/pin/responses/IPinResponse.ts";
 import type { IPinSummaryResponse } from "../types/pin/responses/IPinSummaryResponse.ts";
 import type { ICreatePinRequest } from "../types/pin/requests/ICreatePinRequest.ts";
-import type { IUpdatePinRequest } from "../types/pin/requests/IUpdatePinRequest.ts";
 import { serialize } from "object-to-formdata";
+import type {IUpdatePinRequest} from "@/types/pin/requests/IUpdatePinResponse.ts";
+import type {IPinResponse} from "@/types/pin/responses/IPinResponses.ts";
 
 export const pinService = api.injectEndpoints({
     endpoints: (builder) => ({

@@ -1,4 +1,5 @@
-import type { ITagResponse } from "../../tag/responses/ITagResponse.ts";
+import type {ITagResponse} from "@/types/pin/responses/ITagResponse.ts";
+
 
 export interface IPinResponse {
     id: string;
