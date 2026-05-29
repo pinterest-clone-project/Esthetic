@@ -3,12 +3,29 @@ import HomePage from "./pages/home/HomePage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
 import LoginPage from "./pages/auth/LoginPage.tsx";
 import Layout from "./layout/Layout.tsx";
+import { useEffect } from "react";
+import { useAppDispatch } from "./store";
+import { setUser } from "./store/slices/authSlice";
+import { useGetMeQuery } from "./services/accountService";
+
+const AppInit = ({ children }: { children: React.ReactNode }) => {
+    const dispatch = useAppDispatch();
+    const { data, isSuccess } = useGetMeQuery();
+
+    useEffect(() => {
+        if (isSuccess && data) {
+            dispatch(setUser(data));
+        }
+    }, [isSuccess, data, dispatch]);
+
+    return <>{children}</>;
+};
 
 
 const App = () => {
 
   return (
-    <>
+    <AppInit>
       <Routes>
           <Route element={<Layout/>}>
               <Route path="/">
@@ -22,7 +39,7 @@ const App = () => {
           </Route>
 
       </Routes>
-    </>
+    </AppInit>
   )
 }
 
