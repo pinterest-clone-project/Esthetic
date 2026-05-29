@@ -34,6 +34,14 @@ export const createBaseQuery = (
             return result;
         }
 
+        const url = typeof args === "string" ? args : args.url ?? "";
+        const skipRefresh = ["Account/refresh", "Account/login", "Account/me"]
+            .some(u => url.includes(u));
+
+        if (skipRefresh) {
+            return result;
+        }
+
         if (mutex.isLocked()) {
             await mutex.waitForUnlock();
             return rawBaseQuery(normalizedArgs, api, extraOptions);
@@ -43,10 +51,7 @@ export const createBaseQuery = (
 
         try {
             const refreshResult = await rawBaseQuery(
-                {
-                    url: "Account/refresh",
-                    method: "POST",
-                },
+                { url: "Account/refresh", method: "POST" },
                 api,
                 extraOptions
             );
@@ -54,7 +59,9 @@ export const createBaseQuery = (
             if (!refreshResult.error) {
                 result = await rawBaseQuery(normalizedArgs, api, extraOptions);
             } else {
-                window.location.href = "/login";
+                if (!window.location.pathname.includes("/login")) {
+                    window.location.href = "/login";
+                }
             }
         } finally {
             release();

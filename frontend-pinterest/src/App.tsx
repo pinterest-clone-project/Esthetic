@@ -10,7 +10,9 @@ import { useGetMeQuery } from "./services/accountService";
 
 const AppInit = ({ children }: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
-    const { data, isSuccess } = useGetMeQuery();
+    const { data, isSuccess } = useGetMeQuery(undefined, {
+        skip: false,
+    });
 
     useEffect(() => {
         if (isSuccess && data) {

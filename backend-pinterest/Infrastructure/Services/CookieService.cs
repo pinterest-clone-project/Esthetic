@@ -11,24 +11,25 @@ public class CookieService(IHttpContextAccessor httpContextAccessor, IConfigurat
     private readonly HttpContext context = httpContextAccessor.HttpContext!;
     private readonly bool isProduction =
         configuration["ASPNETCORE_ENVIRONMENT"] != "Development";
-    private readonly string refreshTokenPath = "/api/account/refresh";
+    private readonly string refreshTokenPath = "/api/Account/refresh";
 
     public void SetTokenCookies(TokenDTO tokens)
     {
+        var sameSite = isProduction ? SameSiteMode.Strict : SameSiteMode.Lax;
         context.Response.Cookies.Append(AuthTokenConstants.AccessTokenCookie, tokens.AccessToken, new CookieOptions
         {
             HttpOnly = true,
             Secure = isProduction,
-            SameSite = SameSiteMode.Strict,
-            Expires = AppTimeToLive.AccessTokenTime
+            SameSite = sameSite,
+            Expires = DateTimeOffset.UtcNow.AddMinutes(AppTimeToLive.AccessTokenMinutes)
         });
 
         context.Response.Cookies.Append(AuthTokenConstants.RefreshTokenCookie, tokens.RefreshToken, new CookieOptions
         {
             HttpOnly = true,
             Secure = isProduction,
-            SameSite = SameSiteMode.Strict,
-            Expires = AppTimeToLive.RefreshTokenTime,
+            SameSite = sameSite,
+            Expires = DateTimeOffset.UtcNow.AddDays(AppTimeToLive.RefreshTokenDays),
             Path = refreshTokenPath
         });
     }
