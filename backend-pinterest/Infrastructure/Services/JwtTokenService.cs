@@ -29,7 +29,8 @@ public class JwtTokenService(
         return new TokenDTO
         {
             AccessToken = accessToken,
-            RefreshToken = refreshToken
+            RefreshToken = refreshToken,
+            UserId = user.Id
         };
     }
     
@@ -55,7 +56,8 @@ public class JwtTokenService(
         return new TokenDTO
         {
             AccessToken = accessToken,
-            RefreshToken = newRefreshToken
+            RefreshToken = newRefreshToken,
+            UserId = user.Id
         };
     }
     private static List<Claim> BuildClaims(UserEntity user, IList<string> roles)

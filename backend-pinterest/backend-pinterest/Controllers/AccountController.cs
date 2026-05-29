@@ -2,6 +2,7 @@ using Application.Common.Exceptions;
 using Application.Common.Validators;
 using Application.Interfaces;
 using Application.UseCases.Account.Commands;
+using Application.UseCases.Account.Queries;
 using Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -23,7 +24,8 @@ public class AccountController(IMediator mediator, ICookieService cookieService)
     {
         var tokens = await mediator.Send(command);
         cookieService.SetTokenCookies(tokens);
-        return Ok();
+        var user = await mediator.Send(new GetMeQuery(tokens.UserId));
+        return Ok(user);
     }
 
     [HttpPost("register")]
@@ -32,7 +34,8 @@ public class AccountController(IMediator mediator, ICookieService cookieService)
     {
         var tokens = await mediator.Send(command);
         cookieService.SetTokenCookies(tokens);
-        return Ok();
+        var user = await mediator.Send(new GetMeQuery(tokens.UserId));
+        return Ok(user);
     }
 
     [HttpPost("refresh")]
@@ -85,6 +88,15 @@ public class AccountController(IMediator mediator, ICookieService cookieService)
     {
         var tokens = await mediator.Send(command);
         cookieService.SetTokenCookies(tokens);
-        return Ok();
+        var user = await mediator.Send(new GetMeQuery(tokens.UserId));
+        return Ok(user);
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> Me()
+    {
+        var user = await mediator.Send(new GetMeQuery(CurrentUserId));
+        return Ok(user);
     }
 }
