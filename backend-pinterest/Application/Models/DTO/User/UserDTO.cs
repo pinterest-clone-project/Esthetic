@@ -16,4 +16,5 @@ public class UserDTO
     public DateTime? BirthDate { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+    public IList<string> Roles { get; set; } = [];
 }

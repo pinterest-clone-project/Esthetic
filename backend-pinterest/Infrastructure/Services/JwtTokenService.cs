@@ -29,10 +29,11 @@ public class JwtTokenService(
         return new TokenDTO
         {
             AccessToken = accessToken,
-            RefreshToken = refreshToken
+            RefreshToken = refreshToken,
+            UserId = user.Id
         };
     }
-    
+
     public async Task<TokenDTO?> RefreshTokenAsync(string refreshToken)
     {
         var tokenEntity = await context.RefreshTokens
@@ -45,8 +46,6 @@ public class JwtTokenService(
         if (user == null)
             return null;
 
-        context.RefreshTokens.Remove(tokenEntity);
-
         var roles = await userManager.GetRolesAsync(user);
         var claims = BuildClaims(user, roles);
         var accessToken = GenerateAccessToken(claims);
@@ -55,9 +54,11 @@ public class JwtTokenService(
         return new TokenDTO
         {
             AccessToken = accessToken,
-            RefreshToken = newRefreshToken
+            RefreshToken = newRefreshToken,
+            UserId = user.Id
         };
     }
+
     private static List<Claim> BuildClaims(UserEntity user, IList<string> roles)
     {
         var claims = new List<Claim>

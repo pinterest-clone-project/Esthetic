@@ -80,6 +80,11 @@ public static class WebApplicationBuilderExtensions
 
             options.Events = new JwtBearerEvents
             {
+                OnMessageReceived = context =>
+                {
+                    context.Token = context.Request.Cookies[AuthTokenConstants.AccessTokenCookie];
+                    return Task.CompletedTask;
+                },
                 OnChallenge = async context =>
                 {
                     context.HandleResponse();
@@ -165,9 +170,10 @@ public static class WebApplicationBuilderExtensions
         {
             options.AddPolicy("AllowAll", policy =>
             {
-                policy.AllowAnyOrigin()
+                policy.WithOrigins("http://localhost:5173")
                       .AllowAnyHeader()
-                      .AllowAnyMethod();
+                      .AllowAnyMethod()
+                      .AllowCredentials();
             });
         });
         #endregion
@@ -216,6 +222,7 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<IDbSeederService, DbSeederService>();
         services.AddScoped<ISmtpService, SmtpService>();
         services.AddScoped<IPagedService, PagedService>();
+        services.AddScoped<ICookieService, CookieService>();
         #endregion
 
         #region OpenAPI

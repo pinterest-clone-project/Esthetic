@@ -1,6 +1,4 @@
-import { useState } from "react";
 import { useGetAllPinsQuery } from "../../services/pinService.ts";
-import type { IPinSummaryResponse } from "../../types/pin/responses/IPinSummaryResponse.ts";
 import PinCard from "../../components/UI/PinCard.tsx";
 
 const PinCardSkeleton = () => (

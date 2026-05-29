@@ -2,7 +2,7 @@
 // ---------  This is just for testing --------
 ///////////////////////////////////////////////
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Button from "@/components/button/Button.tsx";
 import GoogleIcon from "@/asssets/icons/GoogleIcon.tsx";
 

@@ -2,9 +2,14 @@
 
 public static class AppTimeToLive
 {
-    public static readonly DateTime AccessTokenTime = DateTime.UtcNow.AddMinutes(15);
-    public static readonly DateTime RefreshTokenTime = DateTime.UtcNow.AddDays(30);
-    public static readonly DateTime ResetPasswordExpiration = DateTime.UtcNow.AddMinutes(15);
+    public const int AccessTokenMinutes = 15;
+    public const int RefreshTokenDays = 7;
+    public const int ResetPasswordMinutes = 15;
+    public const int ListCacheMinutes = 5;
 
-    public static readonly TimeSpan ListCacheExpiration = TimeSpan.FromMinutes(5);
+    public static DateTime AccessTokenTime => DateTime.UtcNow.AddMinutes(AccessTokenMinutes);
+    public static DateTime RefreshTokenTime => DateTime.UtcNow.AddDays(RefreshTokenDays);
+    public static DateTime ResetPasswordExpiration => DateTime.UtcNow.AddMinutes(ResetPasswordMinutes);
+
+    public static readonly TimeSpan ListCacheExpiration = TimeSpan.FromMinutes(ListCacheMinutes);
 }
