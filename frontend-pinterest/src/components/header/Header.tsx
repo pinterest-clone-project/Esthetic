@@ -30,6 +30,7 @@ const Header: React.FC = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+
     const handleLogout = () => {
         dispatch(clearUser());
         setDropdownOpen(false);
@@ -145,12 +146,12 @@ const Header: React.FC = () => {
 
             <Modal isOpen={activeModal === "signup"} onClose={() => setActiveModal(null)}
                     width={450} height={675} borderRadius={20}>
-                <RegisterForm></RegisterForm>
+                <RegisterForm onSuccess={() => setActiveModal(null)} />
             </Modal>
 
             <Modal isOpen={activeModal === "login"} onClose={() => setActiveModal(null)}
                    width={450} height={438} borderRadius={20}>
-                <LoginForm></LoginForm>
+                <LoginForm onSuccess={() => setActiveModal(null)} />
             </Modal>
 
         </header>

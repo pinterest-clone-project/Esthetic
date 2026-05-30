@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
 import { useLoginMutation } from "@/services/accountService.ts";
 import { useAppDispatch } from "@/store";
 import { setUser } from "@/store/slices/authSlice.ts";
@@ -7,12 +6,15 @@ import Button from "@/components/button/Button.tsx";
 import logo from "@/assets/logo.png";
 
 
-const LoginForm = () => {
+interface LoginFormProps {
+    onSuccess?: () => void;
+}
+
+const LoginForm = ({ onSuccess }: LoginFormProps) => {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
     const [login, { isLoading, error }] = useLoginMutation();
@@ -28,7 +30,7 @@ const LoginForm = () => {
         try {
             const account = await login({ email, password }).unwrap();
             dispatch(setUser(account));
-            navigate("/");
+            onSuccess?.();
         } catch (err) {
             console.error("Login failed", err);
         }

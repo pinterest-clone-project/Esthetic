@@ -1,7 +1,6 @@
 import {Route, Routes} from "react-router";
 import HomePage from "./pages/home/HomePage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
-import LoginPage from "./pages/auth/LoginPage.tsx";
 import Layout from "./layout/Layout.tsx";
 import { useEffect } from "react";
 import { useAppDispatch } from "./store";
@@ -32,9 +31,6 @@ const App = () => {
           <Route element={<Layout/>}>
               <Route path="/">
                   <Route index element={<HomePage />} />
-
-                  <Route path="/login" element={<LoginPage />} />
-
               </Route>
 
               <Route path="*" element={<NotFoundPage />} />

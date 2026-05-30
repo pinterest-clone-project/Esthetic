@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useLoginMutation, useGoogleLoginMutation } from "@/services/accountService.ts";
 import { useAppDispatch } from "@/store";
@@ -8,12 +7,16 @@ import Button from "@/components/button/Button.tsx";
 import GoogleIcon from "@/assets/icons/GoogleIcon.tsx";
 import logo from "@/assets/logo.png";
 
-const RegisterForm = () => {
+interface RegisterFormProps {
+    onSuccess?: () => void;
+}
+
+
+const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
     const [login, { isLoading, error }] = useLoginMutation();
@@ -30,7 +33,7 @@ const RegisterForm = () => {
         try {
             const account = await login({ email, password }).unwrap();
             dispatch(setUser(account));
-            navigate("/");
+            onSuccess?.();
         } catch (err) {
             console.error("Login failed", err);
         }
@@ -41,7 +44,7 @@ const RegisterForm = () => {
             try {
                 const account = await loginByGoogle({ token: tokenResponse.access_token }).unwrap();
                 dispatch(setUser(account));
-                navigate("/");
+                onSuccess?.();
             } catch (err) {
                 console.error("Google login failed", err);
             }
