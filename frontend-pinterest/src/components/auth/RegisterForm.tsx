@@ -9,6 +9,7 @@ import GoogleIcon from "@/asssets/icons/GoogleIcon.tsx";
 import logo from "@/assets/logo.png";
 
 const RegisterForm = () => {
+    const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -77,44 +78,61 @@ const RegisterForm = () => {
                 </div>
 
 
-                <div>
-                    <label className="block text-sm text-black mb-1">Password</label>
+                <label className="block text-sm text-black mb-1">Password</label>
+                <div className="relative">
                     <input
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         placeholder="your password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none transition border ${
+                        className={`w-full h-10 px-4 pr-10 rounded-[5px] text-sm outline-none transition border ${
                             hasMinLength && hasSymbol && hasNumber
                                 ? "border-[var(--color-btn-primary)]"
                                 : "border-[#A1A1A1]"
                         }`}
                     />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#A1A1A1] hover:text-black transition"
+                    >
+                        {showPassword ? (
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                                <line x1="1" y1="1" x2="23" y2="23"/>
+                            </svg>
+                        ) : (
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        )}
+                    </button>
+                </div>
 
-
-                    <div className="mt-1 space-y-1">
-                        {[
-                            { label: "8 characters minimum", valid: hasMinLength },
-                            { label: "a symbol",             valid: hasSymbol },
-                            { label: "a number",             valid: hasNumber },
-                        ].map(({ label, valid }) => (
-                            <div key={label} className="flex items-center gap-2">
-                                <div className={`w-4 h-4 rounded-full border-2 transition-colors flex items-center justify-center ${
-                                    valid
-                                        ? "border-[var(--color-btn-primary)] bg-[var(--color-btn-primary)]"
-                                        : "border-[#A1A1A1]"
-                                }`}>
-                                    {valid && (
-                                        <svg width="8" height="6" viewBox="0 0 8 6" fill="none">
-                                            <path d="M1 3L3 5L7 1" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                        </svg>
-                                    )}
-                                </div>
-                                <span className="text-xs text-[var(--color-text-muted)]">{label}</span>
+                <div className="mt-1 space-y-1">
+                    {[
+                        { label: "8 characters minimum", valid: hasMinLength },
+                        { label: "a symbol",             valid: hasSymbol },
+                        { label: "a number",             valid: hasNumber },
+                    ].map(({ label, valid }) => (
+                        <div key={label} className="flex items-center gap-2">
+                            <div className={`w-4 h-4 rounded-full border-2 transition-colors flex items-center justify-center ${
+                                valid
+                                    ? "border-[var(--color-btn-primary)] bg-[var(--color-btn-primary)]"
+                                    : "border-[#A1A1A1]"
+                            }`}>
+                                {valid && (
+                                    <svg width="8" height="6" viewBox="0 0 8 6" fill="none">
+                                        <path d="M1 3L3 5L7 1" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                    </svg>
+                                )}
                             </div>
-                        ))}
-                    </div>
+                            <span className="text-xs text-[var(--color-text-muted)]">{label}</span>
+                        </div>
+                    ))}
                 </div>
 
 
