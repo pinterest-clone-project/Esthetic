@@ -78,18 +78,19 @@ const Header: React.FC = () => {
                         style={{ width: 100, height: 50 }}
                         onClick={() => setActiveModal("login")}
                     >
-                        Login
+                        Log in
                     </Button>
 
                 </nav>
             </div>
 
-            <Modal isOpen={activeModal === "signup"} onClose={() => setActiveModal(null)}>
+            <Modal isOpen={activeModal === "signup"} onClose={() => setActiveModal(null)}
+                    width={450} height={675} borderRadius={20}>
                 <RegisterForm></RegisterForm>
             </Modal>
 
             <Modal isOpen={activeModal === "login"} onClose={() => setActiveModal(null)}
-                   width={450} height={690} borderRadius={20}>
+                   width={450} height={438} borderRadius={20}>
                 <LoginForm></LoginForm>
             </Modal>
 
