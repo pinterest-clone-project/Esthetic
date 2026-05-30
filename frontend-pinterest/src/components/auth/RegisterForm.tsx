@@ -5,7 +5,7 @@ import { useLoginMutation, useGoogleLoginMutation } from "@/services/accountServ
 import { useAppDispatch } from "@/store";
 import { setUser } from "@/store/slices/authSlice.ts";
 import Button from "@/components/button/Button.tsx";
-import GoogleIcon from "@/asssets/icons/GoogleIcon.tsx";
+import GoogleIcon from "@/assets/icons/GoogleIcon.tsx";
 import logo from "@/assets/logo.png";
 
 const RegisterForm = () => {
