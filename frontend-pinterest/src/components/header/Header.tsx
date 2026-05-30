@@ -1,8 +1,17 @@
 import logo from "../../../src/assets/logo.png";
 import searchIcon from "../../../src/assets/search-vector.svg";
 import Button from "@/components/button/Button.tsx";
+import {useState} from "react";
+import Modal from "@/components/UI/Modal.tsx";
+import LoginForm from "@/components/auth/LoginForm.tsx";
+import RegisterForm from "@/components/auth/RegisterForm.tsx";
+
+
+type ModalType = "login" | "signup" | null;
 
 const Header: React.FC = () => {
+    const [activeModal, setActiveModal] = useState<ModalType>(null);
+
     return (
         <header className="w-full bg-black py-3">
             <div className="max-w-[1505px] h-[50px] mx-auto px-4 flex items-center justify-between gap-4
@@ -57,6 +66,7 @@ const Header: React.FC = () => {
                         size="md"
                         radius={10}
                         style={{ width: 100, height: 50 }}
+                        onClick={() => setActiveModal("signup")}
                     >
                         Sign Up
                     </Button>
@@ -66,13 +76,23 @@ const Header: React.FC = () => {
                         size="md"
                         radius={10}
                         style={{ width: 100, height: 50 }}
+                        onClick={() => setActiveModal("login")}
                     >
                         Login
                     </Button>
 
                 </nav>
-
             </div>
+
+            <Modal isOpen={activeModal === "signup"} onClose={() => setActiveModal(null)}>
+                <RegisterForm></RegisterForm>
+            </Modal>
+
+            <Modal isOpen={activeModal === "login"} onClose={() => setActiveModal(null)}
+                   width={450} height={690} borderRadius={20}>
+                <LoginForm></LoginForm>
+            </Modal>
+
         </header>
     );
 };

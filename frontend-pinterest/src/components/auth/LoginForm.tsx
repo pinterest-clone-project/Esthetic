@@ -1,23 +1,16 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import {useEditProfileMutation, useGoogleLoginMutation, useLoginMutation} from "@/services/accountService.ts";
+import { useNavigate } from "react-router";
 import { useGoogleLogin } from "@react-oauth/google";
-import Button from "@/components/button/Button.tsx";
-import GoogleIcon from "@/asssets/icons/GoogleIcon.tsx";
+import { useLoginMutation, useGoogleLoginMutation } from "@/services/accountService.ts";
 import { useAppDispatch } from "@/store";
 import { setUser } from "@/store/slices/authSlice.ts";
+import Button from "@/components/button/Button.tsx";
+import GoogleIcon from "@/asssets/icons/GoogleIcon.tsx";
+import logo from "@/assets/logo.png";
 
 const LoginForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
-    const [edit] = useEditProfileMutation();
-
-    const handleEdit = async () => {
-        await edit({ firstName: 'Іван', bio: "Люблю сало"});
-    }
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -25,13 +18,18 @@ const LoginForm = () => {
     const [login, { isLoading, error }] = useLoginMutation();
     const [loginByGoogle, { isLoading: isGoogleLoading }] = useGoogleLoginMutation();
 
+    const hasMinLength = password.length >= 8;
+    const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const hasNumber = /\d/.test(password);
+
+    const isFormValid = email.includes("@") && email.includes(".") && hasMinLength && hasSymbol && hasNumber;
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             const account = await login({ email, password }).unwrap();
             dispatch(setUser(account));
-            console.log("Login successful", account);
-            // navigate("/");
+            navigate("/");
         } catch (err) {
             console.error("Login failed", err);
         }
@@ -50,90 +48,116 @@ const LoginForm = () => {
     });
 
     return (
-        <div className="flex flex-col dark:bg-gray-950 lg:flex-row min-h-screen bg-white">
-            <div className="w-full lg:w-1/2 flex flex-col justify-center mt-10 px-10 md:px-24 lg:px-32">
-                <div className="max-w-md w-full mx-auto">
-                    <div className="mb-2 text-center lg:text-left">
-                        <h2 className="text-3xl dark:text-white font-bold text-slate-900">Вхід</h2>
-                        <p className="text-slate-500 dark:text-white mt-2">
-                            Ще не маєте акаунту?{" "}
-                            <Link to="/account/register" className="text-amber-300 font-semibold hover:underline">
-                                Реєстрація
-                            </Link>
-                        </p>
-                    </div>
+        <div className="flex flex-col items-center">
 
-                    <div className="relative flex items-center">
-                        <div className="flex-grow border-t border-slate-200"></div>
-                        <span className="flex-shrink mx-4 text-slate-400 text-sm">or</span>
-                        <div className="flex-grow border-t border-slate-200"></div>
-                    </div>
-
-                    <form className="space-y-3" onSubmit={handleSubmit}>
-                        <div>
-                            <label className="block dark:text-white text-sm font-bold text-slate-700 mb-2 uppercase tracking-tight">
-                                Email *
-                            </label>
-                            <input
-                                type="email"
-                                className="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 transition-all"
-                                placeholder="email@example.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                        </div>
-
-                        <div>
-                            <div className="flex justify-between mb-2">
-                                <label className="text-sm dark:text-white font-bold text-slate-700 uppercase tracking-tight">
-                                    Password *
-                                </label>
-                                <a href="forgot-password" className="text-sm text-slate-400 hover:text-amber-300 transition">
-                                    Forgot password?
-                                </a>
-                            </div>
-                            <div className="relative">
-                                <input
-                                    type={showPassword ? "text" : "password"}
-                                    className="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-yellow-400/20 focus:border-yellow-400 transition-all"
-                                    placeholder="Your password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
-                                >
-                                    <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
-                                </button>
-                            </div>
-                        </div>
-
-                        <Button
-                            type="submit"
-                            disabled={isLoading}
-                            fullWidth
-                        >Continue</Button>
-
-                        <Button
-                            type="button"
-                            disabled={isGoogleLoading}
-                            variant="dark"
-                            fullWidth
-                            onClick={() => loginWithGoogle()}
-                            icon={<GoogleIcon />}
-                        >
-                            Continue with Google
-                        </Button>
-
-                        {error && <p className="text-red-500 text-sm">Невірний email або пароль</p>}
-                    </form>
-                    <button onClick={handleEdit}>Test Edit</button>
-                </div>
+            <div className="w-11 h-11 rounded-full flex items-center justify-center mb-4">
+                <img src={logo} className="w-11 h-11" />
             </div>
+
+            {/* Title */}
+            <h2 className="text-2xl font-bold text-black tracking-[-0.5px]">Welcome in Esthetic</h2>
+            <p className="text-sm text-black mt-1 mb-6">Where style begins</p>
+
+            <form className="w-full space-y-4" onSubmit={handleSubmit}>
+
+                <div>
+                    <label className="block text-sm  text-black mb-1">Your gmail</label>
+                    <input
+                        type="email"
+                        placeholder="yourgmail@gmail.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none transition border ${
+                            email.includes("@") && email.includes(".")
+                                ? "border-[var(--color-btn-primary)]"
+                                : "border-[#A1A1A1]"
+                        }`}
+                    />
+                </div>
+
+
+                <div>
+                    <label className="block text-sm text-black mb-1">Password</label>
+                    <input
+                        type="password"
+                        placeholder="your password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none transition border ${
+                            hasMinLength && hasSymbol && hasNumber
+                                ? "border-[var(--color-btn-primary)]"
+                                : "border-[#A1A1A1]"
+                        }`}
+                    />
+
+
+                    <div className="mt-2 space-y-1">
+                        {[
+                            { label: "8 characters minimum", valid: hasMinLength },
+                            { label: "a symbol",             valid: hasSymbol },
+                            { label: "a number",             valid: hasNumber },
+                        ].map(({ label, valid }) => (
+                            <div key={label} className="flex items-center gap-2">
+                                <div className={`w-4 h-4 rounded-full border-2 transition-colors flex items-center justify-center ${
+                                    valid
+                                        ? "border-[var(--color-btn-primary)] bg-[var(--color-btn-primary)]"
+                                        : "border-[#A1A1A1]"
+                                }`}>
+                                    {valid && (
+                                        <svg width="8" height="6" viewBox="0 0 8 6" fill="none">
+                                            <path d="M1 3L3 5L7 1" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                        </svg>
+                                    )}
+                                </div>
+                                <span className="text-xs text-[var(--color-text-muted)]">{label}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+
+                <div>
+                    <label className="block text-sm text-black mb-1">Date of birth</label>
+                    <input
+                        type="text"
+                        placeholder="dd/mm/yy"
+                        className="w-full h-10 px-4 rounded-[5px] border border-[#A1A1A1] text-sm outline-none focus:border-black transition"
+                    />
+                </div>
+
+                {error && <p className="text-red-500 text-xs">Невірний email або пароль</p>}
+
+                <Button type="submit"
+                        disabled={isLoading}
+                        variant={isFormValid ? "primary" : "secondary"}
+                        fullWidth
+                        radius={5}>
+                    Continue
+                </Button>
+
+                <div className="flex items-center justify-center my-2">
+                    <span className="text-sm text-[var(--color-text-dark)]">Or</span>
+                </div>
+
+                <Button
+                    type="button"
+                    disabled={isGoogleLoading}
+                    variant="dark"
+                    fullWidth
+                    radius={5}
+                    icon={<GoogleIcon />}
+                    onClick={() => loginWithGoogle()}
+                >
+                    Continue with Google
+                </Button>
+            </form>
+
+            <p className="text-xs text-[var(--color-text-muted)] text-center mt-4 leading-5">
+                By continuing, you agree to the Esthetic Terms of Service and
+                acknowledge that you have read our Privacy Policy. Notice.
+            </p>
         </div>
     );
 };
