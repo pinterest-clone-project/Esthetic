@@ -1,5 +1,6 @@
 import logo from "../../../src/assets/logo.png";
 import searchIcon from "../../../src/assets/search-vector.svg";
+import Button from "@/components/button/Button.tsx";
 
 const Header: React.FC = () => {
     return (
@@ -51,20 +52,24 @@ const Header: React.FC = () => {
                         </a>
                     </div>
 
-                    <button className="min-w-[100px] min-h-[50px] bg-green-500 hover:bg-green-400  px-4 py-1.5 rounded-md text-sm font-medium transition">
-                        <a className={"font-normal text-sm leading-5 text-black tracking-[-0.5px]"}
-                           href="/signup">
-                            Sign Up
-                        </a>
-                    </button>
-
-                    <button className="min-w-[100px] min-h-[50px] bg-[#535353] hover:border-zinc-400 px-4 py-1.5 rounded-md text-sm transition"
+                    <Button
+                        variant="primary"
+                        size="md"
+                        radius={10}
+                        style={{ width: 100, height: 50 }}
                     >
-                        <a className={"font-normal text-sm leading-5 text-black tracking-[-0.5px]"}
-                        href="/login">
-                            Login
-                        </a>
-                    </button>
+                        Sign Up
+                    </Button>
+
+                    <Button
+                        variant="dark"
+                        size="md"
+                        radius={10}
+                        style={{ width: 100, height: 50 }}
+                    >
+                        Login
+                    </Button>
+
                 </nav>
 
             </div>

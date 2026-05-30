@@ -114,20 +114,20 @@ const LoginForm = () => {
 
                         <Button
                             type="submit"
-                            label={isLoading ? "Вхід..." : "Увійти"}
                             disabled={isLoading}
                             fullWidth
-                        />
+                        >Continue</Button>
 
                         <Button
                             type="button"
-                            label={isGoogleLoading ? "Авторизація..." : "Увійти через Google"}
                             disabled={isGoogleLoading}
                             variant="dark"
                             fullWidth
                             onClick={() => loginWithGoogle()}
                             icon={<GoogleIcon />}
-                        />
+                        >
+                            Continue with Google
+                        </Button>
 
                         {error && <p className="text-red-500 text-sm">Невірний email або пароль</p>}
                     </form>
