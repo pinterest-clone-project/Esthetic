@@ -11,6 +11,7 @@ import userIcon from "../../../src/assets/icons/user_icon.svg";
 import {clearUser} from "@/store/slices/authSlice.ts";
 import {APP_ENV} from "@/constants/env";
 import {Link} from "react-router";
+import { useLogoutMutation } from "@/services/accountService";
 
 
 type ModalType = "login" | "signup" | null;
@@ -21,6 +22,8 @@ const Header: React.FC = () => {
     const dropdownRef = useRef<HTMLDivElement>(null);
     const user = useAppSelector((state) => state.auth.user);
     const dispatch = useAppDispatch();
+
+    const [logout] = useLogoutMutation();
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -33,7 +36,8 @@ const Header: React.FC = () => {
     }, []);
 
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        await logout();
         dispatch(clearUser());
         setDropdownOpen(false);
     };
@@ -112,15 +116,12 @@ const Header: React.FC = () => {
                                         </svg>
                                     </button>
                                 </div>
-
                                 {dropdownOpen && (
                                     <div className="absolute right-0 top-12 bg-[#1a1a1a] rounded-[10px] shadow-2xl w-48 py-2 z-50 border border-[#535353]">
                                         <div className="px-4 py-2 border-b border-[#535353] mb-1">
                                             <p className="text-white text-sm font-medium">{user?.firstName}</p>
                                             <p className="text-[#A1A1A1] text-xs">{user?.email}</p>
                                         </div>
-
-
                                         <button
                                             onClick={handleLogout}
                                             className="w-full px-4 py-2 text-left text-sm text-red-400 hover:bg-[#535353] transition flex items-center gap-2"
@@ -132,7 +133,6 @@ const Header: React.FC = () => {
                                             </svg>
                                             Logout
                                         </button>
-
                                     </div>
                                 )}
                             </div>
