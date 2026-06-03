@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Application.UseCases.Account.Commands;
 
-public record EditCommand : IRequest<TokenDTO>, ITransactionalCommand
+public record EditCommand : IRequest<string>, ITransactionalCommand
 {
     [BindNever]
     public Guid Id { get; init; }

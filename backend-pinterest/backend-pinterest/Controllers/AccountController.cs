@@ -63,8 +63,9 @@ public class AccountController(IMediator mediator, ICookieService cookieService)
     public async Task<IActionResult> Edit([FromForm] EditCommand command)
     {
         var commandWithId = command with { Id = CurrentUserId };
-        var result = await mediator.Send(commandWithId);
-        return Ok(result);
+        var newAccessToken = await mediator.Send(commandWithId);
+        cookieService.UpdateAccessTokenCookie(newAccessToken);
+        return Ok();
     }
 
     [HttpPost("forgot-password")]

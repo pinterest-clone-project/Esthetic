@@ -6,10 +6,10 @@ export const serializePatch = (data: Record<string, unknown>): FormData => {
 
         if (value instanceof File) {
             formData.append(key, value);
-        } else if (typeof value === 'boolean') {
+        } else if (typeof value === "boolean") {
             formData.append(key, String(value));
         } else if (value === null) {
-            formData.append(key, '');
+            formData.append(key, "");
         } else {
             formData.append(key, String(value));
         }
