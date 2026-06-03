@@ -9,6 +9,8 @@ import {useAppDispatch, useAppSelector} from "@/store";
 import bellIcon from "../../../src/assets/icons/bell_icon.svg";
 import userIcon from "../../../src/assets/icons/user_icon.svg";
 import {clearUser} from "@/store/slices/authSlice.ts";
+import {APP_ENV} from "@/constants/env";
+import {Link} from "react-router";
 
 
 type ModalType = "login" | "signup" | null;
@@ -91,17 +93,25 @@ const Header: React.FC = () => {
                             </button>
 
                             <div className="relative" ref={dropdownRef}>
-                                <button
-                                    className="flex items-center gap-1"
-                                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                                >
-                                    <div className="w-9 h-9 rounded-full bg-[var(--color-btn-primary)] flex items-center justify-center">
-                                        <img src={userIcon} className="w-5 h-5" />
-                                    </div>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2">
-                                        <path d="M6 9l6 6 6-6"/>
-                                    </svg>
-                                </button>
+                                <div className="flex items-center gap-1">
+                                    <Link to="/profile">
+                                        <div className="w-9 h-9 rounded-full bg-[var(--color-btn-primary)] flex items-center justify-center overflow-hidden">
+                                            {user.image ? (
+                                                <img
+                                                    src={`${APP_ENV.IMAGES_100_URL}${user.image}`}
+                                                    className="w-full h-full object-cover rounded-full"
+                                                />
+                                            ) : (
+                                                <img src={userIcon} className="w-5 h-5" />
+                                            )}
+                                        </div>
+                                    </Link>
+                                    <button onClick={() => setDropdownOpen(!dropdownOpen)}>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2">
+                                            <path d="M6 9l6 6 6-6"/>
+                                        </svg>
+                                    </button>
+                                </div>
 
                                 {dropdownOpen && (
                                     <div className="absolute right-0 top-12 bg-[#1a1a1a] rounded-[10px] shadow-2xl w-48 py-2 z-50 border border-[#535353]">
