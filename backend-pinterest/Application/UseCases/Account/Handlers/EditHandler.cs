@@ -27,7 +27,10 @@ public class EditHandler(
         user.Email = request.Email.Apply(user.Email);
         user.Bio = request.Bio.Apply(user.Bio);
         user.PhoneNumber = request.PhoneNumber.Apply(user.PhoneNumber);
+
         user.IsPrivate = request.IsPrivate ?? user.IsPrivate;
+        user.Gender = request.Gender ?? user.Gender;
+        user.BirthDate = request.BirthDate ?? user.BirthDate;
 
         if (request.ImageFile != null)
             user.Image = await imageService.SaveImageAsync(request.ImageFile);

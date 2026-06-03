@@ -18,8 +18,8 @@ public record EditCommand : IRequest<TokenDTO>, ITransactionalCommand
     public Optional<string> Email { get; init; }
     public Optional<string> Bio { get; init; }
     public Optional<string> PhoneNumber { get; init; }
-    public Optional<Gender> Gender { get; init; }
-    public Optional<DateTime> BirthDate { get; set; }
+    public Gender? Gender { get; init; }
+    public DateTime? BirthDate { get; set; }
     public bool? IsPrivate { get; init; }
 
     [FromForm]
