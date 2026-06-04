@@ -1,4 +1,3 @@
-// src/components/PrivateRoute.tsx
 import { useAppSelector } from "@/store";
 import { Navigate, Outlet } from "react-router";
 
