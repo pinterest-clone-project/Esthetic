@@ -1,5 +1,6 @@
 import {Route, Routes} from "react-router";
 import HomePage from "./pages/home/HomePage.tsx";
+import CreateAuraPage from "./pages/aura/CreateAuraPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
 import Layout from "./layout/Layout.tsx";
 import { useEffect } from "react";
@@ -31,6 +32,9 @@ const App = () => {
           <Route element={<Layout/>}>
               <Route path="/">
                   <Route index element={<HomePage />} />
+                  <Route path="aura/">
+                      <Route path="create" element={<CreateAuraPage />} />
+                  </Route>
               </Route>
 
               <Route path="*" element={<NotFoundPage />} />
