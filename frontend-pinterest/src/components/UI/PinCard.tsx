@@ -1,17 +1,45 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import type { IPinSummaryResponse } from "../../types/pin/responses/IPinSummaryResponse.ts";
+import { useGetMeQuery } from "../../services/accountService.ts";
+import { useDeletePinMutation } from "../../services/pinService.ts";
 
 const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [hovered, setHovered] = useState(false);
+    const navigate = useNavigate();
+
+    const { data: me } = useGetMeQuery();
+    const [deletePin] = useDeletePinMutation();
+    const isOwner = !!me && me.id === pin.creatorId;
+
+    const handleDelete = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        await deletePin(pin.id);
+        setMenuOpen(false);
+    };
+
+    const handleEdit = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        navigate(`/aura/edit/${pin.id}`);
+    };
+
+    const menuItems = [
+        { label: "Save", onClick: (e: React.MouseEvent) => e.stopPropagation() },
+        { label: "Share", onClick: (e: React.MouseEvent) => e.stopPropagation() },
+        ...(isOwner ? [
+            { label: "Edit", onClick: handleEdit },
+            { label: "Delete", onClick: handleDelete },
+        ] : []),
+    ];
 
     return (
         <div
             className="relative break-inside-avoid mb-3 rounded-xl overflow-hidden group cursor-pointer"
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => { setHovered(false); setMenuOpen(false); }}
+            onClick={() => navigate(`/aura/preview/${pin.id}`)}
         >
-            {/* Image */}
             <img
                 src={pin.mediaUrl ?? ""}
                 alt={pin.title ?? "Pin"}
@@ -19,17 +47,14 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
                 loading="lazy"
             />
 
-            {/* Hover overlay */}
             <div className={`absolute inset-0 rounded-xl bg-black/30 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`} />
 
-            {/* Title on hover */}
             {pin.title && (
                 <div className={`absolute bottom-0 left-0 right-0 px-3 py-2.5 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
                     <p className="text-white text-xs font-medium truncate drop-shadow-lg">{pin.title}</p>
                 </div>
             )}
 
-            {/* Three dots menu button */}
             <div className={`absolute bottom-2 right-2 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
                 <button
                     onClick={(e) => { e.stopPropagation(); setMenuOpen(p => !p); }}
@@ -40,24 +65,26 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
                     ))}
                 </button>
 
-                {/* Dropdown */}
                 {menuOpen && (
                     <div className="absolute bottom-8 right-0 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-2xl overflow-hidden w-36 z-10">
-                        {["Save", "Share", "Edit", "Delete"].map((action) => (
+                        {menuItems.map(({ label, onClick }) => (
                             <button
-                                key={action}
-                                className="w-full text-left px-4 py-2.5 text-xs text-gray-300 hover:bg-white/10 hover:text-white transition-colors"
-                                onClick={(e) => e.stopPropagation()}
+                                key={label}
+                                className={`w-full text-left px-4 py-2.5 text-xs transition-colors
+                                    ${label === "Delete"
+                                        ? "text-red-400 hover:bg-red-500/10 hover:text-red-300"
+                                        : "text-gray-300 hover:bg-white/10 hover:text-white"
+                                    }`}
+                                onClick={onClick}
                             >
-                                {action}
+                                {label}
                             </button>
                         ))}
                     </div>
                 )}
             </div>
 
-            {/* Likes badge */}
-            {pin.likesCount > 0 && (
+            {pin.likesCount >= 0 && (
                 <div className={`absolute top-2 right-2 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
                     <span className="bg-black/50 text-white text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1">
                         <span>♥</span>
@@ -70,4 +97,3 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
 };
 
 export default PinCard;
-
