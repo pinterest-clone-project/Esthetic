@@ -33,6 +33,17 @@ public class CookieService(IHttpContextAccessor httpContextAccessor, IConfigurat
             Path = refreshTokenPath
         });
     }
+    public void UpdateAccessTokenCookie(string newAccessToken)
+    {
+        var sameSite = isProduction ? SameSiteMode.Strict : SameSiteMode.Lax;
+        context.Response.Cookies.Append(AuthTokenConstants.AccessTokenCookie, newAccessToken, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = isProduction,
+            SameSite = sameSite,
+            Expires = DateTimeOffset.UtcNow.AddMinutes(AppTimeToLive.AccessTokenMinutes)
+        });
+    }
 
     public void ClearTokenCookies()
     {

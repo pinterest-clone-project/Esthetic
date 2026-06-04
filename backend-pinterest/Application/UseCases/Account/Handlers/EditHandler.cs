@@ -11,9 +11,9 @@ namespace Application.UseCases.Account.Handlers;
 public class EditHandler(
     IImageService imageService,
     IJwtTokenService tokenService,
-    IAccountRepository accountRepository) : IRequestHandler<EditCommand, TokenDTO>
+    IAccountRepository accountRepository) : IRequestHandler<EditCommand, string>
 {
-    public async Task<TokenDTO> Handle(EditCommand request, CancellationToken cancellationToken)
+    public async Task<string> Handle(EditCommand request, CancellationToken cancellationToken)
     {
         var user = await accountRepository.GetByIdAsync(request.Id, cancellationToken);
 
@@ -27,13 +27,18 @@ public class EditHandler(
         user.Email = request.Email.Apply(user.Email);
         user.Bio = request.Bio.Apply(user.Bio);
         user.PhoneNumber = request.PhoneNumber.Apply(user.PhoneNumber);
+
         user.IsPrivate = request.IsPrivate ?? user.IsPrivate;
+        user.Gender = request.Gender ?? user.Gender;
+        user.BirthDate = request.BirthDate.HasValue
+        ? DateTime.SpecifyKind(request.BirthDate.Value, DateTimeKind.Utc)
+        : user.BirthDate;
 
         if (request.ImageFile != null)
             user.Image = await imageService.SaveImageAsync(request.ImageFile);
 
         var result = await accountRepository.EditAsync(user, cancellationToken);
 
-        return await tokenService.CreateTokenAsync(result);
+        return await tokenService.CreateAccessTokenOnlyAsync(result);
     }
 }

@@ -33,6 +33,12 @@ public class JwtTokenService(
             UserId = user.Id
         };
     }
+    public async Task<string> CreateAccessTokenOnlyAsync(UserEntity user)
+    {
+        var roles = await userManager.GetRolesAsync(user);
+        var claims = BuildClaims(user, roles);
+        return GenerateAccessToken(claims);
+    }
 
     public async Task<TokenDTO?> RefreshTokenAsync(string refreshToken)
     {
