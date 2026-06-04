@@ -30,7 +30,7 @@ const Sidebar = () => {
         <aside className="sticky top-[74px] w-16 bg-black flex flex-col items-center py-6 z-40 h-[calc(100vh-74px)] shrink-0">
             <nav className="flex flex-col items-center gap-2 flex-1">
                 {navItems.map(({ path, icon, label }) => {
-                    const active = isActive(path);
+                    const active = isActive(path) && !addFriendsOpen;
                     return (
                         <button
                             key={path}
@@ -68,7 +68,7 @@ const Sidebar = () => {
                         src={profileIcon}
                         style={{ filter: addFriendsOpen ? greenFilter : whiteFilter }}
                         className={`
-                                w-[30px] h-[30px] transition-all duration-200 group-hover:scale-110
+                                w-[30px] h-[36px] transition-all duration-200 group-hover:scale-110
                                 ${addFriendsOpen ? "opacity-100" : "opacity-50 group-hover:opacity-80"}
                             `}
                     />
