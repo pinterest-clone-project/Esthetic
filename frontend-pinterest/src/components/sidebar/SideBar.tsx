@@ -19,7 +19,7 @@ const Sidebar = () => {
     ];
 
     return (
-        <aside className="sticky  left-0 top-0 h-screen w-16 bg-black flex flex-col items-center py-6 z-40">
+        <aside className="sticky top-0 w-16 bg-black flex flex-col items-center py-6 z-40 h-[calc(100vh-60px)]">
             <nav className="flex flex-col items-center gap-8 flex-1">
                 {navItems.map(({ path, icon }) => (
                     <button key={path} onClick={() => navigate(path)}>
