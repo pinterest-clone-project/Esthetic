@@ -43,7 +43,7 @@ const Header: React.FC = () => {
     };
 
     return (
-        <header className="w-full bg-black py-3">
+        <header className="sticky top-0 z-50 w-full bg-black py-3">
             <div className="max-w-[1505px] h-[50px] mx-auto px-4 flex items-center justify-between gap-4
             ">
 
