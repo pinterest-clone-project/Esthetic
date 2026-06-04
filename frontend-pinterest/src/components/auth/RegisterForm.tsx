@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useLoginMutation, useGoogleLoginMutation } from "@/services/accountService.ts";
 import { useAppDispatch } from "@/store";
-import { setUser } from "@/store/slices/authSlice.ts";
+import {setLoading, setUser} from "@/store/slices/authSlice.ts";
 import Button from "@/components/button/Button.tsx";
 import GoogleIcon from "@/assets/icons/GoogleIcon.tsx";
 import logo from "@/assets/logo.png";
@@ -41,12 +41,15 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
     const loginWithGoogle = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
+            dispatch(setLoading(true));
             try {
                 const account = await loginByGoogle({ token: tokenResponse.access_token }).unwrap();
                 dispatch(setUser(account));
                 onSuccess?.();
             } catch (err) {
                 console.error("Google login failed", err);
+            }  finally {
+                dispatch(setLoading(false));
             }
         },
     });
@@ -165,7 +168,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 <Button
                     type="button"
                     disabled={isGoogleLoading}
-                    variant="dark"
+                    variant="primary"
                     fullWidth
                     radius={5}
                     icon={<GoogleIcon />}
