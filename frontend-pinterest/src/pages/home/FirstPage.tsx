@@ -1,4 +1,14 @@
+import im1 from "../../../src/assets/defaults/def-1.jpg"
+import im2 from "../../../src/assets/defaults/def-2.jpg"
+import im3 from "../../../src/assets/defaults/def-3.jpg"
+import im4 from "../../../src/assets/defaults/def-4.jpg"
+import im5 from "../../../src/assets/defaults/def-5.jpg"
+import im6 from "../../../src/assets/defaults/def-6.jpg"
+import im7 from "../../../src/assets/defaults/def-7.jpg"
+import im8 from "../../../src/assets/defaults/def-8.jpg"
+
 const FirstPage = () =>{
+
     return (
         <div>
         <section className={"flex-col flex items-center pt-12"}>
@@ -21,6 +31,40 @@ const FirstPage = () =>{
                 )}
             </div>
         </section>
+
+            {/* Gallery */}
+            <section className="mt-[70px] flex justify-center">
+                <div className="relative w-[1400px] h-[500px] overflow-hidden">
+
+                    <img
+                        src={im1}
+                        className="absolute left-[145px]  w-[200px] h-[350px] object-cover rounded-[15px]"
+                    />
+
+                    <img
+                        src={im2}
+                        className="absolute left-[390px] w-[200px] h-[400px] object-cover rounded-[15px]"
+                    />
+
+                    <img
+                        src={im3}
+                        className="absolute top-[40px] left-[623px] w-[200px] h-[400px] object-cover rounded-[15px]"
+                    />
+
+                    <img
+                        src={im5}
+                        className="absolute left-[1061px]  w-[200px] h-[400px] object-cover rounded-[15px]"
+                    />
+
+                    <img
+                        src={im4}
+                        className="absolute top-[80px] left-[876px] w-[200px] h-[370px] object-cover rounded-[15px]"
+                    />
+
+
+
+                </div>
+            </section>
 
         </div>
     )
