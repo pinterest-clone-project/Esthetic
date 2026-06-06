@@ -7,7 +7,7 @@ interface ModalProps {
     children: React.ReactNode;
     closeOnOverlay?: boolean;
     width?: number;
-    height?: number;
+    height?: number | "auto";
     borderRadius?: number;
     variant?: "centered" | "sidebar";
     title?: string;
@@ -90,7 +90,7 @@ const Modal = ({
             onClick={closeOnOverlay ? onClose : undefined}
         >
             <div
-                style={{ width, height, borderRadius }}
+                style={{ width, height: height === "auto" ? undefined : height, borderRadius }}
                 className="bg-white shadow-2xl overflow-y-auto p-8"
                 onClick={(e) => e.stopPropagation()}
             >

@@ -163,7 +163,7 @@ const Header: React.FC = () => {
             </div>
 
             <Modal isOpen={activeModal === "signup"} onClose={() => setActiveModal(null)}
-                    width={450} height={675} borderRadius={20}>
+                   width={450} height="auto" borderRadius={20}>
                 <RegisterForm onSuccess={() => setActiveModal(null)} />
             </Modal>
 
