@@ -1,24 +1,3 @@
-/*
-import React from "react";
-
-interface ModalProps {
-    children: React.ReactNode;
-}
-
-const Modal = ({ children }: ModalProps) => {
-    return (
-        <div className="flex items-start justify-center w-full h-full pt-8 pb-8">
-            <div className="bg-white rounded-2xl shadow-2xl w-[440px] max-h-full overflow-y-auto p-8">
-                {children}
-            </div>
-        </div>
-    );
-};
-
-export default Modal;
-*/
-
-
 import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 
@@ -28,8 +7,10 @@ interface ModalProps {
     children: React.ReactNode;
     closeOnOverlay?: boolean;
     width?: number;
-    height?: number;
+    height?: number | "auto";
     borderRadius?: number;
+    variant?: "centered" | "sidebar";
+    title?: string;
 }
 
 const Modal = ({
@@ -40,6 +21,8 @@ const Modal = ({
                    width = 450,
                    height = 675,
                    borderRadius = 20,
+                   variant = "centered",
+                   title,
                }: ModalProps) => {
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -56,13 +39,58 @@ const Modal = ({
 
     if (!isOpen) return null;
 
+    if (variant === "sidebar") {
+        return createPortal(
+            <>
+                {closeOnOverlay && (
+                    <div
+                        className="fixed inset-0 z-40"
+                        onClick={onClose}
+                    />
+                )}
+
+                <div
+                    style={{ width,
+                        left: `calc((100vw - 1505px) / 2 + 64px)` ,
+                        top: 0,  borderTopRightRadius: borderRadius,
+                        borderBottomRightRadius: borderRadius,
+                        borderTopLeftRadius: 0,
+                        borderBottomLeftRadius: 0,}}
+                    className="fixed bottom-0 z-50 bg-[#1a1a1a] shadow-2xl flex flex-col"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    {title && (
+                        <div className="flex items-center justify-between px-5 py-4 border-b border-[#2a2a2a] shrink-0">
+                            <h2 className="text-white font-semibold text-base tracking-[-0.5px]">
+                                {title}
+                            </h2>
+                            <button
+                                onClick={onClose}
+                                className="w-7 h-7 flex items-center justify-center rounded-full bg-[#2a2a2a] hover:bg-[#3a3a3a] transition-colors"
+                            >
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
+                                    <path d="M18 6L6 18M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    )}
+
+                    <div className="flex-1 overflow-y-auto p-5">
+                        {children}
+                    </div>
+                </div>
+            </>,
+            document.body
+        );
+    }
+
     return createPortal(
         <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
             onClick={closeOnOverlay ? onClose : undefined}
         >
             <div
-                style={{ width, height, borderRadius }}
+                style={{ width, height: height === "auto" ? undefined : height, borderRadius }}
                 className="bg-white shadow-2xl overflow-y-auto p-8"
                 onClick={(e) => e.stopPropagation()}
             >

@@ -11,4 +11,6 @@ export interface IAccount {
     createdAt: string;
     updatedAt: string;
     roles: string[];
+    gender: number;
+    birthDate: string;
 }

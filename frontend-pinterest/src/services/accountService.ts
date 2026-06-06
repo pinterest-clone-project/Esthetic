@@ -16,6 +16,7 @@ export const accountService = api.injectEndpoints({
                 method: "POST",
                 body: credentials,
             }),
+            invalidatesTags: ["CurrentUser"],
         }),
 
         register: builder.mutation<IAccount, IRegisterRequest>({
@@ -32,6 +33,7 @@ export const accountService = api.injectEndpoints({
                 method: "PATCH",
                 body: serializePatch(data),
             }),
+            invalidatesTags: ["CurrentUser"],
         }),
 
         forgotPassword: builder.mutation<void, IForgotPasswordRequest>({
@@ -55,10 +57,12 @@ export const accountService = api.injectEndpoints({
                 url: "Account/logout",
                 method: "POST",
             }),
+            invalidatesTags: ["CurrentUser"],
         }),
 
         getMe: builder.query<IAccount, void>({
             query: () => "Account/me",
+            providesTags: ["CurrentUser"],
         }),
 
         googleLogin: builder.mutation<IAccount, { token: string }>({
@@ -67,6 +71,7 @@ export const accountService = api.injectEndpoints({
                 method: "POST",
                 body,
             }),
+            invalidatesTags: ["CurrentUser"],
         }),
     }),
 });

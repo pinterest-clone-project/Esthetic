@@ -6,6 +6,7 @@ import {
 } from "@reduxjs/toolkit/query";
 import { APP_ENV } from "../constants/env";
 import { Mutex } from "async-mutex";
+import {clearUser} from "@/store/slices/authSlice.ts";
 
 const mutex = new Mutex();
 
@@ -35,7 +36,7 @@ export const createBaseQuery = (
         }
 
         const url = typeof args === "string" ? args : args.url ?? "";
-        const skipRefresh = ["Account/refresh", "Account/login", "Account/me"]
+        const skipRefresh = ["Account/refresh", "Account/login"]
             .some(u => url.includes(u));
 
         if (skipRefresh) {
@@ -59,9 +60,7 @@ export const createBaseQuery = (
             if (!refreshResult.error) {
                 result = await rawBaseQuery(normalizedArgs, api, extraOptions);
             } else {
-                if (!window.location.pathname.includes("/login")) {
-                    window.location.href = "/login";
-                }
+                api.dispatch(clearUser());
             }
         } finally {
             release();

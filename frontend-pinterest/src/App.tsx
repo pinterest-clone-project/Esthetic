@@ -1,19 +1,26 @@
 import {Route, Routes} from "react-router";
-import HomePage from "./pages/home/HomePage.tsx";
 import CreateAuraPage from "./pages/aura/CreateAuraPage.tsx";
 import AuraPreviewPage from "./pages/aura/AuraPreviewPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
 import Layout from "./layout/Layout.tsx";
-import { useEffect } from "react";
-import { useAppDispatch } from "./store";
-import { setUser } from "./store/slices/authSlice";
-import { useGetMeQuery } from "./services/accountService";
+import {useEffect} from "react";
+import {useAppDispatch, useAppSelector} from "./store";
+import {setLoading, setUser} from "./store/slices/authSlice";
+import {useGetMeQuery} from "./services/accountService";
+import ProfilePage from "@/pages/profile/ProfilePage.tsx";
+import PrivateRoute from "@/components/PrivateRoute.tsx";
+import Spinner from "@/components/Spinner.tsx";
+import FirstPage from "@/pages/home/FirstPage.tsx";
+import ReviewPage from "@/pages/home/ReviewPage.tsx";
 
-const AppInit = ({ children }: { children: React.ReactNode }) => {
+const AppInit = ({children}: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
-    const { data, isSuccess } = useGetMeQuery(undefined, {
-        skip: false,
-    });
+    const {data, isSuccess, isLoading} = useGetMeQuery(undefined, {skip: false,});
+    const globalLoading = useAppSelector((state) => state.auth.isLoading);
+
+    useEffect(() => {
+        dispatch(setLoading(isLoading));
+    }, [isLoading]);
 
     useEffect(() => {
         if (isSuccess && data) {
@@ -21,30 +28,42 @@ const AppInit = ({ children }: { children: React.ReactNode }) => {
         }
     }, [isSuccess, data, dispatch]);
 
-    return <>{children}</>;
+    return (
+        <>
+            {globalLoading && <Spinner/>}
+            {children}
+        </>
+    );
 };
 
 
 const App = () => {
 
-  return (
-    <AppInit>
-      <Routes>
-          <Route element={<Layout/>}>
-              <Route path="/">
-                  <Route index element={<HomePage />} />
-                  <Route path="aura/">
-                      <Route path="create" element={<CreateAuraPage />} />
-                      <Route path="preview/:id" element={<AuraPreviewPage />} />
-                  </Route>
-              </Route>
+    return (
+        <AppInit>
+            <Routes>
+                <Route element={<Layout/>}>
+                    <Route path="/">
+                        <Route index element={<FirstPage/>}/>
+                        <Route path="aura/">
+                            <Route path="create" element={<CreateAuraPage/>}/>
+                            <Route path="preview/:id" element={<AuraPreviewPage/>}/>
+                        </Route>
+                        <Route path={"review"} element={<ReviewPage/>}></Route>
 
-              <Route path="*" element={<NotFoundPage />} />
-          </Route>
+                        <Route element={<PrivateRoute/>}>
+                            <Route path="/profile">
+                                <Route index element={<ProfilePage/>}/>
+                            </Route>
+                        </Route>
 
-      </Routes>
-    </AppInit>
-  )
+                        <Route path="*" element={<NotFoundPage/>}/>
+                    </Route>
+                </Route>
+
+            </Routes>
+        </AppInit>
+    )
 }
 
 export default App
