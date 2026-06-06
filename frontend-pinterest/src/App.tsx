@@ -2,18 +2,23 @@ import {Route, Routes} from "react-router";
 import HomePage from "./pages/home/HomePage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
 import Layout from "./layout/Layout.tsx";
-import { useEffect } from "react";
-import { useAppDispatch } from "./store";
-import { setUser } from "./store/slices/authSlice";
+import {useEffect} from "react";
+import {useAppDispatch, useAppSelector} from "./store";
+import {setLoading, setUser} from "./store/slices/authSlice";
 import { useGetMeQuery } from "./services/accountService";
 import ProfilePage from "@/pages/profile/ProfilePage.tsx";
+import PrivateRoute from "@/components/PrivateRoute.tsx";
+import Spinner from "@/components/Spinner.tsx";
 import FirstPage from "@/pages/home/FirstPage.tsx";
 
 const AppInit = ({ children }: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
-    const { data, isSuccess } = useGetMeQuery(undefined, {
-        skip: false,
-    });
+    const { data, isSuccess, isLoading } = useGetMeQuery(undefined, { skip: false, });
+    const globalLoading = useAppSelector((state) => state.auth.isLoading);
+
+    useEffect(() => {
+        dispatch(setLoading(isLoading));
+    }, [isLoading]);
 
     useEffect(() => {
         if (isSuccess && data) {
@@ -21,7 +26,12 @@ const AppInit = ({ children }: { children: React.ReactNode }) => {
         }
     }, [isSuccess, data, dispatch]);
 
-    return <>{children}</>;
+    return (
+        <>
+            {globalLoading && <Spinner />}
+            {children}
+        </>
+    );
 };
 
 
@@ -35,8 +45,10 @@ const App = () => {
                   <Route index element={<FirstPage />} />
               </Route>
 
-              <Route path="/profile">
-                  <Route index element={<ProfilePage />} />
+              <Route element={<PrivateRoute />}>
+                  <Route path="/profile">
+                      <Route index element={<ProfilePage />} />
+                  </Route>
               </Route>
 
               <Route path="*" element={<NotFoundPage />} />

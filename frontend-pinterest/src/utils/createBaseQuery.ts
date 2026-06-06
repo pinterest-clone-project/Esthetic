@@ -6,6 +6,7 @@ import {
 } from "@reduxjs/toolkit/query";
 import { APP_ENV } from "../constants/env";
 import { Mutex } from "async-mutex";
+import {clearUser} from "@/store/slices/authSlice.ts";
 
 const mutex = new Mutex();
 
@@ -59,9 +60,7 @@ export const createBaseQuery = (
             if (!refreshResult.error) {
                 result = await rawBaseQuery(normalizedArgs, api, extraOptions);
             } else {
-                if (!window.location.pathname.includes("/login")) {
-                    window.location.href = "/login";
-                }
+                api.dispatch(clearUser());
             }
         } finally {
             release();
