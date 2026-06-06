@@ -7,6 +7,7 @@ import { useAppDispatch } from "./store";
 import { setUser } from "./store/slices/authSlice";
 import { useGetMeQuery } from "./services/accountService";
 import ProfilePage from "@/pages/profile/ProfilePage.tsx";
+import FirstPage from "@/pages/home/FirstPage.tsx";
 
 const AppInit = ({ children }: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
@@ -31,7 +32,7 @@ const App = () => {
       <Routes>
           <Route element={<Layout/>}>
               <Route path="/">
-                  <Route index element={<HomePage />} />
+                  <Route index element={<FirstPage />} />
               </Route>
 
               <Route path="/profile">
