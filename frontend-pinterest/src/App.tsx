@@ -1,5 +1,4 @@
 import {Route, Routes} from "react-router";
-import HomePage from "./pages/home/HomePage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
 import Layout from "./layout/Layout.tsx";
 import {useEffect} from "react";
@@ -9,6 +8,8 @@ import { useGetMeQuery } from "./services/accountService";
 import ProfilePage from "@/pages/profile/ProfilePage.tsx";
 import PrivateRoute from "@/components/PrivateRoute.tsx";
 import Spinner from "@/components/Spinner.tsx";
+import FirstPage from "@/pages/home/FirstPage.tsx";
+import ReviewPage from "@/pages/home/ReviewPage.tsx";
 
 const AppInit = ({ children }: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
@@ -41,7 +42,8 @@ const App = () => {
       <Routes>
           <Route element={<Layout/>}>
               <Route path="/">
-                  <Route index element={<HomePage />} />
+                  <Route index element={<FirstPage />} />
+                  <Route path={"review"} element={<ReviewPage/>}></Route>
               </Route>
 
               <Route element={<PrivateRoute />}>

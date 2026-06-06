@@ -10,7 +10,7 @@ const Layout = () => {
             <Header />
             <div className="flex flex-1 max-w-[1505px] mx-auto w-full">
                 {user && <Sidebar />}
-                <main className="flex-1 px-4">
+                <main className="flex-1 px-4 scroll-smooth">
                     <Outlet/>
                 </main>
             </div>

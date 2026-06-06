@@ -72,7 +72,7 @@ const Header: React.FC = () => {
                     <div className="flex items-center bg-[#535353] rounded-[10px] px-4 h-9 w-full max-w-[586px] h-[40px]">
                         <img
                             src={searchIcon}
-                            className="w-[27px] h-[27px] opacity-70"
+                            className="w-[27px] h-[27px] opacity-70 hover:cursor-pointer"
                         />
 
                         <input
