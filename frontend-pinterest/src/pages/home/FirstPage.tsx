@@ -61,9 +61,27 @@ const FirstPage = () =>{
                         className="absolute top-[80px] left-[876px] w-[200px] h-[370px] object-cover rounded-[15px]"
                     />
 
-
-
                 </div>
+            </section>
+
+            <section className="-mx-[calc((100vw-1505px)/2)]">
+                <a href={"#see-how-it-works"} className="w-screen h-[70px] bg-btn-primary text-black font-medium text-2xl flex items-center justify-center gap-2 ">
+                    See how it works
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                    >
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </a>
+            </section>
+
+            <section id={"see-how-it-works"} className={"h-full"}>
+                <div>hello</div>
             </section>
 
         </div>
