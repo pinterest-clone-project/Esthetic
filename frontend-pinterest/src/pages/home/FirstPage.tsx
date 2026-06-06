@@ -82,9 +82,34 @@ const FirstPage = () =>{
 
             <section id={"see-how-it-works"} className={"min-h-screen"}>
                 <div className={"grid grid-cols-2 text-white pt-52"}>
-                    <div>g</div>
-                    <div className={"flex flex-col items-center text-white "}>
-                        <div className={"font-bold leading-[45px] tracking-[-0.5px] lg:text-[64px] text-4xl"}>Find your Ideas</div>
+                    <section className="flex mt-0 justify-center">
+                        <div className="relative w-[1400px] h-[900px] overflow-hidden">
+
+                            <img
+                                src={im6}
+                                className="absolute mt-6 left-[152px] w-[150px] h-[150px] object-cover rounded-[15px]"
+                            />
+
+                            <img
+                                src={im7}
+                                className="absolute ml-12 left-[304px] w-[300px] h-[300px] object-cover rounded-[15px]"
+                            />
+
+                            <img
+                                src={im8}
+                                className="absolute mt-[325px] left-[416px] w-[200px] h-[200px] object-cover rounded-[15px]"
+                            />
+
+                            <img
+                                src={im5}
+                                className="absolute top-18 left-[240px] w-[300px] h-[400px] object-cover rounded-[15px]"
+                            />
+
+                        </div>
+                    </section>
+
+                    <section className={"flex flex-col items-center text-white "}>
+                        <div className={"font-bold leading-[45px] pt-[50px] tracking-[-0.5px] lg:text-[64px] text-4xl"}>Find your Ideas</div>
                         <p className={"leading-[45px] max-w-[493px] text-center tracking-[-0.5px] pt-18 lg:text-[32px] text-xl"}
                         >What else would you like to try?
                             Type in a search term for a topic
@@ -93,7 +118,7 @@ const FirstPage = () =>{
                         <a className={"w-[200px] h-[50px] rounded-[10px] text-center pt-2 text-[20px] mt-18 bg-btn-primary hover:bg-btn-dark text-black"}>
                             Review
                         </a>
-                    </div>
+                    </section>
 
                 </div>
             </section>
