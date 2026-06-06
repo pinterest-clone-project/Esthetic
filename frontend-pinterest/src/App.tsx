@@ -9,6 +9,7 @@ import ProfilePage from "@/pages/profile/ProfilePage.tsx";
 import PrivateRoute from "@/components/PrivateRoute.tsx";
 import Spinner from "@/components/Spinner.tsx";
 import FirstPage from "@/pages/home/FirstPage.tsx";
+import ReviewPage from "@/pages/home/ReviewPage.tsx";
 
 const AppInit = ({ children }: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
@@ -42,6 +43,7 @@ const App = () => {
           <Route element={<Layout/>}>
               <Route path="/">
                   <Route index element={<FirstPage />} />
+                  <Route path={"review"} element={<ReviewPage/>}></Route>
               </Route>
 
               <Route element={<PrivateRoute />}>

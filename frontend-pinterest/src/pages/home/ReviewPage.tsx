@@ -6,7 +6,7 @@ const PinCardSkeleton = () => (
          style={{ height: `${Math.floor(Math.random() * 120) + 160}px` }} />
 );
 
-const HomePage = () => {
+const ReviewPage = () => {
     const { data: pins, isLoading, isError } = useGetAllPinsQuery();
 
     return (
@@ -35,5 +35,5 @@ const HomePage = () => {
     );
 };
 
-export default HomePage;
+export default ReviewPage;
 

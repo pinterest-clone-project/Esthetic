@@ -7,30 +7,31 @@ import im6 from "../../../src/assets/defaults/def-6.jpg"
 import im7 from "../../../src/assets/defaults/def-7.jpg"
 import im8 from "../../../src/assets/defaults/def-8.jpg"
 
-const FirstPage = () =>{
-
+const FirstPage = () => {
     return (
         <div className="scroll-smooth">
-        <section className={"flex-col flex items-center pt-8"}>
-            <div className={"lg:text-[64px] text-4xl font-bold top-32 leading-[45px] tracking-normal text-center text-white "}>
-                Explore new ideas & inspirations</div>
-            <div className={"lg:text-[24px] text-sm top-32 lg:leading-[45px] leading-[20px] lg:pt-6 pt-3 tracking-normal text-center max-w-[1011px] text-[#A1A1A1A1] "}>
-                Discover and save your favourites from around the web</div>
 
-            {/* Categories */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-8">
-                {["Concept Art", "Photography", "Nature", "Wallpapers"].map(
-                    (category) => (
-                        <button
-                            key={category}
-                            className="bg-[#535353] lg:text-sm text-[11px] px-8 py-2 rounded-[5px] lg:min-w-[200px] md:min-w-[190px] min-w-[130px] lg:min-h-[35px] min-h-[27px] text-white hover:bg-[#666] hover:cursor-pointer"
-                        >
-                            {category}
-                        </button>
-                    )
-                )}
-            </div>
-        </section>
+            {/* Intro */}
+            <section className={"flex-col flex items-center pt-8"}>
+                <div className={"lg:text-[64px] text-4xl font-bold top-32 leading-[45px] tracking-normal text-center text-white "}>
+                    Explore new ideas & inspirations</div>
+                <div className={"lg:text-[24px] text-sm top-32 lg:leading-[45px] leading-[20px] lg:pt-6 pt-3 tracking-normal text-center max-w-[1011px] text-[#A1A1A1A1] "}>
+                    Discover and save your favourites from around the web</div>
+
+                {/* Categories */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-8">
+                    {["Concept Art", "Photography", "Nature", "Wallpapers"].map(
+                        (category) => (
+                            <button
+                                key={category}
+                                className="bg-[#535353] lg:text-sm text-[11px] px-8 py-2 rounded-[5px] lg:min-w-[200px] md:min-w-[190px] min-w-[130px] lg:min-h-[35px] min-h-[27px] text-white hover:bg-[#666] hover:cursor-pointer"
+                            >
+                                {category}
+                            </button>
+                        )
+                    )}
+                </div>
+            </section>
 
             {/* Gallery */}
             <section className="mt-[60px] flex justify-center">
@@ -80,50 +81,49 @@ const FirstPage = () =>{
                 </a>
             </section>
 
-            <section id={"see-how-it-works"} className={"min-h-screen"}>
-                <div className={"grid grid-cols-2 text-white pt-52"}>
-                    <section className="flex mt-0 justify-center">
-                        <div className="relative w-[1400px] h-[900px] overflow-hidden">
+            {/* Second section that is scrolled down*/}
+            <section id={"see-how-it-works"} className={"min-h-screen flex items-center"}>
 
-                            <img
-                                src={im6}
-                                className="absolute mt-6 left-[152px] w-[150px] h-[150px] object-cover rounded-[15px]"
-                            />
+                <div className={"grid grid-cols-1 lg:grid-cols-2 text-white w-full"}>
 
-                            <img
-                                src={im7}
-                                className="absolute ml-12 left-[304px] w-[300px] h-[300px] object-cover rounded-[15px]"
-                            />
+                    {/* Left column with images */}
+                    <section className="flex justify-center">
+                        <div className="relative w-[1400px] h-[600px] overflow-hidden">
 
-                            <img
-                                src={im8}
-                                className="absolute mt-[325px] left-[416px] w-[200px] h-[200px] object-cover rounded-[15px]"
-                            />
-
-                            <img
-                                src={im5}
-                                className="absolute top-18 left-[240px] w-[300px] h-[400px] object-cover rounded-[15px]"
-                            />
+                            <img src={im6} className="absolute mt-6 left-[152px] w-[150px] h-[150px] object-cover rounded-[15px]" />
+                            <img src={im7} className="absolute ml-12 left-[304px] w-[300px] h-[300px] object-cover rounded-[15px]" />
+                            <img src={im8} className="absolute mt-[325px] left-[416px] w-[200px] h-[200px] object-cover rounded-[15px]" />
+                            <img src={im5} className="absolute top-18 left-[240px] w-[300px] h-[400px] object-cover rounded-[15px]" />
 
                         </div>
                     </section>
 
-                    <section className={"flex flex-col items-center text-white "}>
-                        <div className={"font-bold leading-[45px] pt-[50px] tracking-[-0.5px] lg:text-[64px] text-4xl"}>Find your Ideas</div>
-                        <p className={"leading-[45px] max-w-[493px] text-center tracking-[-0.5px] pt-18 lg:text-[32px] text-xl"}
-                        >What else would you like to try?
-                            Type in a search term for a topic
-                            you're interested in, like "Nature,"
-                            and browse the results</p>
-                        <a className={"w-[200px] h-[50px] rounded-[10px] text-center pt-2 text-[20px] mt-18 bg-btn-primary hover:bg-btn-dark text-black"}>
+                    {/* Right column with text */}
+                    <section className={"flex flex-col items-center text-white"}>
+                        <div className={"font-bold leading-[45px] mt-16 tracking-[-0.5px] lg:text-[64px] text-4xl"}>
+                            Find your Ideas
+                        </div>
+
+                        <p className={"leading-[45px] max-w-[493px] mt-16 text-center tracking-[-0.5px] lg:text-[32px] text-xl"}>
+                            What else would you like to try?
+                            Type in a search term for a topic you're interested in, like "Nature,"
+                            and browse the results
+                        </p>
+
+                        <a
+                            href={"review"}
+                            className={"w-[200px] h-[50px] rounded-[10px] mt-16 text-center pt-2 text-[20px] bg-btn-primary hover:bg-btn-dark text-black"}
+                        >
                             Review
                         </a>
                     </section>
 
                 </div>
+
             </section>
 
         </div>
     )
 }
+
 export default FirstPage;
