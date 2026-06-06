@@ -1,19 +1,21 @@
 import {Route, Routes} from "react-router";
+import CreateAuraPage from "./pages/aura/CreateAuraPage.tsx";
+import AuraPreviewPage from "./pages/aura/AuraPreviewPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
 import Layout from "./layout/Layout.tsx";
 import {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "./store";
 import {setLoading, setUser} from "./store/slices/authSlice";
-import { useGetMeQuery } from "./services/accountService";
+import {useGetMeQuery} from "./services/accountService";
 import ProfilePage from "@/pages/profile/ProfilePage.tsx";
 import PrivateRoute from "@/components/PrivateRoute.tsx";
 import Spinner from "@/components/Spinner.tsx";
 import FirstPage from "@/pages/home/FirstPage.tsx";
 import ReviewPage from "@/pages/home/ReviewPage.tsx";
 
-const AppInit = ({ children }: { children: React.ReactNode }) => {
+const AppInit = ({children}: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
-    const { data, isSuccess, isLoading } = useGetMeQuery(undefined, { skip: false, });
+    const {data, isSuccess, isLoading} = useGetMeQuery(undefined, {skip: false,});
     const globalLoading = useAppSelector((state) => state.auth.isLoading);
 
     useEffect(() => {
@@ -28,7 +30,7 @@ const AppInit = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <>
-            {globalLoading && <Spinner />}
+            {globalLoading && <Spinner/>}
             {children}
         </>
     );
@@ -37,27 +39,31 @@ const AppInit = ({ children }: { children: React.ReactNode }) => {
 
 const App = () => {
 
-  return (
-    <AppInit>
-      <Routes>
-          <Route element={<Layout/>}>
-              <Route path="/">
-                  <Route index element={<FirstPage />} />
-                  <Route path={"review"} element={<ReviewPage/>}></Route>
-              </Route>
+    return (
+        <AppInit>
+            <Routes>
+                <Route element={<Layout/>}>
+                    <Route path="/">
+                        <Route index element={<FirstPage/>}/>
+                        <Route path="aura/">
+                            <Route path="create" element={<CreateAuraPage/>}/>
+                            <Route path="preview/:id" element={<AuraPreviewPage/>}/>
+                        </Route>
+                        <Route path={"review"} element={<ReviewPage/>}></Route>
 
-              <Route element={<PrivateRoute />}>
-                  <Route path="/profile">
-                      <Route index element={<ProfilePage />} />
-                  </Route>
-              </Route>
+                        <Route element={<PrivateRoute/>}>
+                            <Route path="/profile">
+                                <Route index element={<ProfilePage/>}/>
+                            </Route>
+                        </Route>
 
-              <Route path="*" element={<NotFoundPage />} />
-          </Route>
+                        <Route path="*" element={<NotFoundPage/>}/>
+                    </Route>
+                </Route>
 
-      </Routes>
-    </AppInit>
-  )
+            </Routes>
+        </AppInit>
+    )
 }
 
 export default App
