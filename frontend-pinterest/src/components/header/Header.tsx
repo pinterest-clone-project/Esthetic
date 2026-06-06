@@ -8,9 +8,9 @@ import RegisterForm from "@/components/auth/RegisterForm.tsx";
 import {useAppDispatch, useAppSelector} from "@/store";
 import bellIcon from "../../../src/assets/icons/bell_icon.svg";
 import userIcon from "../../../src/assets/icons/user_icon.svg";
-import {clearUser} from "@/store/slices/authSlice.ts";
+import {clearUser, setLoading} from "@/store/slices/authSlice.ts";
 import {APP_ENV} from "@/constants/env";
-import {Link} from "react-router";
+import {Link, useNavigate} from "react-router";
 import { useLogoutMutation } from "@/services/accountService";
 
 
@@ -22,6 +22,7 @@ const Header: React.FC = () => {
     const dropdownRef = useRef<HTMLDivElement>(null);
     const user = useAppSelector((state) => state.auth.user);
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const [logout] = useLogoutMutation();
 
@@ -37,13 +38,20 @@ const Header: React.FC = () => {
 
 
     const handleLogout = async () => {
-        await logout();
-        dispatch(clearUser());
-        setDropdownOpen(false);
+        try {
+            await logout();
+        } catch (error) {
+            console.error("Помилка під час logout:", error);
+        } finally {
+            dispatch(clearUser());
+            setDropdownOpen(false);
+            navigate("/");
+            dispatch(setLoading(false));
+        }
     };
 
     return (
-        <header className="w-full bg-black py-3">
+        <header className="sticky top-0 z-50 w-full bg-black py-3">
             <div className="max-w-[1505px] h-[50px] mx-auto px-4 flex items-center justify-between gap-4
             ">
 
@@ -99,7 +107,7 @@ const Header: React.FC = () => {
                             <div className="relative" ref={dropdownRef}>
                                 <div className="flex items-center gap-1">
                                     <Link to="/profile">
-                                        <div className="w-9 h-9 rounded-full bg-[var(--color-btn-primary)] flex items-center justify-center overflow-hidden">
+                                        <div className="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden">
                                             {user.image ? (
                                                 <img
                                                     src={`${APP_ENV.IMAGES_100_URL}${user.image}`}
@@ -155,7 +163,7 @@ const Header: React.FC = () => {
             </div>
 
             <Modal isOpen={activeModal === "signup"} onClose={() => setActiveModal(null)}
-                    width={450} height={675} borderRadius={20}>
+                   width={450} height="auto" borderRadius={20}>
                 <RegisterForm onSuccess={() => setActiveModal(null)} />
             </Modal>
 
