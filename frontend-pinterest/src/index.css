@@ -9,12 +9,26 @@
 
     --font-sans: 'Inter', system-ui, sans-serif;
     --font-size-sm: 14px;
+    --font-size-xs: 12px;
 
     --color-button-text-color: #000000;
+    --color-text-muted: #A1A1A1;
+    --color-text-dark: #000000;
 }
 
 @layer base {
     body {
         font-family: var(--font-sans);
+    }
+}
+
+
+@layer components {
+    .btn-text {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: -0.5px;
+        text-align: center;
     }
 }

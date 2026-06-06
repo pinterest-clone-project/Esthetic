@@ -1,43 +1,58 @@
 import React from "react";
 
-type ButtonVariant = 'primary' | 'secondary' | 'dark';
+type ButtonVariant = "primary" | "secondary" | "dark";
+type ButtonSize = "sm" | "md" | "lg";
 
-interface ButtonProps {
-    label: string;
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: ButtonVariant;
-    onClick?: () => void;
-    disabled?: boolean;
-    type?: 'button' | 'submit' | 'reset';
+    size?: ButtonSize;
     fullWidth?: boolean;
     icon?: React.ReactNode;
+    radius?: number;
+    children: React.ReactNode;
 }
 
+const variantStyles: Record<ButtonVariant, string> = {
+    primary:   "bg-[var(--color-btn-primary)] hover:opacity-90 text-[var(--color-button-text-color)]",
+    secondary: "bg-[var(--color-btn-secondary)] hover:opacity-90 text-[var(--color-button-text-color)]",
+    dark:      "bg-[var(--color-btn-dark)] hover:opacity-90 text-[var(--color-button-text-color)]",
+};
+
+const sizeStyles: Record<ButtonSize, string> = {
+    sm: "h-8 px-4 text-[var(--font-size-sm)]",
+    md: "h-10 px-5 text-[var(--font-size-sm)]",
+    lg: "h-12 px-6 text-base",
+};
+
 const Button = ({
-                    label,
-                    variant = 'primary',
-                    onClick,
-                    disabled = false,
-                    type = 'button',
+                    variant = "primary",
+                    size = "md",
                     fullWidth = false,
                     icon,
+                    radius = 5,
+                    children,
+                    className = "",
+                    style,
+                    ...props
                 }: ButtonProps) => {
     return (
         <button
-            type={type}
-            onClick={onClick}
-            disabled={disabled}
+            style={{ borderRadius: `${radius}px`, ...style }}
             className={`
-        h-[44px] rounded-[8px] font-sans font-medium text-sm transition-opacity
-        flex items-center justify-center gap-3
-        ${fullWidth ? 'w-full' : 'w-[200px]'}
-        ${variant === 'primary' ? 'bg-btn-primary text-button-text-color hover:opacity-90' : ''}
-        ${variant === 'secondary' ? 'bg-btn-secondary text-button-text-color hover:opacity-90' : ''}
-        ${variant === 'dark' ? 'bg-btn-dark text-button-text-color hover:opacity-90' : ''}
-        ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-      `}
+                btn-text
+                transition-opacity duration-200
+                flex items-center justify-center gap-2
+                w-[200px]
+                ${variantStyles[variant]}
+                ${sizeStyles[size]}
+                ${fullWidth ? "!w-full" : ""}
+                disabled:opacity-50 disabled:cursor-not-allowed
+                ${className}
+            `}
+            {...props}
         >
-            {icon ? icon : null}
-            {label}
+            {icon && <span className="flex items-center">{icon}</span>}
+            {children}
         </button>
     );
 };

@@ -1,6 +1,8 @@
 using Application.Common.Exceptions;
 using Application.Common.Validators;
+using Application.Interfaces;
 using Application.UseCases.Account.Commands;
+using Application.UseCases.Account.Queries;
 using Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +13,7 @@ namespace backend_pinterest.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AccountController(IMediator mediator) : ControllerBase
+public class AccountController(IMediator mediator, ICookieService cookieService) : ControllerBase
 {
     private Guid CurrentUserId => Guid.Parse(
         User.FindFirstValue(JwtClaims.Id)
@@ -20,24 +22,39 @@ public class AccountController(IMediator mediator) : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginCommand command)
     {
-        var result = await mediator.Send(command);
-        return Ok(result);
+        var tokens = await mediator.Send(command);
+        cookieService.SetTokenCookies(tokens);
+        var user = await mediator.Send(new GetMeQuery(tokens.UserId));
+        return Ok(user);
     }
 
-    [HttpPost]
-    [Route("register")]
+    [HttpPost("register")]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> Register([FromForm] RegisterCommand command)
     {
-        var result = await mediator.Send(command);
-        return Ok(result);
+        var tokens = await mediator.Send(command);
+        cookieService.SetTokenCookies(tokens);
+        var user = await mediator.Send(new GetMeQuery(tokens.UserId));
+        return Ok(user);
     }
 
     [HttpPost("refresh")]
-    public async Task<IActionResult> Refresh([FromBody] RefreshCommand command)
+    public async Task<IActionResult> Refresh()
     {
-        var result = await mediator.Send(command);
-        return Ok(result);
+        var refreshToken = cookieService.GetRefreshToken()
+            ?? throw new UnauthorizedException(ValidationMessages.InvalidRefreshToken);
+
+        var tokens = await mediator.Send(new RefreshCommand(refreshToken));
+        cookieService.SetTokenCookies(tokens);
+        return Ok();
+    }
+
+    [HttpPost("logout")]
+    [Authorize]
+    public IActionResult Logout()
+    {
+        cookieService.ClearTokenCookies();
+        return Ok();
     }
 
     [Authorize]
@@ -45,33 +62,42 @@ public class AccountController(IMediator mediator) : ControllerBase
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> Edit([FromForm] EditCommand command)
     {
-        var commadWithId = command with { Id = CurrentUserId };
-        var result = await mediator.Send(commadWithId);
-        return Ok(result);
+        var commandWithId = command with { Id = CurrentUserId };
+        var newAccessToken = await mediator.Send(commandWithId);
+        cookieService.UpdateAccessTokenCookie(newAccessToken);
+        return Ok();
     }
 
     [HttpPost("forgot-password")]
     [AllowAnonymous]
     public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordCommand command)
     {
-        var result = await mediator.Send(command);
-        return Ok(result);
+        await mediator.Send(command);
+        return Ok();
     }
 
     [HttpPost("reset-password")]
     [AllowAnonymous]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
     {
-        var result = await mediator.Send(command);
-        return Ok(result);
+        await mediator.Send(command);
+        return Ok();
     }
-
 
     [HttpPost("google")]
     public async Task<IActionResult> Google([FromBody] GoogleCommand command)
     {
-        var result = await mediator.Send(command);
-        return Ok(result);
+        var tokens = await mediator.Send(command);
+        cookieService.SetTokenCookies(tokens);
+        var user = await mediator.Send(new GetMeQuery(tokens.UserId));
+        return Ok(user);
     }
 
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> Me()
+    {
+        var user = await mediator.Send(new GetMeQuery(CurrentUserId));
+        return Ok(user);
+    }
 }
