@@ -13,7 +13,7 @@ const FirstPage = () =>{
                     (category) => (
                         <button
                             key={category}
-                            className="bg-[#535353] lg:text-sm text-[11px] px-8 py-2 rounded-[5px] max-w-[200px] max-h-[35px] text-white hover:bg-[#666] hover:cursor-pointer"
+                            className="bg-[#535353] lg:text-sm text-[11px] px-8 py-2 rounded-[5px] lg:min-w-[200px] md:min-w-[190px] min-w-[130px] lg:min-h-[35px] min-h-[27px] text-white hover:bg-[#666] hover:cursor-pointer"
                         >
                             {category}
                         </button>
