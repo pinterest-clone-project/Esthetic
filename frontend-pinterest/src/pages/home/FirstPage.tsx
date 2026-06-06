@@ -10,8 +10,8 @@ import im8 from "../../../src/assets/defaults/def-8.jpg"
 const FirstPage = () =>{
 
     return (
-        <div>
-        <section className={"flex-col flex items-center pt-12"}>
+        <div className="scroll-smooth">
+        <section className={"flex-col flex items-center pt-8"}>
             <div className={"lg:text-[64px] text-4xl font-bold top-32 leading-[45px] tracking-normal text-center text-white "}>
                 Explore new ideas & inspirations</div>
             <div className={"lg:text-[24px] text-sm top-32 lg:leading-[45px] leading-[20px] lg:pt-6 pt-3 tracking-normal text-center max-w-[1011px] text-[#A1A1A1A1] "}>
@@ -33,7 +33,7 @@ const FirstPage = () =>{
         </section>
 
             {/* Gallery */}
-            <section className="mt-[70px] flex justify-center">
+            <section className="mt-[60px] flex justify-center">
                 <div className="relative w-[1400px] h-[500px] overflow-hidden">
 
                     <img
@@ -65,7 +65,7 @@ const FirstPage = () =>{
             </section>
 
             <section className="-mx-[calc((100vw-1505px)/2)]">
-                <a href={"#see-how-it-works"} className="w-screen h-[70px] bg-btn-primary text-black font-medium text-2xl flex items-center justify-center gap-2 ">
+                <a href={"#see-how-it-works"} className="w-full h-[70px] bg-btn-primary text-black font-medium text-2xl flex items-center justify-center gap-2 ">
                     See how it works
                     <svg
                         width="20"
@@ -80,8 +80,22 @@ const FirstPage = () =>{
                 </a>
             </section>
 
-            <section id={"see-how-it-works"} className={"h-full"}>
-                <div>hello</div>
+            <section id={"see-how-it-works"} className={"min-h-screen"}>
+                <div className={"grid grid-cols-2 text-white pt-52"}>
+                    <div>g</div>
+                    <div className={"flex flex-col items-center text-white "}>
+                        <div className={"font-bold leading-[45px] tracking-[-0.5px] lg:text-[64px] text-4xl"}>Find your Ideas</div>
+                        <p className={"leading-[45px] max-w-[493px] text-center tracking-[-0.5px] pt-18 lg:text-[32px] text-xl"}
+                        >What else would you like to try?
+                            Type in a search term for a topic
+                            you're interested in, like "Nature,"
+                            and browse the results</p>
+                        <a className={"w-[200px] h-[50px] rounded-[10px] text-center pt-2 text-[20px] mt-18 bg-btn-primary hover:bg-btn-dark text-black"}>
+                            Review
+                        </a>
+                    </div>
+
+                </div>
             </section>
 
         </div>
