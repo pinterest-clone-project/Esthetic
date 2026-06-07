@@ -231,6 +231,7 @@ public static class WebApplicationBuilderExtensions
         services.AddSingleton<SeederMapper>();
         services.AddSingleton<ReportMapper>();
         services.AddSingleton<PinMapper>();
+        services.AddSingleton<UserMapper>();
         #endregion
 
         #region OpenAPI

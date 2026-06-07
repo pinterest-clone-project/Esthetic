@@ -2,28 +2,30 @@
 using Application.Models.DTO.User;
 using Application.UseCases.Account.Commands;
 using Application.UseCases.Users.Commands;
-using AutoMapper;
 using Domain.Entities.Identity;
+using Riok.Mapperly.Abstractions;
 
 namespace Application.Mappers;
 
-public class UserMapper : Profile
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.None)]
+public partial class UserMapper
 {
-    public UserMapper()
+    public partial UserDTO ToDto(UserEntity src);
+    public partial UserEntity ToEntity(CreateUserCommand src);
+    public partial UserEntity ToEntity(UpdateUserCommand src);
+    public partial UserEntity ToEntity(RegisterCommand src);
+
+    [MapProperty(nameof(GoogleAccountModel.Email), nameof(UserEntity.UserName))]
+    [MapperIgnoreTarget(nameof(UserEntity.FirstName))]
+    [MapperIgnoreTarget(nameof(UserEntity.LastName))]
+    [MapperIgnoreTarget(nameof(UserEntity.Image))]
+    private partial UserEntity GoogleToEntityInternal(GoogleAccountModel src);
+
+    public UserEntity ToEntity(GoogleAccountModel src)
     {
-        CreateMap<UserEntity, UserDTO>();
-
-        CreateMap<CreateUserCommand, UserEntity>();
-        CreateMap<UpdateUserCommand, UserEntity>()
-            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-        CreateMap<RegisterCommand, UserEntity>();
-
-        CreateMap<GoogleAccountModel, UserEntity>()
-        .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email))
-        .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
-        .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Name.Split(' ', 2)[0]))
-        .ForMember(dest => dest.LastName, opt => opt.MapFrom(src =>
-            src.Name.Contains(' ') ? src.Name.Split(' ', 2)[1] : null))
-        .ForMember(dest => dest.Image, opt => opt.Ignore());
+        var entity = GoogleToEntityInternal(src);
+        entity.FirstName = src.Name.Split(' ', 2)[0];
+        entity.LastName = src.Name.Contains(' ') ? src.Name.Split(' ', 2)[1] : null;
+        return entity;
     }
 }
