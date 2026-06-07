@@ -230,6 +230,7 @@ public static class WebApplicationBuilderExtensions
         services.AddSingleton<TagMapper>();
         services.AddSingleton<SeederMapper>();
         services.AddSingleton<ReportMapper>();
+        services.AddSingleton<PinMapper>();
         #endregion
 
         #region OpenAPI
