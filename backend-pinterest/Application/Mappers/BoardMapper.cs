@@ -5,7 +5,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace Application.Mappers;
 
-[Mapper]
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.None)]
 public partial class BoardMapper
 {
     [MapProperty(nameof(BoardEntity.BoardPins), nameof(BoardDTO.PinsCount),
@@ -27,7 +27,7 @@ public partial class BoardMapper
     private static int MapPinsCount(ICollection<BoardPinEntity> boardPins) =>
         boardPins.Count;
 
-    private static List<string> MapPreviewImageUrls(ICollection<BoardPinEntity> boardPins) =>
+    private static IReadOnlyList<string> MapPreviewImageUrls(ICollection<BoardPinEntity> boardPins) =>
         boardPins
             .OrderByDescending(bp => bp.CreatedAt)
             .Take(4)
