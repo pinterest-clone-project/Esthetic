@@ -228,6 +228,7 @@ public static class WebApplicationBuilderExtensions
         services.AddSingleton<BoardMapper>();
         services.AddSingleton<CommentMapper>();
         services.AddSingleton<TagMapper>();
+        services.AddSingleton<SeederMapper>();
         #endregion
 
         #region OpenAPI
