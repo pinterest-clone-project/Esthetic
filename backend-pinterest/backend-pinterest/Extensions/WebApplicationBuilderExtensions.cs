@@ -2,6 +2,7 @@
 using Application.Common.Optional;
 using Application.Common.Validators;
 using Application.Interfaces;
+using Application.Mappers;
 using Domain.Constants;
 using Domain.Entities.Identity;
 using Domain.Interfaces;
@@ -137,8 +138,6 @@ public static class WebApplicationBuilderExtensions
             options.InstanceName = "Pinterest_";
         });
 
-        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
@@ -223,6 +222,10 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<ISmtpService, SmtpService>();
         services.AddScoped<IPagedService, PagedService>();
         services.AddScoped<ICookieService, CookieService>();
+        #endregion
+
+        #region Mappers
+        services.AddSingleton<BoardMapper>();
         #endregion
 
         #region OpenAPI
