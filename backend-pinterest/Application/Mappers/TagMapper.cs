@@ -1,19 +1,14 @@
-﻿
-using Application.Models.DTO.Tag;
+﻿using Application.Models.DTO.Tag;
 using Application.UseCases.Tags.Commands;
-using Application.UseCases.Users.Commands;
-using AutoMapper;
 using Domain.Entities.Tag;
+using Riok.Mapperly.Abstractions;
 
 namespace Application.Mappers;
 
-public class TagMapper : Profile
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.None)]
+public partial class TagMapper
 {
-    public TagMapper()
-    {
-        CreateMap<TagEntity, TagDTO>();
-        CreateMap<CreateTagCommand, TagEntity>();
-        CreateMap<UpdateTagCommand, TagEntity>()
-            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-    }
+    public partial TagDTO ToDto(TagEntity src);
+    public partial TagEntity ToEntity(CreateTagCommand src);
+    public partial TagEntity ToEntity(UpdateTagCommand src);
 }
