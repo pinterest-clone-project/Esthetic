@@ -226,6 +226,7 @@ public static class WebApplicationBuilderExtensions
 
         #region Mappers
         services.AddSingleton<BoardMapper>();
+        services.AddSingleton<CommentMapper>();
         #endregion
 
         #region OpenAPI

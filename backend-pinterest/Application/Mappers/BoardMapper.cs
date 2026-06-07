@@ -8,7 +8,6 @@ namespace Application.Mappers;
 [Mapper]
 public partial class BoardMapper
 {
-    // BoardEntity → DTOs
     [MapProperty(nameof(BoardEntity.BoardPins), nameof(BoardDTO.PinsCount),
         Use = nameof(MapPinsCount))]
     public partial BoardDTO ToDto(BoardEntity src);
@@ -23,10 +22,8 @@ public partial class BoardMapper
         Use = nameof(MapPreviewImageUrls))]
     public partial BoardDetailsDTO ToDetailsDto(BoardEntity src);
 
-    // Commands → Entity
     public partial BoardEntity ToEntity(CreateBoardCommand src);
 
-    // Приватні конвертери
     private static int MapPinsCount(ICollection<BoardPinEntity> boardPins) =>
         boardPins.Count;
 
