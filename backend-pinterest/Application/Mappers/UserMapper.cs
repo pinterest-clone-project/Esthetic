@@ -28,4 +28,5 @@ public partial class UserMapper
         entity.LastName = src.Name.Contains(' ') ? src.Name.Split(' ', 2)[1] : null;
         return entity;
     }
+    public partial void Patch(UpdateUserCommand src, UserEntity dest);
 }
