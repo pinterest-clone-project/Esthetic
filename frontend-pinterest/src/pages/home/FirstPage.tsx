@@ -83,12 +83,11 @@ const FirstPage = () => {
             </section>
             )}
 
-            {/* Second section that is scrolled down*/}
+
             <section id={"see-how-it-works"} className={"min-h-screen flex items-center"}>
 
                 <div className={"grid grid-cols-1 lg:grid-cols-2 text-white w-full"}>
 
-                    {/* Left column with images */}
                     <section className="flex justify-center">
                         <div className="relative w-[1400px] h-[600px] overflow-hidden">
 
@@ -100,7 +99,6 @@ const FirstPage = () => {
                         </div>
                     </section>
 
-                    {/* Right column with text */}
                     <section className={"flex flex-col items-center text-white"}>
                         <div className={"font-bold leading-[45px] mt-16 tracking-[-0.5px] lg:text-[64px] text-4xl"}>
                             Find your Ideas

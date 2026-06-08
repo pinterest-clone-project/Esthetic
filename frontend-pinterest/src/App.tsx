@@ -52,9 +52,7 @@ const App = () => {
                         <Route path="review" element={<ReviewPage/>}/>
 
                         <Route element={<PrivateRoute/>}>
-                            <Route path="/profile">
-                                <Route index element={<ProfilePage/>}/>
-                            </Route>
+                            <Route path="/profile" element={<ProfilePage/>}/>
                             <Route path="aura/">
                                 <Route path="create" element={<CreateAuraPage/>}/>
                                 <Route path="preview/:id" element={<AuraPreviewPage/>}/>
