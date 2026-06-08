@@ -226,12 +226,13 @@ public static class WebApplicationBuilderExtensions
 
         #region Mappers
         services.AddSingleton<BoardMapper>();
+        services.AddSingleton<CategoryMapper>();
         services.AddSingleton<CommentMapper>();
-        services.AddSingleton<TagMapper>();
-        services.AddSingleton<SeederMapper>();
-        services.AddSingleton<ReportMapper>();
         services.AddSingleton<PinMapper>();
+        services.AddSingleton<ReportMapper>();
+        services.AddSingleton<TagMapper>();
         services.AddSingleton<UserMapper>();
+        services.AddSingleton<SeederMapper>();
         #endregion
 
         #region OpenAPI
