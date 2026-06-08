@@ -36,6 +36,10 @@ const AppInit = ({children}: { children: React.ReactNode }) => {
     );
 };
 
+const RootPage = () => {
+    const user = useAppSelector(state => state.auth.user)
+    return user ? <ReviewPage /> : <FirstPage />
+}
 
 const App = () => {
 
@@ -44,16 +48,16 @@ const App = () => {
             <Routes>
                 <Route element={<Layout/>}>
                     <Route path="/">
-                        <Route index element={<FirstPage/>}/>
-                        <Route path="aura/">
-                            <Route path="create" element={<CreateAuraPage/>}/>
-                            <Route path="preview/:id" element={<AuraPreviewPage/>}/>
-                        </Route>
-                        <Route path={"review"} element={<ReviewPage/>}></Route>
+                        <Route index element={<RootPage/>}/>
+                        <Route path="review" element={<ReviewPage/>}/>
 
                         <Route element={<PrivateRoute/>}>
                             <Route path="/profile">
                                 <Route index element={<ProfilePage/>}/>
+                            </Route>
+                            <Route path="aura/">
+                                <Route path="create" element={<CreateAuraPage/>}/>
+                                <Route path="preview/:id" element={<AuraPreviewPage/>}/>
                             </Route>
                         </Route>
 
