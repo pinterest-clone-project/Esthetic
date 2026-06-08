@@ -1,7 +1,6 @@
 ﻿using Application.Interfaces;
+using Application.Mappers;
 using Application.Models.SeedDTO;
-using AutoMapper;
-using Domain.Entities.Category;
 using System.Text.Json;
 
 namespace Infrastructure.Data.Seed.Seeders;
@@ -10,7 +9,7 @@ public static class CategorySeeder
 {
     public static async Task SeedAsync(
         AppDbContext context,
-        IMapper mapper,
+        SeederMapper mapper,
         IImageService imageService)
     {
         if (context.Categories.Any()) return;
@@ -42,7 +41,7 @@ public static class CategorySeeder
 
         foreach (var dto in categories)
         {
-            var entity = mapper.Map<CategoryEntity>(dto);
+            var entity = mapper.ToEntity(dto);
 
             var localPath = Path.Combine(seedImagesDir, dto.LocalImage);
             if (File.Exists(localPath))
