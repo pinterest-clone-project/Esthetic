@@ -8,6 +8,10 @@ namespace Application.Mappers;
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.None)]
 public partial class BoardMapper
 {
+    [MapperIgnoreSource(nameof(UpdateBoardCommand.CoverImageFile))]
+    [MapperIgnoreTarget(nameof(BoardEntity.CoverImageUrl))]
+    public partial void Patch(UpdateBoardCommand src, BoardEntity dest);
+
     [MapProperty(nameof(BoardEntity.BoardPins), nameof(BoardDTO.PinsCount),
         Use = nameof(MapPinsCount))]
     public partial BoardDTO ToDto(BoardEntity src);

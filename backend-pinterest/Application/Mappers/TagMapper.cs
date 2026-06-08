@@ -11,4 +11,6 @@ public partial class TagMapper
     public partial TagDTO ToDto(TagEntity src);
     public partial TagEntity ToEntity(CreateTagCommand src);
     public partial TagEntity ToEntity(UpdateTagCommand src);
+
+    public partial void Patch(UpdateTagCommand src, TagEntity dest);
 }

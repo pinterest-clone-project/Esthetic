@@ -41,4 +41,7 @@ public partial class PinMapper
         dto.LikesCount = src.Likes?.Count ?? 0;
         return dto;
     }
+
+    [MapperIgnoreTarget(nameof(PinEntity.PinTags))]
+    public partial void Patch(UpdatePinCommand src, PinEntity dest);
 }
