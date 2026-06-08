@@ -1,4 +1,5 @@
 ﻿using Application.Common.Exceptions;
+using Application.Common.Resources;
 using Application.Interfaces;
 using Application.Mappers;
 using Application.Models.DTO.User;
@@ -19,6 +20,31 @@ public class RegisterHandler(
 {
     public async Task<TokenDTO> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
+        var existingUser = await userManager.FindByEmailAsync(request.Email);
+
+        if (existingUser != null)
+        {
+            var hasPassword = await userManager.HasPasswordAsync(existingUser);
+
+            if (hasPassword)
+            {
+                throw new BadRequestException(ValidationMessages.EmailAlreadyExists);
+            }
+
+            var addPasswordResult = await userManager.AddPasswordAsync(existingUser, request.Password);
+
+            if (!addPasswordResult.Succeeded)
+                throw new BadRequestException(string.Join(", ", addPasswordResult.Errors.Select(e => e.Description)));
+
+            if (request.ImageFile != null)
+            {
+                existingUser.Image = await imageService.SaveImageAsync(request.ImageFile);
+                await userManager.UpdateAsync(existingUser);
+            }
+
+            return await tokenService.CreateTokenAsync(existingUser);
+        }
+
         var user = userMapper.ToEntity(request);
 
         if (request.ImageFile != null)

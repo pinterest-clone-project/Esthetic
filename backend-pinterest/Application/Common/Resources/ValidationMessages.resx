@@ -240,4 +240,13 @@
   <data name="Tag" xml:space="preserve">
     <value>Tag</value>
   </data>
+  <data name="EmailAlreadyExists" xml:space="preserve">
+    <value>User with this email address is already registered</value>
+  </data>
+  <data name="GoogleLinkFailed" xml:space="preserve">
+    <value>Failed to link Google account to the existing profile</value>
+  </data>
+  <data name="ExternalLoginLinkFailed" xml:space="preserve">
+    <value>Error linking external login provider</value>
+  </data>
 </root>
