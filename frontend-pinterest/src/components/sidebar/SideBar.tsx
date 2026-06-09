@@ -63,7 +63,7 @@ const Sidebar = () => {
     return (
         <>
             <aside className="sticky top-[74px] w-16 bg-black flex flex-col items-center py-6 z-40 h-[calc(100vh-74px)] shrink-0">
-                <nav className="flex flex-col items-center gap-2 flex-1">
+                <nav className="flex flex-col items-center gap-5 flex-1">
                     {navItems.map(({ path, icon, label }) => (
                         <SidebarButton
                             key={path}
@@ -126,7 +126,7 @@ const Sidebar = () => {
                 </button>
 
                 <button
-                    onClick={() => { navigate('/aura'); closeModal(); }}
+                    onClick={() => { navigate('/aura/create'); closeModal(); }}
                     className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-[#2a2a2a] transition-colors duration-150"
                 >
                     <img src={auraIcon} style={{ filter: whiteFilter }} className="w-6 h-6 opacity-60" />

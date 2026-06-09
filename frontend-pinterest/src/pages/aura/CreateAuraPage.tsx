@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useCreatePinMutation } from "../../services/pinService.ts";
 import { useGetAllCategoriesQuery } from "../../services/categoryService.ts";
 import { useNavigate } from "react-router";
@@ -11,7 +11,7 @@ const CreateAuraPage = () => {
     const [mediaUrl, setMediaUrl] = useState("");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [sourceUrl, setSourceUrl] = useState("");
+    const [sourceUrl] = useState("");
     const [categoryId, setCategoryId] = useState("");
     const [previewUrl, setPreviewUrl] = useState("");
 
@@ -36,10 +36,10 @@ const CreateAuraPage = () => {
     };
 
     return (
-        <div className="w-full min-h-full bg-[#121212] px-10 py-8">
+        <div className="w-full min-h-full px-10 py-8 flex flex-col items-center">
 
             {/* Top bar */}
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center justify-between mb-8 w-full max-w-[1000px]">
                 <h1 className="text-white text-sm font-medium tracking-wide">Create Aura</h1>
                 <button
                     onClick={handleSubmit}
@@ -56,7 +56,7 @@ const CreateAuraPage = () => {
 
                 {/* Left — image preview */}
                 <div className="shrink-0">
-                    <div className="w-[200px] min-h-[200px] rounded-2xl overflow-hidden bg-[#1e1e1e] border border-white/10 flex items-center justify-center">
+                    <div className="w-[200px] min-h-[200px] rounded-2xl overflow-hidden bg-[#1e1e1e] border border-[#333] flex items-center justify-center">
                         {previewUrl ? (
                             <img
                                 src={previewUrl}
@@ -87,8 +87,8 @@ const CreateAuraPage = () => {
                             value={title}
                             onChange={e => setTitle(e.target.value)}
                             placeholder="Aura name"
-                            className="bg-[#1e1e1e] border border-white/10 rounded-md px-3 h-9 text-white text-xs
-                                placeholder:text-gray-600 outline-none focus:border-white/30 transition-colors"
+                            className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-white text-xs
+                                placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors"
                         />
                     </div>
 
@@ -100,8 +100,8 @@ const CreateAuraPage = () => {
                             onChange={e => setDescription(e.target.value)}
                             placeholder="Describe your aura..."
                             rows={4}
-                            className="bg-[#1e1e1e] border border-white/10 rounded-md px-3 py-2 text-white text-xs
-                                placeholder:text-gray-600 outline-none focus:border-white/30 transition-colors resize-none"
+                            className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 py-2 text-white text-xs
+                                placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors resize-none"
                         />
                     </div>
 
@@ -114,8 +114,8 @@ const CreateAuraPage = () => {
                             onChange={e => setMediaUrl(e.target.value)}
                             onBlur={handleMediaUrlBlur}
                             placeholder="Add Url"
-                            className="bg-[#1e1e1e] border border-white/10 rounded-md px-3 h-9 text-white text-xs
-                                placeholder:text-gray-600 outline-none focus:border-white/30 transition-colors"
+                            className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-white text-xs
+                                placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors"
                         />
                     </div>
 
@@ -125,8 +125,8 @@ const CreateAuraPage = () => {
                         <select
                             value={categoryId}
                             onChange={e => setCategoryId(e.target.value)}
-                            className="bg-[#1e1e1e] border border-white/10 rounded-md px-3 h-9 text-xs
-                                outline-none focus:border-white/30 transition-colors appearance-none
+                            className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-xs
+                                outline-none focus:border-[#1DB954] transition-colors appearance-none
                                 text-gray-400 cursor-pointer"
                         >
                             <option value="">Choose Moodboard</option>
