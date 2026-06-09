@@ -8,7 +8,7 @@ interface AuthState {
 
 const initialState: AuthState = {
     user: null,
-    isLoading: false,
+    isLoading: true,
 };
 
 const authSlice = createSlice({
@@ -17,9 +17,11 @@ const authSlice = createSlice({
     reducers: {
         setUser: (state, action: PayloadAction<IAccount>) => {
             state.user = action.payload;
+            state.isLoading = false;
         },
         clearUser: (state) => {
             state.user = null;
+            state.isLoading = false;
         }
     },
 });

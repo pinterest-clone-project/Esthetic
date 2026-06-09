@@ -36,7 +36,7 @@ export const createBaseQuery = (
         }
 
         const url = typeof args === "string" ? args : args.url ?? "";
-        const skipRefresh = ["Account/refresh", "Account/login", "Account/me"]
+        const skipRefresh = ["Account/refresh", "Account/login"]
             .some(u => url.includes(u));
 
         if (skipRefresh) {

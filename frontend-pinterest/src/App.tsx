@@ -2,17 +2,20 @@ import {Route, Routes} from "react-router";
 import CreateAuraPage from "./pages/aura/CreateAuraPage.tsx";
 import AuraPreviewPage from "./pages/aura/AuraPreviewPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
-import Layout from "./layout/Layout.tsx";
+import Layout from "@/layouts/Layout.tsx";
 import {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "./store";
 import {setUser} from "./store/slices/authSlice";
 import {useGetMeQuery} from "./services/accountService";
 import ProfilePage from "@/pages/profile/ProfilePage.tsx";
-import PrivateRoute from "@/components/PrivateRoute.tsx";
+import PrivateRoute from "@/components/routes/PrivateRoute.tsx";
 import FirstPage from "@/pages/home/FirstPage.tsx";
 import logo from "@/assets/logo.png";
 import ReviewPage from "@/pages/home/ReviewPage.tsx";
 import CollectionsPage from "@/pages/collections/CollectionsPage.tsx";
+import AdminRoute from "@/components/routes/AdminRoute.tsx";
+import AdminLayout from "@/layouts/AdminLayout.tsx";
+import AdminDashboard from "@/pages/admin/AdminDashboard.tsx";
 
 const AppInit = ({children}: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
@@ -90,11 +93,16 @@ const App = () => {
                             </Route>
                             <Route path="/collections" element={<CollectionsPage/>}></Route>
                         </Route>
-
-                        <Route path="*" element={<NotFoundPage/>}/>
                     </Route>
                 </Route>
 
+                <Route element={<AdminRoute/>}>
+                    <Route element={<AdminLayout/>}>
+                        <Route path="/admin" element={<AdminDashboard/>}/>
+                    </Route>
+                </Route>
+
+                <Route path="*" element={<NotFoundPage/>}/>
             </Routes>
         </AppInit>
     )
