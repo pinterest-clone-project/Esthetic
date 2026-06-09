@@ -39,6 +39,12 @@ export const pinService = api.injectEndpoints({
                 method: 'DELETE',
             }),
         }),
+        getMyPins: builder.query<IPinSummaryResponse[], void>({
+            query: () => ({
+                url: 'Pins/my',
+                method: 'GET',
+            }),
+        }),
     }),
 });
 
@@ -48,4 +54,5 @@ export const {
     useCreatePinMutation,
     useUpdatePinMutation,
     useDeletePinMutation,
+    useGetMyPinsQuery,
 } = pinService;
