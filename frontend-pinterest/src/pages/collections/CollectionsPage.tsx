@@ -42,15 +42,25 @@ const CollectionsPage = () => {
 
 
             {hasAuras ? (
-                <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3 mt-8">
-                    {pins.map((pin) => (
-                        <div key={pin.id} className="break-inside-avoid mb-3">
-                            <img
-                                src={pin.mediaUrl ?? undefined}
-                                className="w-full rounded-xl object-cover"
-                            />
-                        </div>
-                    ))}
+                <div className="mt-8">
+                    <h2 className="text-lg">Your created Auras</h2>
+                    <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3 mt-4">
+                        {pins.map((pin) => (
+                            <div key={pin.id} className="break-inside-avoid mb-3">
+                                <img
+                                    src={pin.mediaUrl ?? undefined}
+                                    className="w-full rounded-xl object-cover"
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    <h2 className="text-lg mt-4">Your saved Auras</h2>
+                    <div className="mt-4">
+                        <p className="text-white/30 text-sm text-center py-8 border border-white/10 rounded-xl">
+                            You haven't saved any Auras yet
+                        </p>
+                    </div>
                 </div>
             ) : (
                 <div className="flex flex-col items-center justify-center mt-16 gap-6">
@@ -70,7 +80,7 @@ const CollectionsPage = () => {
                     </div>
 
                     <button
-                        onClick={() => navigate("/create/aura")}
+                        onClick={() => navigate("/aura/create")}
                         className="px-6 py-2 rounded-lg border border-white/20 text-white text-sm hover:bg-[#1a1a1a] transition-colors duration-150"
                     >
                         Create Aura

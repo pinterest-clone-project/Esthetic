@@ -5,7 +5,8 @@ export const api = createApi({
     reducerPath: "api",
     baseQuery: createBaseQuery(""),
     tagTypes: [
-        "CurrentUser"
+        "CurrentUser",
+        "MyPins",
     ],
     endpoints: () => ({})
 });

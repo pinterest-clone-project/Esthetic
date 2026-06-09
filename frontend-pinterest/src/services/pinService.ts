@@ -25,6 +25,7 @@ export const pinService = api.injectEndpoints({
                 method: 'POST',
                 body: serialize(data),
             }),
+            invalidatesTags: ['MyPins'],
         }),
         updatePin: builder.mutation<void, IUpdatePinRequest>({
             query: ({ id, ...data }) => ({
@@ -44,6 +45,7 @@ export const pinService = api.injectEndpoints({
                 url: 'Pins/my',
                 method: 'GET',
             }),
+            providesTags: ['MyPins'],
         }),
     }),
 });

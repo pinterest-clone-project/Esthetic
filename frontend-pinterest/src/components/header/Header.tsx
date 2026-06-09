@@ -12,6 +12,7 @@ import {clearUser, setLoading} from "@/store/slices/authSlice.ts";
 import {APP_ENV} from "@/constants/env";
 import {Link, useNavigate} from "react-router";
 import { useLogoutMutation } from "@/services/accountService";
+import {api} from "@/services/api.ts";
 
 
 type ModalType = "login" | "signup" | null;
@@ -44,6 +45,7 @@ const Header: React.FC = () => {
             console.error("Помилка під час logout:", error);
         } finally {
             dispatch(clearUser());
+            dispatch(api.util.resetApiState());
             setDropdownOpen(false);
             navigate("/");
             dispatch(setLoading(false));
