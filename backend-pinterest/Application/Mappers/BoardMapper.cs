@@ -1,41 +1,41 @@
 ﻿using Application.Models.DTO.Board;
 using Application.UseCases.Boards.Commands;
-using AutoMapper;
 using Domain.Entities.Board;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Riok.Mapperly.Abstractions;
 
 namespace Application.Mappers;
 
-public class BoardMapper : Profile
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.None)]
+public partial class BoardMapper
 {
-    public BoardMapper()
-    {
+    [MapperIgnoreSource(nameof(UpdateBoardCommand.CoverImageFile))]
+    [MapperIgnoreTarget(nameof(BoardEntity.CoverImageUrl))]
+    public partial void Patch(UpdateBoardCommand src, BoardEntity dest);
 
-        CreateMap<BoardEntity, BoardDTO>()
-            .ForMember(dest => dest.PinsCount,
-                opt => opt.MapFrom(src => src.BoardPins.Count));
+    [MapProperty(nameof(BoardEntity.BoardPins), nameof(BoardDTO.PinsCount),
+        Use = nameof(MapPinsCount))]
+    public partial BoardDTO ToDto(BoardEntity src);
 
-        CreateMap<BoardEntity, BoardListItemDTO>()
-            .ForMember(dest => dest.PinsCount,
-                opt => opt.MapFrom(src => src.BoardPins.Count));
+    [MapProperty(nameof(BoardEntity.BoardPins), nameof(BoardListItemDTO.PinsCount),
+        Use = nameof(MapPinsCount))]
+    public partial BoardListItemDTO ToListItemDto(BoardEntity src);
 
-        CreateMap<BoardEntity, BoardDetailsDTO>()
-            .ForMember(dest => dest.PinsCount,
-                opt => opt.MapFrom(src => src.BoardPins.Count))
-            .ForMember(dest => dest.PreviewImageUrls,
-                opt => opt.MapFrom(src => src.BoardPins
-                    .OrderByDescending(bp => bp.CreatedAt)
-                    .Take(4)
-                    .Select(bp => bp.Pin.MediaUrl)
-                    .Where(url => url != null)
-                    .ToList()));
+    [MapProperty(nameof(BoardEntity.BoardPins), nameof(BoardDetailsDTO.PinsCount),
+        Use = nameof(MapPinsCount))]
+    [MapProperty(nameof(BoardEntity.BoardPins), nameof(BoardDetailsDTO.PreviewImageUrls),
+        Use = nameof(MapPreviewImageUrls))]
+    public partial BoardDetailsDTO ToDetailsDto(BoardEntity src);
 
-        CreateMap<CreateBoardCommand, BoardEntity>();
+    public partial BoardEntity ToEntity(CreateBoardCommand src);
 
-        CreateMap<UpdateBoardCommand, BoardEntity>()
-        .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+    private static int MapPinsCount(ICollection<BoardPinEntity> boardPins) =>
+        boardPins.Count;
 
-    }
+    private static IReadOnlyList<string> MapPreviewImageUrls(ICollection<BoardPinEntity> boardPins) =>
+        boardPins
+            .OrderByDescending(bp => bp.CreatedAt)
+            .Take(4)
+            .Select(bp => bp.Pin.MediaUrl)
+            .Where(url => url != null)
+            .ToList()!;
 }

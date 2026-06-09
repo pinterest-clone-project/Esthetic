@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-using AutoMapper;
+using Application.Mappers;
 using Domain.Entities.Identity;
 using Infrastructure.Data;
 using Infrastructure.Data.Seed.Seeders;
@@ -16,7 +16,7 @@ public class DbSeederService(IServiceProvider serviceProvider) : IDbSeederServic
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<RoleEntity>>();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserEntity>>();
-        var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+        var mapper = scope.ServiceProvider.GetRequiredService<SeederMapper>();
         var imageService = scope.ServiceProvider.GetRequiredService<IImageService>();
 
         await RoleSeeder.SeedAsync(context, roleManager);
