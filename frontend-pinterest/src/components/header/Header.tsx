@@ -1,5 +1,5 @@
 import logo from "../../../src/assets/logo.png";
-import searchIcon from "../../../src/assets/search-vector.svg";
+import searchIcon from "../../assets/icons/search-vector.svg";
 import Button from "@/components/button/Button.tsx";
 import {useEffect, useRef, useState} from "react";
 import Modal from "@/components/UI/Modal.tsx";

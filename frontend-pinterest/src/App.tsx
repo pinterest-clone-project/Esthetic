@@ -12,6 +12,7 @@ import PrivateRoute from "@/components/PrivateRoute.tsx";
 import Spinner from "@/components/Spinner.tsx";
 import FirstPage from "@/pages/home/FirstPage.tsx";
 import ReviewPage from "@/pages/home/ReviewPage.tsx";
+import CollectionsPage from "@/pages/collections/CollectionsPage.tsx";
 
 const AppInit = ({children}: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
@@ -57,6 +58,7 @@ const App = () => {
                                 <Route path="create" element={<CreateAuraPage/>}/>
                                 <Route path="preview/:id" element={<AuraPreviewPage/>}/>
                             </Route>
+                            <Route path="/collections" element={<CollectionsPage/>}></Route>
                         </Route>
 
                         <Route path="*" element={<NotFoundPage/>}/>
