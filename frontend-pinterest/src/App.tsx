@@ -2,7 +2,7 @@ import {Route, Routes} from "react-router";
 import CreateAuraPage from "./pages/aura/CreateAuraPage.tsx";
 import AuraPreviewPage from "./pages/aura/AuraPreviewPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
-import Layout from "./components/layouts/Layout.tsx";
+import Layout from "@/layouts/Layout.tsx";
 import {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "./store";
 import {setUser} from "./store/slices/authSlice";
@@ -14,6 +14,8 @@ import logo from "@/assets/logo.png";
 import ReviewPage from "@/pages/home/ReviewPage.tsx";
 import CollectionsPage from "@/pages/collections/CollectionsPage.tsx";
 import AdminRoute from "@/components/routes/AdminRoute.tsx";
+import AdminLayout from "@/layouts/AdminLayout.tsx";
+import AdminDashboard from "@/pages/admin/AdminDashboard.tsx";
 
 const AppInit = ({children}: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
@@ -91,8 +93,6 @@ const App = () => {
                             </Route>
                             <Route path="/collections" element={<CollectionsPage/>}></Route>
                         </Route>
-
-                        <Route path="*" element={<NotFoundPage/>}/>
                     </Route>
                 </Route>
 
@@ -101,6 +101,8 @@ const App = () => {
                         <Route path="/admin" element={<AdminDashboard/>}/>
                     </Route>
                 </Route>
+
+                <Route path="*" element={<NotFoundPage/>}/>
             </Routes>
         </AppInit>
     )
