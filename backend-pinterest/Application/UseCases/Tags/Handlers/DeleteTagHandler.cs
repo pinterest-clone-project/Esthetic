@@ -1,6 +1,5 @@
 ﻿
 using Application.UseCases.Tags.Commands;
-using AutoMapper;
 using Domain.Interfaces;
 using MediatR;
 

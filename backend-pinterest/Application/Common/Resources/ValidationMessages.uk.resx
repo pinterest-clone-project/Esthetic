@@ -240,4 +240,13 @@
   <data name="Tag" xml:space="preserve">
     <value>Тег</value>
   </data>
+  <data name="EmailAlreadyExists" xml:space="preserve">
+    <value>Користувач з такою електронною поштою вже зареєстрований</value>
+  </data>
+  <data name="GoogleLinkFailed" xml:space="preserve">
+    <value>Не вдалося зв'язати акаунт Google з існуючим профілем</value>
+  </data>
+  <data name="ExternalLoginLinkFailed" xml:space="preserve">
+    <value>Помилка прив'язку зовнішнього входу</value>
+  </data>
 </root>

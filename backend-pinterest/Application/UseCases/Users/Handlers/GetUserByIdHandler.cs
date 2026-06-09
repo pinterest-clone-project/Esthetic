@@ -1,19 +1,19 @@
-using MediatR;
-using Domain.Interfaces;
-using Application.UseCases.Users.Queries;
-using AutoMapper;
+using Application.Mappers;
 using Application.Models.DTO.User;
+using Application.UseCases.Users.Queries;
+using Domain.Interfaces;
+using MediatR;
 
 namespace Application.UseCases.Users.Handlers;
 
 public class GetUserByIdHandler(
     IUserRepository userRepository,
-    IMapper mapper) : IRequestHandler<GetUserByIdQuery, UserDTO?>
+    UserMapper userMapper) : IRequestHandler<GetUserByIdQuery, UserDTO?>
 {
     public async Task<UserDTO?> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
         var user = await userRepository.GetByIdAsync(request.Id, cancellationToken);
         if (user == null) return null;
-        return mapper.Map<UserDTO>(user);
+        return userMapper.ToDto(user);
     }
 }

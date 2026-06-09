@@ -1,9 +1,9 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Validators;
 using Application.Interfaces;
+using Application.Mappers;
 using Application.Models.DTO.Board;
 using Application.UseCases.Boards.Commands;
-using AutoMapper;
 using Domain.Interfaces;
 using MediatR;
 
@@ -12,7 +12,7 @@ namespace Application.UseCases.Boards.Handlers;
 public class UpdateBoardHandler(
     IBoardRepository boardRepository,
     IImageService imageService,
-    IMapper mapper) : IRequestHandler<UpdateBoardCommand, BoardDTO>
+    BoardMapper boardMapper) : IRequestHandler<UpdateBoardCommand, BoardDTO>
 {
     public async Task<BoardDTO> Handle(UpdateBoardCommand request, CancellationToken cancellationToken)
     {
@@ -22,15 +22,12 @@ public class UpdateBoardHandler(
         if (board.OwnerId != request.OwnerId)
             throw new UnauthorizedException(ValidationMessages.BoardUpdateOwnBoards);
 
-        mapper.Map(request, board);
+        boardMapper.Patch(request, board);
 
         if (request.CoverImageFile != null)
-        {
             board.CoverImageUrl = await imageService.SaveImageAsync(request.CoverImageFile);
-        }
 
         await boardRepository.UpdateAsync(board, cancellationToken);
-
-        return mapper.Map<BoardDTO>(board);
+        return boardMapper.ToDto(board);
     }
 }

@@ -8,7 +8,7 @@ public class RegisterValidator : AbstractValidator<RegisterCommand>
 {
     public RegisterValidator()
     {
-        RuleFor(x => x.Username).NameRules(ValidationMessages.FieldUsername);
+        RuleFor(x => x.UserName).NameRules(ValidationMessages.FieldUsername);
         RuleFor(x => x.FirstName).NameRules(ValidationMessages.FieldFirstName);
         RuleFor(x => x.LastName).NameRules(ValidationMessages.FieldLastName);
         RuleFor(x => x.Bio).BioRules();

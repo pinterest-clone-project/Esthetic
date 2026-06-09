@@ -1,21 +1,19 @@
 ﻿using Application.Models.SeedDTO;
-using AutoMapper;
 using Domain.Entities.Category;
 using Domain.Entities.Identity;
 using Domain.Entities.Tag;
+using Riok.Mapperly.Abstractions;
 
 namespace Application.Mappers;
 
-public class SeederMapper : Profile
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.None)]
+public partial class SeederMapper
 {
-    public SeederMapper()
-    {
-        CreateMap<UserSeedDTO, UserEntity>()
-            .ForMember(x => x.Image, opt => opt.Ignore());
+    [MapperIgnoreTarget(nameof(UserEntity.Image))]
+    public partial UserEntity ToEntity(UserSeedDTO src);
 
-        CreateMap<TagSeedDTO, TagEntity>();
+    public partial TagEntity ToEntity(TagSeedDTO src);
 
-        CreateMap<CategorySeedDTO, CategoryEntity>()
-            .ForMember(dest => dest.Image, opt => opt.Ignore());
-    }
+    [MapperIgnoreTarget(nameof(CategoryEntity.Image))]
+    public partial CategoryEntity ToEntity(CategorySeedDTO src);
 }
