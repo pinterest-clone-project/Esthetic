@@ -57,7 +57,7 @@ const Header: React.FC = () => {
 
                 <div className="flex items-center gap-3 shrink-0 hover:cursor-pointer">
                     <img
-                        className="w-8 h-8"
+                        className="w-11 h-11"
                         src={logo}
                     />
 
@@ -101,13 +101,13 @@ const Header: React.FC = () => {
                     {user ? (
                         <div className="flex items-center gap-14">
                             <button className="text-[#A1A1A1] hover:text-white transition">
-                                <img src={bellIcon} className="w-6 h-6 opacity-70 hover:opacity-100" />
+                                <img src={bellIcon} className="w-[30px] h-[30px] opacity-70 hover:opacity-100" />
                             </button>
 
                             <div className="relative" ref={dropdownRef}>
                                 <div className="flex items-center gap-1">
                                     <Link to="/profile">
-                                        <div className="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden">
+                                        <div className="w-11 h-11 rounded-full flex items-center justify-center overflow-hidden">
                                             {user.image ? (
                                                 <img
                                                     src={`${APP_ENV.IMAGES_100_URL}${user.image}`}
