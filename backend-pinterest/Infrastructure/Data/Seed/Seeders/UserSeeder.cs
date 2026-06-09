@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Mappers;
 using Application.Models.SeedDTO;
+using Domain.Constants;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using System.Text.Json;
@@ -70,7 +71,9 @@ public static class UserSeeder
                 continue;
             }
 
-            foreach (var role in user.Roles)
+            var roles = user.Roles.Count > 0 ? user.Roles : [Roles.User];
+
+            foreach (var role in roles)
             {
                 if (await roleManager.RoleExistsAsync(role))
                     await userManager.AddToRoleAsync(entity, role);
