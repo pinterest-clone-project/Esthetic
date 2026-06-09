@@ -4,6 +4,7 @@ import collectionIcon from "../../../src/assets/icons/collection_icon.svg";
 import addIcon from "../../../src/assets/icons/add_icon.svg";
 import settingsIcon from "../../../src/assets/icons/settings_icon.svg";
 import profileIcon from "../../../src/assets/icons/profile_icon.svg";
+import auraIcon from "../../../src/assets/icons/aura_icon.svg";
 import React, {useState} from "react";
 import Modal from "@/components/UI/Modal.tsx";
 
@@ -93,7 +94,7 @@ const Sidebar = () => {
                 />
             </aside>
 
-            <Modal isOpen={activeModal === 'friends'} onClose={closeModal} variant="sidebar" title="Додати друзів" width={300}>
+            <Modal isOpen={activeModal === 'friends'} onClose={closeModal} variant="sidebar" title="Add friends" width={300}>
                 <div className="flex items-center gap-2 bg-[#2a2a2a] rounded-lg px-3 py-2">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A1A1A1" strokeWidth="2">
                         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
@@ -105,23 +106,31 @@ const Sidebar = () => {
                 </div>
             </Modal>
 
-            <Modal isOpen={activeModal === 'settings'} onClose={closeModal} variant="sidebar" title="Налаштування" width={300}>
+            <Modal isOpen={activeModal === 'settings'} onClose={closeModal} variant="sidebar" title="Settings" width={300}>
                 <button
                     onClick={() => { navigate('/profile'); closeModal(); }}
                     className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-[#2a2a2a] transition-colors duration-150"
                 >
-                    <img src={profileIcon} style={{ filter: whiteFilter }} className="w-5 h-5 opacity-60" />
-                    <span className="text-sm text-white/70">Профіль</span>
+                    <img src={profileIcon} style={{ filter: whiteFilter }} className="w-6 h-6 opacity-60" />
+                    <span className="text-lg text-white/70">Profile</span>
                 </button>
             </Modal>
 
-            <Modal isOpen={activeModal === 'create'} onClose={closeModal} variant="sidebar" title="Створити" width={300}>
+            <Modal isOpen={activeModal === 'create'} onClose={closeModal} variant="sidebar" title="Create" width={300}>
                 <button
-                    onClick={() => { navigate('/profile'); closeModal(); }}
+                    onClick={() => { navigate('/boards'); closeModal(); }}
                     className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-[#2a2a2a] transition-colors duration-150"
                 >
-                    <img src={profileIcon} style={{ filter: whiteFilter }} className="w-5 h-5 opacity-60" />
-                    <span className="text-sm text-white/70">Профіль</span>
+                    <img src={collectionIcon} style={{ filter: whiteFilter }} className="w-6 h-6 opacity-60" />
+                    <span className="text-lg text-white/70">Moodboard</span>
+                </button>
+
+                <button
+                    onClick={() => { navigate('/aura'); closeModal(); }}
+                    className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-[#2a2a2a] transition-colors duration-150"
+                >
+                    <img src={auraIcon} style={{ filter: whiteFilter }} className="w-6 h-6 opacity-60" />
+                    <span className="text-lg text-white/70">Aura</span>
                 </button>
             </Modal>
         </>
