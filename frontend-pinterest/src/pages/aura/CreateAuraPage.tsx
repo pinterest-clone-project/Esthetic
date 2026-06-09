@@ -29,7 +29,7 @@ const CreateAuraPage = () => {
                 sourceUrl: sourceUrl || undefined,
                 categoryId: categoryId || undefined,
             }).unwrap();
-            navigate("/");
+            navigate("/collections");
         } catch (e) {
             console.error(e);
         }

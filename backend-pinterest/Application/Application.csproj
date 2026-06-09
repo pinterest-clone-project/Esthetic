@@ -29,10 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UseCases\Pins\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Common\Resources\ValidationMessages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
