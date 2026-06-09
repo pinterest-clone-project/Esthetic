@@ -89,6 +89,7 @@ const onSubmit = async (formValues: FormValues) => {
 if (isLoading) return <p>Завантаження...</p>;
 
 return (
+    <div className="flex justify-center py-8">
         <form onSubmit={handleSubmit(onSubmit)} className="max-w-[480px] p-6 text-white">
             <h1 className="text-2xl font-bold mb-2">Edit your profile</h1>
             <p className="text-text-muted text-sm mb-6">
@@ -161,6 +162,7 @@ return (
                 {isSaving ? "Saving..." : "Save"}
             </button>
         </form>
+    </div>
 );
 };
 
