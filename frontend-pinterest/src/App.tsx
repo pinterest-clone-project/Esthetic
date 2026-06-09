@@ -3,25 +3,22 @@ import CreateAuraPage from "./pages/aura/CreateAuraPage.tsx";
 import AuraPreviewPage from "./pages/aura/AuraPreviewPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
 import Layout from "./layout/Layout.tsx";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "./store";
-import {setLoading, setUser} from "./store/slices/authSlice";
+import {setUser} from "./store/slices/authSlice";
 import {useGetMeQuery} from "./services/accountService";
 import ProfilePage from "@/pages/profile/ProfilePage.tsx";
 import PrivateRoute from "@/components/PrivateRoute.tsx";
-import Spinner from "@/components/Spinner.tsx";
 import FirstPage from "@/pages/home/FirstPage.tsx";
+import logo from "@/assets/logo.png";
 import ReviewPage from "@/pages/home/ReviewPage.tsx";
 import CollectionsPage from "@/pages/collections/CollectionsPage.tsx";
 
 const AppInit = ({children}: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
-    const {data, isSuccess, isLoading} = useGetMeQuery(undefined, {skip: false,});
-    const globalLoading = useAppSelector((state) => state.auth.isLoading);
-
-    useEffect(() => {
-        dispatch(setLoading(isLoading));
-    }, [isLoading]);
+    const { data, isSuccess, isLoading } = useGetMeQuery();
+    const [showLoader, setShowLoader] = useState(true);
+    const [fadeOut, setFadeOut] = useState(false);
 
     useEffect(() => {
         if (isSuccess && data) {
@@ -29,9 +26,42 @@ const AppInit = ({children}: { children: React.ReactNode }) => {
         }
     }, [isSuccess, data, dispatch]);
 
+    useEffect(() => {
+        if (!isLoading) {
+            const fadeTimer = setTimeout(() => setFadeOut(true), 400);
+            const hideTimer = setTimeout(() => setShowLoader(false), 800);
+            return () => {
+                clearTimeout(fadeTimer);
+                clearTimeout(hideTimer);
+            };
+        }
+    }, [isLoading]);
+
     return (
         <>
-            {globalLoading && <Spinner/>}
+            {showLoader && (
+                <div
+                    className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#121212]"
+                    style={{
+                        opacity: fadeOut ? 0 : 1,
+                        transition: 'opacity 0.6s ease',
+                        pointerEvents: fadeOut ? 'none' : 'all',
+                    }}
+                >
+                    <img
+                        src={logo}
+                        className="w-[150px] h-[150px]"
+                        style={{ animation: 'logoPulse 1.0s ease-out forwards' }}
+                    />
+                    <style>{`
+                        @keyframes logoPulse {
+                            0%   { opacity: 0; transform: scale(0.8); }
+                            60%  { opacity: 1; transform: scale(1.05); }
+                            100% { opacity: 1; transform: scale(1); }
+                        }
+                    `}</style>
+                </div>
+            )}
             {children}
         </>
     );

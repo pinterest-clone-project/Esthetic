@@ -1,33 +1,47 @@
-const Spinner = () => (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-md bg-black/40">
-        <div className="flex flex-col items-center gap-5">
+import logo from "@/assets/logo.png";
+import { useEffect, useState } from "react";
 
-            <div className="relative w-14 h-14 flex items-center justify-center">
-                <div className="absolute inset-0 rounded-full border-2 border-white/[0.07]" />
-                <div
-                    className="absolute inset-0 rounded-full border-2 border-transparent animate-spin"
-                    style={{
-                        borderTopColor: '#1DB954',
-                        borderRightColor: 'rgba(29,185,84,0.3)',
-                        animationTimingFunction: 'cubic-bezier(0.5,0,0.5,1)',
-                        animationDuration: '0.9s',
-                    }}
-                />
-                <div
-                    className="w-1.5 h-1.5 rounded-full bg-btn-primary"
-                    style={{ boxShadow: '0 0 8px #1DB954' }}
-                />
-            </div>
+const Spinner = () => {
+    const [visible, setVisible] = useState(true);
+    const [fadeOut, setFadeOut] = useState(false);
 
-            <span
-                className="text-[13px] tracking-[0.08em] text-white/35 font-light"
-                style={{ animation: 'pulse 1.8s ease-in-out infinite' }}
-            >
-        Loading
-      </span>
+    useEffect(() => {
+        const fadeTimer = setTimeout(() => setFadeOut(true), 1600);
+        const hideTimer = setTimeout(() => setVisible(false), 2000);
+        return () => {
+            clearTimeout(fadeTimer);
+            clearTimeout(hideTimer);
+        };
+    }, []);
 
+    if (!visible) return null;
+
+    return (
+        <div
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#121212]"
+            style={{
+                opacity: fadeOut ? 0 : 1,
+                transition: 'opacity 0.4s ease',
+            }}
+        >
+            <img
+                src={logo}
+                className="w-[60px] h-[60px]"
+                style={{
+                    animation: 'logoPulse 1.6s ease-in-out forwards',
+                }}
+            />
+
+            <style>{`
+                @keyframes logoPulse {
+                    0%   { opacity: 0; transform: scale(0.8); }
+                    30%  { opacity: 1; transform: scale(1.05); }
+                    60%  { opacity: 1; transform: scale(1); }
+                    100% { opacity: 1; transform: scale(1); }
+                }
+            `}</style>
         </div>
-    </div>
-);
+    );
+};
 
 export default Spinner;
