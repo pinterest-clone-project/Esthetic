@@ -8,11 +8,12 @@ import {useAppDispatch, useAppSelector} from "./store";
 import {setUser} from "./store/slices/authSlice";
 import {useGetMeQuery} from "./services/accountService";
 import ProfilePage from "@/pages/profile/ProfilePage.tsx";
-import PrivateRoute from "@/components/PrivateRoute.tsx";
+import PrivateRoute from "@/components/routes/PrivateRoute.tsx";
 import FirstPage from "@/pages/home/FirstPage.tsx";
 import logo from "@/assets/logo.png";
 import ReviewPage from "@/pages/home/ReviewPage.tsx";
 import CollectionsPage from "@/pages/collections/CollectionsPage.tsx";
+import AdminRoute from "@/components/routes/AdminRoute.tsx";
 
 const AppInit = ({children}: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
@@ -95,6 +96,11 @@ const App = () => {
                     </Route>
                 </Route>
 
+                <Route element={<AdminRoute/>}>
+                    {/*<Route element={<AdminLayout/>}>*/}
+                    {/*    <Route path="/admin" element={<AdminDashboard/>}/>*/}
+                    {/*</Route>*/}
+                </Route>
             </Routes>
         </AppInit>
     )
