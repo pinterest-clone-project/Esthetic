@@ -2,7 +2,7 @@ import {Route, Routes} from "react-router";
 import CreateAuraPage from "./pages/aura/CreateAuraPage.tsx";
 import AuraPreviewPage from "./pages/aura/AuraPreviewPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
-import Layout from "./layout/Layout.tsx";
+import Layout from "./components/layouts/Layout.tsx";
 import {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "./store";
 import {setUser} from "./store/slices/authSlice";
@@ -97,9 +97,9 @@ const App = () => {
                 </Route>
 
                 <Route element={<AdminRoute/>}>
-                    {/*<Route element={<AdminLayout/>}>*/}
-                    {/*    <Route path="/admin" element={<AdminDashboard/>}/>*/}
-                    {/*</Route>*/}
+                    <Route element={<AdminLayout/>}>
+                        <Route path="/admin" element={<AdminDashboard/>}/>
+                    </Route>
                 </Route>
             </Routes>
         </AppInit>
