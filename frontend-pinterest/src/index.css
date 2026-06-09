@@ -32,3 +32,12 @@
         text-align: center;
     }
 }
+
+html {
+    scroll-behavior: smooth;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.7; }
+}

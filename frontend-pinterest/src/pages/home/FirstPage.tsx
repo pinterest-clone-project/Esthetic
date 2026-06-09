@@ -6,19 +6,20 @@ import im5 from "../../../src/assets/defaults/def-5.jpg"
 import im6 from "../../../src/assets/defaults/def-6.jpg"
 import im7 from "../../../src/assets/defaults/def-7.jpg"
 import im8 from "../../../src/assets/defaults/def-8.jpg"
+import {useAppSelector} from "@/store";
 
 const FirstPage = () => {
+    const user = useAppSelector((state) => state.auth.user);
+
     return (
         <div className="scroll-smooth">
 
-            {/* Intro */}
             <section className={"flex-col flex items-center pt-8"}>
                 <div className={"lg:text-[64px] text-4xl font-bold top-32 leading-[45px] tracking-normal text-center text-white "}>
                     Explore new ideas & inspirations</div>
                 <div className={"lg:text-[24px] text-sm top-32 lg:leading-[45px] leading-[20px] lg:pt-6 pt-3 tracking-normal text-center max-w-[1011px] text-[#A1A1A1A1] "}>
                     Discover and save your favourites from around the web</div>
 
-                {/* Categories */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-8">
                     {["Concept Art", "Photography", "Nature", "Wallpapers"].map(
                         (category) => (
@@ -33,7 +34,6 @@ const FirstPage = () => {
                 </div>
             </section>
 
-            {/* Gallery */}
             <section className="mt-[60px] flex justify-center">
                 <div className="relative w-[1400px] h-[500px] overflow-hidden">
 
@@ -65,6 +65,7 @@ const FirstPage = () => {
                 </div>
             </section>
 
+            {!user && (
             <section className="-mx-[calc((100vw-1505px)/2)]">
                 <a href={"#see-how-it-works"} className="w-full h-[70px] bg-btn-primary text-black font-medium text-2xl flex items-center justify-center gap-2 ">
                     See how it works
@@ -80,13 +81,13 @@ const FirstPage = () => {
                     </svg>
                 </a>
             </section>
+            )}
 
-            {/* Second section that is scrolled down*/}
+
             <section id={"see-how-it-works"} className={"min-h-screen flex items-center"}>
 
                 <div className={"grid grid-cols-1 lg:grid-cols-2 text-white w-full"}>
 
-                    {/* Left column with images */}
                     <section className="flex justify-center">
                         <div className="relative w-[1400px] h-[600px] overflow-hidden">
 
@@ -98,7 +99,6 @@ const FirstPage = () => {
                         </div>
                     </section>
 
-                    {/* Right column with text */}
                     <section className={"flex flex-col items-center text-white"}>
                         <div className={"font-bold leading-[45px] mt-16 tracking-[-0.5px] lg:text-[64px] text-4xl"}>
                             Find your Ideas
