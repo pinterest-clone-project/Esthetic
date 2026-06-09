@@ -8,7 +8,7 @@ import RegisterForm from "@/components/auth/RegisterForm.tsx";
 import {useAppDispatch, useAppSelector} from "@/store";
 import bellIcon from "../../../src/assets/icons/bell_icon.svg";
 import userIcon from "../../../src/assets/icons/user_icon.svg";
-import {clearUser, setLoading} from "@/store/slices/authSlice.ts";
+import {clearUser} from "@/store/slices/authSlice.ts";
 import {APP_ENV} from "@/constants/env";
 import {Link, useNavigate} from "react-router";
 import { useLogoutMutation } from "@/services/accountService";
@@ -48,7 +48,6 @@ const Header: React.FC = () => {
             dispatch(api.util.resetApiState());
             setDropdownOpen(false);
             navigate("/");
-            dispatch(setLoading(false));
         }
     };
 
