@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router";
-import { useGetPinByIdQuery, useGetAllPinsQuery } from "../../services/pinService.ts";
+import { useGetPinByIdQuery, useGetAllPinsQuery, useDeletePinMutation } from "../../services/pinService.ts";
 import { useGetMeQuery } from "../../services/accountService.ts";
+import { useLikeMutation, useUnlikeMutation } from "../../services/likeService.ts";
 import PinCard from "../../components/UI/PinCard.tsx";
 
 const AuraPreviewPage = () => {
@@ -10,6 +11,10 @@ const AuraPreviewPage = () => {
     const { data: pin, isLoading, isError } = useGetPinByIdQuery(id!);
     const { data: allPins } = useGetAllPinsQuery();
     const { data: me } = useGetMeQuery();
+
+    const [deletePin] = useDeletePinMutation();
+    const [like] = useLikeMutation();
+    const [unlike] = useUnlikeMutation();
 
     const isOwner = me?.id === pin?.creatorId;
     const suggestions = allPins?.filter(p => p.id !== id) ?? [];
@@ -58,7 +63,7 @@ const AuraPreviewPage = () => {
                     {/* Actions row */}
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <span className="flex items-center gap-1.5 text-gray-500 text-xs">
+                            <span className="flex items-center gap-1.5 text-gray-500 text-xs" onClick()>
                                 <span className="text-[#4ade80]">♥</span>
                                 {pin.likesCount}
                             </span>
