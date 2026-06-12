@@ -7,6 +7,7 @@ import {useEditProfileMutation, useGetMeQuery} from "@/services/accountService.t
 import {useApiError} from "@/hooks/useApiError.ts";
 import {useFormServerErrors} from "@/hooks/useFormServerErrors.ts";
 import type {IEditRequest} from "@/types/account/requests/IEditRequest.ts";
+import {APP_ENV} from "@/constants/env";
 
 const schema = z.object({
     firstName:   z.string().min(1, "Імʼя обовʼязкове").max(50).or(z.literal("")).optional(),
@@ -88,67 +89,80 @@ const onSubmit = async (formValues: FormValues) => {
 if (isLoading) return <p>Завантаження...</p>;
 
 return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
-        <div>
-            <input {...register("firstName")} placeholder="Імʼя" />
-            {errors.firstName && <span>{errors.firstName.message}</span>}
-        </div>
+    <div className="flex justify-center py-8">
+        <form onSubmit={handleSubmit(onSubmit)} className="max-w-[480px] p-6 text-white">
+            <h1 className="text-2xl font-bold mb-2">Edit your profile</h1>
+            <p className="text-text-muted text-sm mb-6">
+                Keep your personal information private. The information you add here is visible to all users who can view your profile.
+            </p>
 
-        <div>
-            <input {...register("lastName")} placeholder="Прізвище" />
-            {errors.lastName && <span>{errors.lastName.message}</span>}
-        </div>
+            {/* Avatar */}
+            <div className="flex items-center gap-4 mb-6">
+                <div className="w-14 h-14 rounded-full bg-[#2a2a2a] border-2 border-btn-primary flex items-center justify-center overflow-hidden">
+                    {me?.image
+                        ? <img src={`${APP_ENV.IMAGES_100_URL}${me.image}`} className="w-full h-full object-cover" />
+                        : <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1DB954" strokeWidth="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                    }
+                </div>
+                <label className="px-5 py-2 rounded-lg bg-[#2a2a2a] text-white text-sm cursor-pointer hover:bg-[#3a3a3a] transition">
+                    Edit
+                    <input type="file" accept="image/*" className="hidden"
+                           onChange={(e) => setValue("imageFile", e.target.files?.[0])} />
+                </label>
+            </div>
 
-        <div>
-            <input {...register("email")} type="email" placeholder="Email" />
-            {errors.email && <span>{errors.email.message}</span>}
-        </div>
 
-        <div>
-            <textarea {...register("bio")} placeholder="Про себе" />
-            {errors.bio && <span>{errors.bio.message}</span>}
-        </div>
+            {[
+                { name: "firstName" as const, placeholder: "John" },
+                { name: "lastName"  as const, placeholder: "Your surname" },
+                { name: "bio"       as const, placeholder: "About you", textarea: true },
+                { name: "email"     as const, placeholder: "Email" },
+                { name: "phoneNumber" as const, placeholder: "+380..." },
+            ].map(({ name, placeholder, textarea }) => (
+                <div key={name} className="mb-3">
+                    {textarea
+                        ? <textarea {...register(name)} placeholder={placeholder} rows={3}
+                                    className="w-full bg-transparent border border-[#333] rounded-lg px-4 py-3 text-white placeholder-text-muted text-sm focus:outline-none focus:border-btn-primary resize-none transition" />
+                        : <input {...register(name)} placeholder={placeholder}
+                                 className="w-full bg-transparent border border-[#333] rounded-lg px-4 py-3 text-white placeholder-text-muted text-sm focus:outline-none focus:border-btn-primary transition" />
+                    }
+                    {errors[name] && <span className="text-red-400 text-xs mt-1">{errors[name]?.message}</span>}
+                </div>
+            ))}
 
-        <div>
-            <input {...register("phoneNumber")} placeholder="+380..." />
-            {errors.phoneNumber && <span>{errors.phoneNumber.message}</span>}
-        </div>
+            {/* Gender */}
+            <div className="mb-3">
+                <select {...register("gender", { valueAsNumber: true })}
+                        className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-btn-primary transition">
+                    <option value="">— Gender —</option>
+                    <option value={0}>Male</option>
+                    <option value={1}>Female</option>
+                    <option value={2}>Other</option>
+                </select>
+            </div>
 
-        <div>
-            <select {...register("gender", { valueAsNumber: true })}>
-                <option value="">— Стать —</option>
-                <option value={0}>Чоловіча</option>
-                <option value={1}>Жіноча</option>
-                <option value={2}>Інша</option>
-            </select>
-        </div>
+            {/* Birth date */}
+            <div className="mb-3">
+                <input {...register("birthDate")} type="date"
+                       className="w-full bg-transparent border border-[#333] rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-btn-primary transition" />
+            </div>
 
-        <div>
-            <input {...register("birthDate")} type="date" />
-        </div>
+            {/* Private */}
+            <label className="flex items-center gap-3 mb-6 cursor-pointer">
+                <input {...register("isPrivate")} type="checkbox" className="accent-btn-primary w-4 h-4" />
+                <span className="text-sm text-text-muted">Private account</span>
+            </label>
 
-        <label>
-            <input {...register("isPrivate")} type="checkbox" />
-            Приватний акаунт
-        </label>
+            {apiError && !apiError.errors && (
+                <p className="text-red-400 text-sm mb-4">{apiError.detail ?? apiError.title}</p>
+            )}
 
-        <div>
-            <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setValue("imageFile", e.target.files?.[0])}
-            />
-        </div>
-
-        {/* Загальна помилка (не валідаційна — 401, 500 тощо) */}
-        {apiError && !apiError.errors && (
-            <p style={{ color: "red" }}>{apiError.detail ?? apiError.title}</p>
-        )}
-
-        <button type="submit" disabled={isSaving}>
-            {isSaving ? "Збереження..." : "Зберегти"}
-        </button>
-    </form>
+            <button type="submit" disabled={isSaving}
+                    className="w-full py-3 rounded-lg bg-btn-primary text-black font-medium text-sm hover:opacity-90 disabled:opacity-50 transition">
+                {isSaving ? "Saving..." : "Save"}
+            </button>
+        </form>
+    </div>
 );
 };
 

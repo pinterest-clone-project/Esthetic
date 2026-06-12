@@ -1,13 +1,23 @@
-﻿using Application.UseCases.Pins.Commands;
+﻿using Application.Common.Exceptions;
+using Application.Common.Validators;
+using Application.UseCases.Pins.Commands;
 using Application.UseCases.Pins.Queries;
+using Domain.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace backend_pinterest.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class PinsController(IMediator mediator) : ControllerBase
 {
+    private Guid CurrentUserId => Guid.Parse(
+        User.FindFirstValue(JwtClaims.Id)
+        ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized));
+
+
     [HttpGet("getAll")]
     public async Task<IActionResult> GetAll()
     {
@@ -26,7 +36,8 @@ public class PinsController(IMediator mediator) : ControllerBase
 	[HttpPost("create")]
 	public async Task<IActionResult> Create([FromForm] CreatePinCommand command)
 	{
-	    var pin = await mediator.Send(command);
+        var commandWithCreator = command with { CreatorId = CurrentUserId };
+        var pin = await mediator.Send(commandWithCreator);
 	    return Ok(pin);
 	}
 
@@ -43,5 +54,13 @@ public class PinsController(IMediator mediator) : ControllerBase
     {
         await mediator.Send(new DeletePinCommand(id));
         return NoContent();
+    }
+
+    [HttpGet("my")]
+    [Authorize]
+    public async Task<IActionResult> GetMyPins()
+    {
+        var pins = await mediator.Send(new GetUserPinsQuery(CurrentUserId));
+        return Ok(pins);
     }
 }

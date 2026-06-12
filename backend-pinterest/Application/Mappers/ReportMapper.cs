@@ -1,18 +1,31 @@
 ﻿using Application.Models.DTO.Report;
 using Application.UseCases.Reports.Commands;
-using AutoMapper;
 using Domain.Entities.Report;
 using Domain.Enums;
+using Riok.Mapperly.Abstractions;
 
 namespace Application.Mappers;
 
-public class ReportMapper : Profile
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.None)]
+public partial class ReportMapper
 {
-    public ReportMapper()
+    [MapperIgnoreTarget(nameof(ReportDTO.Status))]
+    private partial ReportDTO ToDtoInternal(ReportEntity src);
+
+    [MapperIgnoreTarget(nameof(ReportEntity.Status))]
+    private partial ReportEntity ToEntityInternal(CreateReportCommand src);
+
+    public ReportDTO ToDto(ReportEntity src)
     {
-        CreateMap<ReportEntity, ReportDTO>()
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
-        CreateMap<CreateReportCommand, ReportEntity>()
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(_ => ReportStatus.Pending));
+        var dto = ToDtoInternal(src);
+        dto.Status = src.Status.ToString();
+        return dto;
+    }
+
+    public ReportEntity ToEntity(CreateReportCommand src)
+    {
+        var entity = ToEntityInternal(src);
+        entity.Status = ReportStatus.Pending;
+        return entity;
     }
 }

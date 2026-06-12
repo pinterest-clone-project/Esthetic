@@ -1,17 +1,15 @@
 using Application.Models.DTO.Category;
 using Application.UseCases.Categories.Commands;
-using AutoMapper;
 using Domain.Entities.Category;
+using Riok.Mapperly.Abstractions;
 
 namespace Application.Mappers;
 
-public class CategoryMapper : Profile
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.None)]
+public partial class CategoryMapper
 {
-    public CategoryMapper()
-    {
-        CreateMap<CategoryEntity, CategoryDTO>();
-        CreateMap<CreateCategoryCommand, CategoryEntity>();
-        CreateMap<UpdateCategoryCommand, CategoryEntity>()
-            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-    }
+    public partial CategoryDTO ToDto(CategoryEntity src);
+    public partial CategoryEntity ToEntity(CreateCategoryCommand src);
+    public partial CategoryEntity ToEntity(UpdateCategoryCommand src);
+    public partial void Patch(UpdateCategoryCommand src, CategoryEntity dest);
 }

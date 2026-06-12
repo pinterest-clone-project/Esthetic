@@ -2,6 +2,7 @@
 using Application.Common.Optional;
 using Application.Common.Validators;
 using Application.Interfaces;
+using Application.Mappers;
 using Domain.Constants;
 using Domain.Entities.Identity;
 using Domain.Interfaces;
@@ -51,6 +52,7 @@ public static class WebApplicationBuilderExtensions
             options.Password.RequireUppercase = false;
             options.Password.RequireNonAlphanumeric = false;
             options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+            options.User.RequireUniqueEmail = true;
         })
         .AddEntityFrameworkStores<AppDbContext>()
         .AddDefaultTokenProviders();
@@ -137,8 +139,6 @@ public static class WebApplicationBuilderExtensions
             options.InstanceName = "Pinterest_";
         });
 
-        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
@@ -223,6 +223,17 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<ISmtpService, SmtpService>();
         services.AddScoped<IPagedService, PagedService>();
         services.AddScoped<ICookieService, CookieService>();
+        #endregion
+
+        #region Mappers
+        services.AddSingleton<BoardMapper>();
+        services.AddSingleton<CategoryMapper>();
+        services.AddSingleton<CommentMapper>();
+        services.AddSingleton<PinMapper>();
+        services.AddSingleton<ReportMapper>();
+        services.AddSingleton<TagMapper>();
+        services.AddSingleton<UserMapper>();
+        services.AddSingleton<SeederMapper>();
         #endregion
 
         #region OpenAPI

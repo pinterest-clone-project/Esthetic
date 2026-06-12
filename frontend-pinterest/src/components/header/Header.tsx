@@ -1,5 +1,5 @@
 import logo from "../../../src/assets/logo.png";
-import searchIcon from "../../../src/assets/search-vector.svg";
+import searchIcon from "../../assets/icons/search-vector.svg";
 import Button from "@/components/button/Button.tsx";
 import {useEffect, useRef, useState} from "react";
 import Modal from "@/components/UI/Modal.tsx";
@@ -8,10 +8,11 @@ import RegisterForm from "@/components/auth/RegisterForm.tsx";
 import {useAppDispatch, useAppSelector} from "@/store";
 import bellIcon from "../../../src/assets/icons/bell_icon.svg";
 import userIcon from "../../../src/assets/icons/user_icon.svg";
-import {clearUser, setLoading} from "@/store/slices/authSlice.ts";
+import {clearUser} from "@/store/slices/authSlice.ts";
 import {APP_ENV} from "@/constants/env";
 import {Link, useNavigate} from "react-router";
 import { useLogoutMutation } from "@/services/accountService";
+import {api} from "@/services/api.ts";
 
 
 type ModalType = "login" | "signup" | null;
@@ -44,9 +45,9 @@ const Header: React.FC = () => {
             console.error("Помилка під час logout:", error);
         } finally {
             dispatch(clearUser());
+            dispatch(api.util.resetApiState());
             setDropdownOpen(false);
             navigate("/");
-            dispatch(setLoading(false));
         }
     };
 
@@ -57,7 +58,7 @@ const Header: React.FC = () => {
 
                 <div className="flex items-center gap-3 shrink-0 hover:cursor-pointer">
                     <img
-                        className="w-8 h-8"
+                        className="w-11 h-11"
                         src={logo}
                     />
 
@@ -101,13 +102,13 @@ const Header: React.FC = () => {
                     {user ? (
                         <div className="flex items-center gap-14">
                             <button className="text-[#A1A1A1] hover:text-white transition">
-                                <img src={bellIcon} className="w-6 h-6 opacity-70 hover:opacity-100" />
+                                <img src={bellIcon} className="w-[30px] h-[30px] opacity-70 hover:opacity-100" />
                             </button>
 
                             <div className="relative" ref={dropdownRef}>
                                 <div className="flex items-center gap-1">
                                     <Link to="/profile">
-                                        <div className="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden">
+                                        <div className="w-11 h-11 rounded-full flex items-center justify-center overflow-hidden">
                                             {user.image ? (
                                                 <img
                                                     src={`${APP_ENV.IMAGES_100_URL}${user.image}`}

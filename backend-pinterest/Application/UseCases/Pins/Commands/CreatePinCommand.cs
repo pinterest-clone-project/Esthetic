@@ -13,4 +13,6 @@ public record CreatePinCommand : IRequest<PinDTO>
     public string? SourceUrl { get; init; }
     public Guid? CategoryId { get; init; }
     public List<Guid>? TagIds { get; init; }
+    [BindNever]
+    public Guid CreatorId { get; init; }
 }

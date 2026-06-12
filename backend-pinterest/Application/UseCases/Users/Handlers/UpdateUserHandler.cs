@@ -1,5 +1,5 @@
+using Application.Mappers;
 using Application.UseCases.Users.Commands;
-using AutoMapper;
 using Domain.Interfaces;
 using MediatR;
 
@@ -7,15 +7,14 @@ namespace Application.UseCases.Users.Handlers;
 
 public class UpdateUserHandler(
     IUserRepository userRepository,
-    IMapper mapper) : IRequestHandler<UpdateUserCommand, Unit>
+    UserMapper userMapper) : IRequestHandler<UpdateUserCommand, Unit>
 {
     public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByIdAsync(request.Id);
-        if (user == null) throw new KeyNotFoundException("User not found");
+        var user = await userRepository.GetByIdAsync(request.Id)
+            ?? throw new KeyNotFoundException("User not found");
 
-        mapper.Map(request, user);
-
+        userMapper.Patch(request, user);
         await userRepository.UpdateAsync(user);
         return Unit.Value;
     }

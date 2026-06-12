@@ -115,6 +115,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User with this email address is already registered.
+        /// </summary>
+        internal static string EmailAlreadyExists {
+            get {
+                return ResourceManager.GetString("EmailAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid email format.
         /// </summary>
         internal static string EmailFormat {
@@ -201,6 +210,15 @@ namespace Application.Common.Resources {
         internal static string ErrorValidation {
             get {
                 return ResourceManager.GetString("ErrorValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error linking external login provider.
+        /// </summary>
+        internal static string ExternalLoginLinkFailed {
+            get {
+                return ResourceManager.GetString("ExternalLoginLinkFailed", resourceCulture);
             }
         }
         
@@ -318,6 +336,15 @@ namespace Application.Common.Resources {
         internal static string FieldUsername {
             get {
                 return ResourceManager.GetString("FieldUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to link Google account to the existing profile.
+        /// </summary>
+        internal static string GoogleLinkFailed {
+            get {
+                return ResourceManager.GetString("GoogleLinkFailed", resourceCulture);
             }
         }
         

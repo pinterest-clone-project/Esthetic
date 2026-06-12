@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import {useGoogleLoginMutation, useRegisterMutation} from "@/services/accountService.ts";
 import { useAppDispatch } from "@/store";
-import {setLoading, setUser} from "@/store/slices/authSlice.ts";
+import {setUser} from "@/store/slices/authSlice.ts";
 import Button from "@/components/button/Button.tsx";
 import GoogleIcon from "@/assets/icons/GoogleIcon.tsx";
 import logo from "@/assets/logo.png";
@@ -41,9 +41,9 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
     const dispatch = useAppDispatch();
-
     const [register, { isLoading }] = useRegisterMutation();
-    const [loginByGoogle, { isLoading: isGoogleLoading }] = useGoogleLoginMutation();
+    const [loginByGoogle] = useGoogleLoginMutation();
+    const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
 
     const hasMinLength = formData.password.length >= 8;
@@ -92,15 +92,15 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
     const loginWithGoogle = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
-            dispatch(setLoading(true));
+            setIsGoogleLoading(true);
             try {
                 const account = await loginByGoogle({ token: tokenResponse.access_token }).unwrap();
                 dispatch(setUser(account));
                 onSuccess?.();
             } catch (err) {
                 console.error("Google login failed", err);
-            }  finally {
-                dispatch(setLoading(false));
+            } finally {
+                setIsGoogleLoading(false);
             }
         },
     });
@@ -241,7 +241,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                             icon={<GoogleIcon />}
                             onClick={() => loginWithGoogle()}
                         >
-                            Continue with Google
+                            {isGoogleLoading ? "Loading..." : "Continue with Google"}
                         </Button>
                     </div>
 

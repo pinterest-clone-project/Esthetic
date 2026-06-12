@@ -1,15 +1,13 @@
 ﻿using Application.Models.DTO.Comment;
 using Application.UseCases.Comments.Commands;
-using AutoMapper;
 using Domain.Entities.Comment;
+using Riok.Mapperly.Abstractions;
 
 namespace Application.Mappers;
 
-public class CommentMapper : Profile
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.None)]
+public partial class CommentMapper
 {
-    public CommentMapper()
-    {
-        CreateMap<CreateCommentCommand, CommentEntity>();
-        CreateMap<CommentEntity, CommentDTO>();
-    }
+    public partial CommentEntity ToEntity(CreateCommentCommand src);
+    public partial CommentDTO ToDto(CommentEntity src);
 }

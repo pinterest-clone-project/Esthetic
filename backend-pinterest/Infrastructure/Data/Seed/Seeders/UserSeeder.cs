@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
+using Application.Mappers;
 using Application.Models.SeedDTO;
-using AutoMapper;
+using Domain.Constants;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using System.Text.Json;
@@ -10,11 +11,11 @@ namespace Infrastructure.Data.Seed.Seeders;
 public static class UserSeeder
 {
     public static async Task SeedAsync(
-    AppDbContext context,
-    IMapper mapper,
-    IImageService imageService,
-    UserManager<UserEntity> userManager,
-    RoleManager<RoleEntity> roleManager)
+        AppDbContext context,
+        SeederMapper mapper,
+        IImageService imageService,
+        UserManager<UserEntity> userManager,
+        RoleManager<RoleEntity> roleManager)
     {
         if (context.Users.Any()) return;
 
@@ -43,21 +44,18 @@ public static class UserSeeder
 
         foreach (var user in users)
         {
-            var entity = mapper.Map<UserEntity>(user);
+            var entity = mapper.ToEntity(user);
             entity.UserName = user.UserName;
 
             if (!string.IsNullOrEmpty(user.LocalImage))
             {
                 var localPath = Path.Combine(seedImagesDir, user.LocalImage);
-                if (File.Exists(localPath))
-                {
-                    entity.Image = await imageService.SaveImageFromPathAsync(localPath);
-                }
-                else
-                {
+                entity.Image = File.Exists(localPath)
+                    ? await imageService.SaveImageFromPathAsync(localPath)
+                    : await imageService.SaveImageFromUrlAsync(user.Image);
+
+                if (!File.Exists(localPath))
                     Console.WriteLine("Local image not found: {0}, falling back to URL", user.LocalImage);
-                    entity.Image = await imageService.SaveImageFromUrlAsync(user.Image);
-                }
             }
             else
             {
@@ -73,16 +71,14 @@ public static class UserSeeder
                 continue;
             }
 
-            foreach (var role in user.Roles)
+            var roles = user.Roles.Count > 0 ? user.Roles : [Roles.User];
+
+            foreach (var role in roles)
             {
                 if (await roleManager.RoleExistsAsync(role))
-                {
                     await userManager.AddToRoleAsync(entity, role);
-                }
                 else
-                {
                     Console.WriteLine("Not Found Role: {0}", role);
-                }
             }
         }
     }
