@@ -37,7 +37,7 @@ const CollectionsPage = () => {
                 <button className="absolute right-0 top-0 px-6 py-2 rounded-lg bg-[#2a2a2a] text-white text-sm hover:bg-[#333] transition-colors duration-150">
                     Create
                 </button>
-                <h1 className="text-4xl  mb-3">Your collection</h1>
+                <h1 className="text-4xl mb-3">Your collection</h1>
                 <div className="flex items-center gap-4">
                     {tabs.map((tab) => (
                         <button
@@ -59,7 +59,7 @@ const CollectionsPage = () => {
             {activeTab === "Aura" &&
                 (hasAuras ? (
                     <div className="mt-8">
-                        <h2 className="text-lg">Your created Auras</h2>
+                        <h2 className="text-lg mb-3">Your created Auras</h2>
                         <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3 mt-4">
                             {myPins!.map((pin) => (
                                 <div key={pin.id} className="break-inside-avoid mb-3">
@@ -100,7 +100,7 @@ const CollectionsPage = () => {
 
             {activeTab === "Moodboard" && (
                 <div className="mt-8">
-                    <h2 className="text-sm text-white/70 mb-4">Your Moodboard</h2>
+                    <h2 className="text-lg mb-3">Your Moodboard</h2>
                     <div className="flex flex-wrap gap-4 mb-10">
                         {moodboards?.map((mb) => (
                             <button
@@ -130,7 +130,7 @@ const CollectionsPage = () => {
                         </button>
                     </div>
 
-                    <h2 className="text-sm text-white/70 mb-4">Random Ideas</h2>
+                    <h2 className="text-lg">Random Ideas</h2>
                     <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-6 gap-3">
                         {Pins?.map((pin) => (
                             <div key={pin.id} className="break-inside-avoid mb-3">
