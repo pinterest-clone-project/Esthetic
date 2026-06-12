@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useGetPinByIdQuery, useGetAllPinsQuery, useDeletePinMutation } from "../../services/pinService.ts";
 import { useGetMeQuery } from "../../services/accountService.ts";
@@ -16,8 +17,34 @@ const AuraPreviewPage = () => {
     const [like] = useLikeMutation();
     const [unlike] = useUnlikeMutation();
 
+    // Ideally seed `liked` from pin.isLikedByMe if your API provides it
+    const [liked, setLiked] = useState(false);
+    const [likesCount, setLikesCount] = useState<number | null>(null);
+
     const isOwner = me?.id === pin?.creatorId;
     const suggestions = allPins?.filter(p => p.id !== id) ?? [];
+
+    // Use local state for likes count once pin loads; fall back to pin.likesCount
+    const displayLikesCount = likesCount ?? pin?.likesCount ?? 0;
+
+    const handleLike = async () => {
+        if (!pin) return;
+        if (liked) {
+            await unlike(pin.id);
+            setLiked(false);
+            setLikesCount(displayLikesCount - 1);
+        } else {
+            await like(pin.id);
+            setLiked(true);
+            setLikesCount(displayLikesCount + 1);
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!pin) return;
+        await deletePin(pin.id);
+        navigate(-1);
+    };
 
     if (isLoading) return (
         <div className="w-full min-h-full bg-[#000000] flex items-center justify-center">
@@ -63,15 +90,25 @@ const AuraPreviewPage = () => {
                     {/* Actions row */}
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <span className="flex items-center gap-1.5 text-gray-500 text-xs" onClick()>
-                                <span className="text-[#4ade80]">♥</span>
-                                {pin.likesCount}
-                            </span>
+                            {/* Like button */}
+                            <button
+                                onClick={handleLike}
+                                className="flex items-center gap-1.5 text-xs transition-colors group"
+                            >
+                                <span className={`transition-colors ${liked ? 'text-[#4ade80]' : 'text-gray-500 group-hover:text-[#4ade80]'}`}>
+                                    ♥
+                                </span>
+                                <span className={`transition-colors ${liked ? 'text-white' : 'text-gray-500'}`}>
+                                    {displayLikesCount}
+                                </span>
+                            </button>
+
                             <span className="flex items-center gap-1.5 text-gray-500 text-xs">
                                 <span className="text-[#4ade80]">💬</span>
                                 {pin.commentsCount}
                             </span>
                         </div>
+
                         {isOwner && (
                             <div className="flex items-center gap-2">
                                 <button
@@ -80,7 +117,10 @@ const AuraPreviewPage = () => {
                                 >
                                     Edit
                                 </button>
-                                <button className="text-xs text-red-400 hover:text-red-300 border border-red-500/20 hover:border-red-400/40 px-3 py-1.5 rounded-lg transition-colors">
+                                <button
+                                    onClick={handleDelete}
+                                    className="text-xs text-red-400 hover:text-red-300 border border-red-500/20 hover:border-red-400/40 px-3 py-1.5 rounded-lg transition-colors"
+                                >
                                     Delete
                                 </button>
                             </div>
