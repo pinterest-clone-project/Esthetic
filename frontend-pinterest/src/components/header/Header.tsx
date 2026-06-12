@@ -58,7 +58,7 @@ const Header: React.FC = () => {
             <div className="max-w-[1505px] h-[50px] mx-auto px-4 flex items-center justify-between gap-4
             ">
 
-                <div className="flex items-center gap-3 shrink-0 hover:cursor-pointer">
+                <div className="flex items-center gap-3 shrink-0 hover:cursor-pointer -ml-1.5">
                     <img
                         className="w-11 h-11"
                         src={logo}
