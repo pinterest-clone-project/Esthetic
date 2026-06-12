@@ -13,6 +13,7 @@ import {APP_ENV} from "@/constants/env";
 import {Link, useNavigate} from "react-router";
 import { useLogoutMutation } from "@/services/accountService";
 import {api} from "@/services/api.ts";
+import {selectIsAdmin} from "@/store/selectors/authSelectors.ts";
 
 
 type ModalType = "login" | "signup" | null;
@@ -22,6 +23,7 @@ const Header: React.FC = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const user = useAppSelector((state) => state.auth.user);
+    const isAdmin = useAppSelector(selectIsAdmin);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
@@ -131,6 +133,22 @@ const Header: React.FC = () => {
                                             <p className="text-white text-sm font-medium">{user?.firstName}</p>
                                             <p className="text-[#A1A1A1] text-xs">{user?.email}</p>
                                         </div>
+
+                                        {isAdmin && (
+                                            <button
+                                                onClick={() => {
+                                                    setDropdownOpen(false);
+                                                    navigate("/admin");
+                                                }}
+                                                className="w-full px-4 py-2 text-left text-sm text-white hover:bg-[#535353] transition flex items-center gap-2"
+                                            >
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                                    <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z"/>
+                                                </svg>
+                                                Адмін панель
+                                            </button>
+                                        )}
+
                                         <button
                                             onClick={handleLogout}
                                             className="w-full px-4 py-2 text-left text-sm text-red-400 hover:bg-[#535353] transition flex items-center gap-2"
