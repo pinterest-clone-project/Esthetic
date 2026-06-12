@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useGetPinByIdQuery, useGetAllPinsQuery, useDeletePinMutation } from "../../services/pinService.ts";
 import { useGetMeQuery } from "../../services/accountService.ts";
@@ -10,6 +10,13 @@ const AuraPreviewPage = () => {
     const navigate = useNavigate();
 
     const { data: pin, isLoading, isError } = useGetPinByIdQuery(id!);
+    // Sync liked state once pin data loads
+    useEffect(() => {
+        if (pin) {
+            setLiked(pin.isLikedByMe ?? false);
+            setLikesCount(pin.likesCount);
+        }
+    }, [pin?.id]);
     const { data: allPins } = useGetAllPinsQuery();
     const { data: me } = useGetMeQuery();
 

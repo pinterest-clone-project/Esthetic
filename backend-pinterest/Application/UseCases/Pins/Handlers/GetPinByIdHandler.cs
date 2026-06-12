@@ -14,6 +14,6 @@ public class GetPinByIdHandler(
     {
         var pin = await repository.GetByIdWithDetailsAsync(request.Id, cancellationToken);
         if (pin == null) return null;
-        return pinMapper.ToDto(pin);
+        return pinMapper.ToDto(pin, request.CurrentUserId);
     }
 }

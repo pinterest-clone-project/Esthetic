@@ -8,7 +8,7 @@ import { useLikeMutation, useUnlikeMutation } from "../../services/likeService.t
 const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [hovered, setHovered] = useState(false);
-    const [liked, setLiked] = useState(false); // ideally seeded from pin.isLikedByMe if your API provides it
+    const [liked, setLiked] = useState(pin.isLikedByMe ?? false);
     const [likesCount, setLikesCount] = useState(pin.likesCount);
     const navigate = useNavigate();
 
