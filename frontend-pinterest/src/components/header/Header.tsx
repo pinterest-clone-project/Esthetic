@@ -6,7 +6,6 @@ import Modal from "@/components/UI/Modal.tsx";
 import LoginForm from "@/components/auth/LoginForm.tsx";
 import RegisterForm from "@/components/auth/RegisterForm.tsx";
 import {useAppDispatch, useAppSelector} from "@/store";
-import bellIcon from "../../../src/assets/icons/bell_icon.svg";
 import userIcon from "../../../src/assets/icons/user_icon.svg";
 import {clearUser} from "@/store/slices/authSlice.ts";
 import {APP_ENV} from "@/constants/env";
@@ -14,6 +13,7 @@ import {Link, useNavigate} from "react-router";
 import { useLogoutMutation } from "@/services/accountService";
 import {api} from "@/services/api.ts";
 import {selectIsAdmin} from "@/store/selectors/authSelectors.ts";
+import NotificationBell from "@/components/header/NotificationBell.tsx";
 
 
 type ModalType = "login" | "signup" | null;
@@ -103,9 +103,8 @@ const Header: React.FC = () => {
 
                     {user ? (
                         <div className="flex items-center gap-14">
-                            <button className="text-[#A1A1A1] hover:text-white transition">
-                                <img src={bellIcon} className="w-[30px] h-[30px] opacity-70 hover:opacity-100" />
-                            </button>
+
+                            <NotificationBell />
 
                             <div className="relative" ref={dropdownRef}>
                                 <div className="flex items-center gap-1">
