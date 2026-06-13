@@ -66,7 +66,7 @@ const FirstPage = () => {
             </section>
 
             {!user && (
-            <section className="absolute left-1/2 -translate-x-1/2 w-screen">
+            <section className="relative w-screen ml-[calc(50%-50vw)]">
                 <a href={"#see-how-it-works"} className="w-full h-[70px] bg-btn-primary text-black font-medium text-2xl flex items-center justify-center gap-2 ">
                     See how it works
                     <svg
@@ -86,16 +86,15 @@ const FirstPage = () => {
 
             <section id={"see-how-it-works"} className={"min-h-screen flex items-center"}>
 
-                <div className={"grid grid-cols-1 lg:grid-cols-2 text-white w-full"}>
+                <div className={"grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-0 text-white w-full"}>
 
-                    <section className="flex justify-center">
-                        <div className="relative w-[1400px] h-[600px] overflow-hidden">
+                    <section className=" hidden md:hidden lg:flex justify-center">
+                        <div className="relative w-full max-w-[700px] h-[600px]">
 
-                            <img src={im6} className="absolute mt-6 left-[152px] w-[150px] h-[150px] object-cover rounded-[15px]" />
-                            <img src={im7} className="absolute ml-12 left-[304px] w-[300px] h-[300px] object-cover rounded-[15px]" />
-                            <img src={im8} className="absolute mt-[325px] left-[416px] w-[200px] h-[200px] object-cover rounded-[15px]" />
-                            <img src={im5} className="absolute top-18 left-[240px] w-[300px] h-[400px] object-cover rounded-[15px]" />
-
+                            <img src={im6} className="absolute top-[4%] left-[23%] w-[150px] h-[150px] object-cover rounded-[15px]" />
+                            <img src={im7} className="absolute left-[55%] w-[300px] h-[300px] object-cover rounded-[15px]" />
+                            <img src={im8} className="absolute top-[55%] left-[65%] w-[200px] h-[200px] object-cover rounded-[15px]" />
+                            <img src={im5} className="absolute top-18 left-[40%] w-[300px] h-[400px] object-cover rounded-[15px]" />
                         </div>
                     </section>
 
