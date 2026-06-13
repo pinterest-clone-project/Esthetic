@@ -34,32 +34,32 @@ const FirstPage = () => {
                 </div>
             </section>
 
-            <section className="mt-[60px] flex justify-center">
-                <div className="relative w-full max-w-[1400px] h-[500px] overflow-hidden">
+            <section className="mt-[60px] flex justify-center h-[470px] lg:h-[475px] md:h-[475px]">
+                <div className="hidden relative lg:block md:block w-full max-w-[1400px]">
 
                     <img
                         src={im1}
-                        className="absolute left-[10%] w-[140px] lg:w-[200px] h-[350px] object-cover rounded-[15px]"
+                        className="absolute left-[10%] w-[140px] lg:w-[200px] h-[290px] lg:h-[350px] object-cover rounded-[15px]"
                     />
 
                     <img
                         src={im2}
-                        className="absolute left-[28%] w-[140px] lg:w-[200px] h-[400px] object-cover rounded-[15px]"
+                        className="absolute left-[28%] w-[140px] lg:w-[200px] h-[340px] lg:h-[400px] object-cover rounded-[15px]"
                     />
 
                     <img
                         src={im3}
-                        className="absolute top-[40px] left-[44%] w-[140px] lg:w-[200px] h-[400px] object-cover rounded-[15px]"
+                        className="absolute top-[40px] left-[44%] w-[140px] lg:w-[200px] h-[340px] lg:h-[400px] object-cover rounded-[15px]"
                     />
 
                     <img
                         src={im5}
-                        className="absolute left-[76%] w-[140px] lg:w-[200px] h-[400px] object-cover rounded-[15px]"
+                        className="absolute left-[76%] w-[140px] lg:w-[200px] h-[340px] lg:h-[400px] object-cover rounded-[15px]"
                     />
 
                     <img
                         src={im4}
-                        className="absolute top-[80px] left-[63%] w-[140px] lg:w-[200px] h-[370px] object-cover rounded-[15px]"
+                        className="absolute top-[80px] left-[63%] w-[140px] lg:w-[200px] h-[310px] lg:h-[370px] object-cover rounded-[15px]"
                     />
 
                 </div>
