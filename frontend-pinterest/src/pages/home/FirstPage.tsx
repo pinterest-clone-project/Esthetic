@@ -35,38 +35,38 @@ const FirstPage = () => {
             </section>
 
             <section className="mt-[60px] flex justify-center">
-                <div className="relative w-[1400px] h-[500px] overflow-hidden">
+                <div className="relative w-full max-w-[1400px] h-[500px] overflow-hidden">
 
                     <img
                         src={im1}
-                        className="absolute left-[145px]  w-[200px] h-[350px] object-cover rounded-[15px]"
+                        className="absolute left-[10%] w-[140px] lg:w-[200px] h-[350px] object-cover rounded-[15px]"
                     />
 
                     <img
                         src={im2}
-                        className="absolute left-[390px] w-[200px] h-[400px] object-cover rounded-[15px]"
+                        className="absolute left-[28%] w-[140px] lg:w-[200px] h-[400px] object-cover rounded-[15px]"
                     />
 
                     <img
                         src={im3}
-                        className="absolute top-[40px] left-[623px] w-[200px] h-[400px] object-cover rounded-[15px]"
+                        className="absolute top-[40px] left-[44%] w-[140px] lg:w-[200px] h-[400px] object-cover rounded-[15px]"
                     />
 
                     <img
                         src={im5}
-                        className="absolute left-[1061px]  w-[200px] h-[400px] object-cover rounded-[15px]"
+                        className="absolute left-[76%] w-[140px] lg:w-[200px] h-[400px] object-cover rounded-[15px]"
                     />
 
                     <img
                         src={im4}
-                        className="absolute top-[80px] left-[876px] w-[200px] h-[370px] object-cover rounded-[15px]"
+                        className="absolute top-[80px] left-[63%] w-[140px] lg:w-[200px] h-[370px] object-cover rounded-[15px]"
                     />
 
                 </div>
             </section>
 
             {!user && (
-            <section className="-mx-[calc((100vw-1505px)/2)]">
+            <section className="absolute left-1/2 -translate-x-1/2 w-screen">
                 <a href={"#see-how-it-works"} className="w-full h-[70px] bg-btn-primary text-black font-medium text-2xl flex items-center justify-center gap-2 ">
                     See how it works
                     <svg
