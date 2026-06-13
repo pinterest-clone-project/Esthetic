@@ -20,7 +20,7 @@ const FirstPage = () => {
                 <div className={"lg:text-[24px] text-sm top-32 lg:leading-[45px] leading-[20px] lg:pt-6 pt-3 tracking-normal text-center max-w-[1011px] text-[#A1A1A1A1] "}>
                     Discover and save your favourites from around the web</div>
 
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mt-8">
                     {["Concept Art", "Photography", "Nature", "Wallpapers"].map(
                         (category) => (
                             <button
@@ -34,7 +34,7 @@ const FirstPage = () => {
                 </div>
             </section>
 
-            <section className="mt-[60px] flex justify-center h-[470px] lg:h-[475px] md:h-[475px]">
+            <section className="mt-[60px] flex justify-center h-[330px] sm:h-[400px] lg:h-[475px] md:h-[475px]">
                 <div className="hidden relative lg:block md:block w-full max-w-[1400px]">
 
                     <img
