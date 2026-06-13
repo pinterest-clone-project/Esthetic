@@ -18,12 +18,14 @@ public partial class PinMapper
     [MapperIgnoreTarget(nameof(PinDTO.CategoryName))]
     [MapperIgnoreTarget(nameof(PinDTO.LikesCount))]
     [MapperIgnoreTarget(nameof(PinDTO.CommentsCount))]
+    [MapperIgnoreTarget(nameof(PinDTO.IsLikedByMe))]
     private partial PinDTO ToDtoInternal(PinEntity src);
 
     [MapperIgnoreTarget(nameof(PinSummaryDTO.LikesCount))]
+    [MapperIgnoreTarget(nameof(PinSummaryDTO.IsLikedByMe))]
     private partial PinSummaryDTO ToSummaryDtoInternal(PinEntity src);
 
-    public PinDTO ToDto(PinEntity src)
+    public PinDTO ToDto(PinEntity src, Guid? currentUserId = null)
     {
         var dto = ToDtoInternal(src);
         dto.Tags = src.PinTags != null
@@ -32,16 +34,20 @@ public partial class PinMapper
         dto.CategoryName = src.Category?.Name;
         dto.LikesCount = src.Likes?.Count ?? 0;
         dto.CommentsCount = src.Comments?.Count ?? 0;
+        dto.IsLikedByMe = currentUserId.HasValue
+            && (src.Likes?.Any(l => l.UserId == currentUserId.Value) ?? false);
         return dto;
     }
 
-    public PinSummaryDTO ToSummaryDto(PinEntity src)
+    public PinSummaryDTO ToSummaryDto(PinEntity src, Guid? currentUserId = null)
     {
         var dto = ToSummaryDtoInternal(src);
         dto.LikesCount = src.Likes?.Count ?? 0;
+        dto.IsLikedByMe = currentUserId.HasValue
+            && (src.Likes?.Any(l => l.UserId == currentUserId.Value) ?? false);
         return dto;
     }
-
+    
     [MapperIgnoreTarget(nameof(PinEntity.PinTags))]
     public partial void Patch(UpdatePinCommand src, PinEntity dest);
 }

@@ -21,14 +21,14 @@ public class PinsController(IMediator mediator) : ControllerBase
     [HttpGet("getAll")]
     public async Task<IActionResult> GetAll()
     {
-        var pins = await mediator.Send(new GetAllPinsQuery());
+        var pins = await mediator.Send(new GetAllPinsQuery(CurrentUserId));
         return Ok(pins);
     }
 
     [HttpGet("getById/{id}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var pin = await mediator.Send(new GetPinByIdQuery(id));
+        var pin = await mediator.Send(new GetPinByIdQuery(id, CurrentUserId));
         if (pin == null) return NotFound();
         return Ok(pin);
     }
