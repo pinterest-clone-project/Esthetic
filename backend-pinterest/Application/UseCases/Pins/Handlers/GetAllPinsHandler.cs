@@ -13,6 +13,6 @@ public class GetAllPinsHandler(
     public async Task<List<PinSummaryDTO>> Handle(GetAllPinsQuery request, CancellationToken cancellationToken)
     {
         var pins = await repository.GetAllWithDetailsAsync(cancellationToken);
-        return pins.Select(pinMapper.ToSummaryDto).ToList();
+        return pins.Select(p => pinMapper.ToSummaryDto(p, request.CurrentUserId)).ToList();
     }
 }

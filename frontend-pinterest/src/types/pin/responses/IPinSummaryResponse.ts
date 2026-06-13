@@ -3,4 +3,5 @@ export interface IPinSummaryResponse {
     title: string | null;
     mediaUrl: string | null;
     likesCount: number;
+    isLikedByMe: boolean;
 }

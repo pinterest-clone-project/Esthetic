@@ -12,6 +12,7 @@ export interface IPinResponse {
     categoryName: string | null;
     tags: ITagResponse[];
     likesCount: number;
+    isLikedByMe: boolean;
     commentsCount: number;
     createdAt: string;
 }
