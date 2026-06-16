@@ -20,8 +20,8 @@ const whiteFilter = "brightness(0) invert(1)";
 type ModalType = 'friends' | 'settings' | 'create' | null;
 
 const modalItems = [
-    { modal: 'friends' as ModalType, icon: profileIcon, label: "Add Friends" },
     { modal: 'create' as ModalType, icon: addIcon, label: "Create" },
+    { modal: 'friends' as ModalType, icon: profileIcon, label: "Add Friends" },
 ];
 
 interface SidebarButtonProps {
