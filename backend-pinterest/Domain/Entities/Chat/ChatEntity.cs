@@ -13,4 +13,5 @@ public class ChatEntity : BaseEntity
     public Guid User2Id { get; set; }
     public UserEntity User2 { get; set; } = null!;
 
+    public virtual ICollection<MessageEntity> Messages { get; set; } = new List<MessageEntity>();
 }
