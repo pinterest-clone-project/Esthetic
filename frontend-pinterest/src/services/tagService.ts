@@ -1,5 +1,6 @@
+import type { ITagResponse } from "@/types/tag/ITagReponse.ts";
 import { api } from "./api.ts";
-import type { ITagResponse } from "@/types/tag/ITagResponse.ts";
+
 
 export const tagService = api.injectEndpoints({
     endpoints: (builder) => ({
