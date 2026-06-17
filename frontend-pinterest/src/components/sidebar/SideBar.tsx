@@ -7,10 +7,14 @@ import profileIcon from "../../../src/assets/icons/profile_icon.svg";
 import auraIcon from "../../../src/assets/icons/aura_icon.svg";
 import React, {useState} from "react";
 import Modal from "@/components/UI/Modal.tsx";
+import {useLogoutMutation} from "@/services/accountService.ts";
+import {clearUser} from "@/store/slices/authSlice.ts";
+import {api} from "@/services/api.ts";
+import {useAppDispatch} from "@/store";
 
 const navItems = [
     { path: "/", icon: homeIcon, label: "Головна" },
-    { path: "/collections", icon: collectionIcon, label: "Дошки" },
+    { path: "/collections/aura", icon: collectionIcon, label: "Дошки" },
 ];
 
 const greenFilter =
@@ -51,11 +55,24 @@ const SidebarButton = ({ icon, label, active, onClick, extraImgClass = "", child
 );
 
 
-
 const Sidebar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [activeModal, setActiveModal] = useState<ModalType>(null);
+    const [logout] = useLogoutMutation();
+    const dispatch = useAppDispatch();
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+        } catch (error) {
+            console.error("Помилка під час logout:", error);
+        } finally {
+            dispatch(clearUser());
+            dispatch(api.util.resetApiState());
+            navigate("/");
+        }
+    };
 
     const isActive = (path: string) => location.pathname === path;
     const closeModal = () => setActiveModal(null);
@@ -95,7 +112,7 @@ const Sidebar = () => {
             </aside>
 
             <Modal isOpen={activeModal === 'friends'} onClose={closeModal} variant="sidebar" title="Add friends" width={300}>
-                <div className="flex items-center gap-2 bg-[#2a2a2a] rounded-lg px-3 py-2">
+                <div className="flex items-center gap-2 bg-[#2a2a2a] rounded-lg px-3 py-2 mx-3">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A1A1A1" strokeWidth="2">
                         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
                     </svg>
@@ -109,28 +126,60 @@ const Sidebar = () => {
             <Modal isOpen={activeModal === 'settings'} onClose={closeModal} variant="sidebar" title="Settings" width={300}>
                 <button
                     onClick={() => { navigate('/profile'); closeModal(); }}
-                    className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-[#2a2a2a] transition-colors duration-150"
+                    className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#2a2a2a] transition-colors duration-150 group"
                 >
-                    <img src={profileIcon} style={{ filter: whiteFilter }} className="w-6 h-6 opacity-60" />
-                    <span className="text-lg text-white/70">Profile</span>
+                    <div className="w-10 h-10 rounded-xl bg-[#2a2a2a] group-hover:bg-[#333] flex items-center justify-center transition-colors shrink-0">
+                        <img src={profileIcon} style={{ filter: whiteFilter }} className="w-5 h-5" />
+                    </div>
+                    <div className="text-left">
+                        <p className="text-white text-sm font-medium">Profile</p>
+                        <p className="text-[#A1A1A1] text-xs">View and edit your profile</p>
+                    </div>
+                </button>
+
+                <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-red-500/10 transition-colors duration-150 group mt-auto mb-1"
+                >
+                    <div className="w-10 h-10 rounded-xl bg-[#2a2a2a] group-hover:bg-red-500/20 flex items-center justify-center transition-colors shrink-0">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                            <polyline points="16 17 21 12 16 7"/>
+                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                    </div>
+                    <div className="text-left">
+                        <p className="text-red-400 text-sm font-medium">Logout</p>
+                        <p className="text-[#A1A1A1] text-xs">Sign out of your account</p>
+                    </div>
                 </button>
             </Modal>
 
             <Modal isOpen={activeModal === 'create'} onClose={closeModal} variant="sidebar" title="Create" width={300}>
                 <button
-                    onClick={() => { navigate('/boards'); closeModal(); }}
-                    className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-[#2a2a2a] transition-colors duration-150"
+                    onClick={() => { navigate('/collections/moodboard'); closeModal(); }}
+                    className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#2a2a2a] transition-colors duration-150 group"
                 >
-                    <img src={collectionIcon} style={{ filter: whiteFilter }} className="w-6 h-6 opacity-60" />
-                    <span className="text-lg text-white/70">Moodboard</span>
+                    <div className="w-10 h-10 rounded-xl bg-[#2a2a2a] group-hover:bg-[#333] flex items-center justify-center transition-colors shrink-0">
+                        <img src={collectionIcon} style={{ filter: whiteFilter }} className="w-5 h-5" />
+                    </div>
+                    <div className="text-left">
+                        <p className="text-white text-sm font-medium">Moodboard</p>
+                        <p className="text-[#A1A1A1] text-xs">Organize your ideas</p>
+                    </div>
                 </button>
 
                 <button
                     onClick={() => { navigate('/aura/create'); closeModal(); }}
-                    className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-[#2a2a2a] transition-colors duration-150"
+                    className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#2a2a2a] transition-colors duration-150 group"
                 >
-                    <img src={auraIcon} style={{ filter: whiteFilter }} className="w-6 h-6 opacity-60" />
-                    <span className="text-lg text-white/70">Aura</span>
+                    <div className="w-10 h-10 rounded-xl bg-[#2a2a2a] group-hover:bg-[#333] flex items-center justify-center transition-colors shrink-0">
+                        <img src={auraIcon} style={{ filter: whiteFilter }} className="w-5 h-5" />
+                    </div>
+                    <div className="text-left">
+                        <p className="text-white text-sm font-medium">Aura</p>
+                        <p className="text-[#A1A1A1] text-xs">Share your aesthetic</p>
+                    </div>
                 </button>
             </Modal>
         </>

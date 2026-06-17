@@ -60,8 +60,8 @@ const Modal = ({
                     onClick={(e) => e.stopPropagation()}
                 >
                     {title && (
-                        <div className="flex items-center justify-between px-5 py-4 border-b border-[#2a2a2a] shrink-0">
-                            <h2 className="text-white font-semibold text-base tracking-[-0.5px]">
+                        <div className="flex items-center justify-between px-3 py-4 border-b border-[#2a2a2a] shrink-0">
+                            <h2 className="text-white font-semibold text-sm tracking-[-0.5px]">
                                 {title}
                             </h2>
                             <button
@@ -75,7 +75,7 @@ const Modal = ({
                         </div>
                     )}
 
-                    <div className="flex-1 overflow-y-auto p-5">
+                    <div className="flex-1 overflow-y-auto px-0 py-2 flex flex-col">
                         {children}
                     </div>
                 </div>

@@ -3,10 +3,11 @@ import im1 from "@/assets/defaults/def-9.jpg";
 import im2 from "@/assets/defaults/def-10.jpg";
 import im3 from "@/assets/defaults/def-11.jpg";
 import {useGetAllPinsQuery, useGetMyPinsQuery} from "@/services/pinService.ts";
-import {useNavigate} from "react-router";
+import {useLocation, useNavigate} from "react-router";
 import {useGetMyMoodboardsQuery} from "@/services/moodboardService.ts";
 import Modal from "@/components/UI/Modal";
 import CreateMoodboardForm from "@/components/moodboard/CreateMoodboardForm.tsx";
+import {APP_ENV} from "@/constants/env";
 
 type CollectionTab = "Aura" | "Moodboard" | "Esthetic AI";
 
@@ -14,14 +15,26 @@ const tabs: CollectionTab[] = ["Aura", "Moodboard", "Esthetic AI"];
 
 const CollectionsPage = () => {
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState<CollectionTab>("Aura");
     const [showCreateMoodboard, setShowCreateMoodboard] = useState(false);
     const { data: myPins } = useGetMyPinsQuery();
     const { data: Pins } = useGetAllPinsQuery();
-
     const { data: moodboards } = useGetMyMoodboardsQuery();
 
+
+    const location = useLocation();
+    const activeTab: CollectionTab = location.pathname.includes("moodboard")
+        ? "Moodboard"
+        : location.pathname.includes("ai")
+            ? "Esthetic AI"
+            : "Aura";
+
     const hasAuras = activeTab === "Aura" && myPins && myPins.length > 0;
+
+    const tabRoutes: Record<CollectionTab, string> = {
+        "Aura": "/collections/aura",
+        "Moodboard": "/collections/moodboard",
+        "Esthetic AI": "/collections/ai",
+    };
 
     return (
         <div className="min-h-screen mt-11 text-white px-8 py-10">
@@ -29,12 +42,10 @@ const CollectionsPage = () => {
                 <button
                     onClick={() => {
                         if (activeTab === "Moodboard") setShowCreateMoodboard(true);
+                        if (activeTab === "Aura") navigate("/aura/create");
                     }}
                     className="absolute right-0 top-0 px-6 py-2 rounded-lg bg-[#2a2a2a] text-white text-sm hover:bg-[#333] transition-colors duration-150"
                 >
-                    Create
-                </button>
-                <button className="absolute right-0 top-0 px-6 py-2 rounded-lg bg-[#2a2a2a] text-white text-sm hover:bg-[#333] transition-colors duration-150">
                     Create
                 </button>
                 <h1 className="text-4xl mb-3">Your collection</h1>
@@ -42,7 +53,7 @@ const CollectionsPage = () => {
                     {tabs.map((tab) => (
                         <button
                             key={tab}
-                            onClick={() => setActiveTab(tab)}
+                            onClick={() => navigate(tabRoutes[tab])}
                             className={`text-sm transition-colors duration-150 ${
                                 activeTab === tab
                                     ? "text-btn-primary border-b border-btn-primary pb-0.5"
@@ -66,6 +77,15 @@ const CollectionsPage = () => {
                                     <img src={pin.mediaUrl ?? undefined} className="w-full rounded-xl object-cover" />
                                 </div>
                             ))}
+
+                            <button
+                                onClick={() => navigate("/aura/create")}
+                                className="relative w-full aspect-[3/4] rounded-xl overflow-hidden hover:opacity-90 transition-opacity break-inside-avoid mb-3 bg-[#2a2a2a]"
+                            >
+                            <span className="absolute inset-0 flex items-center justify-center text-white text-lg font-medium">
+                                Create
+                            </span>
+                            </button>
                         </div>
 
                         <h2 className="text-lg mt-4">Your saved Auras</h2>
@@ -102,31 +122,42 @@ const CollectionsPage = () => {
                 <div className="mt-8">
                     <h2 className="text-lg mb-3">Your Moodboard</h2>
                     <div className="flex flex-wrap gap-4 mb-10">
-                        {moodboards?.map((mb) => (
+                        {moodboards?.items?.map((mb) => (
                             <button
                                 key={mb.id}
-                                onClick={() => navigate(`/moodboard/${mb.id}`)}
-                                className="text-left"
+                                onClick={() => navigate(`/moodboard/preview/${mb.id}`)}
+                                className="text-left group"
                             >
-                                <div className="w-[150px] h-[110px] rounded-xl overflow-hidden flex gap-0.5 bg-[#2a2a2a]">
-                                    {mb.coverUrls.length > 0 ? (
-                                        mb.coverUrls.slice(0, 2).map((url) => (
-                                            <img key={url} src={url} className="flex-1 h-full object-cover" />
-                                        ))
+                                <div className="w-[240px] h-[180px] rounded-2xl overflow-hidden bg-[#2a2a2a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-2xl">
+                                    {mb.coverImageUrl ? (
+                                        <img
+                                            src={`${APP_ENV.IMAGES_800_URL}${mb.coverImageUrl}`}
+                                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                                        />
                                     ) : (
-                                        <div className="flex-1 h-full" />
+                                        <div className="w-full h-full" />
                                     )}
                                 </div>
-                                <p className="text-white text-sm mt-2 truncate w-[150px]">{mb.name}</p>
+                                <p className="text-white text-sm mt-2 truncate w-[220px] group-hover:text-[#1DB954] transition-colors duration-200">
+                                    {mb.title}
+                                </p>
                             </button>
                         ))}
 
 
                         <button
                             onClick={() => setShowCreateMoodboard(true)}
-                            className="w-[150px] h-[110px] rounded-xl bg-[#2a2a2a] flex items-center justify-center text-white/70 text-sm hover:bg-[#333] transition-colors"
+                            className="relative w-[240px] h-[180px] rounded-xl overflow-hidden hover:opacity-90 transition-opacity"
                         >
-                            Create
+                            <div className="absolute inset-0 grid grid-cols-2 grid-rows-2">
+                                <div className="bg-[#535353]" />
+                                <div className="bg-[#A1A1A1]" />
+                                <div className="bg-[#535353]" />
+                                <div className="bg-[#454444]" />
+                            </div>
+                            <span className="absolute inset-0 flex items-center justify-center text-white text-lg font-medium">
+                                Create
+                            </span>
                         </button>
                     </div>
 
