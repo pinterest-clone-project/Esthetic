@@ -1,22 +1,71 @@
-import { useState } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { useCreatePinMutation } from "../../services/pinService.ts";
 import { useGetAllCategoriesQuery } from "../../services/categoryService.ts";
+import { useGetAllTagsQuery } from "../../services/tagService.ts";
+import {APP_ENV} from "@/constants/env";
 import { useNavigate } from "react-router";
 
 const CreateAuraPage = () => {
     const navigate = useNavigate();
     const [createPin, { isLoading }] = useCreatePinMutation();
     const { data: categories } = useGetAllCategoriesQuery();
+    const { data: tags } = useGetAllTagsQuery();
 
     const [mediaUrl, setMediaUrl] = useState("");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [sourceUrl] = useState("");
+    const [sourceUrl, setSourceUrl] = useState("");
     const [categoryId, setCategoryId] = useState("");
+    const [tagIds, setTagIds] = useState<string[]>([]);
     const [previewUrl, setPreviewUrl] = useState("");
+
+    const [tagQuery, setTagQuery] = useState("");
+    const [tagFocused, setTagFocused] = useState(false);
+    const tagBoxRef = useRef<HTMLDivElement>(null);
+
+    const [categoryOpen, setCategoryOpen] = useState(false);
+    const categoryBoxRef = useRef<HTMLDivElement>(null);
+
+    const selectedTags = useMemo(
+        () => tags?.filter(t => tagIds.includes(t.id)) ?? [],
+        [tags, tagIds]
+    );
+
+    const suggestions = useMemo(() => {
+        if (!tags) return [];
+        const q = tagQuery.trim().toLowerCase();
+        return tags
+            .filter(t => !tagIds.includes(t.id))
+            .filter(t => q === "" || t.name.toLowerCase().includes(q))
+            .slice(0, 8);
+    }, [tags, tagIds, tagQuery]);
+
+    const selectedCategory = categories?.find(c => c.id === categoryId);
+
+    useEffect(() => {
+        const handler = (e: MouseEvent) => {
+            if (tagBoxRef.current && !tagBoxRef.current.contains(e.target as Node)) {
+                setTagFocused(false);
+            }
+            if (categoryBoxRef.current && !categoryBoxRef.current.contains(e.target as Node)) {
+                setCategoryOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handler);
+        return () => document.removeEventListener("mousedown", handler);
+    }, []);
 
     const handleMediaUrlBlur = () => {
         setPreviewUrl(mediaUrl);
+    };
+
+    const addTag = (id: string) => {
+        setTagIds(prev => [...prev, id]);
+        setTagQuery("");
+    };
+
+    const removeTag = (id: string) => {
+        setTagIds(prev => prev.filter(t => t !== id));
     };
 
     const handleSubmit = async () => {
@@ -28,6 +77,7 @@ const CreateAuraPage = () => {
                 description: description || undefined,
                 sourceUrl: sourceUrl || undefined,
                 categoryId: categoryId || undefined,
+                tagIds: tagIds.length > 0 ? tagIds : undefined,
             }).unwrap();
             navigate("/collections");
         } catch (e) {
@@ -37,9 +87,8 @@ const CreateAuraPage = () => {
 
     return (
         <div className="w-full min-h-full px-10 py-8 flex flex-col items-center">
-
             {/* Top bar */}
-            <div className="flex items-center justify-between mb-8 w-full max-w-[1000px]">
+            <div className="flex items-center justify-between mb-8 w-full max-w-[580px]">
                 <h1 className="text-white text-sm font-medium tracking-wide">Create Aura</h1>
                 <button
                     onClick={handleSubmit}
@@ -52,92 +101,204 @@ const CreateAuraPage = () => {
             </div>
 
             {/* Main layout */}
-            <div className="flex gap-10 items-start">
+            <div className="w-full max-w-[580px] flex flex-col gap-5">
 
-                {/* Left — image preview */}
-                <div className="shrink-0">
-                    <div className="w-[200px] min-h-[200px] rounded-2xl overflow-hidden bg-[#1e1e1e] border border-[#333] flex items-center justify-center">
-                        {previewUrl ? (
-                            <img
-                                src={previewUrl}
-                                alt="Preview"
-                                className="w-full h-full object-cover"
-                                onError={() => setPreviewUrl("")}
+                {/* Top row: image + Name/Url/SourceUrl */}
+                <div className="flex gap-10 items-start">
+                    {/* Left — image preview */}
+                    <div className="shrink-0">
+                        <div className="w-[200px] min-h-[200px] rounded-2xl overflow-hidden bg-[#1e1e1e] border border-[#333] flex items-center justify-center">
+                            {previewUrl ? (
+                                <img
+                                    src={previewUrl}
+                                    alt="Preview"
+                                    className="w-full h-full object-cover"
+                                    onError={() => setPreviewUrl("")}
+                                />
+                            ) : (
+                                <div className="flex flex-col items-center gap-2 p-6 text-center">
+                                    <svg className="w-8 h-8 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <span className="text-gray-600 text-xs">Preview</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Right — Name, Url, Source Url */}
+                    <div className="w-[340px] flex flex-col gap-5">
+                        {/* Name */}
+                        <div className="flex flex-col gap-1.5">
+                            <label className="text-white text-xs font-medium">Name</label>
+                            <input
+                                type="text"
+                                value={title}
+                                onChange={e => setTitle(e.target.value)}
+                                placeholder="Aura name"
+                                className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-white text-xs
+                                    placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors"
                             />
-                        ) : (
-                            <div className="flex flex-col items-center gap-2 p-6 text-center">
-                                <svg className="w-8 h-8 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                <span className="text-gray-600 text-xs">Preview</span>
+                        </div>
+
+                        {/* URL */}
+                        <div className="flex flex-col gap-1.5">
+                            <label className="text-white text-xs font-medium">Url</label>
+                            <input
+                                type="text"
+                                value={mediaUrl}
+                                onChange={e => setMediaUrl(e.target.value)}
+                                onBlur={handleMediaUrlBlur}
+                                placeholder="Add Url"
+                                className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-white text-xs
+                                    placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors"
+                            />
+                        </div>
+
+                        {/* Source URL */}
+                        <div className="flex flex-col gap-1.5">
+                            <label className="text-white text-xs font-medium">Source Url</label>
+                            <input
+                                type="text"
+                                value={sourceUrl}
+                                onChange={e => setSourceUrl(e.target.value)}
+                                placeholder="Where is this from?"
+                                className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-white text-xs
+                                    placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Second row: Moodboard (under image) + Tags (under Name/Url column) */}
+                <div className="flex gap-10 items-start">
+                    <div className="shrink-0 w-[200px] flex flex-col gap-1.5 relative" ref={categoryBoxRef}>
+                        <label className="text-white text-xs font-medium">Moodboard</label>
+                        <button
+                            type="button"
+                            onClick={() => setCategoryOpen(p => !p)}
+                            className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-xs
+                                outline-none focus:border-[#1DB954] transition-colors
+                                flex items-center justify-between text-left
+                                hover:border-[#4ade80]/50"
+                        >
+                            <span className={`flex items-center gap-2 truncate ${selectedCategory ? "text-white" : "text-gray-500"}`}>
+                                {selectedCategory?.image && (
+                                    <img src={`${APP_ENV.IMAGES_100_URL}${selectedCategory.image}`} alt="" className="w-5 h-5 rounded-full object-cover shrink-0" />
+                                )}
+                                {selectedCategory ? selectedCategory.name : "Choose Moodboard"}
+                            </span>
+                            <svg className={`w-3.5 h-3.5 text-gray-500 shrink-0 transition-transform ${categoryOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        {categoryOpen && (
+                            <div className="absolute top-full left-0 right-0 mt-1 z-20 bg-[#1e1e1e] border border-[#333] rounded-md shadow-2xl max-h-60 overflow-y-auto">
+                                {categoryId && (
+                                    <button
+                                        type="button"
+                                        onClick={() => { setCategoryId(""); setCategoryOpen(false); }}
+                                        className="w-full text-left px-3 py-2 text-xs text-gray-500 hover:bg-white/5 transition-colors border-b border-[#333]"
+                                    >
+                                        Clear selection
+                                    </button>
+                                )}
+                                {categories?.map(cat => (
+                                    <button
+                                        key={cat.id}
+                                        type="button"
+                                        onClick={() => { setCategoryId(cat.id); setCategoryOpen(false); }}
+                                        className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 transition-colors
+                                            ${cat.id === categoryId ? "bg-[#4ade80]/10 text-[#4ade80]" : "text-gray-300 hover:bg-white/5 hover:text-white"}`}
+                                    >
+                                        {cat.image ? (
+                                            <img src={`${APP_ENV.IMAGES_100_URL}${cat.image}`} alt="" className="w-6 h-6 rounded-full object-cover shrink-0" />
+                                        ) : (
+                                            <div className="w-6 h-6 rounded-full bg-white/10 shrink-0" />
+                                        )}
+                                        <div className="flex flex-col min-w-0">
+                                            <span className="truncate">{cat.name}</span>
+                                            {cat.description && (
+                                                <span className="text-[10px] text-gray-500 truncate">{cat.description}</span>
+                                            )}
+                                        </div>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Tags — under Name/Url/SourceUrl column */}
+                    <div className="w-[340px] flex flex-col gap-1.5 relative" ref={tagBoxRef}>
+                        <label className="text-white text-xs font-medium">Tags</label>
+
+                        <input
+                            type="text"
+                            value={tagQuery}
+                            onChange={e => setTagQuery(e.target.value)}
+                            onFocus={() => setTagFocused(true)}
+                            placeholder="Search tags..."
+                            className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-white text-xs
+                                placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors"
+                        />
+
+                        {tagFocused && suggestions.length > 0 && (
+                            <div className="absolute top-full left-0 right-0 mt-1 z-20 bg-[#1e1e1e] border border-[#333] rounded-md shadow-2xl max-h-48 overflow-y-auto">
+                                {suggestions.map(tag => (
+                                    <button
+                                        key={tag.id}
+                                        type="button"
+                                        onClick={() => addTag(tag.id)}
+                                        className="w-full text-left px-3 py-2 text-xs text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
+                                    >
+                                        #{tag.name}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
+                        {tagFocused && tagQuery && suggestions.length === 0 && (
+                            <div className="absolute top-full left-0 right-0 mt-1 z-20 bg-[#1e1e1e] border border-[#333] rounded-md shadow-2xl px-3 py-2">
+                                <span className="text-xs text-gray-600">No matching tags</span>
+                            </div>
+                        )}
+
+
+                        {selectedTags.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mb-1">
+                                {selectedTags.map(tag => (
+                                    <span
+                                        key={tag.id}
+                                        className="text-xs px-2.5 py-1 rounded-full bg-[#4ade80] text-black flex items-center gap-1.5"
+                                    >
+                                        #{tag.name}
+                                        <button
+                                            type="button"
+                                            onClick={() => removeTag(tag.id)}
+                                            className="hover:opacity-60 transition-opacity"
+                                        >
+                                            ✕
+                                        </button>
+                                    </span>
+                                ))}
                             </div>
                         )}
                     </div>
                 </div>
 
-                {/* Right — form fields */}
-                <div className="flex flex-col gap-5 w-[340px]">
-
-                    {/* Name */}
-                    <div className="flex flex-col gap-1.5">
-                        <label className="text-white text-xs font-medium">Name</label>
-                        <input
-                            type="text"
-                            value={title}
-                            onChange={e => setTitle(e.target.value)}
-                            placeholder="Aura name"
-                            className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-white text-xs
-                                placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors"
-                        />
-                    </div>
-
-                    {/* Description */}
-                    <div className="flex flex-col gap-1.5">
-                        <label className="text-white text-xs font-medium">Description</label>
-                        <textarea
-                            value={description}
-                            onChange={e => setDescription(e.target.value)}
-                            placeholder="Describe your aura..."
-                            rows={4}
-                            className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 py-2 text-white text-xs
-                                placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors resize-none"
-                        />
-                    </div>
-
-                    {/* URL */}
-                    <div className="flex flex-col gap-1.5">
-                        <label className="text-white text-xs font-medium">Url</label>
-                        <input
-                            type="text"
-                            value={mediaUrl}
-                            onChange={e => setMediaUrl(e.target.value)}
-                            onBlur={handleMediaUrlBlur}
-                            placeholder="Add Url"
-                            className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-white text-xs
-                                placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors"
-                        />
-                    </div>
-
-                    {/* Moodboard / Category */}
-                    <div className="flex flex-col gap-1.5">
-                        <label className="text-white text-xs font-medium">Moodboard</label>
-                        <select
-                            value={categoryId}
-                            onChange={e => setCategoryId(e.target.value)}
-                            className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-xs
-                                outline-none focus:border-[#1DB954] transition-colors appearance-none
-                                text-gray-400 cursor-pointer"
-                        >
-                            <option value="">Choose Moodboard</option>
-                            {categories?.map(cat => (
-                                <option key={cat.id} value={cat.id} className="text-white bg-[#1e1e1e]">
-                                    {cat.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
+                {/* Description — full width, bigger */}
+                <div className="flex flex-col gap-1.5">
+                    <label className="text-white text-xs font-medium">Description</label>
+                    <textarea
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}
+                        placeholder="Describe your aura..."
+                        rows={8}
+                        className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 py-2.5 text-white text-xs
+                            placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors resize-none"
+                    />
                 </div>
             </div>
         </div>

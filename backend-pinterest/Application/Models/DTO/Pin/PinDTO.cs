@@ -16,4 +16,5 @@ public class PinDTO
     public int LikesCount { get; set; }
     public int CommentsCount { get; set; }
     public DateTime CreatedAt { get; set; }
+    public bool IsLikedByMe { get; set; }
 }

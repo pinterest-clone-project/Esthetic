@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Application.UseCases.Pins.Queries;
 
-public record GetPinByIdQuery(Guid Id) : IRequest<PinDTO>;
+public record GetPinByIdQuery(Guid Id, Guid? CurrentUserId = null) : IRequest<PinDTO?>;

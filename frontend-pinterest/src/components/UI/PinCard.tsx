@@ -3,14 +3,20 @@ import { useNavigate } from "react-router";
 import type { IPinSummaryResponse } from "../../types/pin/responses/IPinSummaryResponse.ts";
 import { useGetMeQuery } from "../../services/accountService.ts";
 import { useDeletePinMutation } from "../../services/pinService.ts";
+import { useLikeMutation, useUnlikeMutation } from "../../services/likeService.ts";
 
 const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [hovered, setHovered] = useState(false);
+    const [liked, setLiked] = useState(pin.isLikedByMe ?? false);
+    const [likesCount, setLikesCount] = useState(pin.likesCount);
     const navigate = useNavigate();
 
     const { data: me } = useGetMeQuery();
     const [deletePin] = useDeletePinMutation();
+    const [like] = useLikeMutation();
+    const [unlike] = useUnlikeMutation();
+
     const isOwner = !!me && me.id === pin.creatorId;
 
     const handleDelete = async (e: React.MouseEvent) => {
@@ -22,6 +28,19 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     const handleEdit = (e: React.MouseEvent) => {
         e.stopPropagation();
         navigate(`/aura/edit/${pin.id}`);
+    };
+
+    const handleLike = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (liked) {
+            await unlike(pin.id);
+            setLiked(false);
+            setLikesCount(c => c - 1);
+        } else {
+            await like(pin.id);
+            setLiked(true);
+            setLikesCount(c => c + 1);
+        }
     };
 
     const menuItems = [
@@ -55,6 +74,18 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
                 </div>
             )}
 
+            {/* Like button — top left */}
+            <div className={`absolute top-2 left-2 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
+                <button
+                    onClick={handleLike}
+                    className="flex items-center gap-1 bg-black/50 hover:bg-black/70 rounded-full px-2 py-1 transition-colors"
+                >
+                    <span className={`text-xs transition-colors ${liked ? 'text-[#4ade80]' : 'text-white/70'}`}>♥</span>
+                    <span className="text-white text-[10px]">{likesCount}</span>
+                </button>
+            </div>
+
+            {/* Dots menu — bottom right */}
             <div className={`absolute bottom-2 right-2 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
                 <button
                     onClick={(e) => { e.stopPropagation(); setMenuOpen(p => !p); }}
@@ -83,15 +114,6 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
                     </div>
                 )}
             </div>
-
-            {pin.likesCount >= 0 && (
-                <div className={`absolute top-2 right-2 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
-                    <span className="bg-black/50 text-white text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1">
-                        <span>♥</span>
-                        <span>{pin.likesCount}</span>
-                    </span>
-                </div>
-            )}
         </div>
     );
 };
