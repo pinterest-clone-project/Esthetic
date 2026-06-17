@@ -95,7 +95,7 @@ const Sidebar = () => {
             </aside>
 
             <Modal isOpen={activeModal === 'friends'} onClose={closeModal} variant="sidebar" title="Add friends" width={300}>
-                <div className="flex items-center gap-2 bg-[#2a2a2a] rounded-lg px-3 py-2">
+                <div className="flex items-center gap-2 bg-[#2a2a2a] rounded-lg px-3 py-2 mx-3">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A1A1A1" strokeWidth="2">
                         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
                     </svg>
@@ -109,28 +109,43 @@ const Sidebar = () => {
             <Modal isOpen={activeModal === 'settings'} onClose={closeModal} variant="sidebar" title="Settings" width={300}>
                 <button
                     onClick={() => { navigate('/profile'); closeModal(); }}
-                    className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-[#2a2a2a] transition-colors duration-150"
+                    className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#2a2a2a] transition-colors duration-150 group"
                 >
-                    <img src={profileIcon} style={{ filter: whiteFilter }} className="w-6 h-6 opacity-60" />
-                    <span className="text-lg text-white/70">Profile</span>
+                    <div className="w-10 h-10 rounded-xl bg-[#2a2a2a] group-hover:bg-[#333] flex items-center justify-center transition-colors shrink-0">
+                        <img src={profileIcon} style={{ filter: whiteFilter }} className="w-5 h-5" />
+                    </div>
+                    <div className="text-left">
+                        <p className="text-white text-sm font-medium">Profile</p>
+                        <p className="text-[#A1A1A1] text-xs">View and edit your profile</p>
+                    </div>
                 </button>
             </Modal>
 
             <Modal isOpen={activeModal === 'create'} onClose={closeModal} variant="sidebar" title="Create" width={300}>
                 <button
-                    onClick={() => { navigate('/boards'); closeModal(); }}
-                    className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-[#2a2a2a] transition-colors duration-150"
+                    onClick={() => { navigate('/collections/moodboard'); closeModal(); }}
+                    className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#2a2a2a] transition-colors duration-150 group"
                 >
-                    <img src={collectionIcon} style={{ filter: whiteFilter }} className="w-6 h-6 opacity-60" />
-                    <span className="text-lg text-white/70">Moodboard</span>
+                    <div className="w-10 h-10 rounded-xl bg-[#2a2a2a] group-hover:bg-[#333] flex items-center justify-center transition-colors shrink-0">
+                        <img src={collectionIcon} style={{ filter: whiteFilter }} className="w-5 h-5" />
+                    </div>
+                    <div className="text-left">
+                        <p className="text-white text-sm font-medium">Moodboard</p>
+                        <p className="text-[#A1A1A1] text-xs">Organize your ideas</p>
+                    </div>
                 </button>
 
                 <button
                     onClick={() => { navigate('/aura/create'); closeModal(); }}
-                    className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-[#2a2a2a] transition-colors duration-150"
+                    className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#2a2a2a] transition-colors duration-150 group"
                 >
-                    <img src={auraIcon} style={{ filter: whiteFilter }} className="w-6 h-6 opacity-60" />
-                    <span className="text-lg text-white/70">Aura</span>
+                    <div className="w-10 h-10 rounded-xl bg-[#2a2a2a] group-hover:bg-[#333] flex items-center justify-center transition-colors shrink-0">
+                        <img src={auraIcon} style={{ filter: whiteFilter }} className="w-5 h-5" />
+                    </div>
+                    <div className="text-left">
+                        <p className="text-white text-sm font-medium">Aura</p>
+                        <p className="text-[#A1A1A1] text-xs">Share your aesthetic</p>
+                    </div>
                 </button>
             </Modal>
         </>
