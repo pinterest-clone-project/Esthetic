@@ -3,7 +3,7 @@ import im1 from "@/assets/defaults/def-9.jpg";
 import im2 from "@/assets/defaults/def-10.jpg";
 import im3 from "@/assets/defaults/def-11.jpg";
 import {useGetAllPinsQuery, useGetMyPinsQuery} from "@/services/pinService.ts";
-import {useNavigate} from "react-router";
+import {useLocation, useNavigate} from "react-router";
 import {useGetMyMoodboardsQuery} from "@/services/moodboardService.ts";
 import Modal from "@/components/UI/Modal";
 import CreateMoodboardForm from "@/components/moodboard/CreateMoodboardForm.tsx";
@@ -15,13 +15,26 @@ const tabs: CollectionTab[] = ["Aura", "Moodboard", "Esthetic AI"];
 
 const CollectionsPage = () => {
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState<CollectionTab>("Aura");
     const [showCreateMoodboard, setShowCreateMoodboard] = useState(false);
     const { data: myPins } = useGetMyPinsQuery();
     const { data: Pins } = useGetAllPinsQuery();
     const { data: moodboards } = useGetMyMoodboardsQuery();
 
+
+    const location = useLocation();
+    const activeTab: CollectionTab = location.pathname.includes("moodboard")
+        ? "Moodboard"
+        : location.pathname.includes("ai")
+            ? "Esthetic AI"
+            : "Aura";
+
     const hasAuras = activeTab === "Aura" && myPins && myPins.length > 0;
+
+    const tabRoutes: Record<CollectionTab, string> = {
+        "Aura": "/collections/aura",
+        "Moodboard": "/collections/moodboard",
+        "Esthetic AI": "/collections/ai",
+    };
 
     return (
         <div className="min-h-screen mt-11 text-white px-8 py-10">
@@ -29,12 +42,10 @@ const CollectionsPage = () => {
                 <button
                     onClick={() => {
                         if (activeTab === "Moodboard") setShowCreateMoodboard(true);
+                        if (activeTab === "Aura") navigate("/aura/create");
                     }}
                     className="absolute right-0 top-0 px-6 py-2 rounded-lg bg-[#2a2a2a] text-white text-sm hover:bg-[#333] transition-colors duration-150"
                 >
-                    Create
-                </button>
-                <button className="absolute right-0 top-0 px-6 py-2 rounded-lg bg-[#2a2a2a] text-white text-sm hover:bg-[#333] transition-colors duration-150">
                     Create
                 </button>
                 <h1 className="text-4xl mb-3">Your collection</h1>
@@ -42,7 +53,7 @@ const CollectionsPage = () => {
                     {tabs.map((tab) => (
                         <button
                             key={tab}
-                            onClick={() => setActiveTab(tab)}
+                            onClick={() => navigate(tabRoutes[tab])}
                             className={`text-sm transition-colors duration-150 ${
                                 activeTab === tab
                                     ? "text-btn-primary border-b border-btn-primary pb-0.5"
