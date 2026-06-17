@@ -6,7 +6,7 @@ export interface Moodboard {
     title: string;
     description?: string;
     isPrivate: boolean;
-    coverUrls: string[];
+    coverImageUrl: string | null;
 }
 
 export interface CreateMoodboardRequest {
@@ -16,15 +16,23 @@ export interface CreateMoodboardRequest {
     coverImageFile?: File;
 }
 
+export interface MoodboardPage {
+    items: Moodboard[];
+    totalCount: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+}
+
 export const moodboardService = api.injectEndpoints({
     endpoints: (builder) => ({
-        getMyMoodboards: builder.query<Moodboard[], void>({
-            query: () => "/api/Boards/my",
+        getMyMoodboards: builder.query<MoodboardPage, void>({
+            query: () => "Boards/my",
             providesTags: ["MyMoodboards"],
         }),
         createMoodboard: builder.mutation<Moodboard, CreateMoodboardRequest>({
             query: (body) => ({
-                url: "/api/Boards/create",
+                url: "Boards/create",
                 method: "POST",
                 body: serialize(body, { indices: true, booleansAsIntegers: false }),
             }),

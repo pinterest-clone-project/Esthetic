@@ -7,6 +7,7 @@ import {useNavigate} from "react-router";
 import {useGetMyMoodboardsQuery} from "@/services/moodboardService.ts";
 import Modal from "@/components/UI/Modal";
 import CreateMoodboardForm from "@/components/moodboard/CreateMoodboardForm.tsx";
+import {APP_ENV} from "@/constants/env";
 
 type CollectionTab = "Aura" | "Moodboard" | "Esthetic AI";
 
@@ -110,22 +111,23 @@ const CollectionsPage = () => {
                 <div className="mt-8">
                     <h2 className="text-lg mb-3">Your Moodboard</h2>
                     <div className="flex flex-wrap gap-4 mb-10">
-                        {moodboards?.map((mb) => (
+                        {moodboards?.items?.map((mb) => (
                             <button
                                 key={mb.id}
                                 onClick={() => navigate(`/moodboard/${mb.id}`)}
                                 className="text-left"
                             >
-                                <div className="w-[150px] h-[110px] rounded-xl overflow-hidden flex gap-0.5 bg-[#2a2a2a]">
-                                    {mb.coverUrls.length > 0 ? (
-                                        mb.coverUrls.slice(0, 2).map((url) => (
-                                            <img key={url} src={url} className="flex-1 h-full object-cover" />
-                                        ))
+                                <div className="w-[150px] h-[110px] rounded-xl overflow-hidden bg-[#2a2a2a]">
+                                    {mb.coverImageUrl ? (
+                                        <img
+                                            src={`${APP_ENV.IMAGES_800_URL}${mb.coverImageUrl}`}
+                                            className="w-full h-full object-cover"
+                                        />
                                     ) : (
-                                        <div className="flex-1 h-full" />
+                                        <div className="w-full h-full" />
                                     )}
                                 </div>
-                                <p className="text-white text-sm mt-2 truncate w-[150px]">{mb.name}</p>
+                                <p className="text-white text-sm mt-2 truncate w-[150px]">{mb.title}</p>
                             </button>
                         ))}
 
