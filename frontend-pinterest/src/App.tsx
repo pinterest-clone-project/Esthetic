@@ -44,7 +44,7 @@ const AppInit = ({children}: { children: React.ReactNode }) => {
         <>
             {showLoader && (
                 <div
-                    className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#121212]"
+                    className="fixed inset-0 z-[9999] flex items-center justify-center bg-white dark:bg-[#121212]"
                     style={{
                         opacity: fadeOut ? 0 : 1,
                         transition: 'opacity 0.6s ease',
