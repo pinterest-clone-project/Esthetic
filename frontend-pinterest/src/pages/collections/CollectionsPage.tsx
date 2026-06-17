@@ -18,7 +18,6 @@ const CollectionsPage = () => {
     const [showCreateMoodboard, setShowCreateMoodboard] = useState(false);
     const { data: myPins } = useGetMyPinsQuery();
     const { data: Pins } = useGetAllPinsQuery();
-
     const { data: moodboards } = useGetMyMoodboardsQuery();
 
     const hasAuras = activeTab === "Aura" && myPins && myPins.length > 0;
@@ -66,6 +65,15 @@ const CollectionsPage = () => {
                                     <img src={pin.mediaUrl ?? undefined} className="w-full rounded-xl object-cover" />
                                 </div>
                             ))}
+
+                            <button
+                                onClick={() => navigate("/aura/create")}
+                                className="relative w-full aspect-[3/4] rounded-xl overflow-hidden hover:opacity-90 transition-opacity break-inside-avoid mb-3 bg-[#2a2a2a]"
+                            >
+                            <span className="absolute inset-0 flex items-center justify-center text-white text-lg font-medium">
+                                Create
+                            </span>
+                            </button>
                         </div>
 
                         <h2 className="text-lg mt-4">Your saved Auras</h2>
@@ -124,9 +132,17 @@ const CollectionsPage = () => {
 
                         <button
                             onClick={() => setShowCreateMoodboard(true)}
-                            className="w-[150px] h-[110px] rounded-xl bg-[#2a2a2a] flex items-center justify-center text-white/70 text-sm hover:bg-[#333] transition-colors"
+                            className="relative w-[150px] h-[110px] rounded-xl overflow-hidden hover:opacity-90 transition-opacity"
                         >
-                            Create
+                            <div className="absolute inset-0 grid grid-cols-2 grid-rows-2">
+                                <div className="bg-[#535353]" />
+                                <div className="bg-[#A1A1A1]" />
+                                <div className="bg-[#535353]" />
+                                <div className="bg-[#454444]" />
+                            </div>
+                            <span className="absolute inset-0 flex items-center justify-center text-white text-lg font-medium">
+                                Create
+                            </span>
                         </button>
                     </div>
 
