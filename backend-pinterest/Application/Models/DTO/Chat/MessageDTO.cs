@@ -1,9 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Application.Models.DTO.Chat;
 
-namespace Application.Models.DTO.Chat;
-
-internal class MessageDTO
-{
-}
+public record MessageDTO(Guid Id, Guid ChatId, Guid SenderId, string Content, DateTime SentAt, bool IsRead);
