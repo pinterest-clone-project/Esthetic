@@ -13,13 +13,11 @@ public class MessageRepository(AppDbContext db) : IMessageRepository
         return entity;
     }
 
-    public Task<List<MessageEntity>> GetChatMessagesAsync(Guid chatId, int page, int pageSize, CancellationToken ct = default) =>
+    public Task<List<MessageEntity>> GetChatMessagesAsync(Guid chatId, CancellationToken ct = default) =>
         db.Messages
             .Where(m => m.ChatId == chatId)
             .Include(m => m.Sender)
             .OrderByDescending(m => m.SentAt)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
             .ToListAsync(ct);
 
     public Task<int> GetUnreadCountAsync(Guid chatId, Guid userId, CancellationToken ct = default) =>
