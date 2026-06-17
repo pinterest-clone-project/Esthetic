@@ -1,4 +1,4 @@
-import {Route, Routes} from "react-router";
+import {Navigate, Route, Routes} from "react-router";
 import CreateAuraPage from "./pages/aura/CreateAuraPage.tsx";
 import AuraPreviewPage from "./pages/aura/AuraPreviewPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
@@ -16,6 +16,7 @@ import CollectionsPage from "@/pages/collections/CollectionsPage.tsx";
 import AdminRoute from "@/components/routes/AdminRoute.tsx";
 import AdminLayout from "@/layouts/AdminLayout.tsx";
 import AdminDashboard from "@/pages/admin/AdminDashboard.tsx";
+import MoodboardPreviewPage from "@/pages/moodboard/MoodboardPreviewPage.tsx";
 
 const AppInit = ({children}: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
@@ -91,7 +92,14 @@ const App = () => {
                                 <Route path="create" element={<CreateAuraPage/>}/>
                                 <Route path="preview/:id" element={<AuraPreviewPage/>}/>
                             </Route>
-                            <Route path="/collections" element={<CollectionsPage/>}></Route>
+                            <Route path="moodboard/">
+                                <Route path="preview/:id" element={<MoodboardPreviewPage/>}/>
+                            </Route>
+
+                            <Route path="/collections" element={<Navigate to="/collections/aura" replace />} />
+                            <Route path="/collections/aura" element={<CollectionsPage/>}/>
+                            <Route path="/collections/moodboard" element={<CollectionsPage/>}/>
+                            <Route path="/collections/ai" element={<CollectionsPage/>}/>
                         </Route>
                     </Route>
                 </Route>

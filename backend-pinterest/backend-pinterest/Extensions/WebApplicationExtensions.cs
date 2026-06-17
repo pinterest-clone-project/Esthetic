@@ -46,7 +46,7 @@ public static class WebApplicationExtensions
 
         app.UseRequestLocalization();
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
 
         app.UseAuthentication();
         app.UseAuthorization();

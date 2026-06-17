@@ -4,4 +4,5 @@ export interface IPinSummaryResponse {
     mediaUrl: string | null;
     likesCount: number;
     isLikedByMe: boolean;
+    creatorId: string;
 }

@@ -1,5 +1,6 @@
 import { api } from "./api.ts";
 import type {ICategory} from "@/types/categories/ICategory.ts";
+import {serialize} from "object-to-formdata";
 
 export const categoryService = api.injectEndpoints({
     endpoints: (builder) => ({

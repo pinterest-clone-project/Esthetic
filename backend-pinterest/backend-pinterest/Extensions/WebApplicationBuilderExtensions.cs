@@ -182,7 +182,7 @@ public static class WebApplicationBuilderExtensions
         {
             options.AddPolicy("AllowAll", policy =>
             {
-                policy.WithOrigins("http://localhost:5173")
+                policy.WithOrigins("http://localhost:5173", "https://max.itstep.click")
                       .AllowAnyHeader()
                       .AllowAnyMethod()
                       .AllowCredentials();
