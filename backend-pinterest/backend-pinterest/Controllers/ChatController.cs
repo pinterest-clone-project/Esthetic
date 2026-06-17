@@ -26,4 +26,8 @@ public class ChatController(IMediator mediator) : ControllerBase
     [HttpPost("with/{otherUserId}")]
     public async Task<IActionResult> GetOrCreateChat(Guid otherUserId)
         => Ok(await mediator.Send(new CreateOrGetChatCommand(CurrentUserId, otherUserId)));
+
+    [HttpGet("{chatId}/messages")]
+    public async Task<IActionResult> GetMessages(Guid chatId)
+        => Ok(await mediator.Send(new GetChatMessagesQuery(chatId, CurrentUserId)));
 }
