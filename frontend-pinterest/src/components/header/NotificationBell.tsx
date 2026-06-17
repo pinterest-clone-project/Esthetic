@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import bellIcon from "@/assets/icons/bell_icon.svg";
 
-type NotificationType = "follow" | "like" | "comment" | "save";
+/*type NotificationType = "follow" | "like" | "comment" | "save";*/
 
 interface AppNotification {
     id: string;
