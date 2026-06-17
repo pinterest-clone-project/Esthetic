@@ -214,6 +214,8 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<IBoardPinRepository, BoardPinRepository>();
         services.AddScoped<IBoardSectionRepository, BoardSectionRepository>();
         services.AddScoped<IPinRepository, PinRepository>();
+        services.AddScoped<IChatRepository, ChatRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
 
         services.AddScoped<IEmailJobScheduler, EmailJobScheduler>();
 
@@ -234,6 +236,8 @@ public static class WebApplicationBuilderExtensions
         services.AddSingleton<TagMapper>();
         services.AddSingleton<UserMapper>();
         services.AddSingleton<SeederMapper>();
+        services.AddSingleton<ChatMapper>();
+        services.AddSingleton<MessageMapper>();
         #endregion
 
         #region OpenAPI
