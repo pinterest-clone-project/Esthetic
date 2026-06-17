@@ -4,6 +4,7 @@ import { useGetAllCategoriesQuery } from "../../services/categoryService.ts";
 import { useGetAllTagsQuery } from "../../services/tagService.ts";
 import {APP_ENV} from "@/constants/env";
 import { useNavigate } from "react-router";
+import BackButton from "@/components/UI/BackButton.tsx";
 
 const CreateAuraPage = () => {
     const navigate = useNavigate();
@@ -87,14 +88,17 @@ const CreateAuraPage = () => {
 
     return (
         <div className="w-full min-h-full px-10 py-8 flex flex-col items-center">
-            {/* Top bar */}
+
             <div className="flex items-center justify-between mb-8 w-full max-w-[580px]">
-                <h1 className="text-white text-sm font-medium tracking-wide">Create Aura</h1>
+                <div className="flex items-center gap-3">
+                    <BackButton className="mb-0" />
+                    <h1 className="text-white text-sm font-medium tracking-wide">Create Aura</h1>
+                </div>
                 <button
                     onClick={handleSubmit}
                     disabled={isLoading || !mediaUrl}
                     className="bg-[#4ade80] hover:bg-[#22c55e] disabled:opacity-40 disabled:cursor-not-allowed
-                        text-black text-xs font-semibold px-5 py-2 rounded-md transition-colors"
+            text-black text-xs font-semibold px-5 py-2 rounded-md transition-colors"
                 >
                     {isLoading ? "Creating..." : "Create"}
                 </button>

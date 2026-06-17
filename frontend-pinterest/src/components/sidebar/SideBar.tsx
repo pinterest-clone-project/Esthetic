@@ -10,7 +10,7 @@ import Modal from "@/components/UI/Modal.tsx";
 
 const navItems = [
     { path: "/", icon: homeIcon, label: "Головна" },
-    { path: "/collections", icon: collectionIcon, label: "Дошки" },
+    { path: "/collections/aura", icon: collectionIcon, label: "Дошки" },
 ];
 
 const greenFilter =
