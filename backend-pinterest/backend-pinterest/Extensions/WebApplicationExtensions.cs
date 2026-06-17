@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.FileProviders;
+﻿using backend_pinterest.Hubs;
+using Microsoft.Extensions.FileProviders;
 using Serilog;
 
 namespace backend_pinterest.Extensions;
@@ -51,6 +52,7 @@ public static class WebApplicationExtensions
         app.UseAuthorization();
 
         app.MapControllers();
+        app.MapHub<ChatHub>("/hubs/chat");
         #endregion
 
         return app;

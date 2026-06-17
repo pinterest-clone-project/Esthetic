@@ -23,6 +23,7 @@ using Quartz;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace backend_pinterest.Extensions;
@@ -146,6 +147,17 @@ public static class WebApplicationBuilderExtensions
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(CacheInvalidationBehavior<,>));
+        });
+        #endregion
+
+        #region SignalR
+        services.AddSignalR(options =>
+        {
+            options.EnableDetailedErrors = builder.Environment.IsDevelopment();
+        })
+        .AddJsonProtocol(options =>
+        {
+            options.PayloadSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         });
         #endregion
 
