@@ -1,5 +1,6 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Validators;
+using Application.UseCases.Chat.Queries;
 using Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -16,4 +17,8 @@ public class ChatController(IMediator mediator) : ControllerBase
     private Guid CurrentUserId => Guid.Parse(
         User.FindFirstValue(JwtClaims.Id)
         ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized));
+
+    [HttpGet]
+    public async Task<IActionResult> GetChats()
+        => Ok(await mediator.Send(new GetUserChatsQuery(CurrentUserId)));
 }
