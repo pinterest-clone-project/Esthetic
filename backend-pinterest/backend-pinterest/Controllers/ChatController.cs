@@ -30,4 +30,8 @@ public class ChatController(IMediator mediator) : ControllerBase
     [HttpGet("{chatId}/messages")]
     public async Task<IActionResult> GetMessages(Guid chatId)
         => Ok(await mediator.Send(new GetChatMessagesQuery(chatId, CurrentUserId)));
+
+    [HttpPost("{chatId}/messages")]
+    public async Task<IActionResult> SendMessage(Guid chatId, [FromBody] string Content)
+        => Ok(await mediator.Send(new SendMessageCommand(chatId, CurrentUserId, Content)));
 }
