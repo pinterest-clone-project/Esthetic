@@ -7,6 +7,10 @@ import profileIcon from "../../../src/assets/icons/profile_icon.svg";
 import auraIcon from "../../../src/assets/icons/aura_icon.svg";
 import React, {useState} from "react";
 import Modal from "@/components/UI/Modal.tsx";
+import {useLogoutMutation} from "@/services/accountService.ts";
+import {clearUser} from "@/store/slices/authSlice.ts";
+import {api} from "@/services/api.ts";
+import {useAppDispatch} from "@/store";
 
 const navItems = [
     { path: "/", icon: homeIcon, label: "Головна" },
@@ -51,11 +55,24 @@ const SidebarButton = ({ icon, label, active, onClick, extraImgClass = "", child
 );
 
 
-
 const Sidebar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [activeModal, setActiveModal] = useState<ModalType>(null);
+    const [logout] = useLogoutMutation();
+    const dispatch = useAppDispatch();
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+        } catch (error) {
+            console.error("Помилка під час logout:", error);
+        } finally {
+            dispatch(clearUser());
+            dispatch(api.util.resetApiState());
+            navigate("/");
+        }
+    };
 
     const isActive = (path: string) => location.pathname === path;
     const closeModal = () => setActiveModal(null);
@@ -117,6 +134,23 @@ const Sidebar = () => {
                     <div className="text-left">
                         <p className="text-white text-sm font-medium">Profile</p>
                         <p className="text-[#A1A1A1] text-xs">View and edit your profile</p>
+                    </div>
+                </button>
+
+                <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-red-500/10 transition-colors duration-150 group mt-auto mb-1"
+                >
+                    <div className="w-10 h-10 rounded-xl bg-[#2a2a2a] group-hover:bg-red-500/20 flex items-center justify-center transition-colors shrink-0">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                            <polyline points="16 17 21 12 16 7"/>
+                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                    </div>
+                    <div className="text-left">
+                        <p className="text-red-400 text-sm font-medium">Logout</p>
+                        <p className="text-[#A1A1A1] text-xs">Sign out of your account</p>
                     </div>
                 </button>
             </Modal>
