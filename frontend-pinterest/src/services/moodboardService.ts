@@ -24,6 +24,20 @@ export interface MoodboardPage {
     totalPages: number;
 }
 
+export interface MoodboardDetail {
+    id: string;
+    title: string;
+    description?: string;
+    coverImageUrl: string | null;
+    isPrivate: boolean;
+    isArchived: boolean;
+    ownerId: string;
+    createdAt: string;
+    updatedAt: string | null;
+    pinsCount: number;
+    previewImageUrls: string[];
+}
+
 export const moodboardService = api.injectEndpoints({
     endpoints: (builder) => ({
         getMyMoodboards: builder.query<MoodboardPage, void>({
@@ -38,7 +52,11 @@ export const moodboardService = api.injectEndpoints({
             }),
             invalidatesTags: ["MyMoodboards"],
         }),
+        getMoodboardById: builder.query<MoodboardDetail, string>({
+            query: (id) => `Boards/getById/${id}`,
+            providesTags: ["MyMoodboards"],
+        }),
     }),
 });
 
-export const { useGetMyMoodboardsQuery, useCreateMoodboardMutation } = moodboardService;
+export const { useGetMyMoodboardsQuery, useCreateMoodboardMutation, useGetMoodboardByIdQuery  } = moodboardService;

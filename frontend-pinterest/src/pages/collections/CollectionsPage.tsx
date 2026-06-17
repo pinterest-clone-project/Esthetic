@@ -114,7 +114,7 @@ const CollectionsPage = () => {
                         {moodboards?.items?.map((mb) => (
                             <button
                                 key={mb.id}
-                                onClick={() => navigate(`/moodboard/${mb.id}`)}
+                                onClick={() => navigate(`/moodboard/preview/${mb.id}`)}
                                 className="text-left"
                             >
                                 <div className="w-[150px] h-[110px] rounded-xl overflow-hidden bg-[#2a2a2a]">

@@ -16,6 +16,7 @@ import CollectionsPage from "@/pages/collections/CollectionsPage.tsx";
 import AdminRoute from "@/components/routes/AdminRoute.tsx";
 import AdminLayout from "@/layouts/AdminLayout.tsx";
 import AdminDashboard from "@/pages/admin/AdminDashboard.tsx";
+import MoodboardPreviewPage from "@/pages/moodboard/MoodboardPreviewPage.tsx";
 
 const AppInit = ({children}: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
@@ -90,6 +91,9 @@ const App = () => {
                             <Route path="aura/">
                                 <Route path="create" element={<CreateAuraPage/>}/>
                                 <Route path="preview/:id" element={<AuraPreviewPage/>}/>
+                            </Route>
+                            <Route path="moodboard/">
+                                <Route path="preview/:id" element={<MoodboardPreviewPage/>}/>
                             </Route>
                             <Route path="/collections" element={<CollectionsPage/>}></Route>
                         </Route>
