@@ -1,5 +1,6 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Validators;
+using Application.UseCases.Chat.Commands;
 using Application.UseCases.Chat.Queries;
 using Domain.Constants;
 using MediatR;
@@ -21,4 +22,8 @@ public class ChatController(IMediator mediator) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetChats()
         => Ok(await mediator.Send(new GetUserChatsQuery(CurrentUserId)));
+
+    [HttpPost("with/{otherUserId}")]
+    public async Task<IActionResult> GetOrCreateChat(Guid otherUserId)
+        => Ok(await mediator.Send(new CreateOrGetChatCommand(CurrentUserId, otherUserId)));
 }
