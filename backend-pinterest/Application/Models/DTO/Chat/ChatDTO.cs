@@ -2,4 +2,9 @@
 
 namespace Application.Models.DTO.Chat;
 
-public record ChatDTO(Guid Id, UserShortDTO OtherUser, MessageDTO? LastMessage, int UnreadCount, DateTime CreatedAt);
+public record ChatDTO(Guid Id, DateTime CreatedAt)
+{
+    public UserShortDTO OtherUser { get; init; } = null!;
+    public MessageDTO? LastMessage { get; init; }
+    public int UnreadCount { get; init; }
+}
