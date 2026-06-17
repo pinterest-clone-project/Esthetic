@@ -1,15 +1,19 @@
 import { api } from "@/services/api.ts";
+import {serialize} from "object-to-formdata";
 
 export interface Moodboard {
     id: string;
-    name: string;
-    isHidden: boolean;
+    title: string;
+    description?: string;
+    isPrivate: boolean;
     coverUrls: string[];
 }
 
 export interface CreateMoodboardRequest {
-    name: string;
-    isHidden: boolean;
+    title: string;
+    description?: string;
+    isPrivate: boolean;
+    coverImageFile?: File;
 }
 
 export const moodboardService = api.injectEndpoints({
@@ -22,7 +26,7 @@ export const moodboardService = api.injectEndpoints({
             query: (body) => ({
                 url: "/api/Boards/create",
                 method: "POST",
-                body,
+                body: serialize(body, { indices: true, booleansAsIntegers: false }),
             }),
             invalidatesTags: ["MyMoodboards"],
         }),

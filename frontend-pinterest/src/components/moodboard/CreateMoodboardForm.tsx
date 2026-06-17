@@ -68,7 +68,11 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
                 <button
                     onClick={handleSubmit}
                     disabled={isLoading || !name.trim()}
-                    className="px-5 py-2 rounded-lg bg-[#e5e5e5] text-black text-sm font-medium hover:bg-[#d4d4d4] transition-colors disabled:opacity-50"
+                    className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 ${
+                        name.trim()
+                            ? "bg-[#1DB954] text-black hover:bg-[#1aa34a]"
+                            : "bg-[#A1A1A1] text-black hover:bg-[#d4d4d4]"
+                    }`}
                 >
                     {isLoading ? "Creating..." : "Create Moodboard"}
                 </button>
