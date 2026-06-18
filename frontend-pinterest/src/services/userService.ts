@@ -7,7 +7,7 @@ export const userService = api.injectEndpoints({
     endpoints: (builder) => ({
         searchUsers: builder.query<IPagedResult<IUser>, ISearchUsersParams>({
             query: ({ search, page = 1, pageSize = 10 }) => ({
-                url: "/Users/search",
+                url: "Users/search",
                 params: { search, page, pageSize },
             }),
         }),

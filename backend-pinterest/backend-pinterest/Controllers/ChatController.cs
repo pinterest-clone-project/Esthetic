@@ -32,8 +32,8 @@ public class ChatController(IMediator mediator) : ControllerBase
         => Ok(await mediator.Send(new GetChatMessagesQuery(chatId, CurrentUserId)));
 
     [HttpPost("{chatId}/messages")]
-    public async Task<IActionResult> SendMessage(Guid chatId, [FromBody] string Content)
-        => Ok(await mediator.Send(new SendMessageCommand(chatId, CurrentUserId, Content)));
+    public async Task<IActionResult> SendMessage(Guid chatId, [FromBody] SendMessageBody body)
+        => Ok(await mediator.Send(new SendMessageCommand(chatId, CurrentUserId, body.Content)));
 
     [HttpPost("{chatId}/read")]
     public async Task<IActionResult> MarkAsRead(Guid chatId)
@@ -42,3 +42,5 @@ public class ChatController(IMediator mediator) : ControllerBase
         return Ok();
     }
 }
+
+public record SendMessageBody(string Content);

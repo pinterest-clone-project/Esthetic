@@ -1,18 +1,16 @@
 ﻿using Application.Common.Exceptions;
+using Application.Interfaces;
 using Application.Mappers;
 using Application.Models.DTO.Chat;
 using Application.UseCases.Chat.Commands;
 using Domain.Entities.Chat;
 using Domain.Interfaces;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Application.UseCases.Chat.Handlers;
 
 public class SendMessageHandler(
-    IMessageRepository messageRepository, IChatRepository chatRepository, MessageMapper messageMapper)
+    IMessageRepository messageRepository, IChatRepository chatRepository, MessageMapper messageMapper, IChatNotifier chatNotifier)
     : IRequestHandler<SendMessageCommand, MessageDTO>
 {
     public async Task<MessageDTO> Handle(SendMessageCommand request, CancellationToken ct)
@@ -31,6 +29,8 @@ public class SendMessageHandler(
         }, ct);
 
         var dto = messageMapper.ToDTO(message);
+        var receiverId = chat.User1Id == request.SenderId ? chat.User2Id : chat.User1Id;
+        await chatNotifier.NotifyNewMessageAsync(receiverId, dto);
 
         return dto;
     }

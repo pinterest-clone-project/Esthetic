@@ -16,6 +16,7 @@ import {useGetChatsQuery, useGetOrCreateChatMutation} from "@/services/chatServi
 import {useSearchUsersQuery} from "@/services/userService.ts";
 import ChatWindow from "@/components/sidebar/windows/ChatWindow.tsx";
 import {stopChatConnection} from "@/utils/chatHub.ts";
+import {APP_ENV} from "@/constants/env";
 
 const navItems = [
     { path: "/", icon: homeIcon, label: "Головна" },
@@ -160,7 +161,7 @@ const Sidebar = () => {
                 </div>
 
                 <div className="mt-3 px-3 flex flex-col gap-1 max-h-[400px] overflow-y-auto">
-                    {debouncedSearch.trim().length >= 2 ? (
+                    {debouncedSearch.trim().length >= 1 ? (
                         <>
                             {searchResult?.items.map((user) => (
                                 <button
@@ -169,7 +170,7 @@ const Sidebar = () => {
                                     className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-[#2a2a2a] transition-colors"
                                 >
                                     <div className="w-9 h-9 rounded-full bg-[#2a2a2a] overflow-hidden shrink-0">
-                                        {user.image && <img src={user.image} className="w-full h-full object-cover" />}
+                                        {user.image && <img src={`${APP_ENV.IMAGES_100_URL}${user.image}`} className="w-full h-full object-cover" />}
                                     </div>
                                     <span className="text-white text-sm">{user.userName}</span>
                                 </button>
@@ -188,7 +189,7 @@ const Sidebar = () => {
                                     className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-[#2a2a2a] transition-colors"
                                 >
                                     <div className="w-9 h-9 rounded-full bg-[#2a2a2a] overflow-hidden shrink-0">
-                                        {chat.otherUser.image && <img src={chat.otherUser.image} className="w-full h-full object-cover" />}
+                                        {chat.otherUser.image && <img src={`${APP_ENV.IMAGES_100_URL}${chat.otherUser.image}`} className="w-full h-full object-cover" />}
                                     </div>
                                     <div className="text-left flex-1 overflow-hidden">
                                         <p className="text-white text-sm">{chat.otherUser.username}</p>

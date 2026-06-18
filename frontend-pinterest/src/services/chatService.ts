@@ -6,23 +6,23 @@ import type {RootState} from "@/store";
 export const chatService = api.injectEndpoints({
     endpoints: (builder) => ({
         getChats: builder.query<IChat[], void>({
-            query: () => "/Chat",
+            query: () => "Chat",
             providesTags: ["Chat"],
         }),
 
         getOrCreateChat: builder.mutation<IChat, string>({
-            query: (otherUserId) => ({ url: `/Chat/with/${otherUserId}`, method: "POST" }),
+            query: (otherUserId) => ({ url: `Chat/with/${otherUserId}`, method: "POST" }),
             invalidatesTags: ["Chat"],
         }),
 
         getMessages: builder.query<IMessage[], string>({
-            query: (chatId) => `/Chat/${chatId}/messages`,
+            query: (chatId) => `Chat/${chatId}/messages`,
             providesTags: (_result, _error, chatId) => [{ type: "Message", id: chatId }],
         }),
 
         sendMessage: builder.mutation<IMessage, { chatId: string; content: string }>({
             query: ({ chatId, content }) => ({
-                url: `/Chat/${chatId}/messages`,
+                url: `Chat/${chatId}/messages`,
                 method: "POST",
                 body: { content },
             }),
@@ -59,11 +59,10 @@ export const chatService = api.injectEndpoints({
         }),
 
         markChatAsRead: builder.mutation<void, string>({
-            query: (chatId) => ({ url: `/Chat/${chatId}/read`, method: "POST" }),
+            query: (chatId) => ({ url: `Chat/${chatId}/read`, method: "POST" }),
             invalidatesTags: ["Chat"],
         }),
     }),
-    overrideExisting: false,
 });
 
 export const {

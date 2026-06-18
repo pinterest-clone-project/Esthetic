@@ -3,6 +3,7 @@ import {useAppSelector} from "@/store";
 import {useGetMessagesQuery, useMarkChatAsReadMutation, useSendMessageMutation} from "@/services/chatService.ts";
 import {useEffect, useRef, useState} from "react";
 import Modal from "@/components/UI/Modal.tsx";
+import {APP_ENV} from "@/constants/env";
 
 interface ChatWindowProps {
     chat: IChat;
@@ -26,7 +27,6 @@ const ChatWindow = ({ chat, onClose }: ChatWindowProps) => {
 
     useEffect(() => {
         if (chat.unreadCount > 0) markAsRead(chat.id);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chat.id]);
 
     const handleSend = () => {
@@ -36,36 +36,72 @@ const ChatWindow = ({ chat, onClose }: ChatWindowProps) => {
         setText("");
     };
 
-    return (
-        <Modal isOpen onClose={onClose} variant="sidebar" title={chat.otherUser.username} width={300}>
-            <div className="flex flex-col h-[500px]">
-                <div className="flex-1 overflow-y-auto px-3 py-2 flex flex-col gap-2">
-                    {messages.map((m) => {
-                        const isOwn = m.senderId === currentUserId;
-                        return (
-                            <div key={m.id} className={`flex flex-col ${isOwn ? "items-end" : "items-start"}`}>
-                                <div
-                                    className={`max-w-[80%] px-3 py-2 rounded-xl text-sm whitespace-pre-wrap break-words ${
-                                        isOwn ? "bg-[#1DB954] text-black" : "bg-[#2a2a2a] text-white"
-                                    }`}
-                                >
-                                    {m.content}
-                                </div>
-                                <span className="text-[10px] text-[#A1A1A1] mt-0.5">{formatTime(m.sentAt)}</span>
-                            </div>
-                        );
-                    })}
-                    <div ref={bottomRef} />
-                </div>
+    const avatarLetter = chat.otherUser.username?.[0]?.toUpperCase() ?? "?";
 
-                <div className="flex items-center gap-2 p-3 border-t border-white/10">
+    return (
+        <Modal isOpen onClose={onClose} variant="sidebar" width={300} disableInnerScroll>
+            <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10 shrink-0">
+                <div className="w-8 h-8 rounded-full bg-[#2a2a2a] overflow-hidden shrink-0 flex items-center justify-center">
+                    {chat.otherUser.image
+                        ? <img src={`${APP_ENV.IMAGES_100_URL}${chat.otherUser.image}`} className="w-full h-full object-cover" />
+                        : <span className="text-white text-xs font-medium">{avatarLetter}</span>
+                    }
+                </div>
+                <span className="text-white text-sm font-medium flex-1">{chat.otherUser.username}</span>
+                <button
+                    onClick={onClose}
+                    className="w-7 h-7 flex items-center justify-center rounded-full bg-[#2a2a2a] hover:bg-[#3a3a3a] transition-colors"
+                >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div
+                className="flex-1 overflow-y-auto px-4 py-3 flex flex-col gap-2 min-h-0"
+                style={{ scrollbarWidth: "none" }}
+            >
+                {messages.map((m) => {
+                    const isOwn = m.senderId === currentUserId;
+                    return (
+                        <div key={m.id} className={`flex ${isOwn ? "justify-end" : "justify-start"}`}>
+                            <div
+                                className={`max-w-[75%] px-3 pt-2 pb-1 text-sm whitespace-pre-wrap break-words flex flex-col ${
+                                    isOwn
+                                        ? "bg-[#1DB954] text-black rounded-[18px] rounded-br-[4px]"
+                                        : "bg-[#2a2a2a] text-white rounded-[18px] rounded-bl-[4px]"
+                                }`}
+                            >
+                                <span>{m.content}</span>
+                                <span className={`text-[10px] mt-0.5 self-end ${isOwn ? "text-black/50" : "text-white/40"}`}>
+                                    {formatTime(m.sentAt)}
+                                </span>
+                            </div>
+                        </div>
+                    );
+                })}
+                <div ref={bottomRef} />
+            </div>
+
+            <div className="px-3 py-3 border-t border-white/10 shrink-0">
+                <div className="flex items-center gap-2 bg-[#1e1e1e] rounded-full px-4 py-2 border border-white/10">
                     <input
                         value={text}
                         onChange={(e) => setText(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                        placeholder="Повідомлення"
-                        className="flex-1 bg-[#2a2a2a] rounded-full px-4 py-2 text-sm text-white outline-none placeholder:text-[#A1A1A1]"
+                        onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
+                        placeholder="Message"
+                        className="flex-1 bg-transparent text-sm text-white outline-none placeholder:text-[#555]"
                     />
+                    <button
+                        onClick={handleSend}
+                        disabled={!text.trim() || isSending}
+                        className="w-7 h-7 rounded-full bg-[#1DB954] flex items-center justify-center disabled:opacity-30 shrink-0 transition-opacity"
+                    >
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                            <path d="M5 12h14M12 5l7 7-7 7" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </Modal>
