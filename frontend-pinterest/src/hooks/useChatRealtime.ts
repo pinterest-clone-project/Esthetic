@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
-import {getChatConnection, startChatConnection} from "@/utils/chatHub.ts";
-import type {IMessage} from "@/types/chat/IMessage.ts";
-import {chatService} from "@/services/chatService.ts";
-import {selectIsAuth} from "@/store/selectors/authSelectors.ts";
+import { getChatConnection, startChatConnection } from "@/utils/chatHub.ts";
+import type { IMessage } from "@/types/chat/IMessage.ts";
+import type { IChat } from "@/types/chat/IChat.ts";
+import { chatService } from "@/services/chatService.ts";
+import { selectIsAuth } from "@/store/selectors/authSelectors.ts";
 
 export const useChatRealtime = () => {
     const dispatch = useAppDispatch();
-    const isAuth    = useAppSelector(selectIsAuth);
+    const isAuth = useAppSelector(selectIsAuth);
 
     useEffect(() => {
         if (!isAuth) return;
@@ -39,13 +40,25 @@ export const useChatRealtime = () => {
                     })
                 );
             });
+
+            connection.on("ReceiveNewChat", (chat: IChat) => {
+                dispatch(
+                    chatService.util.updateQueryData("getChats", undefined, (draft) => {
+                        if (!draft.some((c) => c.id === chat.id)) {
+                            draft.unshift(chat);
+                        }
+                    })
+                );
+            });
         };
 
         setup();
 
         return () => {
             active = false;
-            getChatConnection().off("ReceiveMessage");
+            const conn = getChatConnection();
+            conn.off("ReceiveMessage");
+            conn.off("ReceiveNewChat");
         };
     }, [isAuth, dispatch]);
 };

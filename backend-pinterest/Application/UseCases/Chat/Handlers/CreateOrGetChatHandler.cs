@@ -1,4 +1,5 @@
 ﻿using Application.Common.Exceptions;
+using Application.Interfaces;
 using Application.Mappers;
 using Application.Models.DTO.Chat;
 using Application.UseCases.Chat.Commands;
@@ -9,7 +10,12 @@ using MediatR;
 namespace Application.UseCases.Chat.Handlers;
 
 public class CreateOrGetChatHandler(
-    IChatRepository chatRepository, IMessageRepository messageRepository, ChatMapper chatMapper, UserMapper userMapper, MessageMapper messageMapper)
+    IChatRepository chatRepository,
+    IMessageRepository messageRepository,
+    ChatMapper chatMapper,
+    UserMapper userMapper,
+    MessageMapper messageMapper,
+    IChatNotifier chatNotifier)
     : IRequestHandler<CreateOrGetChatCommand, ChatDTO>
 {
     public async Task<ChatDTO> Handle(CreateOrGetChatCommand request, CancellationToken ct)
@@ -18,7 +24,10 @@ public class CreateOrGetChatHandler(
             throw new BadRequestException("Не можна створити чат із самим собою");
 
         var chat = await chatRepository.GetByUsersAsync(request.CurrentUserId, request.OtherUserId, ct);
-        if (chat is null)
+
+        var isNewChat = chat is null;
+
+        if (isNewChat)
         {
             chat = await chatRepository.AddAsync(new ChatEntity
             {
@@ -28,7 +37,16 @@ public class CreateOrGetChatHandler(
             chat = await chatRepository.GetByUsersAsync(request.CurrentUserId, request.OtherUserId, ct);
         }
 
-        var unread = await messageRepository.GetUnreadCountAsync(chat!.Id, request.CurrentUserId, ct);
-        return chatMapper.ToDTO(chat, request.CurrentUserId, unread, messageMapper, userMapper);
+        var unreadForCurrent = await messageRepository.GetUnreadCountAsync(chat!.Id, request.CurrentUserId, ct);
+        var chatDTOForCurrent = chatMapper.ToDTO(chat, request.CurrentUserId, unreadForCurrent, messageMapper, userMapper);
+
+        if (isNewChat)
+        {
+            var unreadForOther = await messageRepository.GetUnreadCountAsync(chat.Id, request.OtherUserId, ct);
+            var chatDTOForOther = chatMapper.ToDTO(chat, request.OtherUserId, unreadForOther, messageMapper, userMapper);
+            await chatNotifier.NotifyNewChatAsync(request.OtherUserId, chatDTOForOther);
+        }
+
+        return chatDTOForCurrent;
     }
 }

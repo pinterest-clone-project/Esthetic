@@ -9,4 +9,6 @@ public class SignalRChatNotifier(IHubContext<ChatHub> hubContext) : IChatNotifie
 {
     public Task NotifyNewMessageAsync(Guid receiverId, MessageDTO message) =>
         hubContext.Clients.Group(receiverId.ToString()).SendAsync("ReceiveMessage", message);
+    public Task NotifyNewChatAsync(Guid receiverId, ChatDTO chat) =>
+        hubContext.Clients.Group(receiverId.ToString()).SendAsync("ReceiveNewChat", chat);
 }

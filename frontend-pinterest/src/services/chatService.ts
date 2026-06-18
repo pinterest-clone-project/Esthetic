@@ -12,7 +12,16 @@ export const chatService = api.injectEndpoints({
 
         getOrCreateChat: builder.mutation<IChat, string>({
             query: (otherUserId) => ({ url: `Chat/with/${otherUserId}`, method: "POST" }),
-            invalidatesTags: ["Chat"],
+            async onQueryStarted(_otherUserId, { dispatch, queryFulfilled }) {
+                const { data: newChat } = await queryFulfilled;
+                dispatch(
+                    chatService.util.updateQueryData("getChats", undefined, (draft) => {
+                        if (!draft.some((c) => c.id === newChat.id)) {
+                            draft.unshift(newChat);
+                        }
+                    })
+                );
+            },
         }),
 
         getMessages: builder.query<IMessage[], string>({
