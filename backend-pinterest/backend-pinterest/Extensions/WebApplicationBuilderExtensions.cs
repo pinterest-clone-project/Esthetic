@@ -3,6 +3,7 @@ using Application.Common.Optional;
 using Application.Common.Validators;
 using Application.Interfaces;
 using Application.Mappers;
+using backend_pinterest.Middleware;
 using Domain.Constants;
 using Domain.Entities.Identity;
 using Domain.Interfaces;
@@ -237,6 +238,8 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<ISmtpService, SmtpService>();
         services.AddScoped<IPagedService, PagedService>();
         services.AddScoped<ICookieService, CookieService>();
+
+        services.AddSingleton<IChatNotifier, SignalRChatNotifier>();
         #endregion
 
         #region Mappers
