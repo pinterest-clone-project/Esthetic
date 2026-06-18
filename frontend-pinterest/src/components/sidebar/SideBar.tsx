@@ -5,12 +5,17 @@ import addIcon from "../../../src/assets/icons/add_icon.svg";
 import settingsIcon from "../../../src/assets/icons/settings_icon.svg";
 import profileIcon from "../../../src/assets/icons/profile_icon.svg";
 import auraIcon from "../../../src/assets/icons/aura_icon.svg";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Modal from "@/components/UI/Modal.tsx";
 import {useLogoutMutation} from "@/services/accountService.ts";
 import {clearUser} from "@/store/slices/authSlice.ts";
 import {api} from "@/services/api.ts";
 import {useAppDispatch} from "@/store";
+import type { IChat } from "@/types/chat/IChat";
+import {useGetChatsQuery, useGetOrCreateChatMutation} from "@/services/chatService.ts";
+import {useSearchUsersQuery} from "@/services/userService.ts";
+import ChatWindow from "@/components/sidebar/windows/ChatWindow.tsx";
+import {stopChatConnection} from "@/utils/chatHub.ts";
 
 const navItems = [
     { path: "/", icon: homeIcon, label: "Головна" },
@@ -68,6 +73,7 @@ const Sidebar = () => {
         } catch (error) {
             console.error("Помилка під час logout:", error);
         } finally {
+            await stopChatConnection();
             dispatch(clearUser());
             dispatch(api.util.resetApiState());
             navigate("/");
@@ -76,6 +82,35 @@ const Sidebar = () => {
 
     const isActive = (path: string) => location.pathname === path;
     const closeModal = () => setActiveModal(null);
+
+
+    const [activeChat, setActiveChat] = useState<IChat | null>(null);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+
+    const { data: chats = [] } = useGetChatsQuery();
+    const { data: searchResult } = useSearchUsersQuery(
+        { search: debouncedSearch, pageSize: 10 },
+        { skip: debouncedSearch.trim().length < 2 }
+    );
+    const [getOrCreateChat] = useGetOrCreateChatMutation();
+
+    useEffect(() => {
+        const t = setTimeout(() => setDebouncedSearch(searchTerm), 300);
+        return () => clearTimeout(t);
+    }, [searchTerm]);
+
+    const handleSelectUser = async (userId: string) => {
+        const chat = await getOrCreateChat(userId).unwrap();
+        setActiveChat(chat);
+        setActiveModal(null);
+        setSearchTerm("");
+    };
+
+    const handleOpenChat = (chat: IChat) => {
+        setActiveChat(chat);
+        setActiveModal(null);
+    };
 
     return (
         <>
@@ -111,15 +146,65 @@ const Sidebar = () => {
                 />
             </aside>
 
-            <Modal isOpen={activeModal === 'friends'} onClose={closeModal} variant="sidebar" title="Add friends" width={300}>
+            <Modal isOpen={activeModal === 'friends'} onClose={closeModal} variant="sidebar" title="Messages" width={300}>
                 <div className="flex items-center gap-2 bg-[#2a2a2a] rounded-lg px-3 py-2 mx-3">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A1A1A1" strokeWidth="2">
                         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
                     </svg>
                     <input
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                         className="bg-transparent text-sm text-white outline-none w-full placeholder:text-[#A1A1A1]"
                         placeholder="Search by nickname"
                     />
+                </div>
+
+                <div className="mt-3 px-3 flex flex-col gap-1 max-h-[400px] overflow-y-auto">
+                    {debouncedSearch.trim().length >= 2 ? (
+                        <>
+                            {searchResult?.items.map((user) => (
+                                <button
+                                    key={user.id}
+                                    onClick={() => handleSelectUser(user.id)}
+                                    className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-[#2a2a2a] transition-colors"
+                                >
+                                    <div className="w-9 h-9 rounded-full bg-[#2a2a2a] overflow-hidden shrink-0">
+                                        {user.image && <img src={user.image} className="w-full h-full object-cover" />}
+                                    </div>
+                                    <span className="text-white text-sm">{user.userName}</span>
+                                </button>
+                            ))}
+                            {searchResult?.items.length === 0 && (
+                                <p className="text-[#A1A1A1] text-xs px-2">Користувачів не знайдено</p>
+                            )}
+                        </>
+                    ) : (
+                        <>
+                            <p className="text-[#A1A1A1] text-xs px-2 mb-1">Ваші чати</p>
+                            {chats.map((chat) => (
+                                <button
+                                    key={chat.id}
+                                    onClick={() => handleOpenChat(chat)}
+                                    className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-[#2a2a2a] transition-colors"
+                                >
+                                    <div className="w-9 h-9 rounded-full bg-[#2a2a2a] overflow-hidden shrink-0">
+                                        {chat.otherUser.image && <img src={chat.otherUser.image} className="w-full h-full object-cover" />}
+                                    </div>
+                                    <div className="text-left flex-1 overflow-hidden">
+                                        <p className="text-white text-sm">{chat.otherUser.username}</p>
+                                        {chat.lastMessage && (
+                                            <p className="text-[#A1A1A1] text-xs truncate">{chat.lastMessage.content}</p>
+                                        )}
+                                    </div>
+                                    {chat.unreadCount > 0 && (
+                                        <span className="bg-[#1DB954] text-black text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center shrink-0">
+                                {chat.unreadCount}
+                            </span>
+                                    )}
+                                </button>
+                            ))}
+                        </>
+                    )}
                 </div>
             </Modal>
 
@@ -182,6 +267,7 @@ const Sidebar = () => {
                     </div>
                 </button>
             </Modal>
+            {activeChat && <ChatWindow chat={activeChat} onClose={() => setActiveChat(null)} />}
         </>
     );
 

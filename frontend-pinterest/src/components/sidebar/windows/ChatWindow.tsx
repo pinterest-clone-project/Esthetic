@@ -14,7 +14,7 @@ const formatTime = (iso: string) =>
 
 const ChatWindow = ({ chat, onClose }: ChatWindowProps) => {
     const currentUserId = useAppSelector((s) => s.auth.user?.id);
-    const { data: messages = [] } = useGetMessagesQuery(chat.id, { pollingInterval: 3000 });
+    const { data: messages = [] } = useGetMessagesQuery(chat.id);
     const [sendMessage, { isLoading: isSending }] = useSendMessageMutation();
     const [markAsRead] = useMarkChatAsReadMutation();
     const [text, setText] = useState("");
