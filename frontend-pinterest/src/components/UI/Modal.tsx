@@ -11,6 +11,7 @@ interface ModalProps {
     borderRadius?: number;
     variant?: "centered" | "sidebar";
     title?: string;
+    disableInnerScroll?: boolean;
 }
 
 const Modal = ({
@@ -23,6 +24,7 @@ const Modal = ({
                    borderRadius = 20,
                    variant = "centered",
                    title,
+                   disableInnerScroll = false,
                }: ModalProps) => {
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -43,25 +45,24 @@ const Modal = ({
         return createPortal(
             <>
                 {closeOnOverlay && (
-                    <div
-                        className="fixed inset-0 z-40"
-                        onClick={onClose}
-                    />
+                    <div className="fixed inset-0 z-40" onClick={onClose} />
                 )}
-
                 <div
-                    style={{ width,
-                        left: `calc((100vw - 1505px) / 2 + 64px)` ,
-                        top: 0,  borderTopRightRadius: borderRadius,
+                    style={{
+                        width,
+                        left: `calc((100vw - 1505px) / 2 + 64px)`,
+                        top: 0,
+                        borderTopRightRadius: borderRadius,
                         borderBottomRightRadius: borderRadius,
                         borderTopLeftRadius: 0,
-                        borderBottomLeftRadius: 0,}}
+                        borderBottomLeftRadius: 0,
+                    }}
                     className="fixed bottom-0 z-50 bg-[#1a1a1a] shadow-2xl flex flex-col"
                     onClick={(e) => e.stopPropagation()}
                 >
                     {title && (
-                        <div className="flex items-center justify-between px-5 py-4 border-b border-[#2a2a2a] shrink-0">
-                            <h2 className="text-white font-semibold text-base tracking-[-0.5px]">
+                        <div className="flex items-center justify-between px-3 py-4 border-b border-[#2a2a2a] shrink-0">
+                            <h2 className="text-white font-semibold text-sm tracking-[-0.5px]">
                                 {title}
                             </h2>
                             <button
@@ -75,7 +76,7 @@ const Modal = ({
                         </div>
                     )}
 
-                    <div className="flex-1 overflow-y-auto p-5">
+                    <div className={`flex-1 min-h-0 px-0 py-2 flex flex-col ${disableInnerScroll ? "overflow-hidden" : "overflow-y-auto"}`}>
                         {children}
                     </div>
                 </div>

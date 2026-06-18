@@ -7,6 +7,9 @@ export const api = createApi({
     tagTypes: [
         "CurrentUser",
         "MyPins",
+        "MyMoodboards",
+        "Chat",
+        "Message"
     ],
     endpoints: () => ({})
 });

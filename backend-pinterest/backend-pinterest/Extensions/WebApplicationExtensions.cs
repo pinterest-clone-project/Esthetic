@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.FileProviders;
+﻿using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using backend_pinterest.Hubs;
+using Microsoft.Extensions.FileProviders;
 using Serilog;
 
 namespace backend_pinterest.Extensions;
@@ -7,6 +10,11 @@ public static class WebApplicationExtensions
 {
     public static WebApplication ConfigureApplication(this WebApplication app)
     {
+
+        using var scope = app.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        db.Database.Migrate();
+
         var config = app.Configuration;
 
         #region CORS
@@ -45,12 +53,13 @@ public static class WebApplicationExtensions
 
         app.UseRequestLocalization();
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
 
         app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
+        app.MapHub<ChatHub>("/hubs/chat");
         #endregion
 
         return app;
