@@ -2,10 +2,12 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
 import {getChatConnection, startChatConnection} from "@/utils/chatHub.ts";
 import type {IMessage} from "@/types/chat/IMessage.ts";
+import {chatService} from "@/services/chatService.ts";
+import {selectIsAuth} from "@/store/selectors/authSelectors.ts";
 
 export const useChatRealtime = () => {
     const dispatch = useAppDispatch();
-    const isAuth = useAppSelector((s) => s.auth.isAuth);
+    const isAuth    = useAppSelector(selectIsAuth);
 
     useEffect(() => {
         if (!isAuth) return;
@@ -20,7 +22,7 @@ export const useChatRealtime = () => {
 
             connection.on("ReceiveMessage", (message: IMessage) => {
                 dispatch(
-                    chatApi.util.updateQueryData("getMessages", message.chatId, (draft) => {
+                    chatService.util.updateQueryData("getMessages", message.chatId, (draft) => {
                         if (!draft.some((m) => m.id === message.id)) {
                             draft.push(message);
                         }
@@ -28,7 +30,7 @@ export const useChatRealtime = () => {
                 );
 
                 dispatch(
-                    chatApi.util.updateQueryData("getChats", undefined, (draft) => {
+                    chatService.util.updateQueryData("getChats", undefined, (draft) => {
                         const chat = draft.find((c) => c.id === message.chatId);
                         if (chat) {
                             chat.lastMessage = message;
