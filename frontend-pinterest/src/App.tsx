@@ -17,12 +17,15 @@ import AdminRoute from "@/components/routes/AdminRoute.tsx";
 import AdminLayout from "@/layouts/AdminLayout.tsx";
 import AdminDashboard from "@/pages/admin/AdminDashboard.tsx";
 import MoodboardPreviewPage from "@/pages/moodboard/MoodboardPreviewPage.tsx";
+import {useChatRealtime} from "@/hooks/useChatRealtime.ts";
 
 const AppInit = ({children}: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
     const { data, isSuccess, isLoading } = useGetMeQuery();
     const [showLoader, setShowLoader] = useState(true);
     const [fadeOut, setFadeOut] = useState(false);
+
+    useChatRealtime();
 
     useEffect(() => {
         if (isSuccess && data) {

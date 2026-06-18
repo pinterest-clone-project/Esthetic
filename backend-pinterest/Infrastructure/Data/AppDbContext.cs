@@ -2,6 +2,7 @@ using Application.Interfaces;
 using Domain.Entities.Board;
 using Domain.Entities.BoardSection;
 using Domain.Entities.Category;
+using Domain.Entities.Chat;
 using Domain.Entities.Comment;
 using Domain.Entities.Follow;
 using Domain.Entities.Identity;
@@ -38,6 +39,8 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     public DbSet<BoardEntity> Boards { get; set; }
     public DbSet<BoardPinEntity> BoardPins { get; set; }
     public DbSet<BoardSectionEntity> BoardsSection { get; set; }
+    public DbSet<ChatEntity> Chats { get; set; }
+    public DbSet<MessageEntity> Messages { get; set; }
 
     public IDbContextTransaction? CurrentTransaction => Database.CurrentTransaction;
 
