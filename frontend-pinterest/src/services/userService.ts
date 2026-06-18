@@ -3,7 +3,7 @@ import type {IPagedResult} from "@/types/IPagedResult.ts";
 import type {IUser} from "@/types/user/IUser.ts";
 import type {ISearchUsersParams} from "@/types/user/ISearchUsersParams.ts";
 
-export const userApi = api.injectEndpoints({
+export const userService = api.injectEndpoints({
     endpoints: (builder) => ({
         searchUsers: builder.query<IPagedResult<IUser>, ISearchUsersParams>({
             query: ({ search, page = 1, pageSize = 10 }) => ({
@@ -14,4 +14,4 @@ export const userApi = api.injectEndpoints({
     })
 });
 
-export const { useSearchUsersQuery } = userApi;
+export const { useSearchUsersQuery } = userService;

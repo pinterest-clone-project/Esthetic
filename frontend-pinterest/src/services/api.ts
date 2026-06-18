@@ -8,6 +8,8 @@ export const api = createApi({
         "CurrentUser",
         "MyPins",
         "MyMoodboards",
+        "Chat",
+        "Message"
     ],
     endpoints: () => ({})
 });
