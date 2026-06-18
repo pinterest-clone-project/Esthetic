@@ -82,7 +82,7 @@ const Header: React.FC = () => {
                         />
 
                         <input
-                            className="bg-transparent text-sm outline-none text-black dark:text-white px-3 w-full"
+                            className="bg-transparent text-sm outline-none placeholder:text-black dark:placeholder:text-white dark:placeholder:opacity-50 px-3 w-full"
                             type="text"
                             placeholder="Search"
                         />
