@@ -16,6 +16,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/esthetic
+            git reset --hard HEAD
+            git clean -fd
             git pull origin main
             cd backend-pinterest
             docker build -t esthetic-api .
