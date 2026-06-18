@@ -6,6 +6,7 @@
     --color-btn-primary: #1DB954;
     --color-btn-secondary: #A1A1A1;
     --color-btn-dark: #535353;
+    --color-btn-light: #A2A2A2;
 
     --font-sans: 'Inter', system-ui, sans-serif;
     --font-size-sm: 14px;
@@ -14,6 +15,7 @@
     --color-button-text-color: #000000;
     --color-text-muted: #A1A1A1;
     --color-text-dark: #000000;
+    --color-text-light: #FFFFFF;
 }
 
 @layer base {

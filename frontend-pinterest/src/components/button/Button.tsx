@@ -1,6 +1,6 @@
 import React from "react";
 
-type ButtonVariant = "primary" | "secondary" | "dark";
+type ButtonVariant = "primary" | "secondary" | "dark" | "light";
 type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -16,6 +16,7 @@ const variantStyles: Record<ButtonVariant, string> = {
     primary:   "bg-[var(--color-btn-primary)] hover:opacity-90 text-[var(--color-button-text-color)]",
     secondary: "bg-[var(--color-btn-secondary)] hover:opacity-90 text-[var(--color-button-text-color)]",
     dark:      "bg-[var(--color-btn-dark)] hover:opacity-90 text-[var(--color-button-text-color)]",
+    light:     "bg-[var(--color-btn-light)] hover:opacity-90 text-[var(--color-text-light)]",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -48,6 +49,7 @@ const Button = ({
                 ${fullWidth ? "!w-full" : ""}
                 disabled:opacity-50 disabled:cursor-not-allowed
                 ${className}
+                cursor-pointer
             `}
             {...props}
         >

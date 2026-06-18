@@ -1,5 +1,6 @@
 import logo from "../../../src/assets/logo.png";
-import searchIcon from "../../assets/icons/search-vector.svg";
+import searchIconDark from "../../assets/icons/search-vector-dark.svg";
+import searchIconLight from "../../assets/icons/search-vector-light.svg";
 import Button from "@/components/button/Button.tsx";
 import {useEffect, useRef, useState} from "react";
 import Modal from "@/components/UI/Modal.tsx";
@@ -14,6 +15,7 @@ import { useLogoutMutation } from "@/services/accountService";
 import {api} from "@/services/api.ts";
 import {selectIsAdmin} from "@/store/selectors/authSelectors.ts";
 import NotificationBell from "@/components/header/NotificationBell.tsx";
+import {useTheme} from "@/context/ThemeContext.tsx";
 
 
 type ModalType = "login" | "signup" | null;
@@ -25,6 +27,7 @@ const Header: React.FC = () => {
     const user = useAppSelector((state) => state.auth.user);
     const isAdmin = useAppSelector(selectIsAdmin);
     const dispatch = useAppDispatch();
+    const {theme} = useTheme();
     const navigate = useNavigate();
 
     const [logout] = useLogoutMutation();
@@ -65,21 +68,21 @@ const Header: React.FC = () => {
                     />
 
                     {!user && (
-                        <a className="text-white font-bold text-xl leading-5 tracking-[-0.5px]" href="/">
+                        <a className="text-black dark:text-white font-bold text-xl leading-5 tracking-[-0.5px]" href="/">
                             Esthetic
                         </a>
                     )}
                 </div>
 
                 <div className="flex-1 flex justify-center">
-                    <div className="flex items-center bg-[#535353] rounded-[10px] px-4 h-9 w-full max-w-[586px] h-[40px]">
+                    <div className="flex items-center bg-[#A2A2A2] dark:bg-[#535353] rounded-[10px] px-4 h-9 w-full max-w-[586px] h-[40px]">
                         <img
-                            src={searchIcon}
+                            src={theme === "dark" ? searchIconDark : searchIconLight}
                             className="w-[27px] h-[27px] opacity-70 hover:cursor-pointer"
                         />
 
                         <input
-                            className="bg-transparent text-sm outline-none text-white px-3 w-full"
+                            className="bg-transparent text-sm outline-none text-black dark:text-white px-3 w-full"
                             type="text"
                             placeholder="Search"
                         />
@@ -89,13 +92,13 @@ const Header: React.FC = () => {
                 <nav className="hidden md:flex items-center gap-5 shrink-0">
                     {!user && (
                         <div className="hidden lg:flex items-center gap-5">
-                            <a className="text-white hover:text-green-400 hover:cursor-pointer transition font-normal text-sm leading-5 tracking-[-0.5px]">
+                            <a className="text-black dark:text-white hover:text-green-400 hover:cursor-pointer transition font-normal text-sm leading-5 tracking-[-0.5px]">
                                 About Us
                             </a>
-                            <a className="text-white text-sm hover:text-green-400 hover:cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
+                            <a className="text-black dark:text-white text-sm hover:text-green-400 hover:cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
                                 For Business
                             </a>
-                            <a className="text-white text-sm hover:text-green-400 hover:cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
+                            <a className="text-black dark:text-white text-sm hover:text-green-400 hover:cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
                                 News
                             </a>
                         </div>
@@ -170,7 +173,7 @@ const Header: React.FC = () => {
                                     onClick={() => setActiveModal("signup")}>
                                 Sign Up
                             </Button>
-                            <Button variant="dark" size="md" radius={10} style={{ width: 100, height: 50 }}
+                            <Button variant={theme === "dark" ? "dark" : "light"} size="md" radius={10} style={{ width: 100, height: 50 }}
                                     onClick={() => setActiveModal("login")}>
                                 Log in
                             </Button>
