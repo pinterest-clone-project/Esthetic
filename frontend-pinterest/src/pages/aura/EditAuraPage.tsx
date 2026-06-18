@@ -1,13 +1,16 @@
 import { useState, useMemo, useRef, useEffect } from "react";
-import { useCreatePinMutation } from "../../services/pinService.ts";
+import { useGetPinByIdQuery, useUpdatePinMutation } from "../../services/pinService.ts";
 import { useGetAllCategoriesQuery } from "../../services/categoryService.ts";
 import { useGetAllTagsQuery } from "../../services/tagService.ts";
-import {APP_ENV} from "@/constants/env";
-import { useNavigate } from "react-router";
+import { APP_ENV } from "@/constants/env";
+import { useNavigate, useParams } from "react-router";
 
-const CreateAuraPage = () => {
+const EditAuraPage = () => {
     const navigate = useNavigate();
-    const [createPin, { isLoading }] = useCreatePinMutation();
+    const { id } = useParams<{ id: string }>();
+
+    const { data: pin, isLoading: isPinLoading } = useGetPinByIdQuery(id!);
+    const [updatePin, { isLoading }] = useUpdatePinMutation();
     const { data: categories } = useGetAllCategoriesQuery();
     const { data: tags } = useGetAllTagsQuery();
 
@@ -17,7 +20,6 @@ const CreateAuraPage = () => {
     const [sourceUrl, setSourceUrl] = useState("");
     const [categoryId, setCategoryId] = useState("");
     const [tagIds, setTagIds] = useState<string[]>([]);
-    const [previewUrl, setPreviewUrl] = useState("");
 
     const [tagQuery, setTagQuery] = useState("");
     const [tagFocused, setTagFocused] = useState(false);
@@ -25,6 +27,17 @@ const CreateAuraPage = () => {
 
     const [categoryOpen, setCategoryOpen] = useState(false);
     const categoryBoxRef = useRef<HTMLDivElement>(null);
+
+    // Populate form once the pin loads
+    useEffect(() => {
+        if (pin) {
+            setTitle(pin.title ?? "");
+            setDescription(pin.description ?? "");
+            setSourceUrl(pin.sourceUrl ?? "");
+            setCategoryId(pin.categoryId ?? "");
+            setTagIds(pin.tags.map(t => t.id));
+        }
+    }, [pin]);
 
     const selectedTags = useMemo(
         () => tags?.filter(t => tagIds.includes(t.id)) ?? [],
@@ -55,65 +68,81 @@ const CreateAuraPage = () => {
         return () => document.removeEventListener("mousedown", handler);
     }, []);
 
-    const handleMediaUrlBlur = () => {
-        setPreviewUrl(mediaUrl);
-    };
-
-    const addTag = (id: string) => {
-        setTagIds(prev => [...prev, id]);
+    const addTag = (tagId: string) => {
+        setTagIds(prev => [...prev, tagId]);
         setTagQuery("");
     };
 
-    const removeTag = (id: string) => {
-        setTagIds(prev => prev.filter(t => t !== id));
+    const removeTag = (tagId: string) => {
+        setTagIds(prev => prev.filter(t => t !== tagId));
     };
 
     const handleSubmit = async () => {
-        if (!mediaUrl) return;
+        if (!id) return;
         try {
-            await createPin({
-                mediaUrl,
+            await updatePin({
+                id,
+                mediaUrl: mediaUrl || undefined,
                 title: title || undefined,
                 description: description || undefined,
                 sourceUrl: sourceUrl || undefined,
                 categoryId: categoryId || undefined,
                 tagIds: tagIds.length > 0 ? tagIds : undefined,
             }).unwrap();
-            navigate("/collections");
+            navigate(`/aura/preview/${id}`);
         } catch (e) {
             console.error(e);
         }
     };
 
+    const handleMediaUrlBlur = () => {
+        setPreviewUrl(mediaUrl);
+    };
+
+    if (isPinLoading) {
+        return (
+            <div className="w-full min-h-full flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-[#4ade80] animate-spin" />
+            </div>
+        );
+    }
+
+    if (!pin) {
+        return (
+            <div className="w-full min-h-full flex items-center justify-center">
+                <p className="text-red-400 text-sm">Aura not found.</p>
+            </div>
+        );
+    }
+
     return (
         <div className="w-full min-h-full px-10 py-8 flex flex-col items-center">
             {/* Top bar */}
             <div className="flex items-center justify-between mb-8 w-full max-w-[580px]">
-                <h1 className="text-white text-sm font-medium tracking-wide">Create Aura</h1>
+                <h1 className="text-white text-sm font-medium tracking-wide">Edit Aura</h1>
                 <button
                     onClick={handleSubmit}
-                    disabled={isLoading || !mediaUrl}
+                    disabled={isLoading}
                     className="bg-[#4ade80] hover:bg-[#22c55e] disabled:opacity-40 disabled:cursor-not-allowed
                         text-black text-xs font-semibold px-5 py-2 rounded-md transition-colors"
                 >
-                    {isLoading ? "Creating..." : "Create"}
+                    {isLoading ? "Saving..." : "Save"}
                 </button>
             </div>
 
             {/* Main layout */}
             <div className="w-full max-w-[580px] flex flex-col gap-5">
 
-                {/* Top row: image + Name/Url/SourceUrl */}
+                {/* Top row: image + Name/SourceUrl */}
                 <div className="flex gap-10 items-start">
-                    {/* Left — image preview */}
+                    {/* Left — image preview (read-only, media can't be changed) */}
                     <div className="shrink-0">
                         <div className="w-[200px] min-h-[200px] rounded-2xl overflow-hidden bg-[#1e1e1e] border border-[#333] flex items-center justify-center">
-                            {previewUrl ? (
+                            {pin.mediaUrl ? (
                                 <img
-                                    src={previewUrl}
+                                    src={pin.mediaUrl}
                                     alt="Preview"
                                     className="w-full h-full object-cover"
-                                    onError={() => setPreviewUrl("")}
                                 />
                             ) : (
                                 <div className="flex flex-col items-center gap-2 p-6 text-center">
@@ -127,7 +156,6 @@ const CreateAuraPage = () => {
                         </div>
                     </div>
 
-                    {/* Right — Name, Url, Source Url */}
                     <div className="w-[340px] flex flex-col gap-5">
                         {/* Name */}
                         <div className="flex flex-col gap-1.5">
@@ -142,7 +170,6 @@ const CreateAuraPage = () => {
                             />
                         </div>
 
-                        {/* URL */}
                         <div className="flex flex-col gap-1.5">
                             <label className="text-white text-xs font-medium">Url</label>
                             <input
@@ -192,7 +219,6 @@ const CreateAuraPage = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
-
                         {categoryOpen && (
                             <div className="absolute top-full left-0 right-0 mt-1 z-20 bg-[#1e1e1e] border border-[#333] rounded-md shadow-2xl max-h-60 overflow-y-auto">
                                 {categoryId && (
@@ -229,10 +255,9 @@ const CreateAuraPage = () => {
                         )}
                     </div>
 
-                    {/* Tags — under Name/Url/SourceUrl column */}
+                    {/* Tags — under Name/SourceUrl column */}
                     <div className="w-[340px] flex flex-col gap-1.5 relative" ref={tagBoxRef}>
                         <label className="text-white text-xs font-medium">Tags</label>
-
                         <input
                             type="text"
                             value={tagQuery}
@@ -242,7 +267,6 @@ const CreateAuraPage = () => {
                             className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-white text-xs
                                 placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors"
                         />
-
                         {tagFocused && suggestions.length > 0 && (
                             <div className="absolute top-full left-0 right-0 mt-1 z-20 bg-[#1e1e1e] border border-[#333] rounded-md shadow-2xl max-h-48 overflow-y-auto">
                                 {suggestions.map(tag => (
@@ -257,14 +281,11 @@ const CreateAuraPage = () => {
                                 ))}
                             </div>
                         )}
-
                         {tagFocused && tagQuery && suggestions.length === 0 && (
                             <div className="absolute top-full left-0 right-0 mt-1 z-20 bg-[#1e1e1e] border border-[#333] rounded-md shadow-2xl px-3 py-2">
                                 <span className="text-xs text-gray-600">No matching tags</span>
                             </div>
                         )}
-
-
                         {selectedTags.length > 0 && (
                             <div className="flex flex-wrap gap-2 mb-1">
                                 {selectedTags.map(tag => (
@@ -304,4 +325,4 @@ const CreateAuraPage = () => {
     );
 };
 
-export default CreateAuraPage;
+export default EditAuraPage;
