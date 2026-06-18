@@ -11,8 +11,7 @@ export const userApi = api.injectEndpoints({
                 params: { search, page, pageSize },
             }),
         }),
-    }),
-    overrideExisting: false,
+    })
 });
 
 export const { useSearchUsersQuery } = userApi;
