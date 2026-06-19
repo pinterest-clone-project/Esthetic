@@ -88,82 +88,105 @@ const onSubmit = async (formValues: FormValues) => {
 
 if (isLoading) return <p>Завантаження...</p>;
 
-return (
-    <div className="flex justify-center py-8">
-        <form onSubmit={handleSubmit(onSubmit)} className="max-w-[480px] p-6 text-white">
-            <h1 className="text-2xl font-bold mb-2">Edit your profile</h1>
-            <p className="text-text-muted text-sm mb-6">
-                Keep your personal information private. The information you add here is visible to all users who can view your profile.
-            </p>
+    return (
+        <div className="flex justify-center py-8">
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-[680px] px-6 text-white">
 
-            {/* Avatar */}
-            <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 rounded-full bg-[#2a2a2a] border-2 border-btn-primary flex items-center justify-center overflow-hidden">
-                    {me?.image
-                        ? <img src={`${APP_ENV.IMAGES_100_URL}${me.image}`} className="w-full h-full object-cover" />
-                        : <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1DB954" strokeWidth="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-                    }
+                {/* Header */}
+                <div className="flex items-center gap-5 mb-8">
+                    <div className="relative group cursor-pointer">
+                        <div className="w-20 h-20 rounded-full bg-[#2a2a2a] border-2 border-[#1DB954] overflow-hidden">
+                            {me?.image
+                                ? <img src={`${APP_ENV.IMAGES_100_URL}${me.image}`} className="w-full h-full object-cover" />
+                                : <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1DB954" strokeWidth="1.5" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                            }
+                        </div>
+                        <label className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition cursor-pointer">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            <input type="file" accept="image/*" className="hidden" onChange={(e) => setValue("imageFile", e.target.files?.[0])} />
+                        </label>
+                    </div>
+                    <div>
+                        <h1 className="text-2xl font-bold">Edit your profile</h1>
+                        <p className="text-[#A1A1A1] text-sm mt-1">Your info is visible to users who can view your profile</p>
+                    </div>
                 </div>
-                <label className="px-5 py-2 rounded-lg bg-[#2a2a2a] text-white text-sm cursor-pointer hover:bg-[#3a3a3a] transition">
-                    Edit
-                    <input type="file" accept="image/*" className="hidden"
-                           onChange={(e) => setValue("imageFile", e.target.files?.[0])} />
-                </label>
-            </div>
 
-
-            {[
-                { name: "firstName" as const, placeholder: "John" },
-                { name: "lastName"  as const, placeholder: "Your surname" },
-                { name: "bio"       as const, placeholder: "About you", textarea: true },
-                { name: "email"     as const, placeholder: "Email" },
-                { name: "phoneNumber" as const, placeholder: "+380..." },
-            ].map(({ name, placeholder, textarea }) => (
-                <div key={name} className="mb-3">
-                    {textarea
-                        ? <textarea {...register(name)} placeholder={placeholder} rows={3}
-                                    className="w-full bg-transparent border border-[#333] rounded-lg px-4 py-3 text-white placeholder-text-muted text-sm focus:outline-none focus:border-btn-primary resize-none transition" />
-                        : <input {...register(name)} placeholder={placeholder}
-                                 className="w-full bg-transparent border border-[#333] rounded-lg px-4 py-3 text-white placeholder-text-muted text-sm focus:outline-none focus:border-btn-primary transition" />
-                    }
-                    {errors[name] && <span className="text-red-400 text-xs mt-1">{errors[name]?.message}</span>}
+                {/* First name + Last name */}
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">First name</label>
+                        <input {...register("firstName")} placeholder="John"
+                               className="w-full bg-transparent border border-[#333] rounded-xl px-4 py-3 text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
+                        {errors.firstName && <span className="text-red-400 text-xs mt-1">{errors.firstName.message}</span>}
+                    </div>
+                    <div>
+                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">Last name</label>
+                        <input {...register("lastName")} placeholder="Doe"
+                               className="w-full bg-transparent border border-[#333] rounded-xl px-4 py-3 text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
+                        {errors.lastName && <span className="text-red-400 text-xs mt-1">{errors.lastName.message}</span>}
+                    </div>
                 </div>
-            ))}
 
-            {/* Gender */}
-            <div className="mb-3">
-                <select {...register("gender", { valueAsNumber: true })}
-                        className="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-btn-primary transition">
-                    <option value="">— Gender —</option>
-                    <option value={0}>Male</option>
-                    <option value={1}>Female</option>
-                    <option value={2}>Other</option>
-                </select>
-            </div>
+                {/* Bio */}
+                <div className="mb-4">
+                    <label className="text-xs text-[#A1A1A1] mb-1.5 block">About you</label>
+                    <textarea {...register("bio")} placeholder="Tell something about yourself..." rows={3}
+                              className="w-full bg-transparent border border-[#333] rounded-xl px-4 py-3 text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] resize-none transition" />
+                </div>
 
-            {/* Birth date */}
-            <div className="mb-3">
-                <input {...register("birthDate")} type="date"
-                       className="w-full bg-transparent border border-[#333] rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-btn-primary transition" />
-            </div>
+                {/* Email + Phone */}
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">Email</label>
+                        <input {...register("email")} placeholder="john@example.com"
+                               className="w-full bg-transparent border border-[#333] rounded-xl px-4 py-3 text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
+                        {errors.email && <span className="text-red-400 text-xs mt-1">{errors.email.message}</span>}
+                    </div>
+                    <div>
+                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">Phone</label>
+                        <input {...register("phoneNumber")} placeholder="+380..."
+                               className="w-full bg-transparent border border-[#333] rounded-xl px-4 py-3 text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
+                    </div>
+                </div>
 
-            {/* Private */}
-            <label className="flex items-center gap-3 mb-6 cursor-pointer">
-                <input {...register("isPrivate")} type="checkbox" className="accent-btn-primary w-4 h-4" />
-                <span className="text-sm text-text-muted">Private account</span>
-            </label>
+                {/* Gender + Birth date */}
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">Gender</label>
+                        <select {...register("gender", { valueAsNumber: true })}
+                                className="w-full bg-[#1a1a1a] border border-[#333] rounded-xl px-4 py-3 text-white text-base focus:outline-none focus:border-[#1DB954] transition">
+                            <option value="">— Gender —</option>
+                            <option value={0}>Male</option>
+                            <option value={1}>Female</option>
+                            <option value={2}>Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">Birth date</label>
+                        <input {...register("birthDate")} type="date"
+                               className="w-full bg-transparent border border-[#333] rounded-xl px-4 py-3 text-white text-base focus:outline-none focus:border-[#1DB954] transition" />
+                    </div>
+                </div>
 
-            {apiError && !apiError.errors && (
-                <p className="text-red-400 text-sm mb-4">{apiError.detail ?? apiError.title}</p>
-            )}
+                {/* Private + Save */}
+                <div className="flex items-center justify-between">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                        <input {...register("isPrivate")} type="checkbox" className="accent-[#1DB954] w-4 h-4" />
+                        <span className="text-sm text-[#A1A1A1]">Private account</span>
+                    </label>
+                    <button type="submit" disabled={isSaving}
+                            className="px-10 py-3 rounded-xl bg-[#1DB954] text-black font-semibold text-base hover:bg-[#1aa34a] disabled:opacity-50 transition">
+                        {isSaving ? "Saving..." : "Save"}
+                    </button>
+                </div>
 
-            <button type="submit" disabled={isSaving}
-                    className="w-full py-3 rounded-lg bg-btn-primary text-black font-medium text-sm hover:opacity-90 disabled:opacity-50 transition">
-                {isSaving ? "Saving..." : "Save"}
-            </button>
-        </form>
-    </div>
-);
+                {apiError && !apiError.errors && (
+                    <p className="text-red-400 text-sm mt-4">{apiError.detail ?? apiError.title}</p>
+                )}
+            </form>
+        </div>
+    );
 };
 
 export default ProfilePage;

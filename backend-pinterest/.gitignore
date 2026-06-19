@@ -281,3 +281,5 @@ yarn-debug.log*
 yarn-error.log*
 
 package-lock.json
+
+**/appsettings.Production.json

@@ -3,6 +3,7 @@ using Application.Common.Optional;
 using Application.Common.Validators;
 using Application.Interfaces;
 using Application.Mappers;
+using backend_pinterest.Middleware;
 using Domain.Constants;
 using Domain.Entities.Identity;
 using Domain.Interfaces;
@@ -23,6 +24,7 @@ using Quartz;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace backend_pinterest.Extensions;
@@ -149,6 +151,17 @@ public static class WebApplicationBuilderExtensions
         });
         #endregion
 
+        #region SignalR
+        services.AddSignalR(options =>
+        {
+            options.EnableDetailedErrors = builder.Environment.IsDevelopment();
+        })
+        .AddJsonProtocol(options =>
+        {
+            options.PayloadSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        });
+        #endregion
+
         #region Controllers
         services.AddControllers(options =>
         {
@@ -170,7 +183,7 @@ public static class WebApplicationBuilderExtensions
         {
             options.AddPolicy("AllowAll", policy =>
             {
-                policy.WithOrigins("http://localhost:5173")
+                policy.WithOrigins("http://localhost:5173", "https://max.itstep.click")
                       .AllowAnyHeader()
                       .AllowAnyMethod()
                       .AllowCredentials();
@@ -214,6 +227,8 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<IBoardPinRepository, BoardPinRepository>();
         services.AddScoped<IBoardSectionRepository, BoardSectionRepository>();
         services.AddScoped<IPinRepository, PinRepository>();
+        services.AddScoped<IChatRepository, ChatRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
 
         services.AddScoped<IEmailJobScheduler, EmailJobScheduler>();
 
@@ -223,6 +238,8 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<ISmtpService, SmtpService>();
         services.AddScoped<IPagedService, PagedService>();
         services.AddScoped<ICookieService, CookieService>();
+
+        services.AddSingleton<IChatNotifier, SignalRChatNotifier>();
         #endregion
 
         #region Mappers
@@ -234,6 +251,8 @@ public static class WebApplicationBuilderExtensions
         services.AddSingleton<TagMapper>();
         services.AddSingleton<UserMapper>();
         services.AddSingleton<SeederMapper>();
+        services.AddSingleton<ChatMapper>();
+        services.AddSingleton<MessageMapper>();
         #endregion
 
         #region OpenAPI

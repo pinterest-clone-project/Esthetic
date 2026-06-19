@@ -14,6 +14,7 @@ public partial class UserMapper
     public partial UserEntity ToEntity(CreateUserCommand src);
     public partial UserEntity ToEntity(UpdateUserCommand src);
     public partial UserEntity ToEntity(RegisterCommand src);
+    public partial UserShortDTO ToShortDTO(UserEntity entity);
 
     [MapProperty(nameof(GoogleAccountModel.Email), nameof(UserEntity.UserName))]
     [MapperIgnoreTarget(nameof(UserEntity.FirstName))]
