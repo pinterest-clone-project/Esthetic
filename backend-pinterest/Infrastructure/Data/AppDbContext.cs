@@ -41,13 +41,13 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     public DbSet<BoardSectionEntity> BoardsSection { get; set; }
     public DbSet<ChatEntity> Chats { get; set; }
     public DbSet<MessageEntity> Messages { get; set; }
+    public DbSet<TagEntity> Tags { get; set; }
 
     public IDbContextTransaction? CurrentTransaction => Database.CurrentTransaction;
 
     public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken ct = default)
         => await Database.BeginTransactionAsync(ct);
 
-    public DbSet<TagEntity> Tags { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
