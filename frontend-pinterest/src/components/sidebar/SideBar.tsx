@@ -6,7 +6,7 @@ import settingsIcon from "../../../src/assets/icons/settings_icon.svg";
 import profileIcon from "../../../src/assets/icons/profile_icon.svg";
 import auraIcon from "../../../src/assets/icons/aura_icon.svg";
 import React, {useEffect, useState} from "react";
-import Modal from "@/components/UI/Modal.tsx";
+import Modal from "@/components/ui/Modal.tsx";
 import {useLogoutMutation} from "@/services/accountService.ts";
 import {clearUser} from "@/store/slices/authSlice.ts";
 import {api} from "@/services/api.ts";
@@ -19,8 +19,8 @@ import {stopChatConnection} from "@/utils/chatHub.ts";
 import {APP_ENV} from "@/constants/env";
 
 const navItems = [
-    { path: "/", icon: homeIcon, label: "Головна" },
-    { path: "/collections/aura", icon: collectionIcon, label: "Дошки" },
+    { path: "/", icon: homeIcon, label: "Main" },
+    { path: "/collections/aura", icon: collectionIcon, label: "Collections" },
 ];
 
 const greenFilter =
@@ -31,7 +31,7 @@ type ModalType = 'friends' | 'settings' | 'create' | null;
 
 const modalItems = [
     { modal: 'create' as ModalType, icon: addIcon, label: "Create" },
-    { modal: 'friends' as ModalType, icon: profileIcon, label: "Add Friends" },
+    { modal: 'friends' as ModalType, icon: profileIcon, label: "Add friends" },
 ];
 
 interface SidebarButtonProps {
@@ -157,7 +157,7 @@ const Sidebar = () => {
 
                 <SidebarButton
                     icon={settingsIcon}
-                    label="Налаштування"
+                    label="Settings"
                     active={activeModal === 'settings'}
                     onClick={() => setActiveModal('settings')}
                     extraImgClass="group-hover:rotate-45"
