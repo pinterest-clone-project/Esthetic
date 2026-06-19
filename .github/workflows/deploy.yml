@@ -29,7 +29,6 @@ jobs:
                --network=host \
                --env-file /var/www/esthetic/.env \
                -v /var/www/esthetic-images:/app/images \
-               -v /var/www/esthetic/appsettings.Production.json:/app/appsettings.Production.json \
                esthetic-api
 
   deploy-frontend:
