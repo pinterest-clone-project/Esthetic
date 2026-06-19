@@ -20,6 +20,7 @@ interface FormData {
     firstName: string;
     lastName: string;
     username: string;
+    birthDate: string;
     bio: string;
     phoneNumber: string;
     imageFile: File | null;
@@ -34,6 +35,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
         firstName: "",
         lastName: "",
         username: "",
+        birthDate: "",
         bio: "",
         phoneNumber: "",
         imageFile: null,
@@ -49,12 +51,14 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
     const hasMinLength = formData.password.length >= 8;
     const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(formData.password);
     const hasNumber = /\d/.test(formData.password);
+
     const isStep1Valid =
         formData.email.includes("@") &&
         formData.email.includes(".") &&
         hasMinLength &&
         hasSymbol &&
-        hasNumber;
+        hasNumber &&
+        formData.birthDate.trim().length > 0;
 
 
     const isStep2Valid =
@@ -78,6 +82,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 LastName: formData.lastName,
                 Email: formData.email,
                 Password: formData.password,
+                BirthDate: formData.birthDate,
                 Bio: formData.bio || undefined,
                 PhoneNumber: formData.phoneNumber || undefined,
                 ImageFile: formData.imageFile || undefined,
@@ -215,6 +220,22 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                     </div>
                                 ))}
                             </div>
+                        </div>
+
+
+                        <div>
+                            <label className="block text-sm text-black mb-1">Date of birth</label>
+                            <input
+                                type="date"
+                                value={formData.birthDate}
+                                onChange={update("birthDate")}
+                                max={new Date().toISOString().split("T")[0]}
+                                className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none transition border ${
+                                    formData.birthDate.trim().length > 0
+                                        ? "border-[var(--color-btn-primary)]"
+                                        : "border-[#A1A1A1]"
+                                }`}
+                            />
                         </div>
 
                         <Button

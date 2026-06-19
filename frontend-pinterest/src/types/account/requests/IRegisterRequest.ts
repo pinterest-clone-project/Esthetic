@@ -5,6 +5,7 @@ export interface IRegisterRequest {
     Bio?: string;
     Email: string;
     Password: string;
+    BirthDate: string;
     PhoneNumber?: string;
     ImageFile?: File | null;
 }

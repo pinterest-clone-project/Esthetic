@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Reflection;
 
 namespace Infrastructure.Data;
@@ -54,5 +55,27 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     {
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        var dateTimeConverter = new ValueConverter<DateTime, DateTime>(
+            v => v.Kind == DateTimeKind.Utc ? v : DateTime.SpecifyKind(v, DateTimeKind.Utc),
+            v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
+        var nullableDateTimeConverter = new ValueConverter<DateTime?, DateTime?>(
+            v => v.HasValue
+                ? (v.Value.Kind == DateTimeKind.Utc ? v.Value : DateTime.SpecifyKind(v.Value, DateTimeKind.Utc))
+                : v,
+            v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v);
+
+        foreach (var entityType in builder.Model.GetEntityTypes())
+        {
+            foreach (var property in entityType.GetProperties())
+            {
+                if (property.ClrType == typeof(DateTime))
+                    property.SetValueConverter(dateTimeConverter);
+                else if (property.ClrType == typeof(DateTime?))
+                    property.SetValueConverter(nullableDateTimeConverter);
+            }
+        }
+
     }
 }
