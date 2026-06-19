@@ -4,6 +4,7 @@ import {useGetNotificationsQuery, useMarkAllAsReadMutation} from "@/services/not
 import {getNotificationUrl} from "@/utils/getNotificationUrl.ts";
 import bellIcon from "@/assets/icons/bell_icon.svg";
 import {formatTimeLabel} from "@/utils/formatTimeLabel.ts";
+import {APP_ENV} from "@/constants/env";
 
 const NotificationBell: React.FC = () => {
     const [open, setOpen] = useState(false);
@@ -73,7 +74,7 @@ const NotificationBell: React.FC = () => {
                                 >
                                     <div className="w-8 h-8 rounded-full bg-[#2a2a2a] shrink-0 overflow-hidden">
                                         {n.actorImage && (
-                                            <img src={n.actorImage} className="w-full h-full object-cover" />
+                                            <img src={`${APP_ENV.IMAGES_100_URL}${n.actorImage}`} className="w-full h-full object-cover" />
                                         )}
                                     </div>
                                     <div className="min-w-0 flex-1">
