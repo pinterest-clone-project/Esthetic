@@ -8,7 +8,7 @@ import {useApiError} from "@/hooks/useApiError.ts";
 import {useFormServerErrors} from "@/hooks/useFormServerErrors.ts";
 import type {IEditRequest} from "@/types/account/requests/IEditRequest.ts";
 import {APP_ENV} from "@/constants/env";
-import {useToast} from "@/components/ui/Toast/ToastProvider.tsx";
+import {useToast} from "@/components/ui/Toast/UseToast.ts";
 
 const schema = z.object({
     firstName:   z.string().min(1, "Імʼя обовʼязкове").max(50).or(z.literal("")).optional(),
