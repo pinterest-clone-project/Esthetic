@@ -2,6 +2,7 @@
 using Application.Common.Optional;
 using Application.Common.Validators;
 using Application.Interfaces;
+using Application.Interfaces.Notifiers;
 using Application.Mappers;
 using backend_pinterest.Middleware;
 using Domain.Constants;

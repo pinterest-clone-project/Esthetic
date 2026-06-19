@@ -1,6 +1,6 @@
 ﻿using Application.Models.DTO.Chat;
 
-namespace Application.Interfaces;
+namespace Application.Interfaces.Notifiers;
 
 public interface IChatNotifier
 {
