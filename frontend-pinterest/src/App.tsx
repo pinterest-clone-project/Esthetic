@@ -18,6 +18,7 @@ import AdminLayout from "@/layouts/AdminLayout.tsx";
 import AdminDashboard from "@/pages/admin/AdminDashboard.tsx";
 import MoodboardPreviewPage from "@/pages/moodboard/MoodboardPreviewPage.tsx";
 import {useChatRealtime} from "@/hooks/useChatRealtime.ts";
+import {useNotificationRealtime} from "@/hooks/useNotificationRealtime.ts";
 
 const AppInit = ({children}: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
@@ -26,6 +27,7 @@ const AppInit = ({children}: { children: React.ReactNode }) => {
     const [fadeOut, setFadeOut] = useState(false);
 
     useChatRealtime();
+    useNotificationRealtime();
 
     useEffect(() => {
         if (isSuccess && data) {

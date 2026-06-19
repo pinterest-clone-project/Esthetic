@@ -1,5 +1,5 @@
 ﻿using Application.Common.Exceptions;
-using Application.Interfaces;
+using Application.Interfaces.Notifiers;
 using Application.Mappers;
 using Application.Models.DTO.Chat;
 using Application.UseCases.Chat.Commands;
