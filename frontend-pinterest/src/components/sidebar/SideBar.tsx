@@ -90,6 +90,7 @@ const Sidebar = () => {
     const [debouncedSearch, setDebouncedSearch] = useState("");
 
     const { data: chats = [] } = useGetChatsQuery();
+    const totalUnread = chats.reduce((sum, c) => sum + c.unreadCount, 0);
     const { data: searchResult } = useSearchUsersQuery(
         { search: debouncedSearch, pageSize: 10 },
         { skip: debouncedSearch.trim().length < 2 }
@@ -127,15 +128,31 @@ const Sidebar = () => {
                         />
                     ))}
 
-                    {modalItems.map(({ modal, icon, label }) => (
-                        <SidebarButton
-                            key={modal}
-                            icon={icon}
-                            label={label}
-                            active={activeModal === modal}
-                            onClick={() => setActiveModal(modal)}
-                        />
-                    ))}
+                    {modalItems.map(({ modal, icon, label }) =>
+                            modal === 'friends' ? (
+                                <SidebarButton
+                                    key={modal}
+                                    icon={icon}
+                                    label={label}
+                                    active={activeModal === modal}
+                                    onClick={() => setActiveModal(modal)}
+                                >
+                                    {totalUnread > 0 && (
+                                        <span className="absolute top-0.5 right-0.5 min-w-[16px] h-[16px] px-0.5 rounded-full bg-[#1DB954] text-black text-[9px] font-bold flex items-center justify-center leading-none">
+                    {totalUnread > 9 ? "9+" : totalUnread}
+                </span>
+                                    )}
+                                </SidebarButton>
+                            ) : (
+                                <SidebarButton
+                                    key={modal}
+                                    icon={icon}
+                                    label={label}
+                                    active={activeModal === modal}
+                                    onClick={() => setActiveModal(modal)}
+                                />
+                            )
+                    )}
                 </nav>
 
                 <SidebarButton

@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Interfaces.Notifiers;
 using Application.Models.DTO.Chat;
 using backend_pinterest.Hubs;
 using Microsoft.AspNetCore.SignalR;

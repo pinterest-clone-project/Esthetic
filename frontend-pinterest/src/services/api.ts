@@ -9,7 +9,8 @@ export const api = createApi({
         "MyPins",
         "MyMoodboards",
         "Chat",
-        "Message"
+        "Message",
+        "Notification"
     ],
     endpoints: () => ({})
 });
