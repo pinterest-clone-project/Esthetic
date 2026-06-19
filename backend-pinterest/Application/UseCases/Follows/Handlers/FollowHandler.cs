@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Application.UseCases.Follows.Handlers;
 
-public class FollowCommandHandler(
+public class FollowHandler(
     IFollowRepository followRepository,
     IUserRepository userRepository,
     IMediator mediator)
