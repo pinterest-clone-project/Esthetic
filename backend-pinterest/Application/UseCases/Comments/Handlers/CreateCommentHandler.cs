@@ -40,7 +40,7 @@ public class CreateCommentCommandHandler(
                 pin.Id,
                 commenter.UserName!,
                 commenter.Image,
-                pin.Title
+                pin.Title!
             )
         ), ct);
 
