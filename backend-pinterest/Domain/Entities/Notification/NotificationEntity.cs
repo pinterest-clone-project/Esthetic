@@ -14,4 +14,10 @@ public class NotificationEntity
     public string Message { get; set; } = string.Empty;
     public bool IsRead { get; set; } = false;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public Guid? ActorId { get; set; }
+    public UserEntity? Actor { get; set; }
+    public Guid? TargetId { get; set; }
+    public string? ActorUsername { get; set; }
+    public string? ActorImage { get; set; }
 }
