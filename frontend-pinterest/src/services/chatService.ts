@@ -72,6 +72,7 @@ export const chatService = api.injectEndpoints({
             invalidatesTags: ["Chat"],
         }),
     }),
+    overrideExisting: false,
 });
 
 export const {
