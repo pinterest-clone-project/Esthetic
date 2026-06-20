@@ -17,6 +17,7 @@ import {useSearchUsersQuery} from "@/services/userService.ts";
 import ChatWindow from "@/components/sidebar/windows/ChatWindow.tsx";
 import {stopChatConnection} from "@/utils/chatHub.ts";
 import {APP_ENV} from "@/constants/env";
+import {useTheme} from "@/context/ThemeContext.tsx";
 
 const navItems = [
     { path: "/", icon: homeIcon, label: "Головна" },
@@ -25,7 +26,8 @@ const navItems = [
 
 const greenFilter =
     "brightness(0) saturate(100%) invert(58%) sepia(61%) saturate(450%) hue-rotate(95deg) brightness(95%)";
-const whiteFilter = "brightness(0) invert(1)";
+const whiteFilter = "brightness(0)";
+const darkFilter = "brightness(0)  invert(1)";
 
 type ModalType = 'friends' | 'settings' | 'create' | null;
 
@@ -41,19 +43,20 @@ interface SidebarButtonProps {
     onClick: () => void;
     extraImgClass?: string;
     children?: React.ReactNode;
+    isDark?: boolean;
 }
 
-const SidebarButton = ({ icon, label, active, onClick, extraImgClass = "", children }: SidebarButtonProps) => (
+const SidebarButton = ({ icon, label, active, onClick, extraImgClass = "", children, isDark }: SidebarButtonProps) => (
     <button
         onClick={onClick}
-        className="relative group flex items-center justify-center w-[40px] h-[46px] rounded-lg transition-all duration-200 hover:bg-[#1a1a1a]"
+        className="relative group flex items-center justify-center w-[40px] h-[46px] rounded-lg transition-all duration-200 hover:bg-gray-200 dark:hover:bg-[#1a1a1a]"
     >
         <img
             src={icon}
-            style={{ filter: active ? greenFilter : whiteFilter }}
+            style={{ filter: active ? greenFilter : isDark ? darkFilter : whiteFilter }}
             className={`w-[30px] h-[33px] transition-all duration-200 group-hover:scale-110 ${active ? "opacity-100" : "opacity-50 group-hover:opacity-80"} ${extraImgClass}`}
         />
-        <span className="absolute left-12 px-2 py-1 rounded-md bg-[#1a1a1a] text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-150 pointer-events-none border border-white/10">
+        <span className="absolute left-12 px-2 py-1 rounded-md bg-[#1a1a1a] text-white dark:text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-150 pointer-events-none border border-white/10">
             {label}
         </span>
         {children}
@@ -67,6 +70,7 @@ const Sidebar = () => {
     const [activeModal, setActiveModal] = useState<ModalType>(null);
     const [logout] = useLogoutMutation();
     const dispatch = useAppDispatch();
+    const {theme} = useTheme();
 
     const handleLogout = async () => {
         try {
@@ -115,7 +119,7 @@ const Sidebar = () => {
 
     return (
         <>
-            <aside className="sticky top-[74px] w-16 bg-black flex flex-col items-center py-6 z-40 h-[calc(100vh-74px)] shrink-0">
+            <aside className="sticky top-[74px] w-16 bg-white dark:bg-black flex flex-col items-center py-6 z-40 h-[calc(100vh-74px)] shrink-0">
                 <nav className="flex flex-col items-center gap-5 flex-1">
                     {navItems.map(({ path, icon, label }) => (
                         <SidebarButton
@@ -124,6 +128,7 @@ const Sidebar = () => {
                             label={label}
                             active={isActive(path) && activeModal === null}
                             onClick={() => { navigate(path); closeModal(); }}
+                            isDark={theme === "dark"}
                         />
                     ))}
 
