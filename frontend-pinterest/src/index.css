@@ -43,3 +43,13 @@ html {
     0%, 100% { opacity: 0.35; }
     50% { opacity: 0.7; }
 }
+
+@layer utilities {
+    .date-picker::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+    }
+
+    .dark .date-picker::-webkit-calendar-picker-indicator {
+        filter: invert(0);
+    }
+}
