@@ -93,6 +93,7 @@ const App = () => {
                         <Route path="/">
                             <Route index element={<RootPage />} />
                             <Route path="review" element={<ReviewPage />} />
+                        </Route>
 
                         <Route element={<PrivateRoute/>}>
                             <Route path="/profile" element={<ProfilePage/>}/>
