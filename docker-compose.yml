@@ -1,15 +1,21 @@
 services:
-  postgres:
-    image: postgres:17
-    container_name: postgres_db
+  api:
+    image: jacobs51/esthetic-api:latest  
+    container_name: esthetic-api
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    ports:
-      - "${PG_PORT}:5432"
+      ASPNETCORE_ENVIRONMENT: Production
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./backend-pinterest/backend-pinterest/appsettings.Production.json:/app/appsettings.Production.json:ro
+    depends_on:
+      - redis
+    restart: unless-stopped
+    network_mode: host   
+
+  web:
+    image: jacobs51/esthetic-web:latest
+    container_name: esthetic-web
+    ports:
+      - "5173:80"
     restart: unless-stopped
 
   redis:
@@ -22,5 +28,4 @@ services:
     restart: unless-stopped
 
 volumes:
-  postgres_data:
   redis_data:
