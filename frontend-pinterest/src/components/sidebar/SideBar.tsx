@@ -240,7 +240,7 @@ const Sidebar = () => {
                     onClick={() => { navigate('/profile'); closeModal(); }}
                     className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group "
                 >
-                    <div className="w-10 h-10 rounded-xl bg-[#a1a1a1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1] flex items-center justify-center transition-colors shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1] flex items-center justify-center transition-colors shrink-0">
                         <img src={profileIcon} style={{ filter: whiteFilter }} className="w-5 h-5" />
                     </div>
                     <div className="text-left">
@@ -253,7 +253,7 @@ const Sidebar = () => {
                     onClick={() => { navigate('/theme'); closeModal(); }}
                     className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group"
                 >
-                    <div className="w-10 h-10 rounded-xl bg-[#a1a1a1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1]  flex items-center justify-center transition-colors shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1]  flex items-center justify-center transition-colors shrink-0">
                         <img src={themeIcon} style={{ filter: whiteFilter }} className="w-5 h-5" />
                     </div>
                     <div className="text-left">
@@ -266,7 +266,7 @@ const Sidebar = () => {
                     onClick={handleLogout}
                     className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-red-500/10 transition-colors duration-150 group mt-auto mb-1"
                 >
-                    <div className="w-10 h-10 rounded-xl bg-[#a1a1a1] dark:bg-[#2a2a2a] group-hover:bg-red-500/20 flex items-center justify-center transition-colors shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] group-hover:bg-red-500/20 flex items-center justify-center transition-colors shrink-0">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2">
                             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
                             <polyline points="16 17 21 12 16 7"/>
@@ -285,7 +285,7 @@ const Sidebar = () => {
                     onClick={() => { navigate('/collections/moodboard'); closeModal(); }}
                     className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group"
                 >
-                    <div className="w-10 h-10 rounded-xl bg-[#a1a1a1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1]  flex items-center justify-center transition-colors shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1]  flex items-center justify-center transition-colors shrink-0">
                         <img src={collectionIcon} style={{ filter: whiteFilter }} className="w-5 h-5" />
                     </div>
                     <div className="text-left">
@@ -298,7 +298,7 @@ const Sidebar = () => {
                     onClick={() => { navigate('/aura/create'); closeModal(); }}
                     className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group"
                 >
-                    <div className="w-10 h-10 rounded-xl bg-[#a1a1a1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1]  flex items-center justify-center transition-colors shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1]  flex items-center justify-center transition-colors shrink-0">
                         <img src={auraIcon} style={{ filter: whiteFilter }} className="w-5 h-5" />
                     </div>
                     <div className="text-left">
