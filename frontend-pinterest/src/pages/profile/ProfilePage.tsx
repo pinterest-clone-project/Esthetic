@@ -97,7 +97,7 @@ if (isLoading) return <p>Завантаження...</p>;
 
     return (
         <div className="flex justify-center py-8">
-            <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-[680px] px-6 text-white">
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-[680px] px-6 text-black dark:text-white">
 
                 <div className="flex items-center gap-5 mb-8">
                     <div className="relative group cursor-pointer">
@@ -122,13 +122,13 @@ if (isLoading) return <p>Завантаження...</p>;
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">First name</label>
                         <input {...register("firstName")} placeholder="John"
-                               className="w-full bg-transparent border border-[#333] rounded-xl px-4 py-3 text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
+                               className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
                         {errors.firstName && <span className="text-red-400 text-xs mt-1">{errors.firstName.message}</span>}
                     </div>
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">Last name</label>
                         <input {...register("lastName")} placeholder="Doe"
-                               className="w-full bg-transparent border border-[#333] rounded-xl px-4 py-3 text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
+                               className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
                         {errors.lastName && <span className="text-red-400 text-xs mt-1">{errors.lastName.message}</span>}
                     </div>
                 </div>
@@ -136,20 +136,20 @@ if (isLoading) return <p>Завантаження...</p>;
                 <div className="mb-4">
                     <label className="text-xs text-[#A1A1A1] mb-1.5 block">About you</label>
                     <textarea {...register("bio")} placeholder="Tell something about yourself..." rows={3}
-                              className="w-full bg-transparent border border-[#333] rounded-xl px-4 py-3 text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] resize-none transition" />
+                              className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] resize-none transition" />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">Email</label>
                         <input {...register("email")} placeholder="john@example.com"
-                               className="w-full bg-transparent border border-[#333] rounded-xl px-4 py-3 text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
+                               className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
                         {errors.email && <span className="text-red-400 text-xs mt-1">{errors.email.message}</span>}
                     </div>
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">Phone</label>
                         <input {...register("phoneNumber")} placeholder="+380..."
-                               className="w-full bg-transparent border border-[#333] rounded-xl px-4 py-3 text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
+                               className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
                     </div>
                 </div>
 
@@ -157,7 +157,7 @@ if (isLoading) return <p>Завантаження...</p>;
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">Gender</label>
                         <select {...register("gender", { valueAsNumber: true })}
-                                className="w-full bg-[#1a1a1a] border border-[#333] rounded-xl px-4 py-3 text-white text-base focus:outline-none focus:border-[#1DB954] transition">
+                                className="w-full bg-[#D1D1D1] dark:bg-[#1a1a1a] border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white text-base focus:outline-none focus:border-[#1DB954] transition">
                             <option value="">— Gender —</option>
                             <option value={0}>Male</option>
                             <option value={1}>Female</option>
@@ -167,7 +167,7 @@ if (isLoading) return <p>Завантаження...</p>;
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">Birth date</label>
                         <input {...register("birthDate")} type="date"
-                               className="w-full bg-transparent border border-[#333] rounded-xl px-4 py-3 text-white text-base focus:outline-none focus:border-[#1DB954] transition" />
+                               className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white text-base focus:outline-none focus:border-[#1DB954] transition" />
                     </div>
                 </div>
 
