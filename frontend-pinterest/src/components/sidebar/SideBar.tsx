@@ -193,12 +193,12 @@ const Sidebar = () => {
                                 <button
                                     key={user.id}
                                     onClick={() => handleSelectUser(user.id)}
-                                    className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-[#2a2a2a] transition-colors"
+                                    className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-[#D1D1D1] dark:hover:bg-[#2a2a2a] transition-colors"
                                 >
-                                    <div className="w-9 h-9 rounded-full bg-[#2a2a2a] overflow-hidden shrink-0">
+                                    <div className="w-9 h-9 rounded-full bg-[#D1D1D1] dark:bg-[#a2a2a2] overflow-hidden shrink-0">
                                         {user.image && <img src={`${APP_ENV.IMAGES_100_URL}${user.image}`} className="w-full h-full object-cover" />}
                                     </div>
-                                    <span className="text-white text-sm">{user.userName}</span>
+                                    <span className="text-black dark:text-white text-sm">{user.userName}</span>
                                 </button>
                             ))}
                             {searchResult?.items.length === 0 && (
@@ -220,7 +220,7 @@ const Sidebar = () => {
                                     <div className="text-left flex-1 overflow-hidden">
                                         <p className="text-black dark:text-white text-sm">{chat.otherUser.username}</p>
                                         {chat.lastMessage && (
-                                            <p className="text-[#A1A1A1] text-xs truncate">{chat.lastMessage.content}</p>
+                                            <p className="text-black dark:text-[#A1A1A1] text-xs truncate">{chat.lastMessage.content}</p>
                                         )}
                                     </div>
                                     {chat.unreadCount > 0 && (
