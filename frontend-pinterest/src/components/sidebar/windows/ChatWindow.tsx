@@ -2,7 +2,7 @@ import type {IChat} from "@/types/chat/IChat.ts";
 import {useAppSelector} from "@/store";
 import {useGetMessagesQuery, useMarkChatAsReadMutation, useSendMessageMutation} from "@/services/chatService.ts";
 import {useEffect, useRef, useState} from "react";
-import Modal from "@/components/UI/Modal.tsx";
+import Modal from "@/components/ui/Modal.tsx";
 import {APP_ENV} from "@/constants/env";
 
 interface ChatWindowProps {

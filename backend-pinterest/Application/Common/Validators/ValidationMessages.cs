@@ -24,8 +24,8 @@ public static class ValidationMessages
     public static string EmailFormat => Get("EmailFormat");
     public static string PhoneFormat => Get("PhoneFormat");
     public static string InvalidCredentials => Get("InvalidCredentials");
-
     public static string FieldEmail => Get("FieldEmail");
+    public static string FieldBirthDate => Get("FieldBirthDate");
     public static string FieldPassword => Get("FieldPassword");
     public static string FieldNewPassword => Get("FieldNewPassword");
     public static string FieldFirstName => Get("FieldFirstName");

@@ -8,6 +8,7 @@ import {useApiError} from "@/hooks/useApiError.ts";
 import {useFormServerErrors} from "@/hooks/useFormServerErrors.ts";
 import type {IEditRequest} from "@/types/account/requests/IEditRequest.ts";
 import {APP_ENV} from "@/constants/env";
+import {useToast} from "@/components/ui/Toast/UseToast.ts";
 
 const schema = z.object({
     firstName:   z.string().min(1, "Імʼя обовʼязкове").max(50).or(z.literal("")).optional(),
@@ -30,6 +31,7 @@ type FormValues = z.infer<typeof schema>;
 const ProfilePage = () => {
     const { data: me, isLoading } = useGetMeQuery();
     const [editProfile, { isLoading: isSaving, error: rawError }] = useEditProfileMutation();
+    const { showToast } = useToast();
 
     const {
         register,
@@ -83,7 +85,12 @@ const onSubmit = async (formValues: FormValues) => {
 
     if (Object.keys(patch).length === 0) return;
 
-    await editProfile(patch as Record<string, unknown>);
+    try {
+        await editProfile(patch as Record<string, unknown>).unwrap();
+        showToast("Профіль успішно оновлено", "success");
+    } catch {
+        showToast("Не вдалося оновити профіль", "error");
+    }
 };
 
 if (isLoading) return <p>Завантаження...</p>;
@@ -92,7 +99,6 @@ if (isLoading) return <p>Завантаження...</p>;
         <div className="flex justify-center py-8">
             <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-[680px] px-6 text-white">
 
-                {/* Header */}
                 <div className="flex items-center gap-5 mb-8">
                     <div className="relative group cursor-pointer">
                         <div className="w-20 h-20 rounded-full bg-[#2a2a2a] border-2 border-[#1DB954] overflow-hidden">
@@ -112,7 +118,6 @@ if (isLoading) return <p>Завантаження...</p>;
                     </div>
                 </div>
 
-                {/* First name + Last name */}
                 <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">First name</label>
@@ -128,14 +133,12 @@ if (isLoading) return <p>Завантаження...</p>;
                     </div>
                 </div>
 
-                {/* Bio */}
                 <div className="mb-4">
                     <label className="text-xs text-[#A1A1A1] mb-1.5 block">About you</label>
                     <textarea {...register("bio")} placeholder="Tell something about yourself..." rows={3}
                               className="w-full bg-transparent border border-[#333] rounded-xl px-4 py-3 text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] resize-none transition" />
                 </div>
 
-                {/* Email + Phone */}
                 <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">Email</label>
@@ -150,7 +153,6 @@ if (isLoading) return <p>Завантаження...</p>;
                     </div>
                 </div>
 
-                {/* Gender + Birth date */}
                 <div className="grid grid-cols-2 gap-4 mb-6">
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">Gender</label>

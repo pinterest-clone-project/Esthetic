@@ -2,6 +2,7 @@
 using Application.Common.Optional;
 using Application.Common.Validators;
 using Application.Interfaces;
+using Application.Interfaces.Notifiers;
 using Application.Mappers;
 using backend_pinterest.Middleware;
 using Domain.Constants;
@@ -229,6 +230,7 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<IPinRepository, PinRepository>();
         services.AddScoped<IChatRepository, ChatRepository>();
         services.AddScoped<IMessageRepository, MessageRepository>();
+        services.AddScoped<INotificationRepository, NotificationRepository>();
 
         services.AddScoped<IEmailJobScheduler, EmailJobScheduler>();
 
@@ -240,6 +242,7 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<ICookieService, CookieService>();
 
         services.AddSingleton<IChatNotifier, SignalRChatNotifier>();
+        services.AddSingleton<INotificationNotifier, SignalRNotificationNotifier>();
         #endregion
 
         #region Mappers
@@ -253,6 +256,7 @@ public static class WebApplicationBuilderExtensions
         services.AddSingleton<SeederMapper>();
         services.AddSingleton<ChatMapper>();
         services.AddSingleton<MessageMapper>();
+        services.AddSingleton<NotificationMapper>();
         #endregion
 
         #region OpenAPI

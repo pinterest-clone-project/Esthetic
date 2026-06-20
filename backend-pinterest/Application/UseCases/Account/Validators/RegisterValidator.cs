@@ -15,5 +15,6 @@ public class RegisterValidator : AbstractValidator<RegisterCommand>
         RuleFor(x => x.Email).EmailRules(ValidationMessages.FieldEmail);
         RuleFor(x => x.Password).PasswordRules(ValidationMessages.FieldPassword);
         RuleFor(x => x.PhoneNumber).PhoneRules();
+        RuleFor(x => x.BirthDate).BirthDateRules();
     }
 }

@@ -232,6 +232,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Дата народження.
+        /// </summary>
+        internal static string FieldBirthDate {
+            get {
+                return ResourceManager.GetString("FieldBirthDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Code.
         /// </summary>
         internal static string FieldCode {

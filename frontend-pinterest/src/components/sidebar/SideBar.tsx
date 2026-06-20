@@ -7,7 +7,7 @@ import profileIcon from "../../../src/assets/icons/profile_icon.svg";
 import auraIcon from "../../../src/assets/icons/aura_icon.svg";
 import themeIcon from "../../../src/assets/icons/theme_mode.svg"
 import React, {useEffect, useState} from "react";
-import Modal from "@/components/UI/Modal.tsx";
+import Modal from "@/components/ui/Modal.tsx";
 import {useLogoutMutation} from "@/services/accountService.ts";
 import {clearUser} from "@/store/slices/authSlice.ts";
 import {api} from "@/services/api.ts";
@@ -21,8 +21,8 @@ import {APP_ENV} from "@/constants/env";
 import {useTheme} from "@/context/ThemeContext.tsx";
 
 const navItems = [
-    { path: "/", icon: homeIcon, label: "Головна" },
-    { path: "/collections/aura", icon: collectionIcon, label: "Дошки" },
+    { path: "/", icon: homeIcon, label: "Main" },
+    { path: "/collections/aura", icon: collectionIcon, label: "Collections" },
 ];
 
 const greenFilter =
@@ -34,7 +34,7 @@ type ModalType = 'friends' | 'settings' | 'create' | null;
 
 const modalItems = [
     { modal: 'create' as ModalType, icon: addIcon, label: "Create" },
-    { modal: 'friends' as ModalType, icon: profileIcon, label: "Add Friends" },
+    { modal: 'friends' as ModalType, icon: profileIcon, label: "Add friends" },
 ];
 
 interface SidebarButtonProps {
@@ -95,6 +95,7 @@ const Sidebar = () => {
     const [debouncedSearch, setDebouncedSearch] = useState("");
 
     const { data: chats = [] } = useGetChatsQuery();
+    const totalUnread = chats.reduce((sum, c) => sum + c.unreadCount, 0);
     const { data: searchResult } = useSearchUsersQuery(
         { search: debouncedSearch, pageSize: 10 },
         { skip: debouncedSearch.trim().length < 2 }
@@ -133,20 +134,36 @@ const Sidebar = () => {
                         />
                     ))}
 
-                    {modalItems.map(({ modal, icon, label }) => (
-                        <SidebarButton
-                            key={modal}
-                            icon={icon}
-                            label={label}
-                            active={activeModal === modal}
-                            onClick={() => setActiveModal(modal)}
-                        />
-                    ))}
+                    {modalItems.map(({ modal, icon, label }) =>
+                            modal === 'friends' ? (
+                                <SidebarButton
+                                    key={modal}
+                                    icon={icon}
+                                    label={label}
+                                    active={activeModal === modal}
+                                    onClick={() => setActiveModal(modal)}
+                                >
+                                    {totalUnread > 0 && (
+                                        <span className="absolute top-0.5 right-0.5 min-w-[16px] h-[16px] px-0.5 rounded-full bg-[#1DB954] text-black text-[9px] font-bold flex items-center justify-center leading-none">
+                    {totalUnread > 9 ? "9+" : totalUnread}
+                </span>
+                                    )}
+                                </SidebarButton>
+                            ) : (
+                                <SidebarButton
+                                    key={modal}
+                                    icon={icon}
+                                    label={label}
+                                    active={activeModal === modal}
+                                    onClick={() => setActiveModal(modal)}
+                                />
+                            )
+                    )}
                 </nav>
 
                 <SidebarButton
                     icon={settingsIcon}
-                    label="Налаштування"
+                    label="Settings"
                     active={activeModal === 'settings'}
                     onClick={() => setActiveModal('settings')}
                     extraImgClass="group-hover:rotate-45"
