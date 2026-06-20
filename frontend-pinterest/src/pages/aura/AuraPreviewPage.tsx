@@ -3,8 +3,8 @@ import { useParams, useNavigate } from "react-router";
 import { useGetPinByIdQuery, useGetAllPinsQuery, useDeletePinMutation } from "../../services/pinService.ts";
 import { useGetMeQuery } from "../../services/accountService.ts";
 import { useLikeMutation, useUnlikeMutation } from "../../services/likeService.ts";
-import PinCard from "../../components/UI/PinCard.tsx";
-import BackButton from "@/components/UI/BackButton.tsx";
+import PinCard from "@/components/ui/PinCard.tsx";
+import BackButton from "@/components/ui/BackButton.tsx";
 
 const AuraPreviewPage = () => {
     const { id } = useParams<{ id: string }>();

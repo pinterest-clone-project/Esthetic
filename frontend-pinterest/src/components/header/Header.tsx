@@ -2,7 +2,7 @@ import logo from "../../../src/assets/logo.png";
 import searchIcon from "../../assets/icons/search-vector.svg";
 import Button from "@/components/button/Button.tsx";
 import {useEffect, useRef, useState} from "react";
-import Modal from "@/components/UI/Modal.tsx";
+import Modal from "@/components/ui/Modal.tsx";
 import LoginForm from "@/components/auth/LoginForm.tsx";
 import RegisterForm from "@/components/auth/RegisterForm.tsx";
 import {useAppDispatch, useAppSelector} from "@/store";
@@ -109,14 +109,14 @@ const Header: React.FC = () => {
                             <div className="relative" ref={dropdownRef}>
                                 <div className="flex items-center gap-1">
                                     <Link to="/profile">
-                                        <div className="w-11 h-11 rounded-full flex items-center justify-center overflow-hidden">
+                                        <div className="w-11 h-11 rounded-full flex items-center justify-center overflow-hidden bg-[var(--color-btn-primary)]">
                                             {user.image ? (
                                                 <img
                                                     src={`${APP_ENV.IMAGES_100_URL}${user.image}`}
                                                     className="w-full h-full object-cover rounded-full"
                                                 />
                                             ) : (
-                                                <img src={userIcon} className="w-5 h-5" />
+                                                <img src={userIcon} className="w-5 h-6 object-contain" />
                                             )}
                                         </div>
                                     </Link>

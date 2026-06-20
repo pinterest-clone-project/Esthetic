@@ -67,4 +67,9 @@ public static class SharedValidationRules
             .MaximumLength(FieldLengths.DescriptionMax)
             .WithMessage(ValidationMessages.MaxLength(ValidationMessages.FieldDescription, FieldLengths.DescriptionMax))
             .When(x => x is string s && !string.IsNullOrEmpty(s));
+
+    public static IRuleBuilderOptions<T, DateTime> BirthDateRules<T>(this IRuleBuilder<T, DateTime> rule) =>
+    rule
+        .NotEmpty()
+        .WithMessage(ValidationMessages.Required(ValidationMessages.FieldBirthDate));
 }

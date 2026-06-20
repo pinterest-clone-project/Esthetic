@@ -4,7 +4,7 @@ import { useGetAllCategoriesQuery } from "../../services/categoryService.ts";
 import { useGetAllTagsQuery } from "../../services/tagService.ts";
 import {APP_ENV} from "@/constants/env";
 import { useNavigate } from "react-router";
-import BackButton from "@/components/UI/BackButton.tsx";
+import BackButton from "@/components/ui/BackButton.tsx";
 
 const CreateAuraPage = () => {
     const navigate = useNavigate();

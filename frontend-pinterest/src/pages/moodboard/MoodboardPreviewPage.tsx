@@ -1,7 +1,7 @@
 import { useGetMoodboardByIdQuery } from "@/services/moodboardService.ts";
 import { useParams } from "react-router";
 import { APP_ENV } from "@/constants/env";
-import BackButton from "@/components/UI/BackButton.tsx";
+import BackButton from "@/components/ui/BackButton.tsx";
 
 const MoodboardPreviewPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();

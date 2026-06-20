@@ -1,5 +1,5 @@
 import { useGetAllPinsQuery } from "../../services/pinService.ts";
-import PinCard from "../../components/UI/PinCard.tsx";
+import PinCard from "@/components/ui/PinCard.tsx";
 
 const PinCardSkeleton = () => (
     <div className="break-inside-avoid mb-3 rounded-xl overflow-hidden bg-white/5 animate-pulse"

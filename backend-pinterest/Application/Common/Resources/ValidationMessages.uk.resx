@@ -249,4 +249,7 @@
   <data name="ExternalLoginLinkFailed" xml:space="preserve">
     <value>Помилка прив'язку зовнішнього входу</value>
   </data>
+  <data name="FieldBirthDate" xml:space="preserve">
+    <value>Дата народження</value>
+  </data>
 </root>

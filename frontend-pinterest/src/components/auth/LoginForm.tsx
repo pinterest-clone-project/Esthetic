@@ -44,7 +44,7 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
                 <img src={logo} className="w-11 h-11" />
             </div>
 
-            {/* Title */}
+
             <h2 className="text-2xl font-bold text-black tracking-[-0.5px]">Welcome in Esthetic</h2>
             <p className="text-sm text-black  mb-5">Where style begins</p>
 
@@ -58,11 +58,7 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none transition border ${
-                            email.includes("@") && email.includes(".")
-                                ? "border-[var(--color-btn-primary)]"
-                                : "border-[#A1A1A1]"
-                        }`}
+                        className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none transition border-[var(--color-btn-primary)] border`}
                     />
                 </div>
 
@@ -74,11 +70,7 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        className={`w-full h-10 px-4 pr-10 rounded-[5px] text-sm outline-none transition border ${
-                            hasMinLength && hasSymbol && hasNumber
-                                ? "border-[var(--color-btn-primary)]"
-                                : "border-[#A1A1A1]"
-                        }`}
+                        className={`w-full h-10 px-4 pr-10 rounded-[5px] text-sm outline-none transition border border-[var(--color-btn-primary)]`}
                     />
                     <button
                         type="button"

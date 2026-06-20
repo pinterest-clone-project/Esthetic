@@ -20,6 +20,7 @@ interface FormData {
     firstName: string;
     lastName: string;
     username: string;
+    birthDate: string;
     bio: string;
     phoneNumber: string;
     imageFile: File | null;
@@ -34,6 +35,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
         firstName: "",
         lastName: "",
         username: "",
+        birthDate: "",
         bio: "",
         phoneNumber: "",
         imageFile: null,
@@ -49,12 +51,14 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
     const hasMinLength = formData.password.length >= 8;
     const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(formData.password);
     const hasNumber = /\d/.test(formData.password);
+
     const isStep1Valid =
         formData.email.includes("@") &&
         formData.email.includes(".") &&
         hasMinLength &&
         hasSymbol &&
-        hasNumber;
+        hasNumber &&
+        formData.birthDate.trim().length > 0;
 
 
     const isStep2Valid =
@@ -78,6 +82,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 LastName: formData.lastName,
                 Email: formData.email,
                 Password: formData.password,
+                BirthDate: formData.birthDate,
                 Bio: formData.bio || undefined,
                 PhoneNumber: formData.phoneNumber || undefined,
                 ImageFile: formData.imageFile || undefined,
@@ -110,16 +115,14 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
     ) => setFormData((prev) => ({ ...prev, [field]: e.target.value }));
 
     const StepIndicator = () => (
-        <div className="flex items-center justify-center gap-2 mb-6">
+        <div className="flex w-full gap-1 mb-6">
             {([1, 2, 3] as Step[]).map((s) => (
                 <div
                     key={s}
-                    className={`rounded-full transition-all duration-300 ${
-                        s === step
-                            ? "w-6 h-2 bg-[var(--color-btn-primary)]"
-                            : s < step
-                                ? "w-2 h-2 bg-[var(--color-btn-primary)] opacity-60"
-                                : "w-2 h-2 bg-[#A1A1A1]"
+                    className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
+                        s <= step
+                            ? "bg-[var(--color-btn-primary)]"
+                            : "bg-[#A1A1A1]"
                     }`}
                 />
             ))}
@@ -127,13 +130,13 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
     );
 
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center px-16">
 
             <div className="w-11 h-11 rounded-full flex items-center justify-center mb-3">
                 <img src={logo} className="w-11 h-11" />
             </div>
 
-            <StepIndicator />
+            {step > 1 && <StepIndicator />}
 
 
             {step === 1 && (
@@ -143,7 +146,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                     </h2>
                     <p className="text-sm text-black mt-1 mb-5 text-center">Where style begins</p>
 
-                    <div className="space-y-3">
+                    <div className="space-y-5">
                         <div>
                             <label className="block text-sm text-black mb-1">Your email</label>
                             <input
@@ -151,11 +154,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 placeholder="yourgmail@gmail.com"
                                 value={formData.email}
                                 onChange={update("email")}
-                                className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none transition border ${
-                                    formData.email.includes("@") && formData.email.includes(".")
-                                        ? "border-[var(--color-btn-primary)]"
-                                        : "border-[#A1A1A1]"
-                                }`}
+                                className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none border-[var(--color-btn-primary)] transition border`}
                             />
                         </div>
 
@@ -167,11 +166,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                     placeholder="your password"
                                     value={formData.password}
                                     onChange={update("password")}
-                                    className={`w-full h-10 px-4 pr-10 rounded-[5px] text-sm outline-none transition border ${
-                                        hasMinLength && hasSymbol && hasNumber
-                                            ? "border-[var(--color-btn-primary)]"
-                                            : "border-[#A1A1A1]"
-                                    }`}
+                                    className={`w-full h-10 px-4 pr-10 rounded-[5px] text-sm outline-none border-[var(--color-btn-primary)] transition border`}
                                 />
                                 <button
                                     type="button"
@@ -211,10 +206,22 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                                 </svg>
                                             )}
                                         </div>
-                                        <span className="text-xs text-[var(--color-text-muted)]">{label}</span>
+                                        <span className="text-xs ">{label}</span>
                                     </div>
                                 ))}
                             </div>
+                        </div>
+
+
+                        <div>
+                            <label className="block text-sm text-black mb-1">Date of birth</label>
+                            <input
+                                type="date"
+                                value={formData.birthDate}
+                                onChange={update("birthDate")}
+                                max={new Date().toISOString().split("T")[0]}
+                                className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none border-[var(--color-btn-primary)] transition border`}
+                            />
                         </div>
 
                         <Button
@@ -228,7 +235,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                             Continue
                         </Button>
 
-                        <div className="flex items-center justify-center my-1">
+                        <div className="flex items-center justify-center">
                             <span className="text-sm text-[var(--color-text-dark)]">Or</span>
                         </div>
 
@@ -252,7 +259,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 </div>
             )}
 
-            {/* ───── STEP 2: Name + Username ───── */}
+
             {step === 2 && (
                 <div className="w-full">
                     <h2 className="text-2xl font-bold text-black tracking-[-0.5px] text-center">
@@ -268,11 +275,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 placeholder="John"
                                 value={formData.firstName}
                                 onChange={update("firstName")}
-                                className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none transition border ${
-                                    formData.firstName.trim().length > 0
-                                        ? "border-[var(--color-btn-primary)]"
-                                        : "border-[#A1A1A1]"
-                                }`}
+                                className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none border-[var(--color-btn-primary)] transition border`}
                             />
                         </div>
 
@@ -283,11 +286,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 placeholder="Doe"
                                 value={formData.lastName}
                                 onChange={update("lastName")}
-                                className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none transition border ${
-                                    formData.lastName.trim().length > 0
-                                        ? "border-[var(--color-btn-primary)]"
-                                        : "border-[#A1A1A1]"
-                                }`}
+                                className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none border-[var(--color-btn-primary)] transition border`}
                             />
                         </div>
 
@@ -300,11 +299,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                     placeholder="john_doe"
                                     value={formData.username}
                                     onChange={update("username")}
-                                    className={`w-full h-10 pl-7 pr-4 rounded-[5px] text-sm outline-none transition border ${
-                                        formData.username.trim().length >= 3
-                                            ? "border-[var(--color-btn-primary)]"
-                                            : "border-[#A1A1A1]"
-                                    }`}
+                                    className={`w-full h-10 pl-7 pr-4 rounded-[5px] text-sm outline-none border-[var(--color-btn-primary)] transition border`}
                                 />
                             </div>
                             <p className="text-xs text-[#A1A1A1] mt-1">Minimum 3 characters</p>
@@ -332,7 +327,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 </div>
             )}
 
-            {/* ───── STEP 3: Bio + Phone + Avatar ───── */}
+
             {step === 3 && (
                 <div className="w-full">
                     <h2 className="text-2xl font-bold text-black tracking-[-0.5px] text-center">
@@ -343,10 +338,9 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                     </p>
 
                     <div className="space-y-3">
-                        {/* Avatar upload */}
                         <div className="flex flex-col items-center mb-2">
                             <label className="cursor-pointer group relative">
-                                <div className="w-20 h-20 rounded-full border-2 border-dashed border-[#A1A1A1] group-hover:border-[var(--color-btn-primary)] transition flex items-center justify-center overflow-hidden">
+                                <div className="w-20 h-20 rounded-full border-2 border-dashed border-[var(--color-btn-primary)] group-hover:border-[var(--color-btn-primary)] transition flex items-center justify-center overflow-hidden">
                                     {imagePreview ? (
                                         <img src={imagePreview} className="w-full h-full object-cover" />
                                     ) : (
@@ -374,7 +368,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 onChange={update("bio")}
                                 rows={3}
                                 maxLength={150}
-                                className="w-full px-4 py-2 rounded-[5px] text-sm outline-none transition border border-[#A1A1A1] focus:border-[var(--color-btn-primary)] resize-none"
+                                className="w-full px-4 py-2 rounded-[5px] text-sm outline-none transition border border-[var(--color-btn-primary)] resize-none"
                             />
                             <p className="text-xs text-[#A1A1A1] text-right">{formData.bio.length}/150</p>
                         </div>
@@ -386,7 +380,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 placeholder="+380 xx xxx xx xx"
                                 value={formData.phoneNumber}
                                 onChange={update("phoneNumber")}
-                                className="w-full h-10 px-4 rounded-[5px] text-sm outline-none transition border border-[#A1A1A1] focus:border-[var(--color-btn-primary)]"
+                                className="w-full h-10 px-4 rounded-[5px] text-sm outline-none transition border border-[var(--color-btn-primary)]"
                             />
                         </div>
 
