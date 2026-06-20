@@ -142,6 +142,7 @@ const Sidebar = () => {
                                     label={label}
                                     active={activeModal === modal}
                                     onClick={() => setActiveModal(modal)}
+                                    isDark={theme === "dark"}
                                 >
                                     {totalUnread > 0 && (
                                         <span className="absolute top-0.5 right-0.5 min-w-[16px] h-[16px] px-0.5 rounded-full bg-[#1DB954] text-black text-[9px] font-bold flex items-center justify-center leading-none">
@@ -156,6 +157,7 @@ const Sidebar = () => {
                                     label={label}
                                     active={activeModal === modal}
                                     onClick={() => setActiveModal(modal)}
+                                    isDark={theme === "dark"}
                                 />
                             )
                     )}
@@ -166,6 +168,7 @@ const Sidebar = () => {
                     label="Settings"
                     active={activeModal === 'settings'}
                     onClick={() => setActiveModal('settings')}
+                    isDark={theme === "dark"}
                     extraImgClass="group-hover:rotate-45"
                 />
             </aside>
