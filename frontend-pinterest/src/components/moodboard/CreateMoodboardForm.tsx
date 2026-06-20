@@ -43,10 +43,10 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
     };
 
     return (
-        <div className="bg-white rounded-[20px] px-8 py-7 w-full">
+        <div className="bg-black dark:bg-white rounded-[20px] px-8 py-7 w-full">
             {step === 1 ? (
                 <>
-                    <h2 className="text-center text-black text-lg font-semibold mb-5">
+                    <h2 className="text-center text-white dark:text-black text-lg font-semibold mb-5">
                         Create your Board
                     </h2>
 
@@ -57,18 +57,18 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
                         </svg>
                     </div>
 
-                    <label className="block text-sm text-black mb-1">Board name</label>
+                    <label className="block text-sm text-white dark:text-black mb-1">Board name</label>
                     <input
                         type="text"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         placeholder="Name your Board"
-                        className="w-full border border-btn-primary rounded-lg px-3 py-2 text-sm text-black outline-none focus:ring-1 focus:ring-btn-primary mb-5"
+                        className="w-full border border-btn-primary rounded-lg px-3 py-2 text-sm text-white dark:text-black outline-none focus:ring-1 focus:ring-btn-primary mb-5"
                     />
 
                     <div className="flex items-start justify-between mb-6">
                         <div>
-                            <p className="text-sm text-black font-medium">Private Board</p>
+                            <p className="text-sm text-white dark:text-black font-medium">Private Board</p>
                             <p className="text-xs text-gray-400 max-w-[200px]">
                                 Only you can see this Board
                             </p>
@@ -81,7 +81,7 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
                             }`}
                         >
                             <span
-                                className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${
+                                className={`absolute top-0.5 left-0.5 w-5 h-5 bg-black dark:bg-white rounded-full transition-transform ${
                                     isPrivate ? "translate-x-5" : ""
                                 }`}
                             />
@@ -94,8 +94,8 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
                             disabled={!title.trim()}
                             className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 ${
                                 title.trim()
-                                    ? "bg-[#1DB954] text-black hover:bg-[#1aa34a]"
-                                    : "bg-[#A1A1A1] text-black"
+                                    ? "bg-[#1DB954] text-white dark:text-black hover:bg-[#1aa34a]"
+                                    : "bg-[#A1A1A1] text-white dark:text-black"
                             }`}
                         >
                             Next
@@ -111,19 +111,19 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
                         >
                             ←
                         </button>
-                        <h2 className="text-black text-lg font-semibold">Add details</h2>
+                        <h2 className="text-white dark:text-black text-lg font-semibold">Add details</h2>
                     </div>
 
-                    <label className="block text-sm text-black mb-1">Description</label>
+                    <label className="block text-sm text-white dark:text-black mb-1">Description</label>
                     <textarea
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="What's this board about?"
                         rows={3}
-                        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-black outline-none focus:ring-1 focus:ring-[#1DB954] mb-5 resize-none"
+                        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-white dark:text-black outline-none focus:ring-1 focus:ring-[#1DB954] mb-5 resize-none"
                     />
 
-                    <label className="block text-sm text-black mb-2">Choose cover</label>
+                    <label className="block text-sm text-white dark:text-black mb-2">Choose cover</label>
                     {myPins && myPins.length > 0 ? (
                         <div className="grid grid-cols-4 gap-2 mb-6 max-h-[200px] overflow-y-auto">
                             {myPins.map((pin) => (

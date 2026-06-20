@@ -87,7 +87,7 @@ const Modal = ({
 
     return createPortal(
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-black/60"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 dark:bg-black/60"
             onClick={closeOnOverlay ? onClose : undefined}
         >
             <div

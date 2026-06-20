@@ -128,7 +128,7 @@ const CollectionsPage = () => {
                                 onClick={() => navigate(`/moodboard/preview/${mb.id}`)}
                                 className="text-left group"
                             >
-                                <div className="w-[240px] h-[180px] rounded-2xl overflow-hidden bg-[#2a2a2a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-2xl">
+                                <div className="w-[240px] h-[180px] rounded-2xl overflow-hidden bg-[#D1D1D1] dark:bg-[#2a2a2a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-2xl">
                                     {mb.coverImageUrl ? (
                                         <img
                                             src={`${APP_ENV.IMAGES_800_URL}${mb.coverImageUrl}`}
@@ -138,7 +138,7 @@ const CollectionsPage = () => {
                                         <div className="w-full h-full" />
                                     )}
                                 </div>
-                                <p className="text-white text-sm mt-2 truncate w-[220px] group-hover:text-[#1DB954] transition-colors duration-200">
+                                <p className="text-black dark:text-white text-sm mt-2 truncate w-[220px] group-hover:text-[#1DB954] transition-colors duration-200">
                                     {mb.title}
                                 </p>
                             </button>
