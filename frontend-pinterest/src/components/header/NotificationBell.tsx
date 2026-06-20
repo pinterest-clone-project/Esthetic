@@ -40,10 +40,7 @@ const NotificationBell: React.FC = () => {
 
     return (
         <div className="relative" ref={ref}>
-            <button
-                onClick={handleToggle}
-                className="relative flex items-center justify-center w-11 h-11 text-[#A1A1A1] hover:text-white transition"
-            >
+
             <button onClick={handleToggle} className="relative flex items-center justify-center w-11 h-11 text-[#A1A1A1] hover:text-white cursor-pointer transition">
                 <img src={bellIcon} className="w-[30px] h-[30px] opacity-70 hover:opacity-100" />
                 {unreadCount > 0 && (
@@ -69,7 +66,7 @@ const NotificationBell: React.FC = () => {
                                     key={n.id}
                                     onClick={() => handleNotificationClick(n)}
                                     className={`w-full px-4 py-3 flex items-start gap-3 transition
-                                        ${url ? "cursor-pointer hover:bg-[#535353]" : "cursor-default"}
+                                        ${url ? "cursor-pointer hover:bg-[#A1A1A1] dark:hover:bg-[#535353]" : "cursor-default"}
                                         ${!n.isRead ? "bg-white/[0.03]" : ""}
                                     `}
                                 >
@@ -79,8 +76,8 @@ const NotificationBell: React.FC = () => {
                                         )}
                                     </div>
                                     <div className="min-w-0 flex-1">
-                                        <p className="text-white text-sm leading-snug">{n.message}</p>
-                                        <p className="text-[#A1A1A1] text-xs mt-0.5">
+                                        <p className="text-black dark:text-white text-sm leading-snug">{n.message}</p>
+                                        <p className="text-black dark:text-[#A1A1A1] text-xs mt-0.5">
                                             {formatTimeLabel(n.createdAt)}
                                         </p>
                                     </div>
@@ -90,30 +87,11 @@ const NotificationBell: React.FC = () => {
                                 </div>
                             );
                         })
-                        notifications.map((n) => (
-                            <div
-                                key={n.id}
-                                className={`w-full px-4 py-3 flex items-start gap-3 hover:bg-[#A1A1A1] dark:hover:bg-[#535353] transition cursor-pointer ${
-                                    !n.isRead ? "bg-white/[0.03]" : ""
-                                }`}
-                            >
-                                <div className="w-8 h-8 rounded-full bg-[#2a2a2a] shrink-0" />
-                                <div className="min-w-0">
-                                    <p className="text-black dark:text-white text-sm leading-snug">{n.text}</p>
-                                    <p className="text-black dark:text-[#A1A1A1] text-xs mt-0.5">{n.timeLabel}</p>
-                                </div>
-                                {!n.isRead && <span className="w-2 h-2 rounded-full bg-btn-primary shrink-0 mt-1.5" />}
-                            </div>
-                        ))
+
                     )}
 
                     <button
                         onClick={() => { setOpen(false); navigate("/notifications"); }}
-                        className="w-full px-4 py-3 text-center text-sm text-btn-primary hover:bg-[#535353] transition border-t border-[#535353] sticky bottom-0 bg-[#1a1a1a]"
-                        onClick={() => {
-                            setOpen(false);
-                            navigate("/notifications");
-                        }}
                         className="w-full px-4 py-3 text-center text-sm text-green-700 dark:text-btn-primary cursor-pointer hover:bg-[#A1A1A1] dark:hover:bg-[#535353] transition border-t border-[#A1A1A1] dark:border-[#535353] sticky bottom-0 bg-white dark:bg-[#1a1a1a]"
                     >
                         See all

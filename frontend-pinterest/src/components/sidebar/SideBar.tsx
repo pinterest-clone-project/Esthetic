@@ -7,7 +7,7 @@ import profileIcon from "../../../src/assets/icons/profile_icon.svg";
 import auraIcon from "../../../src/assets/icons/aura_icon.svg";
 import themeIcon from "../../../src/assets/icons/theme_mode.svg"
 import React, {useEffect, useState} from "react";
-import Modal from "@/components/ui/Modal.tsx";
+import Modal from "@/components/UI/Modal.tsx";
 import {useLogoutMutation} from "@/services/accountService.ts";
 import {clearUser} from "@/store/slices/authSlice.ts";
 import {api} from "@/services/api.ts";

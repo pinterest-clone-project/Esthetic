@@ -88,45 +88,40 @@ const App = () => {
         <ToastProvider>
             <AppInit>
                 <Routes>
-                    <Route element={<Layout/>}>
+                    <Route element={<Layout />}>
                         <Route path="/">
-                            <Route index element={<RootPage/>}/>
-                            <Route path="review" element={<ReviewPage/>}/>
+                            <Route index element={<RootPage />} />
+                            <Route path="review" element={<ReviewPage />} />
 
-                            <Route element={<PrivateRoute/>}>
-                                <Route path="/profile" element={<ProfilePage/>}/>
-                                <Route path="aura/">
-                                    <Route path="create" element={<CreateAuraPage/>}/>
-                                    <Route path="preview/:id" element={<AuraPreviewPage/>}/>
+                            <Route element={<PrivateRoute />}>
+                                <Route path="/profile" element={<ProfilePage />} />
+
+                                <Route path="aura">
+                                    <Route path="create" element={<CreateAuraPage />} />
+                                    <Route path="preview/:id" element={<AuraPreviewPage />} />
                                 </Route>
-                                <Route path="moodboard/">
-                                    <Route path="preview/:id" element={<MoodboardPreviewPage/>}/>
+
+                                <Route path="moodboard">
+                                    <Route path="preview/:id" element={<MoodboardPreviewPage />} />
                                 </Route>
 
                                 <Route path="/collections" element={<Navigate to="/collections/aura" replace />} />
-                                <Route path="/collections/aura" element={<CollectionsPage/>}/>
-                                <Route path="/collections/moodboard" element={<CollectionsPage/>}/>
-                                <Route path="/collections/ai" element={<CollectionsPage/>}/>
+                                <Route path="/collections/aura" element={<CollectionsPage />} />
+                                <Route path="/collections/moodboard" element={<CollectionsPage />} />
+                                <Route path="/collections/ai" element={<CollectionsPage />} />
+
+                                <Route path="/theme" element={<ThemePage />} />
                             </Route>
                         </Route>
                     </Route>
-                            <Route path="/collections" element={<Navigate to="/collections/aura" replace />} />
-                            <Route path="/collections/aura" element={<CollectionsPage/>}/>
-                            <Route path="/collections/moodboard" element={<CollectionsPage/>}/>
-                            <Route path="/collections/ai" element={<CollectionsPage/>}/>
-                            <Route path="/theme" element={<ThemePage/>}/>
 
-                        </Route>
-                    </Route>
-                </Route>
-
-                    <Route element={<AdminRoute/>}>
-                        <Route element={<AdminLayout/>}>
-                            <Route path="/admin" element={<AdminDashboard/>}/>
+                    <Route element={<AdminRoute />}>
+                        <Route element={<AdminLayout />}>
+                            <Route path="/admin" element={<AdminDashboard />} />
                         </Route>
                     </Route>
 
-                    <Route path="*" element={<NotFoundPage/>}/>
+                    <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </AppInit>
         </ToastProvider>
