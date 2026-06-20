@@ -6,7 +6,7 @@ import {useAppSelector} from "@/store";
 const Layout = () => {
     const user = useAppSelector((state) => state.auth.user);
     return (
-        <div className="flex flex-col min-h-screen bg-black">
+        <div className="flex flex-col min-h-screen bg-white dark:bg-black">
             <Header />
             <div className="flex flex-1 max-w-[1505px] mx-auto w-full">
                 {user && <Sidebar />}
