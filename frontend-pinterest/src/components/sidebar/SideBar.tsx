@@ -5,6 +5,7 @@ import addIcon from "../../../src/assets/icons/add_icon.svg";
 import settingsIcon from "../../../src/assets/icons/settings_icon.svg";
 import profileIcon from "../../../src/assets/icons/profile_icon.svg";
 import auraIcon from "../../../src/assets/icons/aura_icon.svg";
+import themeIcon from "../../../src/assets/icons/theme_mode.svg"
 import React, {useEffect, useState} from "react";
 import Modal from "@/components/UI/Modal.tsx";
 import {useLogoutMutation} from "@/services/accountService.ts";
@@ -225,6 +226,19 @@ const Sidebar = () => {
                     <div className="text-left">
                         <p className="text-white text-sm font-medium">Profile</p>
                         <p className="text-[#A1A1A1] text-xs">View and edit your profile</p>
+                    </div>
+                </button>
+
+                <button
+                    onClick={() => { navigate('/theme'); closeModal(); }}
+                    className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#2a2a2a] transition-colors duration-150 group"
+                >
+                    <div className="w-10 h-10 rounded-xl bg-[#2a2a2a] group-hover:bg-[#333] flex items-center justify-center transition-colors shrink-0">
+                        <img src={themeIcon} style={{ filter: whiteFilter }} className="w-5 h-5" />
+                    </div>
+                    <div className="text-left">
+                        <p className="text-white text-sm font-medium">Theme</p>
+                        <p className="text-[#A1A1A1] text-xs">Light / Dark mode switch</p>
                     </div>
                 </button>
 
