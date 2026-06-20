@@ -3,7 +3,6 @@ import searchIconDark from "../../assets/icons/search-vector-dark.svg";
 import searchIconLight from "../../assets/icons/search-vector-light.svg";
 import Button from "@/components/button/Button.tsx";
 import {useEffect, useRef, useState} from "react";
-import Modal from "@/components/ui/Modal.tsx";
 import LoginForm from "@/components/auth/LoginForm.tsx";
 import RegisterForm from "@/components/auth/RegisterForm.tsx";
 import {useAppDispatch, useAppSelector} from "@/store";
@@ -16,7 +15,7 @@ import {api} from "@/services/api.ts";
 import {selectIsAdmin} from "@/store/selectors/authSelectors.ts";
 import NotificationBell from "@/components/header/NotificationBell.tsx";
 import {useTheme} from "@/context/ThemeContext.tsx";
-
+import Modal from "@/components/ui/Modal.tsx";
 
 type ModalType = "login" | "signup" | null;
 
