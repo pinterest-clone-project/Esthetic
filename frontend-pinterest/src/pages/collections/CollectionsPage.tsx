@@ -5,7 +5,7 @@ import im3 from "@/assets/defaults/def-11.jpg";
 import {useGetAllPinsQuery, useGetMyPinsQuery} from "@/services/pinService.ts";
 import {useLocation, useNavigate} from "react-router";
 import {useGetMyMoodboardsQuery} from "@/services/moodboardService.ts";
-import Modal from "@/components/ui/Modal";
+import Modal from "@/components/UI/Modal";
 import CreateMoodboardForm from "@/components/moodboard/CreateMoodboardForm.tsx";
 import {APP_ENV} from "@/constants/env";
 
