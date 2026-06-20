@@ -28,6 +28,7 @@ const EditAuraPage = () => {
     const [categoryOpen, setCategoryOpen] = useState(false);
     const categoryBoxRef = useRef<HTMLDivElement>(null);
 
+
     // Populate form once the pin loads
     useEffect(() => {
         if (pin) {
@@ -96,9 +97,6 @@ const EditAuraPage = () => {
         }
     };
 
-    const handleMediaUrlBlur = () => {
-        setPreviewUrl(mediaUrl);
-    };
 
     if (isPinLoading) {
         return (
@@ -139,17 +137,18 @@ const EditAuraPage = () => {
                     {/* Left — image preview (read-only, media can't be changed) */}
                     <div className="shrink-0">
                         <div className="w-[200px] min-h-[200px] rounded-2xl overflow-hidden bg-[#1e1e1e] border border-[#333] flex items-center justify-center">
-                            {pin.mediaUrl ? (
+                            {mediaUrl ? (
                                 <img
-                                    src={pin.mediaUrl}
+                                    src={mediaUrl}
                                     alt="Preview"
                                     className="w-full h-full object-cover"
+                                    onError={(e) => { e.currentTarget.style.display = "none"; }}
                                 />
                             ) : (
                                 <div className="flex flex-col items-center gap-2 p-6 text-center">
                                     <svg className="w-8 h-8 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
                                     <span className="text-gray-600 text-xs">Preview</span>
                                 </div>
@@ -177,10 +176,9 @@ const EditAuraPage = () => {
                                 type="text"
                                 value={mediaUrl}
                                 onChange={e => setMediaUrl(e.target.value)}
-                                onBlur={handleMediaUrlBlur}
                                 placeholder="Add Url"
                                 className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-white text-xs
-                                    placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors"
+                                placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors"
                             />
                         </div>
 
