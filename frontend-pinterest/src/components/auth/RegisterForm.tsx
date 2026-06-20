@@ -141,32 +141,32 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
             {step === 1 && (
                 <div className="w-full">
-                    <h2 className="text-2xl font-bold text-black tracking-[-0.5px] text-center">
+                    <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] text-center">
                         Welcome to Esthetic
                     </h2>
-                    <p className="text-sm text-black mt-1 mb-5 text-center">Where style begins</p>
+                    <p className="text-sm text-white dark:text-black mt-1 mb-5 text-center">Where style begins</p>
 
                     <div className="space-y-5">
                         <div>
-                            <label className="block text-sm text-black mb-1">Your email</label>
+                            <label className="block text-sm text-white dark:text-black mb-1">Your email</label>
                             <input
                                 type="email"
                                 placeholder="yourgmail@gmail.com"
                                 value={formData.email}
                                 onChange={update("email")}
-                                className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none border-[var(--color-btn-primary)] transition border`}
+                                className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none text-white dark:text-black border-[var(--color-btn-primary)] transition border`}
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm text-black mb-1">Password</label>
+                            <label className="block text-sm text-white dark:text-black mb-1">Password</label>
                             <div className="relative">
                                 <input
                                     type={showPassword ? "text" : "password"}
                                     placeholder="your password"
                                     value={formData.password}
                                     onChange={update("password")}
-                                    className={`w-full h-10 px-4 pr-10 rounded-[5px] text-sm outline-none border-[var(--color-btn-primary)] transition border`}
+                                    className={`w-full h-10 px-4 pr-10 rounded-[5px] text-white dark:text-black text-sm outline-none border-[var(--color-btn-primary)] transition border`}
                                 />
                                 <button
                                     type="button"
@@ -206,7 +206,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                                 </svg>
                                             )}
                                         </div>
-                                        <span className="text-xs ">{label}</span>
+                                        <span className="text-xs text-white dark:text-black">{label}</span>
                                     </div>
                                 ))}
                             </div>
@@ -214,13 +214,13 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
 
                         <div>
-                            <label className="block text-sm text-black mb-1">Date of birth</label>
+                            <label className="block text-sm text-white dark:text-black mb-1">Date of birth</label>
                             <input
                                 type="date"
                                 value={formData.birthDate}
                                 onChange={update("birthDate")}
                                 max={new Date().toISOString().split("T")[0]}
-                                className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none border-[var(--color-btn-primary)] transition border`}
+                                className={`date-picker w-full h-10 px-4 rounded-[5px] text-white dark:text-black text-sm outline-none border-[var(--color-btn-primary)] transition border`}
                             />
                         </div>
 
@@ -236,7 +236,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                         </Button>
 
                         <div className="flex items-center justify-center">
-                            <span className="text-sm text-[var(--color-text-dark)]">Or</span>
+                            <span className="text-sm text-white dark:text-black text-[var(--color-text-dark)]">Or</span>
                         </div>
 
                         <Button
@@ -262,36 +262,36 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
             {step === 2 && (
                 <div className="w-full">
-                    <h2 className="text-2xl font-bold text-black tracking-[-0.5px] text-center">
+                    <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] text-center">
                         Nice to meet you!
                     </h2>
-                    <p className="text-sm text-black mt-1 mb-5 text-center">What's your name?</p>
+                    <p className="text-sm text-white dark:text-black mt-1 mb-5 text-center">What's your name?</p>
 
                     <div className="space-y-3">
                         <div>
-                            <label className="block text-sm text-black mb-1">First name</label>
+                            <label className="block text-sm text-white dark:text-black mb-1">First name</label>
                             <input
                                 type="text"
                                 placeholder="John"
                                 value={formData.firstName}
                                 onChange={update("firstName")}
-                                className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none border-[var(--color-btn-primary)] transition border`}
+                                className={`w-full h-10 px-4 rounded-[5px] text-sm text-white dark:text-black outline-none border-[var(--color-btn-primary)] transition border`}
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm text-black mb-1">Last name</label>
+                            <label className="block text-white dark:text-black text-sm text-black mb-1">Last name</label>
                             <input
                                 type="text"
                                 placeholder="Doe"
                                 value={formData.lastName}
                                 onChange={update("lastName")}
-                                className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none border-[var(--color-btn-primary)] transition border`}
+                                className={`w-full h-10 px-4 rounded-[5px] text-white dark:text-black text-sm outline-none border-[var(--color-btn-primary)] transition border`}
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm text-black mb-1">Username</label>
+                            <label className="block text-sm text-white dark:text-black mb-1">Username</label>
                             <div className="relative">
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#A1A1A1] text-sm">@</span>
                                 <input
@@ -299,7 +299,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                     placeholder="john_doe"
                                     value={formData.username}
                                     onChange={update("username")}
-                                    className={`w-full h-10 pl-7 pr-4 rounded-[5px] text-sm outline-none border-[var(--color-btn-primary)] transition border`}
+                                    className={`w-full h-10 pl-7 pr-4 rounded-[5px] text-white dark:text-black text-sm outline-none border-[var(--color-btn-primary)] transition border`}
                                 />
                             </div>
                             <p className="text-xs text-[#A1A1A1] mt-1">Minimum 3 characters</p>
@@ -319,7 +319,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                         <button
                             type="button"
                             onClick={() => setStep(1)}
-                            className="w-full text-center text-sm text-[#A1A1A1] hover:text-black transition mt-1"
+                            className="w-full text-center text-sm text-[#A1A1A1] dark:hover:text-black hover:text-white transition mt-1"
                         >
                             ← Back
                         </button>
@@ -330,10 +330,10 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
             {step === 3 && (
                 <div className="w-full">
-                    <h2 className="text-2xl font-bold text-black tracking-[-0.5px] text-center">
+                    <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] text-center">
                         Almost done!
                     </h2>
-                    <p className="text-sm text-black mt-1 mb-5 text-center">
+                    <p className="text-sm text-white dark:text-black mt-1 mb-5 text-center">
                         Add a profile photo and tell us about yourself
                     </p>
 
@@ -357,30 +357,30 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 </div>
                                 <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
                             </label>
-                            <p className="text-xs text-[#A1A1A1] mt-2">Upload photo (optional)</p>
+                            <p className="text-xs text-white dark:text-black text-[#A1A1A1] mt-2">Upload photo (optional)</p>
                         </div>
 
                         <div>
-                            <label className="block text-sm text-black mb-1">Bio</label>
+                            <label className="block text-sm text-white dark:text-black mb-1">Bio</label>
                             <textarea
                                 placeholder="Tell us about yourself..."
                                 value={formData.bio}
                                 onChange={update("bio")}
                                 rows={3}
                                 maxLength={150}
-                                className="w-full px-4 py-2 rounded-[5px] text-sm outline-none transition border border-[var(--color-btn-primary)] resize-none"
+                                className="w-full px-4 py-2 rounded-[5px] text-white dark:text-black text-sm outline-none transition border border-[var(--color-btn-primary)] resize-none"
                             />
-                            <p className="text-xs text-[#A1A1A1] text-right">{formData.bio.length}/150</p>
+                            <p className="text-xs dark:text-[#A1A1A1] text-white text-right">{formData.bio.length}/150</p>
                         </div>
 
                         <div>
-                            <label className="block text-sm text-black mb-1">Phone number</label>
+                            <label className="block text-sm text-white dark:text-black mb-1">Phone number</label>
                             <input
                                 type="tel"
                                 placeholder="+380 xx xxx xx xx"
                                 value={formData.phoneNumber}
                                 onChange={update("phoneNumber")}
-                                className="w-full h-10 px-4 rounded-[5px] text-sm outline-none transition border border-[var(--color-btn-primary)]"
+                                className="w-full h-10 px-4 rounded-[5px] text-white dark:text-black text-sm outline-none transition border border-[var(--color-btn-primary)]"
                             />
                         </div>
 
@@ -398,7 +398,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                         <button
                             type="button"
                             onClick={() => setStep(2)}
-                            className="w-full text-center text-sm text-[#A1A1A1] hover:text-black transition mt-1"
+                            className="w-full text-center text-sm text-[#A1A1A1] hover:text-white dark:hover:text-black transition mt-1"
                         >
                             ← Back
                         </button>

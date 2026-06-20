@@ -10,7 +10,7 @@ const ReviewPage = () => {
     const { data: pins, isLoading, isError } = useGetAllPinsQuery();
 
     return (
-        <div className="w-full min-h-full bg-[#000000] px-6 py-6">
+        <div className="w-full min-h-full bg-white dark:bg-black px-6 py-6">
 
             {isError && (
                 <div className="flex items-center justify-center h-40">
