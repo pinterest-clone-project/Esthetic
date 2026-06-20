@@ -20,6 +20,8 @@ import AdminDashboard from "@/pages/admin/AdminDashboard.tsx";
 import MoodboardPreviewPage from "@/pages/moodboard/MoodboardPreviewPage.tsx";
 import {useChatRealtime} from "@/hooks/useChatRealtime.ts";
 import {useNotificationRealtime} from "@/hooks/useNotificationRealtime.ts";
+import {ToastProvider} from "@/components/ui/Toast/ToastProvider.tsx";
+import ThemePage from "@/pages/settings/ThemePage.tsx";
 
 const AppInit = ({children}: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
@@ -51,7 +53,7 @@ const AppInit = ({children}: { children: React.ReactNode }) => {
         <>
             {showLoader && (
                 <div
-                    className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#121212]"
+                    className="fixed inset-0 z-[9999] flex items-center justify-center bg-white dark:bg-[#121212]"
                     style={{
                         opacity: fadeOut ? 0 : 1,
                         transition: 'opacity 0.6s ease',
@@ -83,14 +85,14 @@ const RootPage = () => {
 }
 
 const App = () => {
-
     return (
-        <AppInit>
-            <Routes>
-                <Route element={<Layout/>}>
-                    <Route path="/">
-                        <Route index element={<RootPage/>}/>
-                        <Route path="review" element={<ReviewPage/>}/>
+        <ToastProvider>
+            <AppInit>
+                <Routes>
+                    <Route element={<Layout />}>
+                        <Route path="/">
+                            <Route index element={<RootPage />} />
+                            <Route path="review" element={<ReviewPage />} />
 
                         <Route element={<PrivateRoute/>}>
                             <Route path="/profile" element={<ProfilePage/>}/>
@@ -102,24 +104,38 @@ const App = () => {
                             <Route path="moodboard/">
                                 <Route path="preview/:id" element={<MoodboardPreviewPage/>}/>
                             </Route>
+                            <Route element={<PrivateRoute />}>
+                                <Route path="/profile" element={<ProfilePage />} />
 
-                            <Route path="/collections" element={<Navigate to="/collections/aura" replace />} />
-                            <Route path="/collections/aura" element={<CollectionsPage/>}/>
-                            <Route path="/collections/moodboard" element={<CollectionsPage/>}/>
-                            <Route path="/collections/ai" element={<CollectionsPage/>}/>
+                                <Route path="aura">
+                                    <Route path="create" element={<CreateAuraPage />} />
+                                    <Route path="preview/:id" element={<AuraPreviewPage />} />
+                                </Route>
+
+                                <Route path="moodboard">
+                                    <Route path="preview/:id" element={<MoodboardPreviewPage />} />
+                                </Route>
+
+                                <Route path="/collections" element={<Navigate to="/collections/aura" replace />} />
+                                <Route path="/collections/aura" element={<CollectionsPage />} />
+                                <Route path="/collections/moodboard" element={<CollectionsPage />} />
+                                <Route path="/collections/ai" element={<CollectionsPage />} />
+
+                                <Route path="/theme" element={<ThemePage />} />
+                            </Route>
                         </Route>
                     </Route>
-                </Route>
 
-                <Route element={<AdminRoute/>}>
-                    <Route element={<AdminLayout/>}>
-                        <Route path="/admin" element={<AdminDashboard/>}/>
+                    <Route element={<AdminRoute />}>
+                        <Route element={<AdminLayout />}>
+                            <Route path="/admin" element={<AdminDashboard />} />
+                        </Route>
                     </Route>
-                </Route>
 
-                <Route path="*" element={<NotFoundPage/>}/>
-            </Routes>
-        </AppInit>
+                    <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+            </AppInit>
+        </ToastProvider>
     )
 }
 

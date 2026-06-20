@@ -1,5 +1,5 @@
 import { useGetAllPinsQuery } from "../../services/pinService.ts";
-import PinCard from "../../components/UI/PinCard.tsx";
+import PinCard from "@/components/ui/PinCard.tsx";
 
 const PinCardSkeleton = () => (
     <div className="break-inside-avoid mb-3 rounded-xl overflow-hidden bg-white/5 animate-pulse"
@@ -10,7 +10,7 @@ const ReviewPage = () => {
     const { data: pins, isLoading, isError } = useGetAllPinsQuery();
 
     return (
-        <div className="w-full min-h-full bg-[#000000] px-6 py-6">
+        <div className="w-full min-h-full bg-white dark:bg-black px-6 py-6">
 
             {isError && (
                 <div className="flex items-center justify-center h-40">

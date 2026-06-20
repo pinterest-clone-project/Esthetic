@@ -57,17 +57,17 @@ const Modal = ({
                         borderTopLeftRadius: 0,
                         borderBottomLeftRadius: 0,
                     }}
-                    className="fixed bottom-0 z-50 bg-[#1a1a1a] shadow-2xl flex flex-col"
+                    className="fixed bottom-0 z-50 bg-white dark:bg-[#1a1a1a] shadow-2xl flex flex-col"
                     onClick={(e) => e.stopPropagation()}
                 >
                     {title && (
-                        <div className="flex items-center justify-between px-3 py-4 border-b border-[#2a2a2a] shrink-0">
-                            <h2 className="text-white font-semibold text-sm tracking-[-0.5px]">
+                        <div className="flex items-center justify-between px-3 py-4 border-b border-[#a1a1a1] dark:border-[#2a2a2a] shrink-0">
+                            <h2 className="text-black dark:text-white font-semibold text-sm tracking-[-0.5px]">
                                 {title}
                             </h2>
                             <button
                                 onClick={onClose}
-                                className="w-7 h-7 flex items-center justify-center rounded-full bg-[#2a2a2a] hover:bg-[#3a3a3a] transition-colors"
+                                className="w-7 h-7 flex items-center justify-center rounded-full bg-[#A1A1A1] dark:bg-[#a2a2a2] hover:bg-[#3a3a3a] transition-colors"
                             >
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
                                     <path d="M18 6L6 18M6 6l12 12" />
@@ -87,12 +87,12 @@ const Modal = ({
 
     return createPortal(
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 dark:bg-black/60"
             onClick={closeOnOverlay ? onClose : undefined}
         >
             <div
                 style={{ width, height: height === "auto" ? undefined : height, borderRadius }}
-                className="bg-white shadow-2xl overflow-y-auto p-8"
+                className="bg-black dark:bg-white shadow-2xl overflow-y-auto p-8"
                 onClick={(e) => e.stopPropagation()}
             >
                 {children}

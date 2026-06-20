@@ -4,7 +4,7 @@ import { useGetAllCategoriesQuery } from "../../services/categoryService.ts";
 import { useGetAllTagsQuery } from "../../services/tagService.ts";
 import {APP_ENV} from "@/constants/env";
 import { useNavigate } from "react-router";
-import BackButton from "@/components/UI/BackButton.tsx";
+import BackButton from "@/components/ui/BackButton.tsx";
 
 const CreateAuraPage = () => {
     const navigate = useNavigate();
@@ -92,7 +92,7 @@ const CreateAuraPage = () => {
             <div className="flex items-center justify-between mb-8 w-full max-w-[580px]">
                 <div className="flex items-center gap-3">
                     <BackButton className="mb-0" />
-                    <h1 className="text-white text-sm font-medium tracking-wide">Create Aura</h1>
+                    <h1 className="text-black dark:text-white text-sm font-medium tracking-wide">Create Aura</h1>
                 </div>
                 <button
                     onClick={handleSubmit}
@@ -111,7 +111,7 @@ const CreateAuraPage = () => {
                 <div className="flex gap-10 items-start">
                     {/* Left — image preview */}
                     <div className="shrink-0">
-                        <div className="w-[200px] min-h-[200px] rounded-2xl overflow-hidden bg-[#1e1e1e] border border-[#333] flex items-center justify-center">
+                        <div className="w-[200px] min-h-[200px] rounded-2xl overflow-hidden bg-white dark:bg-[#1e1e1e] border border-[#A1A1A1] dark:border-[#333] flex items-center justify-center">
                             {previewUrl ? (
                                 <img
                                     src={previewUrl}
@@ -135,40 +135,40 @@ const CreateAuraPage = () => {
                     <div className="w-[340px] flex flex-col gap-5">
                         {/* Name */}
                         <div className="flex flex-col gap-1.5">
-                            <label className="text-white text-xs font-medium">Name</label>
+                            <label className="text-black dark:text-white text-xs font-medium">Name</label>
                             <input
                                 type="text"
                                 value={title}
                                 onChange={e => setTitle(e.target.value)}
                                 placeholder="Aura name"
-                                className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-white text-xs
+                                className="bg-white dark:bg-[#1e1e1e] border border-[#A1A1A1] dark:border-[#333] rounded-md px-3 h-9 text-black dark:text-white text-xs
                                     placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors"
                             />
                         </div>
 
                         {/* URL */}
                         <div className="flex flex-col gap-1.5">
-                            <label className="text-white text-xs font-medium">Url</label>
+                            <label className="text-black dark:text-white text-xs font-medium">Url</label>
                             <input
                                 type="text"
                                 value={mediaUrl}
                                 onChange={e => setMediaUrl(e.target.value)}
                                 onBlur={handleMediaUrlBlur}
                                 placeholder="Add Url"
-                                className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-white text-xs
+                                className="bg-white dark:bg-[#1e1e1e] border border-[#A1A1A1] dark:border-[#333] rounded-md px-3 h-9 text-black dark:text-white text-xs
                                     placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors"
                             />
                         </div>
 
                         {/* Source URL */}
                         <div className="flex flex-col gap-1.5">
-                            <label className="text-white text-xs font-medium">Source Url</label>
+                            <label className="text-black dark:text-white text-xs font-medium">Source Url</label>
                             <input
                                 type="text"
                                 value={sourceUrl}
                                 onChange={e => setSourceUrl(e.target.value)}
                                 placeholder="Where is this from?"
-                                className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-white text-xs
+                                className="bg-white dark:bg-[#1e1e1e] border border-[#A1A1A1] dark:border-[#333] rounded-md px-3 h-9 text-black dark:text-white text-xs
                                     placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors"
                             />
                         </div>
@@ -235,7 +235,7 @@ const CreateAuraPage = () => {
 
                     {/* Tags — under Name/Url/SourceUrl column */}
                     <div className="w-[340px] flex flex-col gap-1.5 relative" ref={tagBoxRef}>
-                        <label className="text-white text-xs font-medium">Tags</label>
+                        <label className="text-black dark:text-white text-xs font-medium">Tags</label>
 
                         <input
                             type="text"
@@ -243,18 +243,18 @@ const CreateAuraPage = () => {
                             onChange={e => setTagQuery(e.target.value)}
                             onFocus={() => setTagFocused(true)}
                             placeholder="Search tags..."
-                            className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-white text-xs
+                            className="bg-white dark:bg-[#1e1e1e] border border-[#A1A1A1] dark:border-[#333] rounded-md px-3 h-9 text-black dark:text-white text-xs
                                 placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors"
                         />
 
                         {tagFocused && suggestions.length > 0 && (
-                            <div className="absolute top-full left-0 right-0 mt-1 z-20 bg-[#1e1e1e] border border-[#333] rounded-md shadow-2xl max-h-48 overflow-y-auto">
+                            <div className="absolute top-full left-0 right-0 mt-1 z-20 bg-white dark:bg-[#1e1e1e] border border-[#A1A1A1] dark:border-[#333] rounded-md shadow-2xl max-h-48 overflow-y-auto">
                                 {suggestions.map(tag => (
                                     <button
                                         key={tag.id}
                                         type="button"
                                         onClick={() => addTag(tag.id)}
-                                        className="w-full text-left px-3 py-2 text-xs text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
+                                        className="w-full text-left px-3 py-2 text-xs text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 hover-text-black dark:hover:text-white transition-colors"
                                     >
                                         #{tag.name}
                                     </button>
@@ -263,7 +263,7 @@ const CreateAuraPage = () => {
                         )}
 
                         {tagFocused && tagQuery && suggestions.length === 0 && (
-                            <div className="absolute top-full left-0 right-0 mt-1 z-20 bg-[#1e1e1e] border border-[#333] rounded-md shadow-2xl px-3 py-2">
+                            <div className="absolute top-full left-0 right-0 mt-1 z-20 bg-white dark:bg-[#1e1e1e] border border-[#A1A1A1] dark:border-[#333] rounded-md shadow-2xl px-3 py-2">
                                 <span className="text-xs text-gray-600">No matching tags</span>
                             </div>
                         )}
@@ -274,7 +274,7 @@ const CreateAuraPage = () => {
                                 {selectedTags.map(tag => (
                                     <span
                                         key={tag.id}
-                                        className="text-xs px-2.5 py-1 rounded-full bg-[#4ade80] text-black flex items-center gap-1.5"
+                                        className="text-xs px-2.5 py-1 rounded-full bg-white dark:bg-[#4ade80] text-black flex items-center gap-1.5"
                                     >
                                         #{tag.name}
                                         <button
@@ -293,13 +293,13 @@ const CreateAuraPage = () => {
 
                 {/* Description — full width, bigger */}
                 <div className="flex flex-col gap-1.5">
-                    <label className="text-white text-xs font-medium">Description</label>
+                    <label className="text-black dark:text-white text-xs font-medium">Description</label>
                     <textarea
                         value={description}
                         onChange={e => setDescription(e.target.value)}
                         placeholder="Describe your aura..."
                         rows={8}
-                        className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 py-2.5 text-white text-xs
+                        className="bg-white dark:bg-[#1e1e1e] border border-[#A1A1A1] dark:border-[#333] rounded-md px-3 py-2.5 text-black dark:text-white text-xs
                             placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors resize-none"
                     />
                 </div>

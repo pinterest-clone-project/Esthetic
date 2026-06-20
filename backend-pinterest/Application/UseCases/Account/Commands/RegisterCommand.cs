@@ -15,7 +15,7 @@ public record RegisterCommand : IRequest<TokenDTO>, ITransactionalCommand
     public string Email { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
     public string? PhoneNumber { get; set; } = string.Empty;
-
+    public DateTime BirthDate { get; set; }
     [FromForm]
     public IFormFile? ImageFile { get; set; } = null;
 }

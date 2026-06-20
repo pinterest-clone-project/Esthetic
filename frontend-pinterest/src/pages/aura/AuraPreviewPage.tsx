@@ -3,8 +3,8 @@ import { useParams, useNavigate } from "react-router";
 import { useGetPinByIdQuery, useGetAllPinsQuery, useDeletePinMutation } from "../../services/pinService.ts";
 import { useGetMeQuery } from "../../services/accountService.ts";
 import { useLikeMutation, useUnlikeMutation } from "../../services/likeService.ts";
-import PinCard from "../../components/UI/PinCard.tsx";
-import BackButton from "@/components/UI/BackButton.tsx";
+import PinCard from "@/components/ui/PinCard.tsx";
+import BackButton from "@/components/ui/BackButton.tsx";
 
 const AuraPreviewPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -55,19 +55,19 @@ const AuraPreviewPage = () => {
     };
 
     if (isLoading) return (
-        <div className="w-full min-h-full bg-[#000000] flex items-center justify-center">
+        <div className="w-full min-h-full bg-white dark:bg-[#000000] flex items-center justify-center">
             <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-[#4ade80] animate-spin" />
         </div>
     );
 
     if (isError || !pin) return (
-        <div className="w-full min-h-full bg-[#000000] flex items-center justify-center">
+        <div className="w-full min-h-full bg-white dark:bg-[#000000] flex items-center justify-center">
             <p className="text-red-400 text-sm">Aura not found.</p>
         </div>
     );
 
     return (
-        <div className="w-full min-h-full bg-[#000000] px-6 py-8">
+        <div className="w-full min-h-full bg-white dark:bg-[#000000] px-6 py-8">
 
             <BackButton />
 
@@ -97,7 +97,7 @@ const AuraPreviewPage = () => {
                                 <span className={`transition-colors ${liked ? 'text-[#4ade80]' : 'text-gray-500 group-hover:text-[#4ade80]'}`}>
                                     ♥
                                 </span>
-                                <span className={`transition-colors ${liked ? 'text-white' : 'text-gray-500'}`}>
+                                <span className={`transition-colors ${liked ? 'text-black dark:text-white' : 'text-gray-500'}`}>
                                     {displayLikesCount}
                                 </span>
                             </button>
@@ -128,7 +128,7 @@ const AuraPreviewPage = () => {
 
                     {/* Title */}
                     {pin.title && (
-                        <h1 className="text-white text-2xl font-semibold leading-tight">{pin.title}</h1>
+                        <h1 className="text-black dark:text-white text-2xl font-semibold leading-tight">{pin.title}</h1>
                     )}
 
                     {/* Description */}

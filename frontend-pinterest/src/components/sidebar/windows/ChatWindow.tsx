@@ -2,7 +2,7 @@ import type {IChat} from "@/types/chat/IChat.ts";
 import {useAppSelector} from "@/store";
 import {useGetMessagesQuery, useMarkChatAsReadMutation, useSendMessageMutation} from "@/services/chatService.ts";
 import {useEffect, useRef, useState} from "react";
-import Modal from "@/components/UI/Modal.tsx";
+import Modal from "@/components/ui/Modal.tsx";
 import {APP_ENV} from "@/constants/env";
 
 interface ChatWindowProps {
@@ -47,10 +47,10 @@ const ChatWindow = ({ chat, onClose }: ChatWindowProps) => {
                         : <span className="text-white text-xs font-medium">{avatarLetter}</span>
                     }
                 </div>
-                <span className="text-white text-sm font-medium flex-1">{chat.otherUser.username}</span>
+                <span className="text-black dark:text-white text-sm font-medium flex-1">{chat.otherUser.username}</span>
                 <button
                     onClick={onClose}
-                    className="w-7 h-7 flex items-center justify-center rounded-full bg-[#2a2a2a] hover:bg-[#3a3a3a] transition-colors"
+                    className="w-7 h-7 flex items-center justify-center rounded-full bg-[#D1D1D1] dark:bg-[#2a2a2a] hover:bg-[#3a3a3a] transition-colors"
                 >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
                         <path d="M18 6L6 18M6 6l12 12"/>
@@ -85,13 +85,13 @@ const ChatWindow = ({ chat, onClose }: ChatWindowProps) => {
             </div>
 
             <div className="px-3 py-3 border-t border-white/10 shrink-0">
-                <div className="flex items-center gap-2 bg-[#1e1e1e] rounded-full px-4 py-2 border border-white/10">
+                <div className="flex items-center gap-2 bg-[#D1D1D1] dark:bg-[#1e1e1e] rounded-full px-4 py-2 border border-white/10">
                     <input
                         value={text}
                         onChange={(e) => setText(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
                         placeholder="Message"
-                        className="flex-1 bg-transparent text-sm text-white outline-none placeholder:text-[#555]"
+                        className="flex-1 bg-transparent text-sm text-black dark:text-white outline-none placeholder:text-[#555]"
                     />
                     <button
                         onClick={handleSend}

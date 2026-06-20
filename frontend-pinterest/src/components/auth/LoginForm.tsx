@@ -44,29 +44,25 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
                 <img src={logo} className="w-11 h-11" />
             </div>
 
-            {/* Title */}
-            <h2 className="text-2xl font-bold text-black tracking-[-0.5px]">Welcome in Esthetic</h2>
-            <p className="text-sm text-black  mb-5">Where style begins</p>
+
+            <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px]">Welcome in Esthetic</h2>
+            <p className="text-sm text-white dark:text-black mb-5">Where style begins</p>
 
             <form className="w-full space-y-3" onSubmit={handleSubmit}>
 
                 <div>
-                    <label className="block text-sm  text-black mb-1">Your gmail</label>
+                    <label className="block text-sm text-white dark:text-black mb-1">Your gmail</label>
                     <input
                         type="email"
                         placeholder="yourgmail@gmail.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none transition border ${
-                            email.includes("@") && email.includes(".")
-                                ? "border-[var(--color-btn-primary)]"
-                                : "border-[#A1A1A1]"
-                        }`}
+                        className={`w-full h-10 px-4 rounded-[5px] text-white dark:text-black text-sm outline-none transition border-[var(--color-btn-primary)] border`}
                     />
                 </div>
 
-                <label className="block text-sm text-black mb-1">Password</label>
+                <label className="block text-sm text-white dark:text-black mb-1">Password</label>
                 <div className="relative">
                     <input
                         type={showPassword ? "text" : "password"}
@@ -74,16 +70,12 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        className={`w-full h-10 px-4 pr-10 rounded-[5px] text-sm outline-none transition border ${
-                            hasMinLength && hasSymbol && hasNumber
-                                ? "border-[var(--color-btn-primary)]"
-                                : "border-[#A1A1A1]"
-                        }`}
+                        className={`w-full h-10 px-4 pr-10 rounded-[5px] text-white dark:text-black text-sm outline-none transition border border-[var(--color-btn-primary)]`}
                     />
                     <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#A1A1A1] hover:text-black transition"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#A1A1A1] hover:text-white dark:hover:text-black transition"
                     >
                         {showPassword ? (
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
