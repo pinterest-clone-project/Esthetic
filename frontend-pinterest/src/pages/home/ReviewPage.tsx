@@ -1,13 +1,21 @@
 import { useGetAllPinsQuery } from "../../services/pinService.ts";
 import PinCard from "@/components/ui/PinCard.tsx";
+import {useMemo} from "react";
 
-const PinCardSkeleton = () => (
+
+
+const PinCardSkeleton = ({ height }: { height: number }) => (
     <div className="break-inside-avoid mb-3 rounded-xl overflow-hidden bg-white/5 animate-pulse"
-         style={{ height: `${Math.floor(Math.random() * 120) + 160}px` }} />
+         style={{ height: `${height}px` }} />
 );
 
 const ReviewPage = () => {
     const { data: pins, isLoading, isError } = useGetAllPinsQuery();
+
+    const skeletonHeights = useMemo(
+        () => Array.from({ length: 12 }, () => Math.floor(Math.random() * 120) + 160),
+        []
+    );
 
     return (
         <div className="w-full min-h-full bg-white dark:bg-black px-6 py-6">
@@ -21,7 +29,7 @@ const ReviewPage = () => {
             {/* Masonry grid */}
             <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3">
                 {isLoading
-                    ? Array.from({ length: 12 }).map((_, i) => <PinCardSkeleton key={i} />)
+                    ? skeletonHeights.map((h, i) => <PinCardSkeleton key={i} height={h} />)
                     : pins?.map(pin => <PinCard key={pin.id} pin={pin} />)
                 }
             </div>
