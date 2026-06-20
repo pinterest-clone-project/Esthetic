@@ -8,10 +8,8 @@ import type {IPinResponse} from "@/types/pin/responses/IPinResponses.ts";
 export const pinService = api.injectEndpoints({
     endpoints: (builder) => ({
         getAllPins: builder.query<IPinSummaryResponse[], void>({
-            query: () => ({
-                url: 'Pins/getAll',
-                method: 'GET',
-            }),
+            query: () => ({ url: 'Pins/getAll', method: 'GET' }),
+            providesTags: ['AllPins'],
         }),
         getPinById: builder.query<IPinResponse, string>({
             query: (id) => ({
@@ -33,6 +31,7 @@ export const pinService = api.injectEndpoints({
                 method: 'PUT',
                 body: serialize(data),
             }),
+            invalidatesTags: ['MyPins', 'AllPins'],
         }),
         deletePin: builder.mutation<void, string>({
             query: (id) => ({

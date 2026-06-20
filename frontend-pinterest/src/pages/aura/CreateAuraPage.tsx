@@ -177,20 +177,20 @@ const CreateAuraPage = () => {
 
                 <div className="flex gap-10 items-start">
                     <div className="shrink-0 w-[200px] flex flex-col gap-1.5 relative" ref={categoryBoxRef}>
-                        <label className="text-white text-xs font-medium">Category</label>
+                        <label className="text-black dark:text-white text-xs font-medium">Category</label>
                         <button
                             type="button"
                             onClick={() => setCategoryOpen(p => !p)}
-                            className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-xs
+                            className="bg-white dark:bg-[#1e1e1e] border border-[#A1A1A1] dark:border-[#333] rounded-md px-3 h-9 text-xs
                                 outline-none focus:border-[#1DB954] transition-colors
                                 flex items-center justify-between text-left
                                 hover:border-[#4ade80]/50"
                         >
-                            <span className={`flex items-center gap-2 truncate ${selectedCategory ? "text-white" : "text-gray-500"}`}>
+                            <span className={`flex items-center gap-2 truncate ${selectedCategory ? "text-black dark:text-white" : "text-gray-500"}`}>
                                 {selectedCategory?.image && (
                                     <img src={`${APP_ENV.IMAGES_100_URL}${selectedCategory.image}`} alt="" className="w-5 h-5 rounded-full object-cover shrink-0" />
                                 )}
-                                {selectedCategory ? selectedCategory.name : "Choose Moodboard"}
+                                {selectedCategory ? selectedCategory.name : "Choose Category"}
                             </span>
                             <svg className={`w-3.5 h-3.5 text-gray-500 shrink-0 transition-transform ${categoryOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -198,7 +198,7 @@ const CreateAuraPage = () => {
                         </button>
 
                         {categoryOpen && (
-                            <div className="absolute top-full left-0 right-0 mt-1 z-20 bg-[#1e1e1e] border border-[#333] rounded-md shadow-2xl max-h-60 overflow-y-auto">
+                            <div className="absolute top-full left-0 right-0 mt-1 z-20 bg-white dark:bg-[#1e1e1e] border border-[#A1A1A1] dark:border-[#333] rounded-md shadow-2xl max-h-60 overflow-y-auto">
                                 {categoryId && (
                                     <button
                                         type="button"
@@ -214,7 +214,7 @@ const CreateAuraPage = () => {
                                         type="button"
                                         onClick={() => { setCategoryId(cat.id); setCategoryOpen(false); }}
                                         className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 transition-colors
-                                            ${cat.id === categoryId ? "bg-[#4ade80]/10 text-[#4ade80]" : "text-gray-300 hover:bg-white/5 hover:text-white"}`}
+                                            ${cat.id === categoryId ? "bg-[#4ade80]/10 text-[#4ade80]" : "text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white"}`}
                                     >
                                         {cat.image ? (
                                             <img src={`${APP_ENV.IMAGES_100_URL}${cat.image}`} alt="" className="w-6 h-6 rounded-full object-cover shrink-0" />

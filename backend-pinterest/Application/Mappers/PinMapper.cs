@@ -12,6 +12,7 @@ public partial class PinMapper
     public partial PinEntity ToEntity(CreatePinCommand src);
 
     [MapperIgnoreTarget(nameof(PinEntity.PinTags))]
+    [MapperIgnoreTarget(nameof(PinEntity.MediaUrl))]
     public partial PinEntity ToEntity(UpdatePinCommand src);
 
     [MapperIgnoreTarget(nameof(PinDTO.Tags))]

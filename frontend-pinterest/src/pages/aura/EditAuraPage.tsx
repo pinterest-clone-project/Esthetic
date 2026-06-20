@@ -36,6 +36,7 @@ const EditAuraPage = () => {
             setSourceUrl(pin.sourceUrl ?? "");
             setCategoryId(pin.categoryId ?? "");
             setTagIds(pin.tags.map(t => t.id));
+            setMediaUrl(pin.mediaUrl ?? "");
         }
     }, [pin]);
 
@@ -82,12 +83,12 @@ const EditAuraPage = () => {
         try {
             await updatePin({
                 id,
-                mediaUrl: mediaUrl || undefined,
                 title: title || undefined,
                 description: description || undefined,
                 sourceUrl: sourceUrl || undefined,
                 categoryId: categoryId || undefined,
                 tagIds: tagIds.length > 0 ? tagIds : undefined,
+                mediaUrl: mediaUrl,
             }).unwrap();
             navigate(`/aura/preview/${id}`);
         } catch (e) {
