@@ -1,23 +1,22 @@
 services:
   api:
-    image: jacobs51/esthetic-api:latest  
+    image: jacobs51/esthetic-api:latest
     container_name: esthetic-api
     environment:
       ASPNETCORE_ENVIRONMENT: Production
     volumes:
       - ./backend-pinterest/backend-pinterest/appsettings.Production.json:/app/appsettings.Production.json:ro
+      - /var/www/esthetic-images:/app/images
     depends_on:
       - redis
     restart: unless-stopped
-    network_mode: host   
-
+    network_mode: host
   web:
     image: jacobs51/esthetic-web:latest
     container_name: esthetic-web
     ports:
       - "5173:80"
     restart: unless-stopped
-
   redis:
     image: redis:latest
     container_name: redis_cache
@@ -26,6 +25,5 @@ services:
     volumes:
       - redis_data:/data
     restart: unless-stopped
-
 volumes:
   redis_data:
