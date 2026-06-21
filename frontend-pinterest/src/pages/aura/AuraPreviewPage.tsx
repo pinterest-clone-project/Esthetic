@@ -5,6 +5,7 @@ import { useGetMeQuery } from "../../services/accountService.ts";
 import { useLikeMutation, useUnlikeMutation } from "../../services/likeService.ts";
 import PinCard from "@/components/ui/PinCard.tsx";
 import BackButton from "@/components/ui/BackButton.tsx";
+import { APP_ENV } from "@/constants/env";
 
 const AuraPreviewPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -77,7 +78,7 @@ const AuraPreviewPage = () => {
                 {/* Image */}
                 <div className="shrink-0 w-[360px] rounded-2xl overflow-hidden shadow-2xl">
                     <img
-                        src={pin.mediaUrl ?? ""}
+                        src={pin.image ? `${APP_ENV.IMAGES_1200_URL}${pin.image}` : ""}
                         alt={pin.title ?? "Aura"}
                         className="w-full block"
                     />

@@ -7,9 +7,13 @@ public class CreatePinValidator : AbstractValidator<CreatePinCommand>
 {
     public CreatePinValidator()
     {
+        RuleFor(x => x)
+            .Must(x => x.ImageFile != null || !string.IsNullOrWhiteSpace(x.MediaUrl))
+            .WithMessage(ValidationMessages.PinImageRequired);
+
         RuleFor(x => x.MediaUrl)
-            .IsRequired(ValidationMessages.FieldMediaUrl)
-            .UrlRules(ValidationMessages.FieldMediaUrl);
+            .UrlRules(ValidationMessages.FieldMediaUrl)
+            .When(x => x.ImageFile == null && !string.IsNullOrWhiteSpace(x.MediaUrl));
 
         RuleFor(x => x.Title)
             .NameRules(ValidationMessages.FieldTitle)

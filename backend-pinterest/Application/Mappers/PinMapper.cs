@@ -9,10 +9,16 @@ namespace Application.Mappers;
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.None)]
 public partial class PinMapper
 {
+    [MapperIgnoreTarget(nameof(PinEntity.PinTags))]
+    [MapperIgnoreTarget(nameof(PinEntity.Image))]
+    [MapperIgnoreSource(nameof(CreatePinCommand.ImageFile))]
+    [MapperIgnoreSource(nameof(CreatePinCommand.MediaUrl))]
     public partial PinEntity ToEntity(CreatePinCommand src);
 
     [MapperIgnoreTarget(nameof(PinEntity.PinTags))]
-    [MapperIgnoreTarget(nameof(PinEntity.MediaUrl))]
+    [MapperIgnoreTarget(nameof(PinEntity.Image))]
+    [MapperIgnoreSource(nameof(UpdatePinCommand.ImageFile))]
+    [MapperIgnoreSource(nameof(UpdatePinCommand.MediaUrl))]
     public partial PinEntity ToEntity(UpdatePinCommand src);
 
     [MapperIgnoreTarget(nameof(PinDTO.Tags))]
@@ -50,5 +56,8 @@ public partial class PinMapper
     }
     
     [MapperIgnoreTarget(nameof(PinEntity.PinTags))]
+    [MapperIgnoreTarget(nameof(PinEntity.Image))]
+    [MapperIgnoreSource(nameof(UpdatePinCommand.ImageFile))]
+    [MapperIgnoreSource(nameof(UpdatePinCommand.MediaUrl))]
     public partial void Patch(UpdatePinCommand src, PinEntity dest);
 }

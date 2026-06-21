@@ -1,3 +1,4 @@
+using Application.Interfaces;
 using Domain.Entities.PinTag;
 using Domain.Entities.Pin;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,7 @@ using Application.Models.SeedDTO;
 namespace Infrastructure.Data.Seed.Seeders;
 public class PinSeeder
 {
-    public static async Task SeedAsync(AppDbContext context)
+    public static async Task SeedAsync(AppDbContext context, IImageService imageService)
     {
         if (!context.Pins.Any())
         {
@@ -40,7 +41,6 @@ public class PinSeeder
                                 CreatorId = defaultCreator.Id,
                                 Title = pin.Title,
                                 Description = pin.Description,
-                                MediaUrl = pin.MediaUrl,
                                 SourceUrl = pin.SourceUrl,
                                 CategoryId = pin.CategoryName != null
                                     ? allCategories.FirstOrDefault(c => c.Name == pin.CategoryName)?.Id
@@ -52,6 +52,20 @@ public class PinSeeder
                                         .ToList()
                                     : null
                             };
+
+                            if (!string.IsNullOrWhiteSpace(pin.MediaUrl))
+                            {
+                                try
+                                {
+                                    entity.Image = await imageService.SaveImageFromUrlAsync(pin.MediaUrl);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Failed to download pin image: {0}", ex.Message);
+                                    entity.Image = string.Empty;
+                                }
+                            }
+
                             await context.Pins.AddAsync(entity);
                         }
                         await context.SaveChangesAsync();

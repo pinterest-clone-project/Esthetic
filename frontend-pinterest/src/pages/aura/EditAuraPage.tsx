@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef, useEffect } from "react";
-import { useGetPinByIdQuery, useUpdatePinMutation } from "../../services/pinService.ts";
-import { useGetAllCategoriesQuery } from "../../services/categoryService.ts";
-import { useGetAllTagsQuery } from "../../services/tagService.ts";
+import { useGetPinByIdQuery, useUpdatePinMutation } from "@/services/pinService.ts";
+import { useGetAllCategoriesQuery } from "@/services/categoryService.ts";
+import { useGetAllTagsQuery } from "@/services/tagService.ts";
 import { APP_ENV } from "@/constants/env";
 import { useNavigate, useParams } from "react-router";
 
@@ -14,12 +14,14 @@ const EditAuraPage = () => {
     const { data: categories } = useGetAllCategoriesQuery();
     const { data: tags } = useGetAllTagsQuery();
 
+    const [imageFile, setImageFile] = useState<File | null>(null);
     const [mediaUrl, setMediaUrl] = useState("");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [sourceUrl, setSourceUrl] = useState("");
     const [categoryId, setCategoryId] = useState("");
     const [tagIds, setTagIds] = useState<string[]>([]);
+    const [previewUrl, setPreviewUrl] = useState("");
 
     const [tagQuery, setTagQuery] = useState("");
     const [tagFocused, setTagFocused] = useState(false);
@@ -28,8 +30,6 @@ const EditAuraPage = () => {
     const [categoryOpen, setCategoryOpen] = useState(false);
     const categoryBoxRef = useRef<HTMLDivElement>(null);
 
-
-    // Populate form once the pin loads
     useEffect(() => {
         if (pin) {
             setTitle(pin.title ?? "");
@@ -37,7 +37,7 @@ const EditAuraPage = () => {
             setSourceUrl(pin.sourceUrl ?? "");
             setCategoryId(pin.categoryId ?? "");
             setTagIds(pin.tags.map(t => t.id));
-            setMediaUrl(pin.mediaUrl ?? "");
+            setPreviewUrl(pin.image ? `${APP_ENV.IMAGES_800_URL}${pin.image}` : "");
         }
     }, [pin]);
 
@@ -70,6 +70,25 @@ const EditAuraPage = () => {
         return () => document.removeEventListener("mousedown", handler);
     }, []);
 
+    useEffect(() => {
+        if (!previewUrl.startsWith("blob:")) return;
+        return () => URL.revokeObjectURL(previewUrl);
+    }, [previewUrl]);
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setImageFile(file);
+        setMediaUrl("");
+        setPreviewUrl(URL.createObjectURL(file));
+    };
+
+    const handleMediaUrlBlur = () => {
+        if (!mediaUrl.trim()) return;
+        setImageFile(null);
+        setPreviewUrl(mediaUrl);
+    };
+
     const addTag = (tagId: string) => {
         setTagIds(prev => [...prev, tagId]);
         setTagQuery("");
@@ -89,7 +108,8 @@ const EditAuraPage = () => {
                 sourceUrl: sourceUrl || undefined,
                 categoryId: categoryId || undefined,
                 tagIds: tagIds.length > 0 ? tagIds : undefined,
-                mediaUrl: mediaUrl,
+                imageFile: imageFile ?? undefined,
+                mediaUrl: !imageFile && mediaUrl.trim() ? mediaUrl.trim() : undefined,
             }).unwrap();
             navigate(`/aura/preview/${id}`);
         } catch (e) {
@@ -116,7 +136,6 @@ const EditAuraPage = () => {
 
     return (
         <div className="w-full min-h-full px-10 py-8 flex flex-col items-center">
-            {/* Top bar */}
             <div className="flex items-center justify-between mb-8 w-full max-w-[580px]">
                 <h1 className="text-white text-sm font-medium tracking-wide">Edit Aura</h1>
                 <button
@@ -129,17 +148,14 @@ const EditAuraPage = () => {
                 </button>
             </div>
 
-            {/* Main layout */}
             <div className="w-full max-w-[580px] flex flex-col gap-5">
 
-                {/* Top row: image + Name/SourceUrl */}
                 <div className="flex gap-10 items-start">
-                    {/* Left — image preview (read-only, media can't be changed) */}
-                    <div className="shrink-0">
+                    <div className="shrink-0 flex flex-col gap-2">
                         <div className="w-[200px] min-h-[200px] rounded-2xl overflow-hidden bg-[#1e1e1e] border border-[#333] flex items-center justify-center">
-                            {mediaUrl ? (
+                            {previewUrl ? (
                                 <img
-                                    src={mediaUrl}
+                                    src={previewUrl}
                                     alt="Preview"
                                     className="w-full h-full object-cover"
                                     onError={(e) => { e.currentTarget.style.display = "none"; }}
@@ -154,10 +170,15 @@ const EditAuraPage = () => {
                                 </div>
                             )}
                         </div>
+                        <label className="text-white text-xs font-medium cursor-pointer text-center">
+                            <span className="inline-block px-3 py-1.5 rounded-md border border-[#333] hover:border-[#1DB954] transition-colors">
+                                Upload image
+                            </span>
+                            <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+                        </label>
                     </div>
 
                     <div className="w-[340px] flex flex-col gap-5">
-                        {/* Name */}
                         <div className="flex flex-col gap-1.5">
                             <label className="text-white text-xs font-medium">Name</label>
                             <input
@@ -171,18 +192,18 @@ const EditAuraPage = () => {
                         </div>
 
                         <div className="flex flex-col gap-1.5">
-                            <label className="text-white text-xs font-medium">Url</label>
+                            <label className="text-white text-xs font-medium">Image Url</label>
                             <input
                                 type="text"
                                 value={mediaUrl}
                                 onChange={e => setMediaUrl(e.target.value)}
-                                placeholder="Add Url"
+                                onBlur={handleMediaUrlBlur}
+                                placeholder="Direct link to new image"
                                 className="bg-[#1e1e1e] border border-[#333] rounded-md px-3 h-9 text-white text-xs
                                 placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors"
                             />
                         </div>
 
-                        {/* Source URL */}
                         <div className="flex flex-col gap-1.5">
                             <label className="text-white text-xs font-medium">Source Url</label>
                             <input
@@ -254,7 +275,6 @@ const EditAuraPage = () => {
                         )}
                     </div>
 
-                    {/* Tags — under Name/SourceUrl column */}
                     <div className="w-[340px] flex flex-col gap-1.5 relative" ref={tagBoxRef}>
                         <label className="text-white text-xs font-medium">Tags</label>
                         <input
@@ -307,7 +327,6 @@ const EditAuraPage = () => {
                     </div>
                 </div>
 
-                {/* Description — full width, bigger */}
                 <div className="flex flex-col gap-1.5">
                     <label className="text-white text-xs font-medium">Description</label>
                     <textarea

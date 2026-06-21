@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef, useEffect } from "react";
-import { useCreatePinMutation } from "../../services/pinService.ts";
-import { useGetAllCategoriesQuery } from "../../services/categoryService.ts";
-import { useGetAllTagsQuery } from "../../services/tagService.ts";
+import { useCreatePinMutation } from "@/services/pinService.ts";
+import { useGetAllCategoriesQuery } from "@/services/categoryService.ts";
+import { useGetAllTagsQuery } from "@/services/tagService.ts";
 import {APP_ENV} from "@/constants/env";
 import { useNavigate } from "react-router";
 import BackButton from "@/components/ui/BackButton.tsx";
@@ -12,6 +12,7 @@ const CreateAuraPage = () => {
     const { data: categories } = useGetAllCategoriesQuery();
     const { data: tags } = useGetAllTagsQuery();
 
+    const [imageFile, setImageFile] = useState<File | null>(null);
     const [mediaUrl, setMediaUrl] = useState("");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -42,6 +43,7 @@ const CreateAuraPage = () => {
     }, [tags, tagIds, tagQuery]);
 
     const selectedCategory = categories?.find(c => c.id === categoryId);
+    const canSubmit = imageFile !== null || mediaUrl.trim() !== "";
 
     useEffect(() => {
         const handler = (e: MouseEvent) => {
@@ -56,7 +58,22 @@ const CreateAuraPage = () => {
         return () => document.removeEventListener("mousedown", handler);
     }, []);
 
+    useEffect(() => {
+        if (!previewUrl.startsWith("blob:")) return;
+        return () => URL.revokeObjectURL(previewUrl);
+    }, [previewUrl]);
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setImageFile(file);
+        setMediaUrl("");
+        setPreviewUrl(URL.createObjectURL(file));
+    };
+
     const handleMediaUrlBlur = () => {
+        if (!mediaUrl.trim()) return;
+        setImageFile(null);
         setPreviewUrl(mediaUrl);
     };
 
@@ -70,10 +87,11 @@ const CreateAuraPage = () => {
     };
 
     const handleSubmit = async () => {
-        if (!mediaUrl) return;
+        if (!canSubmit) return;
         try {
             await createPin({
-                mediaUrl,
+                imageFile: imageFile ?? undefined,
+                mediaUrl: !imageFile && mediaUrl.trim() ? mediaUrl.trim() : undefined,
                 title: title || undefined,
                 description: description || undefined,
                 sourceUrl: sourceUrl || undefined,
@@ -96,7 +114,7 @@ const CreateAuraPage = () => {
                 </div>
                 <button
                     onClick={handleSubmit}
-                    disabled={isLoading || !mediaUrl}
+                    disabled={isLoading || !canSubmit}
                     className="bg-[#4ade80] hover:bg-[#22c55e] disabled:opacity-40 disabled:cursor-not-allowed
             text-black text-xs font-semibold px-5 py-2 rounded-md transition-colors"
                 >
@@ -104,13 +122,10 @@ const CreateAuraPage = () => {
                 </button>
             </div>
 
-            {/* Main layout */}
             <div className="w-full max-w-[580px] flex flex-col gap-5">
 
-                {/* Top row: image + Name/Url/SourceUrl */}
                 <div className="flex gap-10 items-start">
-                    {/* Left — image preview */}
-                    <div className="shrink-0">
+                    <div className="shrink-0 flex flex-col gap-2">
                         <div className="w-[200px] min-h-[200px] rounded-2xl overflow-hidden bg-white dark:bg-[#1e1e1e] border border-[#A1A1A1] dark:border-[#333] flex items-center justify-center">
                             {previewUrl ? (
                                 <img
@@ -129,11 +144,15 @@ const CreateAuraPage = () => {
                                 </div>
                             )}
                         </div>
+                        <label className="text-black dark:text-white text-xs font-medium cursor-pointer text-center">
+                            <span className="inline-block px-3 py-1.5 rounded-md border border-[#A1A1A1] dark:border-[#333] hover:border-[#1DB954] transition-colors">
+                                Upload image
+                            </span>
+                            <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+                        </label>
                     </div>
 
-                    {/* Right — Name, Url, Source Url */}
                     <div className="w-[340px] flex flex-col gap-5">
-                        {/* Name */}
                         <div className="flex flex-col gap-1.5">
                             <label className="text-black dark:text-white text-xs font-medium">Name</label>
                             <input
@@ -146,21 +165,19 @@ const CreateAuraPage = () => {
                             />
                         </div>
 
-                        {/* URL */}
                         <div className="flex flex-col gap-1.5">
-                            <label className="text-black dark:text-white text-xs font-medium">Url</label>
+                            <label className="text-black dark:text-white text-xs font-medium">Image Url</label>
                             <input
                                 type="text"
                                 value={mediaUrl}
                                 onChange={e => setMediaUrl(e.target.value)}
                                 onBlur={handleMediaUrlBlur}
-                                placeholder="Add Url"
+                                placeholder="Direct link to image"
                                 className="bg-white dark:bg-[#1e1e1e] border border-[#A1A1A1] dark:border-[#333] rounded-md px-3 h-9 text-black dark:text-white text-xs
                                     placeholder:text-gray-600 outline-none focus:border-[#1DB954] transition-colors"
                             />
                         </div>
 
-                        {/* Source URL */}
                         <div className="flex flex-col gap-1.5">
                             <label className="text-black dark:text-white text-xs font-medium">Source Url</label>
                             <input
@@ -233,7 +250,6 @@ const CreateAuraPage = () => {
                         )}
                     </div>
 
-                    {/* Tags — under Name/Url/SourceUrl column */}
                     <div className="w-[340px] flex flex-col gap-1.5 relative" ref={tagBoxRef}>
                         <label className="text-black dark:text-white text-xs font-medium">Tags</label>
 
@@ -291,7 +307,6 @@ const CreateAuraPage = () => {
                     </div>
                 </div>
 
-                {/* Description — full width, bigger */}
                 <div className="flex flex-col gap-1.5">
                     <label className="text-black dark:text-white text-xs font-medium">Description</label>
                     <textarea

@@ -23,7 +23,7 @@ export const pinService = api.injectEndpoints({
                 method: 'POST',
                 body: serialize(data),
             }),
-            invalidatesTags: ['MyPins'],
+            invalidatesTags: ['MyPins', 'AllPins'],
         }),
         updatePin: builder.mutation<void, IUpdatePinRequest>({
             query: ({ id, ...data }) => ({
@@ -38,6 +38,7 @@ export const pinService = api.injectEndpoints({
                 url: `Pins/delete/${id}`,
                 method: 'DELETE',
             }),
+            invalidatesTags: ['MyPins', 'AllPins'],
         }),
         getMyPins: builder.query<IPinSummaryResponse[], void>({
             query: () => ({
