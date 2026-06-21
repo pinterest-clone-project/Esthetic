@@ -3,7 +3,6 @@ import searchIconDark from "../../assets/icons/search-vector-dark.svg";
 import searchIconLight from "../../assets/icons/search-vector-light.svg";
 import Button from "@/components/button/Button.tsx";
 import {useEffect, useRef, useState} from "react";
-import Modal from "@/components/ui/Modal.tsx";
 import LoginForm from "@/components/auth/LoginForm.tsx";
 import RegisterForm from "@/components/auth/RegisterForm.tsx";
 import {useAppDispatch, useAppSelector} from "@/store";
@@ -16,7 +15,7 @@ import {api} from "@/services/api.ts";
 import {selectIsAdmin} from "@/store/selectors/authSelectors.ts";
 import NotificationBell from "@/components/header/NotificationBell.tsx";
 import {useTheme} from "@/context/ThemeContext.tsx";
-
+import Modal from "@/components/ui/Modal.tsx";
 
 type ModalType = "login" | "signup" | null;
 
@@ -112,7 +111,8 @@ const Header: React.FC = () => {
                             <div className="relative" ref={dropdownRef}>
                                 <div className="flex items-center gap-1">
                                     <Link to="/profile">
-                                        <div className="w-11 h-11 rounded-full flex items-center justify-center overflow-hidden bg-[var(--color-btn-primary)]">
+                                        <div  className={`w-11 h-11 rounded-full flex items-center justify-center overflow-hidden
+                                            ${user.image ? "" : "bg-[var(--color-btn-primary)]"}`}>
                                             {user.image ? (
                                                 <img
                                                     src={`${APP_ENV.IMAGES_100_URL}${user.image}`}

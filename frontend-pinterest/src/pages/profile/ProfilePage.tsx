@@ -103,7 +103,7 @@ if (isLoading) return <p>Завантаження...</p>;
                     <div className="relative group cursor-pointer">
                         <div className="w-20 h-20 rounded-full bg-[#2a2a2a] border-2 border-[#1DB954] overflow-hidden">
                             {me?.image
-                                ? <img src={`${APP_ENV.IMAGES_100_URL}${me.image}`} className="w-full h-full object-cover" />
+                                ? <img src={`${APP_ENV.IMAGES_800_URL}${me.image}`} className="w-full h-full object-cover" />
                                 : <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1DB954" strokeWidth="1.5" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
                             }
                         </div>

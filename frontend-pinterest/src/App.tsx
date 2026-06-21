@@ -1,5 +1,6 @@
 import {Navigate, Route, Routes} from "react-router";
 import CreateAuraPage from "./pages/aura/CreateAuraPage.tsx";
+import EditAuraPage from "./pages/aura/EditAuraPage.tsx";
 import AuraPreviewPage from "./pages/aura/AuraPreviewPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
 import Layout from "@/layouts/Layout.tsx";
@@ -92,7 +93,18 @@ const App = () => {
                         <Route path="/">
                             <Route index element={<RootPage />} />
                             <Route path="review" element={<ReviewPage />} />
+                        </Route>
 
+                        <Route element={<PrivateRoute/>}>
+                            <Route path="/profile" element={<ProfilePage/>}/>
+                            <Route path="aura/">
+                                <Route path="edit/:id" element={<EditAuraPage/>}/>
+                                <Route path="create" element={<CreateAuraPage/>}/>
+                                <Route path="preview/:id" element={<AuraPreviewPage/>}/>
+                            </Route>
+                            <Route path="moodboard/">
+                                <Route path="preview/:id" element={<MoodboardPreviewPage/>}/>
+                            </Route>
                             <Route element={<PrivateRoute />}>
                                 <Route path="/profile" element={<ProfilePage />} />
 
