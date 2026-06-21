@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef, useEffect } from "react";
-import { useCreatePinMutation } from "../../services/pinService.ts";
-import { useGetAllCategoriesQuery } from "../../services/categoryService.ts";
-import { useGetAllTagsQuery } from "../../services/tagService.ts";
+import { useCreatePinMutation } from "@/services/pinService.ts";
+import { useGetAllCategoriesQuery } from "@/services/categoryService.ts";
+import { useGetAllTagsQuery } from "@/services/tagService.ts";
 import {APP_ENV} from "@/constants/env";
 import { useNavigate } from "react-router";
 import BackButton from "@/components/ui/BackButton.tsx";

@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef, useEffect } from "react";
-import { useGetPinByIdQuery, useUpdatePinMutation } from "../../services/pinService.ts";
-import { useGetAllCategoriesQuery } from "../../services/categoryService.ts";
-import { useGetAllTagsQuery } from "../../services/tagService.ts";
+import { useGetPinByIdQuery, useUpdatePinMutation } from "@/services/pinService.ts";
+import { useGetAllCategoriesQuery } from "@/services/categoryService.ts";
+import { useGetAllTagsQuery } from "@/services/tagService.ts";
 import { APP_ENV } from "@/constants/env";
 import { useNavigate, useParams } from "react-router";
 
