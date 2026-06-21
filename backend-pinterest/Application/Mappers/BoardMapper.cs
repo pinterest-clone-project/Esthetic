@@ -35,7 +35,7 @@ public partial class BoardMapper
         boardPins
             .OrderByDescending(bp => bp.CreatedAt)
             .Take(4)
-            .Select(bp => bp.Pin.MediaUrl)
-            .Where(url => url != null)
-            .ToList()!;
+            .Select(bp => bp.Pin.Image)
+            .Where(image => !string.IsNullOrEmpty(image))
+            .ToList();
 }

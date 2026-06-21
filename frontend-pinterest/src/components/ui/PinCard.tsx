@@ -4,6 +4,7 @@ import type { IPinSummaryResponse } from "../../types/pin/responses/IPinSummaryR
 import { useGetMeQuery } from "../../services/accountService.ts";
 import { useDeletePinMutation } from "../../services/pinService.ts";
 import { useLikeMutation, useUnlikeMutation } from "../../services/likeService.ts";
+import { APP_ENV } from "@/constants/env";
 
 const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -60,7 +61,7 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
             onClick={() => navigate(`/aura/preview/${pin.id}`)}
         >
             <img
-                src={pin.mediaUrl ?? ""}
+                src={pin.image ? `${APP_ENV.IMAGES_800_URL}${pin.image}` : ""}
                 alt={pin.title ?? "Pin"}
                 className="w-full block rounded-xl transition-transform duration-300 group-hover:scale-[1.02]"
                 loading="lazy"

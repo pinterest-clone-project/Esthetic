@@ -10,6 +10,10 @@ public class UpdatePinValidator : AbstractValidator<UpdatePinCommand>
         RuleFor(x => x.Id)
             .IdRules();
 
+        RuleFor(x => x.MediaUrl)
+            .UrlRules(ValidationMessages.FieldMediaUrl)
+            .When(x => !string.IsNullOrWhiteSpace(x.MediaUrl));
+
         RuleFor(x => x.Title)
             .NameRules(ValidationMessages.FieldTitle)
             .When(x => x.Title != null);

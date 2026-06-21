@@ -34,6 +34,7 @@ public class PinsController(IMediator mediator) : ControllerBase
     }
 
 	[HttpPost("create")]
+	[Consumes("multipart/form-data")]
 	public async Task<IActionResult> Create([FromForm] CreatePinCommand command)
 	{
         var commandWithCreator = command with { CreatorId = CurrentUserId };
@@ -42,6 +43,7 @@ public class PinsController(IMediator mediator) : ControllerBase
 	}
 
     [HttpPut("update/{id}")]
+    [Consumes("multipart/form-data")]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromForm] UpdatePinCommand request)
     {
         var command = request with { Id = id };

@@ -1,5 +1,6 @@
 export interface ICreatePinRequest {
-    mediaUrl: string;
+    imageFile?: File;
+    mediaUrl?: string;
     title?: string;
     description?: string;
     sourceUrl?: string;
