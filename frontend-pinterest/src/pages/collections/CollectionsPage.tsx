@@ -39,19 +39,9 @@ const CollectionsPage = () => {
     return (
         <div className="min-h-screen mt-4 sm:mt-11 text-black dark:text-white px-4 sm:px-8 py-6 sm:py-10">
             <div className="flex flex-col items-center mb-6 gap-3">
+                <h1 className="text-2xl sm:text-4xl">Your collection</h1>
                 <div className="flex items-center justify-between w-full">
-                    <h1 className="text-2xl sm:text-4xl">Your collection</h1>
-                    <button
-                        onClick={() => {
-                            if (activeTab === "Moodboard") setShowCreateMoodboard(true);
-                            if (activeTab === "Aura") navigate("/aura/create");
-                        }}
-                        className="px-5 py-2 rounded-lg bg-[#A2A2A2] dark:bg-[#535353] text-black dark:text-white text-sm hover:bg-[#D1D1D1] dark:hover:bg-[#A2A2A2] transition-colors duration-150"
-                    >
-                        Create
-                    </button>
-                </div>
-                <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4">
                     {tabs.map((tab) => (
                         <button
                             key={tab}
@@ -65,9 +55,18 @@ const CollectionsPage = () => {
                             {tab}
                         </button>
                     ))}
+                    </div>
+                    <button
+                        onClick={() => {
+                            if (activeTab === "Moodboard") setShowCreateMoodboard(true);
+                            if (activeTab === "Aura") navigate("/aura/create");
+                        }}
+                        className="px-5 py-2 rounded-lg bg-[#A2A2A2] dark:bg-[#535353] text-black dark:text-white text-sm hover:bg-[#D1D1D1] dark:hover:bg-[#A2A2A2] transition-colors duration-150"
+                    >
+                        Create
+                    </button>
                 </div>
             </div>
-
 
 
             {activeTab === "Aura" &&
