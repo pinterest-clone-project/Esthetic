@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router";
 import { useAppSelector } from "@/store";
+import { useTheme } from "@/context/ThemeContext";
 import homeIcon from "@/assets/icons/home_icon.svg";
 import collectionIcon from "@/assets/icons/collection_icon.svg";
 import addIcon from "@/assets/icons/add_icon.svg";
@@ -9,7 +10,8 @@ import userIcon from "@/assets/icons/user_icon.svg";
 
 const greenFilter =
     "brightness(0) saturate(100%) invert(58%) sepia(61%) saturate(450%) hue-rotate(95deg) brightness(95%)";
-const defaultFilter = "brightness(0) opacity(0.5)";
+const defaultFilterLight = "brightness(0) opacity(0.4)";
+const defaultFilterDark = "brightness(0) invert(1) opacity(0.4)";
 
 interface NavItem {
     label: string;
@@ -30,6 +32,8 @@ const BottomNav = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const user = useAppSelector((state) => state.auth.user);
+    const { theme } = useTheme();
+    const defaultFilter = theme === "dark" ? defaultFilterDark : defaultFilterLight;
 
     if (!user) return null;
 
