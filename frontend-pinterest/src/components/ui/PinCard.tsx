@@ -5,6 +5,7 @@ import { useGetMeQuery } from "../../services/accountService.ts";
 import { useDeletePinMutation } from "../../services/pinService.ts";
 import { useLikeMutation, useUnlikeMutation } from "../../services/likeService.ts";
 import { APP_ENV } from "@/constants/env";
+import SaveModal from "./SaveModal.tsx";
 
 const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -17,6 +18,7 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     const [deletePin] = useDeletePinMutation();
     const [like] = useLikeMutation();
     const [unlike] = useUnlikeMutation();
+    const [saveModalOpen, setSaveModalOpen] = useState(false);
 
     const isOwner = !!me && me.id === pin.creatorId;
 
@@ -45,8 +47,24 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     };
 
     const menuItems = [
-        { label: "Save", onClick: (e: React.MouseEvent) => e.stopPropagation() },
-        { label: "Share", onClick: (e: React.MouseEvent) => e.stopPropagation() },
+        {
+            label: "Save",
+            onClick: (e: React.MouseEvent) => {
+                e.stopPropagation();
+                setMenuOpen(false);
+                setSaveModalOpen(true);
+            }
+        },
+        {
+            label: "Share",
+            onClick: (e: React.MouseEvent) => {
+                e.stopPropagation();
+                navigator.clipboard.writeText(
+                    `${window.location.origin}/aura/preview/${pin.id}`
+                );
+                setMenuOpen(false);
+            }
+        },
         ...(isOwner ? [
             { label: "Edit", onClick: handleEdit },
             { label: "Delete", onClick: handleDelete },
@@ -115,6 +133,9 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
                     </div>
                 )}
             </div>
+        {saveModalOpen && (
+            <SaveModal pinId={pin.id} onClose={() => setSaveModalOpen(false)} />
+        )}
         </div>
     );
 };

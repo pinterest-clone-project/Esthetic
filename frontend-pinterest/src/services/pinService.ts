@@ -47,6 +47,22 @@ export const pinService = api.injectEndpoints({
             }),
             providesTags: ['MyPins'],
         }),
+        savePin: builder.mutation<void, { pinId: string; boardId: string; }>({
+            query: ({ pinId, ...body }) => ({
+                url: `Pins/${pinId}/save`,
+                method: 'POST',
+                body,
+            }),
+            invalidatesTags: ['MyMoodboards'],
+        }),
+        unsavePin: builder.mutation<void, { pinId: string; boardId: string }>({
+            query: ({ pinId, ...body }) => ({
+                url: `Pins/${pinId}/unsave`,
+                method: 'DELETE',
+                body,
+            }),
+            invalidatesTags: ['MyMoodboards'],
+        }),
     }),
 });
 
@@ -57,4 +73,6 @@ export const {
     useUpdatePinMutation,
     useDeletePinMutation,
     useGetMyPinsQuery,
+    useSavePinMutation,
+    useUnsavePinMutation,
 } = pinService;
