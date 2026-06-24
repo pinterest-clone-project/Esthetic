@@ -11,7 +11,7 @@ interface RegisterFormProps {
     onSuccess?: () => void;
 }
 
-type Step = 1 | 2 | 3;
+type Step = 1 | 2 | 3 | 4;
 
 
 interface FormData {
@@ -23,6 +23,7 @@ interface FormData {
     birthDate: string;
     bio: string;
     phoneNumber: string;
+    gender: "Male" | "Female" | null;
     imageFile: File | null;
 }
 
@@ -39,6 +40,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
         bio: "",
         phoneNumber: "",
         imageFile: null,
+        gender: null,
     });
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -85,6 +87,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 BirthDate: formData.birthDate,
                 Bio: formData.bio || undefined,
                 PhoneNumber: formData.phoneNumber || undefined,
+                Gender: formData.gender || undefined,
                 ImageFile: formData.imageFile || undefined,
             }).unwrap();
             dispatch(setUser(account));
@@ -116,7 +119,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
     const StepIndicator = () => (
         <div className="flex w-full gap-1 mb-6">
-            {([1, 2, 3] as Step[]).map((s) => (
+            {([1, 2, 3, 4] as Step[]).map((s) => (
                 <div
                     key={s}
                     className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
@@ -331,6 +334,54 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
             {step === 3 && (
                 <div className="w-full">
                     <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] text-center">
+                        What is your gender?
+                    </h2>
+                    <p className="text-sm text-white dark:text-black mt-1 mb-5 text-center">
+                        This information will always be private.
+                    </p>
+
+                    <div className="space-y-3">
+                        <Button
+                            type="button"
+                            variant="primary"
+                            fullWidth
+                            radius={5}
+                            onClick={() => {
+                                setFormData((prev) => ({ ...prev, gender: "Male" }));
+                                setStep(4);
+                            }}
+                        >
+                            Male
+                        </Button>
+
+                        <Button
+                            type="button"
+                            variant="secondary"
+                            fullWidth
+                            radius={5}
+                            onClick={() => {
+                                setFormData((prev) => ({ ...prev, gender: "Female" }));
+                                setStep(4);
+                            }}
+                        >
+                            Female
+                        </Button>
+
+                        <button
+                            type="button"
+                            onClick={() => setStep(2)}
+                            className="w-full text-center text-sm text-[#A1A1A1] hover:text-white dark:hover:text-black transition mt-1"
+                        >
+                            ← Back
+                        </button>
+                    </div>
+                </div>
+            )}
+
+
+            {step === 4 && (
+                <div className="w-full">
+                    <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] text-center">
                         Almost done!
                     </h2>
                     <p className="text-sm text-white dark:text-black mt-1 mb-5 text-center">
@@ -397,7 +448,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
                         <button
                             type="button"
-                            onClick={() => setStep(2)}
+                            onClick={() => setStep(3)}
                             className="w-full text-center text-sm text-[#A1A1A1] hover:text-white dark:hover:text-black transition mt-1"
                         >
                             ← Back
