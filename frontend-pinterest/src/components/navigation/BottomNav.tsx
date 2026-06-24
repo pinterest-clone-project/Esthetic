@@ -21,7 +21,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
     { label: "Home", icon: homeIcon, path: "/" },
-    { label: "Chat", icon: "", path: "__chat__" },
+    { label: "Chat", icon: "", path: "/chat" },
     { label: "Create", icon: addIcon, path: "/aura/create", isCreate: true },
     { label: "Collections", icon: collectionIcon, path: "/collections/aura" },
     { label: "Profile", icon: userIcon, path: "/profile" },
@@ -37,10 +37,6 @@ const BottomNav = () => {
     if (!user) return null;
 
     const handleClick = (item: NavItem) => {
-        if (item.path === "__chat__") {
-            window.dispatchEvent(new CustomEvent("open-chat"));
-            return;
-        }
         navigate(item.path);
     };
 
