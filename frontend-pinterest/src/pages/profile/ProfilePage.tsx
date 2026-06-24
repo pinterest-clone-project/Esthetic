@@ -96,8 +96,8 @@ const onSubmit = async (formValues: FormValues) => {
 if (isLoading) return <p>Завантаження...</p>;
 
     return (
-        <div className="flex justify-center py-8">
-            <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-[680px] px-6 text-black dark:text-white">
+        <div className="flex justify-center py-4 sm:py-8">
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-[680px] px-3 sm:px-6 text-black dark:text-white">
 
                 <div className="flex items-center gap-5 mb-8">
                     <div className="relative group cursor-pointer">
@@ -118,7 +118,7 @@ if (isLoading) return <p>Завантаження...</p>;
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">First name</label>
                         <input {...register("firstName")} placeholder="John"
@@ -139,7 +139,7 @@ if (isLoading) return <p>Завантаження...</p>;
                               className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] resize-none transition" />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">Email</label>
                         <input {...register("email")} placeholder="john@example.com"
@@ -153,7 +153,7 @@ if (isLoading) return <p>Завантаження...</p>;
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">Gender</label>
                         <select {...register("gender", { valueAsNumber: true })}
@@ -172,7 +172,7 @@ if (isLoading) return <p>Завантаження...</p>;
                 </div>
 
                 {/* Private + Save */}
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-center justify-between gap-3">
                     <label className="flex items-center gap-3 cursor-pointer">
                         <input {...register("isPrivate")} type="checkbox" className="accent-[#1DB954] w-4 h-4" />
                         <span className="text-sm text-[#A1A1A1]">Private account</span>
