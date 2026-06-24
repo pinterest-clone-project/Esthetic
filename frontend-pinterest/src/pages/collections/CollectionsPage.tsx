@@ -46,7 +46,7 @@ const CollectionsPage = () => {
                             if (activeTab === "Moodboard") setShowCreateMoodboard(true);
                             if (activeTab === "Aura") navigate("/aura/create");
                         }}
-                        className="absolute right-0 px-5 py-2 rounded-lg bg-[#A2A2A2] dark:bg-[#535353] text-black dark:text-white text-sm hover:bg-[#D1D1D1] dark:hover:bg-[#A2A2A2] transition-colors duration-150"
+                        className="hidden md:block absolute right-0 px-5 py-2 rounded-lg bg-[#A2A2A2] dark:bg-[#535353] text-black dark:text-white text-sm hover:bg-[#D1D1D1] dark:hover:bg-[#A2A2A2] transition-colors duration-150"
                     >
                         Create
                     </button>
