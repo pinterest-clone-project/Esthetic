@@ -30,6 +30,10 @@ const AuraPreviewPage = () => {
     const [liked, setLiked] = useState(false);
     const [likesCount, setLikesCount] = useState<number | null>(null);
 
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "instant" });
+    }, [id]);
+
     const isOwner = me?.id === pin?.creatorId;
     const suggestions = allPins?.filter(p => p.id !== id) ?? [];
 
@@ -167,7 +171,7 @@ const AuraPreviewPage = () => {
                             href={pin.sourceUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs text-gray-600 hover:text-gray-400 underline underline-offset-2 transition-colors truncate"
+                            className="text-xs text-gray-600 hover:text-gray-400 underline underline-offset-2 transition-colors break-all"
                         >
                             {pin.sourceUrl}
                         </a>
