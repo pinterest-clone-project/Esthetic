@@ -19,6 +19,7 @@ import {stopChatConnection} from "@/utils/chatHub.ts";
 import {APP_ENV} from "@/constants/env";
 import {useTheme} from "@/context/ThemeContext.tsx";
 import Modal from "@/components/ui/Modal.tsx";
+import ThemeToggle from "@/components/ui/ThemeToggle.tsx";
 
 const navItems = [
     { path: "/", icon: homeIcon, label: "Main" },
@@ -252,18 +253,18 @@ const Sidebar = () => {
                     </div>
                 </button>
 
-                <button
-                    onClick={() => { navigate('/theme'); closeModal(); }}
-                    className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group"
-                >
-                    <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1]  flex items-center justify-center transition-colors shrink-0">
-                        <img src={themeIcon} style={{ filter: whiteFilter }} className="w-5 h-5" />
+                <div className="flex items-center justify-between w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1] flex items-center justify-center transition-colors shrink-0">
+                            <img src={themeIcon} style={{ filter: whiteFilter }} className="w-5 h-5" />
+                        </div>
+                        <div className="text-left">
+                            <p className="text-black dark:text-white text-sm font-medium">Theme</p>
+                            <p className="text-black dark:text-[#A1A1A1] text-xs">Light / Dark mode switch</p>
+                        </div>
                     </div>
-                    <div className="text-left">
-                        <p className="text-black dark:text-white text-sm font-medium">Theme</p>
-                        <p className="text-black dark:text-[#A1A1A1] text-xs">Light / Dark mode switch</p>
-                    </div>
-                </button>
+                    <ThemeToggle />
+                </div>
 
                 <button
                     onClick={handleLogout}

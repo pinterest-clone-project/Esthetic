@@ -7,9 +7,13 @@ import im6 from "../../../src/assets/defaults/def-6.jpg"
 import im7 from "../../../src/assets/defaults/def-7.jpg"
 import im8 from "../../../src/assets/defaults/def-8.jpg"
 import {useAppSelector} from "@/store";
+import Modal from "@/components/ui/Modal.tsx";
+import RegisterForm from "@/components/auth/RegisterForm.tsx";
+import {useState} from "react";
 
 const FirstPage = () => {
     const user = useAppSelector((state) => state.auth.user);
+    const [activeModal, setActiveModal] = useState<"signup" | null>(null);
 
     return (
         <div className="scroll-smooth">
@@ -109,16 +113,26 @@ const FirstPage = () => {
                             and browse the results
                         </p>
 
-                        <a
-                            href={"review"}
-                            className={"w-[200px] h-[50px] rounded-[10px] mt-16 text-center pt-2 text-[20px] bg-btn-primary hover:bg-btn-dark text-white dark:text-black"}
+                        <button
+                            onClick={() => setActiveModal("signup")}
+                            className={"w-[200px] h-[50px] rounded-[10px] mt-16 text-center text-[20px] bg-btn-primary hover:bg-btn-dark text-white dark:text-black"}
                         >
                             Review
-                        </a>
+                        </button>
                     </section>
 
                 </div>
             </section>
+
+            <Modal
+                isOpen={activeModal === "signup"}
+                onClose={() => setActiveModal(null)}
+                width={450}
+                height="auto"
+                borderRadius={20}
+            >
+                <RegisterForm onSuccess={() => setActiveModal(null)} />
+            </Modal>
 
         </div>
     )
