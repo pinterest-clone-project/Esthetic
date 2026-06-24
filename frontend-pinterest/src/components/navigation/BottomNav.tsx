@@ -4,7 +4,6 @@ import { useTheme } from "@/context/ThemeContext";
 import homeIcon from "@/assets/icons/home_icon.svg";
 import collectionIcon from "@/assets/icons/collection_icon.svg";
 import addIcon from "@/assets/icons/add_icon.svg";
-import searchIconLight from "@/assets/icons/search-vector-dark.svg";
 import { APP_ENV } from "@/constants/env";
 import userIcon from "@/assets/icons/user_icon.svg";
 
@@ -22,7 +21,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
     { label: "Home", icon: homeIcon, path: "/" },
-    { label: "Search", icon: searchIconLight, path: "__search__" },
+    { label: "Chat", icon: "", path: "__chat__" },
     { label: "Create", icon: addIcon, path: "/aura/create", isCreate: true },
     { label: "Collections", icon: collectionIcon, path: "/collections/aura" },
     { label: "Profile", icon: userIcon, path: "/profile" },
@@ -38,12 +37,8 @@ const BottomNav = () => {
     if (!user) return null;
 
     const handleClick = (item: NavItem) => {
-        if (item.path === "__search__") {
-            const input = document.querySelector<HTMLInputElement>("header input");
-            if (input) {
-                input.focus();
-                window.scrollTo({ top: 0, behavior: "smooth" });
-            }
+        if (item.path === "__chat__") {
+            window.dispatchEvent(new CustomEvent("open-chat"));
             return;
         }
         navigate(item.path);
@@ -88,6 +83,19 @@ const BottomNav = () => {
                         <span className={`text-[10px] ${isActive(item) ? "text-[#1DB954]" : "text-[#A2A2A2]"}`}>
                             {item.label}
                         </span>
+                    </button>
+                ) : item.path === "__chat__" ? (
+                    <button
+                        key={item.path}
+                        onClick={() => handleClick(item)}
+                        className="flex flex-col items-center gap-0.5 px-2 py-1"
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             stroke={theme === "dark" ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)"}
+                             strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        <span className="text-[10px] text-[#A2A2A2]">{item.label}</span>
                     </button>
                 ) : (
                     <button

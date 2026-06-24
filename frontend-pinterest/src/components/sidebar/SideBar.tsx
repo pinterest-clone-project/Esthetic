@@ -111,6 +111,12 @@ const Sidebar = () => {
         return () => clearTimeout(t);
     }, [searchTerm]);
 
+    useEffect(() => {
+        const handler = () => setActiveModal('friends');
+        window.addEventListener("open-chat", handler);
+        return () => window.removeEventListener("open-chat", handler);
+    }, []);
+
     const handleSelectUser = async (userId: string) => {
         const chat = await getOrCreateChat(userId).unwrap();
         setActiveChat(chat);
