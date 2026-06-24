@@ -47,19 +47,40 @@ public static class UserSeeder
             var entity = mapper.ToEntity(user);
             entity.UserName = user.UserName;
 
-            if (!string.IsNullOrEmpty(user.LocalImage))
+            try
             {
-                var localPath = Path.Combine(seedImagesDir, user.LocalImage);
-                entity.Image = File.Exists(localPath)
-                    ? await imageService.SaveImageFromPathAsync(localPath)
-                    : await imageService.SaveImageFromUrlAsync(user.Image);
+                if (!string.IsNullOrEmpty(user.LocalImage))
+                {
+                    var localPath = Path.Combine(seedImagesDir, user.LocalImage);
+                    entity.Image = File.Exists(localPath)
+                        ? await imageService.SaveImageFromPathAsync(localPath)
+                        : await imageService.SaveImageFromUrlAsync(user.Image);
 
-                if (!File.Exists(localPath))
-                    Console.WriteLine("Local image not found: {0}, falling back to URL", user.LocalImage);
+                    if (!File.Exists(localPath))
+                        Console.WriteLine("Local image not found: {0}, falling back to URL", user.LocalImage);
+                }
+                else
+                {
+                    entity.Image = await imageService.SaveImageFromUrlAsync(user.Image);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                entity.Image = await imageService.SaveImageFromUrlAsync(user.Image);
+                Console.WriteLine("Image seed failed for {0} ({1}): {2}. Retrying once...",
+                    user.UserName, user.Image, ex.Message);
+
+                try
+                {
+                    // одна повторна спроба — thispersondoesnotexist.com нестабільний,
+                    // другий запит часто проходить
+                    entity.Image = await imageService.SaveImageFromUrlAsync(user.Image);
+                }
+                catch (Exception retryEx)
+                {
+                    Console.WriteLine("Retry failed for {0}: {1}. Creating user without avatar.",
+                        user.UserName, retryEx.Message);
+                    entity.Image = string.Empty; // або заглушка, дивись нижче
+                }
             }
 
             var result = await userManager.CreateAsync(entity, user.Password);

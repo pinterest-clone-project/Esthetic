@@ -62,8 +62,30 @@ public class ImageService(IConfiguration configuration) : IImageService
     public async Task<string> SaveImageFromUrlAsync(string imageUrl)
     {
         using var httpClient = new HttpClient();
-        var imageBytes = await httpClient.GetByteArrayAsync(imageUrl);
-        return await SaveImageAsync(imageBytes);
+
+
+        httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+        httpClient.DefaultRequestHeaders.Add("Accept", "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8");
+
+        try
+        {
+            var response = await httpClient.GetAsync(imageUrl);
+
+            response.EnsureSuccessStatusCode();
+
+            var contentType = response.Content.Headers.ContentType?.MediaType;
+            if (contentType != null && !contentType.StartsWith("image/"))
+            {
+                throw new InvalidDataException($"URL повернув тип '{contentType}' замість зображення.");
+            }
+
+            var imageBytes = await response.Content.ReadAsByteArrayAsync();
+            return await SaveImageAsync(imageBytes);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Не вдалося завантажити або обробити зображення з URL: {imageUrl}. Причина: {ex.Message}", ex);
+        }
     }
 
     private async Task<string> SaveImageAsync(byte[] bytes)
