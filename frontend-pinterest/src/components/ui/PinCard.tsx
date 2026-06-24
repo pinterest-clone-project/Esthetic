@@ -8,7 +8,6 @@ import { APP_ENV } from "@/constants/env";
 
 const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     const [menuOpen, setMenuOpen] = useState(false);
-    const [hovered, setHovered] = useState(false);
     const [liked, setLiked] = useState(pin.isLikedByMe ?? false);
     const [likesCount, setLikesCount] = useState(pin.likesCount);
     const navigate = useNavigate();
@@ -56,8 +55,7 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     return (
         <div
             className="relative break-inside-avoid mb-3 rounded-xl overflow-hidden group cursor-pointer"
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => { setHovered(false); setMenuOpen(false); }}
+            onMouseLeave={() => setMenuOpen(false)}
             onClick={() => navigate(`/aura/preview/${pin.id}`)}
         >
             <img
@@ -67,16 +65,16 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
                 loading="lazy"
             />
 
-            <div className={`absolute inset-0 rounded-xl bg-black/30 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`} />
+            <div className="absolute inset-0 rounded-xl bg-black/30 transition-opacity duration-200 opacity-0 md:group-hover:opacity-100" />
 
             {pin.title && (
-                <div className={`absolute bottom-0 left-0 right-0 px-3 py-2.5 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
+                <div className="absolute bottom-0 left-0 right-0 px-3 py-2.5 transition-opacity duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100">
                     <p className="text-white text-xs font-medium truncate drop-shadow-lg">{pin.title}</p>
                 </div>
             )}
 
             {/* Like button — top left */}
-            <div className={`absolute top-2 left-2 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
+            <div className="absolute top-2 left-2 transition-opacity duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100">
                 <button
                     onClick={handleLike}
                     className="flex items-center gap-1 bg-black/50 hover:bg-black/70 rounded-full px-2 py-1 transition-colors"
@@ -87,7 +85,7 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
             </div>
 
             {/* Dots menu — bottom right */}
-            <div className={`absolute bottom-2 right-2 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
+            <div className="absolute bottom-2 right-2 transition-opacity duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100">
                 <button
                     onClick={(e) => { e.stopPropagation(); setMenuOpen(p => !p); }}
                     className="flex items-center gap-[3px] bg-black/50 hover:bg-black/70 rounded-full px-2 py-1.5 transition-colors"
