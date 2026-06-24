@@ -157,7 +157,7 @@ if (isLoading) return <p>Завантаження...</p>;
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">Gender</label>
                         <select {...register("gender", { valueAsNumber: true })}
-                                className="w-full bg-[#D1D1D1] dark:bg-[#1a1a1a] border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white text-base focus:outline-none focus:border-[#1DB954] transition">
+                                className="w-full bg-[#D1D1D1] dark:bg-[#1a1a1a] border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white text-sm focus:outline-none focus:border-[#1DB954] transition">
                             <option value="">— Gender —</option>
                             <option value={0}>Female</option>
                             <option value={1}>Male</option>
