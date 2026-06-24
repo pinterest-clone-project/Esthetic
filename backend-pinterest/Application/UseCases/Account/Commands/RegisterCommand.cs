@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.Transaction;
 using Application.Models.DTO.User;
+using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ public record RegisterCommand : IRequest<TokenDTO>, ITransactionalCommand
     public string Password { get; set; } = string.Empty;
     public string? PhoneNumber { get; set; } = string.Empty;
     public DateTime BirthDate { get; set; }
+    public Gender? Gender { get; set; } = null;
     [FromForm]
     public IFormFile? ImageFile { get; set; } = null;
 }

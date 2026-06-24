@@ -7,5 +7,6 @@ export interface IRegisterRequest {
     Password: string;
     BirthDate: string;
     PhoneNumber?: string;
+    Gender?: string;
     ImageFile?: File | null;
 }

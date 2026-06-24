@@ -22,7 +22,6 @@ const ProfilePage          = lazy(() => import("@/pages/profile/ProfilePage.tsx"
 const CollectionsPage      = lazy(() => import("@/pages/collections/CollectionsPage.tsx"));
 const MoodboardPreviewPage = lazy(() => import("@/pages/moodboard/MoodboardPreviewPage.tsx"));
 const AdminDashboard       = lazy(() => import("@/pages/admin/AdminDashboard.tsx"));
-const ThemePage            = lazy(() => import("@/pages/settings/ThemePage.tsx"));
 const NotFoundPage         = lazy(() => import("./pages/NotFoundPage.tsx"));
 
 const PageLoader = () => (
@@ -122,7 +121,6 @@ const App = () => {
                                 <Route path="/collections/moodboard" element={<CollectionsPage />} />
                                 <Route path="/collections/ai" element={<CollectionsPage />} />
 
-                                <Route path="/theme" element={<ThemePage />} />
                             </Route>
                         </Route>
 

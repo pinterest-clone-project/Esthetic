@@ -53,3 +53,8 @@ html {
         filter: invert(0);
     }
 }
+
+
+html {
+    scrollbar-gutter: stable;
+}
