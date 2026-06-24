@@ -38,6 +38,7 @@ public static class ValidationMessages
     public static string FieldTitle => Get("FieldTitle");
     public static string FieldMediaUrl => Get("FieldMediaUrl");
     public static string FieldSourceUrl => Get("FieldSourceUrl");
+    public static string PinImageRequired => Get("PinImageRequired");
     public static string FieldPinId => Get("FieldPinId");
 
     public static string ErrorValidation => Get("ErrorValidation");

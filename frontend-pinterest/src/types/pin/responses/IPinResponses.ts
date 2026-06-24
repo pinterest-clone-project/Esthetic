@@ -6,7 +6,7 @@ export interface IPinResponse {
     creatorId: string;
     title: string | null;
     description: string | null;
-    mediaUrl: string | null;
+    image: string;
     sourceUrl: string | null;
     categoryId: string | null;
     categoryName: string | null;

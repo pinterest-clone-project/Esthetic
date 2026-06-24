@@ -8,7 +8,7 @@ public class PinDTO
     public Guid CreatorId { get; set; }
     public string? Title { get; set; }
     public string? Description { get; set; }
-    public string? MediaUrl { get; set; }
+    public string Image { get; set; } = string.Empty;
     public string? SourceUrl { get; set; }
     public Guid? CategoryId { get; set; }
     public string? CategoryName { get; set; }

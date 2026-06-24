@@ -18,7 +18,7 @@ public class PinEntity : BaseEntity
 
     public string? Title { get; set; } = null;
     public string? Description { get; set; } = null;
-    public string? MediaUrl { get; set; } = null;
+    public string Image { get; set; } = string.Empty;
     public string? SourceUrl { get; set; } = null;
 
     public Guid? CategoryId { get; set; }

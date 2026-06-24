@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useCreateMoodboardMutation } from "@/services/moodboardService.ts";
 import {useGetMyPinsQuery} from "@/services/pinService.ts";
+import { APP_ENV } from "@/constants/env";
 
 interface CreateMoodboardFormProps {
     onSuccess: () => void;
@@ -11,7 +12,7 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [isPrivate, setIsPrivate] = useState(false);
-    const [selectedCoverUrl, setSelectedCoverUrl] = useState<string | null>(null);
+    const [selectedCoverPinId, setSelectedCoverPinId] = useState<string | null>(null);
 
     const [createMoodboard, { isLoading }] = useCreateMoodboardMutation();
     const { data: myPins } = useGetMyPinsQuery(undefined, {
@@ -23,10 +24,13 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
         try {
             let coverImageFile: File | undefined;
 
-            if (selectedCoverUrl) {
-                const res = await fetch(selectedCoverUrl);
-                const blob = await res.blob();
-                coverImageFile = new File([blob], "cover.jpg", { type: blob.type });
+            if (selectedCoverPinId) {
+                const pin = myPins?.find(p => p.id === selectedCoverPinId);
+                if (pin?.image) {
+                    const res = await fetch(`${APP_ENV.IMAGES_800_URL}${pin.image}`);
+                    const blob = await res.blob();
+                    coverImageFile = new File([blob], "cover.jpg", { type: blob.type });
+                }
             }
 
             await createMoodboard({
@@ -129,20 +133,20 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
                             {myPins.map((pin) => (
                                 <div
                                     key={pin.id}
-                                    onClick={() => setSelectedCoverUrl(
-                                        selectedCoverUrl === pin.mediaUrl ? null : pin.mediaUrl ?? null
+                                    onClick={() => setSelectedCoverPinId(
+                                        selectedCoverPinId === pin.id ? null : pin.id
                                     )}
                                     className={`relative cursor-pointer rounded-lg overflow-hidden aspect-square border-2 transition-colors ${
-                                        selectedCoverUrl === pin.mediaUrl
+                                        selectedCoverPinId === pin.id
                                             ? "border-[#1DB954]"
                                             : "border-transparent"
                                     }`}
                                 >
                                     <img
-                                        src={pin.mediaUrl ?? undefined}
+                                        src={pin.image ? `${APP_ENV.IMAGES_200_URL}${pin.image}` : undefined}
                                         className="w-full h-full object-cover"
                                     />
-                                    {selectedCoverUrl === pin.mediaUrl && (
+                                    {selectedCoverPinId === pin.id && (
                                         <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
                                             <span className="text-white text-lg">✓</span>
                                         </div>

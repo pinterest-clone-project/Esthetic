@@ -4,6 +4,7 @@ import { createBaseQuery } from "../utils/createBaseQuery.ts";
 export const api = createApi({
     reducerPath: "api",
     baseQuery: createBaseQuery(""),
+    refetchOnMountOrArgChange: true,
     tagTypes: [
         "CurrentUser",
         "MyPins",

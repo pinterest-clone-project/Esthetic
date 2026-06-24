@@ -74,7 +74,7 @@ const CollectionsPage = () => {
                         <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3 mt-4">
                             {myPins!.map((pin) => (
                                 <div key={pin.id} className="break-inside-avoid mb-3">
-                                    <img src={pin.mediaUrl ?? undefined} className="w-full rounded-xl object-cover" />
+                                    <img src={pin.image ? `${APP_ENV.IMAGES_800_URL}${pin.image}` : undefined} className="w-full rounded-xl object-cover" />
                                 </div>
                             ))}
 
@@ -165,7 +165,7 @@ const CollectionsPage = () => {
                     <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-6 gap-3">
                         {Pins?.map((pin) => (
                             <div key={pin.id} className="break-inside-avoid mb-3">
-                                <img src={pin.mediaUrl ?? undefined} className="w-full rounded-xl object-cover" />
+                                <img src={pin.image ? `${APP_ENV.IMAGES_800_URL}${pin.image}` : undefined} className="w-full rounded-xl object-cover" />
                             </div>
                         ))}
                     </div>

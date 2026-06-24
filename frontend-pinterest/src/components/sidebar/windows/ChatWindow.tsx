@@ -1,6 +1,6 @@
 import type {IChat} from "@/types/chat/IChat.ts";
 import {useAppSelector} from "@/store";
-import {useGetMessagesQuery, useMarkChatAsReadMutation, useSendMessageMutation} from "@/services/chatService.ts";
+import {useGetChatsQuery, useGetMessagesQuery, useMarkChatAsReadMutation, useSendMessageMutation} from "@/services/chatService.ts";
 import {useEffect, useRef, useState} from "react";
 import Modal from "@/components/ui/Modal.tsx";
 import {APP_ENV} from "@/constants/env";
@@ -21,13 +21,21 @@ const ChatWindow = ({ chat, onClose }: ChatWindowProps) => {
     const [text, setText] = useState("");
     const bottomRef = useRef<HTMLDivElement>(null);
 
+    const { unreadCount } = useGetChatsQuery(undefined, {
+        selectFromResult: ({ data }) => ({
+            unreadCount: data?.find((c) => c.id === chat.id)?.unreadCount ?? 0,
+        }),
+    });
+
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages.length]);
 
     useEffect(() => {
-        if (chat.unreadCount > 0) markAsRead(chat.id);
-    }, [chat.id]);
+        if (unreadCount > 0) {
+            markAsRead(chat.id);
+        }
+    }, [unreadCount, chat.id]);
 
     const handleSend = () => {
         const content = text.trim();

@@ -252,4 +252,16 @@
   <data name="FieldBirthDate" xml:space="preserve">
     <value>Дата народження</value>
   </data>
+  <data name="PinImageRequired" xml:space="preserve">
+    <value>Image file or image URL is required</value>
+  </data>
+  <data name="FieldMediaUrl" xml:space="preserve">
+    <value>Image URL</value>
+  </data>
+  <data name="FieldSourceUrl" xml:space="preserve">
+    <value>Source URL</value>
+  </data>
+  <data name="FieldTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
 </root>

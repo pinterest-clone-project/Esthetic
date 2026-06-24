@@ -1,5 +1,7 @@
 using Domain.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Application.UseCases.Pins.Commands;
@@ -7,6 +9,10 @@ namespace Application.UseCases.Pins.Commands;
 public record UpdatePinCommand : IRequest<Unit>
 {
     public required Guid Id { get; init; }
+
+    [FromForm]
+    public IFormFile? ImageFile { get; init; }
+
     public string? MediaUrl { get; init; }
     public string? Title { get; init; }
     public string? Description { get; init; }

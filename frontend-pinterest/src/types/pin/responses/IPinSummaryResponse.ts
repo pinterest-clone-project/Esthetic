@@ -1,7 +1,7 @@
 export interface IPinSummaryResponse {
     id: string;
     title: string | null;
-    mediaUrl: string | null;
+    image: string;
     likesCount: number;
     isLikedByMe: boolean;
     creatorId: string;

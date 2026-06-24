@@ -96,7 +96,10 @@ const Sidebar = () => {
     const [debouncedSearch, setDebouncedSearch] = useState("");
 
     const { data: chats = [] } = useGetChatsQuery();
-    const totalUnread = chats.reduce((sum, c) => sum + c.unreadCount, 0);
+    const totalUnread = chats.reduce(
+        (sum, c) => sum + (c.id === activeChat?.id ? 0 : c.unreadCount),
+        0
+    );
     const { data: searchResult } = useSearchUsersQuery(
         { search: debouncedSearch, pageSize: 10 },
         { skip: debouncedSearch.trim().length < 2 }
@@ -224,7 +227,7 @@ const Sidebar = () => {
                                             <p className="text-black dark:text-[#A1A1A1] text-xs truncate">{chat.lastMessage.content}</p>
                                         )}
                                     </div>
-                                    {chat.unreadCount > 0 && (
+                                    {chat.unreadCount > 0 && chat.id !== activeChat?.id && (
                                         <span className="bg-[#1DB954] text-black text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center shrink-0">
                                 {chat.unreadCount}
                             </span>

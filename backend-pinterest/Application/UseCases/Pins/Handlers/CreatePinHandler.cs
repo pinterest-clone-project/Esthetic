@@ -1,3 +1,4 @@
+using Application.Interfaces;
 using Application.Mappers;
 using Application.Models.DTO.Pin;
 using Application.UseCases.Pins.Commands;
@@ -9,11 +10,17 @@ namespace Application.UseCases.Pins.Handlers;
 
 public class CreatePinHandler(
     IPinRepository repository,
-    PinMapper pinMapper) : IRequestHandler<CreatePinCommand, PinDTO>
+    PinMapper pinMapper,
+    IImageService imageService) : IRequestHandler<CreatePinCommand, PinDTO>
 {
     public async Task<PinDTO> Handle(CreatePinCommand request, CancellationToken cancellationToken)
     {
         var entity = pinMapper.ToEntity(request);
+
+        if (request.ImageFile != null)
+            entity.Image = await imageService.SaveImageAsync(request.ImageFile);
+        else if (!string.IsNullOrWhiteSpace(request.MediaUrl))
+            entity.Image = await imageService.SaveImageFromUrlAsync(request.MediaUrl);
 
         if (request.TagIds != null)
             entity.PinTags = request.TagIds
