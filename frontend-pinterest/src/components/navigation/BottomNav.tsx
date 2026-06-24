@@ -8,6 +8,7 @@ import addIcon from "@/assets/icons/add_icon.svg";
 import profileIcon from "../../../src/assets/icons/profile_icon.svg";
 import { APP_ENV } from "@/constants/env";
 import userIcon from "@/assets/icons/user_icon.svg";
+import auraIcon from "../../../src/assets/icons/aura_icon.svg";
 
 const greenFilter =
     "brightness(0) saturate(100%) invert(58%) sepia(61%) saturate(450%) hue-rotate(95deg) brightness(95%)";
@@ -71,7 +72,7 @@ const BottomNav = () => {
                                     onClick={() => { setCreateOpen(false); navigate("/aura/create"); }}
                                     className="flex items-center gap-3 w-full px-4 py-3 text-sm text-black dark:text-white hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a] transition-colors"
                                 >
-                                    <span className="text-lg">✦</span>
+                                    <img src={auraIcon} className="w-5 h-5 object-contain" style={{ filter: defaultFilter }} />
                                     Aura
                                 </button>
                                 <div className="h-px bg-[#A2A2A2] dark:bg-[#535353]" />
@@ -79,7 +80,7 @@ const BottomNav = () => {
                                     onClick={() => { setCreateOpen(false); navigate("/collections/moodboard"); }}
                                     className="flex items-center gap-3 w-full px-4 py-3 text-sm text-black dark:text-white hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a] transition-colors"
                                 >
-                                    <span className="text-lg">⊞</span>
+                                    <img src={collectionIcon} className="w-5 h-5 object-contain" style={{ filter: defaultFilter }} />
                                     Moodboard
                                 </button>
                             </div>
