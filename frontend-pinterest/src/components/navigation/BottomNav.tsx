@@ -3,7 +3,6 @@ import { useAppSelector } from "@/store";
 import homeIcon from "@/assets/icons/home_icon.svg";
 import collectionIcon from "@/assets/icons/collection_icon.svg";
 import addIcon from "@/assets/icons/add_icon.svg";
-import profileIcon from "@/assets/icons/profile_icon.svg";
 import searchIconLight from "@/assets/icons/search-vector-dark.svg";
 import { APP_ENV } from "@/constants/env";
 import userIcon from "@/assets/icons/user_icon.svg";
@@ -24,7 +23,7 @@ const navItems: NavItem[] = [
     { label: "Search", icon: searchIconLight, path: "__search__" },
     { label: "Create", icon: addIcon, path: "/aura/create", isCreate: true },
     { label: "Collections", icon: collectionIcon, path: "/collections/aura" },
-    { label: "Profile", icon: profileIcon, path: "/profile" },
+    { label: "Profile", icon: userIcon, path: "/profile" },
 ];
 
 const BottomNav = () => {
@@ -36,7 +35,7 @@ const BottomNav = () => {
 
     const handleClick = (item: NavItem) => {
         if (item.path === "__search__") {
-            const input = document.querySelector<HTMLInputElement>("header input[type='text']");
+            const input = document.querySelector<HTMLInputElement>("header input");
             if (input) {
                 input.focus();
                 window.scrollTo({ top: 0, behavior: "smooth" });
