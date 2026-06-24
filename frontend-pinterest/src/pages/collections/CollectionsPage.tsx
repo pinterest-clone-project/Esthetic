@@ -37,18 +37,20 @@ const CollectionsPage = () => {
     };
 
     return (
-        <div className="min-h-screen mt-11 text-black dark:text-white px-8 py-10">
-            <div className="relative  flex flex-col items-center mb-6">
-                <button
-                    onClick={() => {
-                        if (activeTab === "Moodboard") setShowCreateMoodboard(true);
-                        if (activeTab === "Aura") navigate("/aura/create");
-                    }}
-                    className="absolute right-0 top-0 px-6 py-2 rounded-lg bg-[#A2A2A2] dark:bg-[#535353] text-black dark:text-white text-sm hover:bg-[#D1D1D1] dark:hover:bg-[#A2A2A2] transition-colors duration-150"
-                >
-                    Create
-                </button>
-                <h1 className="text-4xl mb-3">Your collection</h1>
+        <div className="min-h-screen mt-4 sm:mt-11 text-black dark:text-white px-4 sm:px-8 py-6 sm:py-10">
+            <div className="flex flex-col items-center mb-6 gap-3">
+                <div className="flex items-center justify-between w-full">
+                    <h1 className="text-2xl sm:text-4xl">Your collection</h1>
+                    <button
+                        onClick={() => {
+                            if (activeTab === "Moodboard") setShowCreateMoodboard(true);
+                            if (activeTab === "Aura") navigate("/aura/create");
+                        }}
+                        className="px-5 py-2 rounded-lg bg-[#A2A2A2] dark:bg-[#535353] text-black dark:text-white text-sm hover:bg-[#D1D1D1] dark:hover:bg-[#A2A2A2] transition-colors duration-150"
+                    >
+                        Create
+                    </button>
+                </div>
                 <div className="flex items-center gap-4">
                     {tabs.map((tab) => (
                         <button
@@ -65,6 +67,7 @@ const CollectionsPage = () => {
                     ))}
                 </div>
             </div>
+
 
 
             {activeTab === "Aura" &&
@@ -97,10 +100,10 @@ const CollectionsPage = () => {
                     </div>
                 ) : (
                     <div className="flex flex-col items-center justify-center mt-16 gap-6">
-                        <div className="relative w-[320px] h-[240px]">
-                            <img src={im1} className="absolute top-[40px] left-0 w-[140px] h-[150px] object-cover rounded-xl" />
-                            <img src={im2} className="absolute top-0 left-[90px] w-[150px] h-[160px] object-cover rounded-xl" />
-                            <img src={im3} className="absolute top-[70px] left-[180px] w-[140px] h-[160px] object-cover rounded-xl" />
+                        <div className="relative w-[280px] h-[200px] sm:w-[320px] sm:h-[240px]">
+                            <img src={im1} className="absolute top-[35px] left-0 w-[120px] h-[130px] sm:w-[140px] sm:h-[150px] object-cover rounded-xl" />
+                            <img src={im2} className="absolute top-0 left-[80px] w-[130px] h-[140px] sm:w-[150px] sm:h-[160px] object-cover rounded-xl" />
+                            <img src={im3} className="absolute top-[60px] left-[160px] w-[120px] h-[140px] sm:w-[140px] sm:h-[160px] object-cover rounded-xl" />
                         </div>
                         <div className="text-center mt-4">
                             <h2 className="text-2xl font-medium mb-3">Combine your ideas</h2>
@@ -121,14 +124,14 @@ const CollectionsPage = () => {
             {activeTab === "Moodboard" && (
                 <div className="mt-8">
                     <h2 className="text-lg mb-3">Your Moodboard</h2>
-                    <div className="flex flex-wrap gap-4 mb-10">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-10">
                         {moodboards?.items?.map((mb) => (
                             <button
                                 key={mb.id}
                                 onClick={() => navigate(`/moodboard/preview/${mb.id}`)}
                                 className="text-left group"
                             >
-                                <div className="w-[240px] h-[180px] rounded-2xl overflow-hidden bg-[#D1D1D1] dark:bg-[#2a2a2a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-2xl">
+                                <div className="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-[#D1D1D1] dark:bg-[#2a2a2a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-2xl">
                                     {mb.coverImageUrl ? (
                                         <img
                                             src={`${APP_ENV.IMAGES_800_URL}${mb.coverImageUrl}`}
@@ -138,16 +141,15 @@ const CollectionsPage = () => {
                                         <div className="w-full h-full" />
                                     )}
                                 </div>
-                                <p className="text-black dark:text-white text-sm mt-2 truncate w-[220px] group-hover:text-[#1DB954] transition-colors duration-200">
+                                <p className="text-black dark:text-white text-sm mt-2 truncate group-hover:text-[#1DB954] transition-colors duration-200">
                                     {mb.title}
                                 </p>
                             </button>
                         ))}
 
-
                         <button
                             onClick={() => setShowCreateMoodboard(true)}
-                            className="relative w-[240px] h-[180px] rounded-xl overflow-hidden hover:opacity-90 transition-opacity"
+                            className="relative w-full aspect-[4/3] rounded-xl overflow-hidden hover:opacity-90 transition-opacity"
                         >
                             <div className="absolute inset-0 grid grid-cols-2 grid-rows-2">
                                 <div className="bg-[#A1A1A1] dark:bg-[#535353]" />
