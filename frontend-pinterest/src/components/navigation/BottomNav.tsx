@@ -1,0 +1,111 @@
+import { useLocation, useNavigate } from "react-router";
+import { useAppSelector } from "@/store";
+import homeIcon from "@/assets/icons/home_icon.svg";
+import collectionIcon from "@/assets/icons/collection_icon.svg";
+import addIcon from "@/assets/icons/add_icon.svg";
+import profileIcon from "@/assets/icons/profile_icon.svg";
+import searchIconLight from "@/assets/icons/search-vector-dark.svg";
+import { APP_ENV } from "@/constants/env";
+import userIcon from "@/assets/icons/user_icon.svg";
+
+const greenFilter =
+    "brightness(0) saturate(100%) invert(58%) sepia(61%) saturate(450%) hue-rotate(95deg) brightness(95%)";
+const defaultFilter = "brightness(0) opacity(0.5)";
+
+interface NavItem {
+    label: string;
+    icon: string;
+    path: string;
+    isCreate?: boolean;
+}
+
+const navItems: NavItem[] = [
+    { label: "Home", icon: homeIcon, path: "/" },
+    { label: "Search", icon: searchIconLight, path: "__search__" },
+    { label: "Create", icon: addIcon, path: "/aura/create", isCreate: true },
+    { label: "Collections", icon: collectionIcon, path: "/collections/aura" },
+    { label: "Profile", icon: profileIcon, path: "/profile" },
+];
+
+const BottomNav = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const user = useAppSelector((state) => state.auth.user);
+
+    if (!user) return null;
+
+    const handleClick = (item: NavItem) => {
+        if (item.path === "__search__") {
+            const input = document.querySelector<HTMLInputElement>("header input[type='text']");
+            if (input) {
+                input.focus();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+            return;
+        }
+        navigate(item.path);
+    };
+
+    const isActive = (item: NavItem) => {
+        if (item.path === "__search__") return false;
+        if (item.path === "/profile") return location.pathname.startsWith("/profile");
+        return location.pathname === item.path;
+    };
+
+    return (
+        <nav className="fixed bottom-0 left-0 right-0 z-50 flex md:hidden items-center justify-around bg-white dark:bg-black border-t border-[#A2A2A2] dark:border-[#535353] h-16 px-2">
+            {navItems.map((item) =>
+                item.isCreate ? (
+                    <button
+                        key={item.path}
+                        onClick={() => handleClick(item)}
+                        className="flex items-center justify-center w-12 h-12 rounded-full bg-[#1DB954] shadow-md active:scale-95 transition-transform"
+                    >
+                        <img src={item.icon} className="w-6 h-6" style={{ filter: "brightness(0)" }} alt={item.label} />
+                    </button>
+                ) : item.label === "Profile" ? (
+                    <button
+                        key={item.path}
+                        onClick={() => handleClick(item)}
+                        className="flex flex-col items-center gap-0.5 px-2 py-1"
+                    >
+                        <div className={`w-7 h-7 rounded-full overflow-hidden flex items-center justify-center
+                            ${user.image ? "" : "bg-[var(--color-btn-primary)]"}
+                            ${isActive(item) ? "ring-2 ring-[#1DB954]" : ""}`}>
+                            {user.image ? (
+                                <img
+                                    src={`${APP_ENV.IMAGES_100_URL}${user.image}`}
+                                    className="w-full h-full object-cover"
+                                    alt="Profile"
+                                />
+                            ) : (
+                                <img src={userIcon} className="w-4 h-4 object-contain" alt="Profile" />
+                            )}
+                        </div>
+                        <span className={`text-[10px] ${isActive(item) ? "text-[#1DB954]" : "text-[#A2A2A2]"}`}>
+                            {item.label}
+                        </span>
+                    </button>
+                ) : (
+                    <button
+                        key={item.path}
+                        onClick={() => handleClick(item)}
+                        className="flex flex-col items-center gap-0.5 px-2 py-1"
+                    >
+                        <img
+                            src={item.icon}
+                            className="w-6 h-6"
+                            style={{ filter: isActive(item) ? greenFilter : defaultFilter }}
+                            alt={item.label}
+                        />
+                        <span className={`text-[10px] ${isActive(item) ? "text-[#1DB954]" : "text-[#A2A2A2]"}`}>
+                            {item.label}
+                        </span>
+                    </button>
+                )
+            )}
+        </nav>
+    );
+};
+
+export default BottomNav;
