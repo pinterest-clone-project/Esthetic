@@ -154,7 +154,7 @@ const ChatPage = () => {
 
     if (activeChat) {
         return (
-            <div className="fixed inset-0 z-40 bg-white dark:bg-black flex flex-col" style={{ paddingBottom: "64px" }}>
+            <div className="fixed inset-x-0 bottom-0 z-40 bg-white dark:bg-black flex flex-col" style={{ top: "74px", paddingBottom: "64px" }}>
                 <ChatView chat={activeChat} onBack={() => setActiveChat(null)} />
             </div>
         );
