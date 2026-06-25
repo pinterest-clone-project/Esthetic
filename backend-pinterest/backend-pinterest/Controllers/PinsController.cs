@@ -68,7 +68,7 @@ public class PinsController(IMediator mediator) : ControllerBase
 
     [HttpPost("{pinId:guid}/save")]
     [Authorize]
-    public async Task<IActionResult> Save(Guid pinId, [FromBody] SavePinCommand command)
+    public async Task<IActionResult> Save([FromRoute] Guid pinId, [FromBody] SavePinCommand command)
     {
         var cmd = command with { PinId = pinId, UserId = CurrentUserId };
         await mediator.Send(cmd);
@@ -77,10 +77,18 @@ public class PinsController(IMediator mediator) : ControllerBase
 
     [HttpDelete("{pinId:guid}/unsave")]
     [Authorize]
-    public async Task<IActionResult> Unsave(Guid pinId, [FromBody] UnsavePinCommand command)
+    public async Task<IActionResult> Unsave([FromRoute] Guid pinId, [FromBody] UnsavePinCommand command)
     {
         var cmd = command with { PinId = pinId, UserId = CurrentUserId };
         await mediator.Send(cmd);
         return NoContent();
+    }
+
+    [HttpGet("{pinId:guid}/saved-boards")]
+    [Authorize]
+    public async Task<IActionResult> GetSavedBoards(Guid pinId)
+    {
+        var boardIds = await mediator.Send(new GetPinSavedBoardsQuery(pinId, CurrentUserId));
+        return Ok(boardIds);
     }
 }
