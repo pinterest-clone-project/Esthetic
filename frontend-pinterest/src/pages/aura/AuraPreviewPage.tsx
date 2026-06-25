@@ -30,6 +30,10 @@ const AuraPreviewPage = () => {
     const [liked, setLiked] = useState(false);
     const [likesCount, setLikesCount] = useState<number | null>(null);
 
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "instant" });
+    }, [id]);
+
     const isOwner = me?.id === pin?.creatorId;
     const suggestions = allPins?.filter(p => p.id !== id) ?? [];
 
@@ -68,15 +72,15 @@ const AuraPreviewPage = () => {
     );
 
     return (
-        <div className="w-full min-h-full bg-white dark:bg-[#000000] px-6 py-8">
+        <div className="w-full min-h-full bg-white dark:bg-[#000000] px-3 py-4 md:px-6 md:py-8">
 
             <BackButton />
 
             {/* Pin detail */}
-            <div className="flex gap-10 items-start max-w-4xl mx-auto mb-16">
+            <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start max-w-4xl mx-auto mb-16">
 
                 {/* Image */}
-                <div className="shrink-0 w-[360px] rounded-2xl overflow-hidden shadow-2xl">
+                <div className="w-full md:w-[360px] md:shrink-0 rounded-2xl overflow-hidden shadow-2xl">
                     <img
                         src={pin.image ? `${APP_ENV.IMAGES_1200_URL}${pin.image}` : ""}
                         alt={pin.title ?? "Aura"}
@@ -88,7 +92,7 @@ const AuraPreviewPage = () => {
                 <div className="flex-1 flex flex-col gap-5 pt-2">
 
                     {/* Actions row */}
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                         <div className="flex items-center gap-3">
                             {/* Like button */}
                             <button
@@ -167,7 +171,7 @@ const AuraPreviewPage = () => {
                             href={pin.sourceUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs text-gray-600 hover:text-gray-400 underline underline-offset-2 transition-colors truncate"
+                            className="text-xs text-gray-600 hover:text-gray-400 underline underline-offset-2 transition-colors break-all"
                         >
                             {pin.sourceUrl}
                         </a>

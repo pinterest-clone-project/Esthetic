@@ -111,6 +111,7 @@ const Sidebar = () => {
         return () => clearTimeout(t);
     }, [searchTerm]);
 
+
     const handleSelectUser = async (userId: string) => {
         const chat = await getOrCreateChat(userId).unwrap();
         setActiveChat(chat);
@@ -125,7 +126,7 @@ const Sidebar = () => {
 
     return (
         <>
-            <aside className="sticky top-[74px] w-16 bg-white dark:bg-black flex flex-col items-center py-6 z-40 h-[calc(100vh-74px)] shrink-0">
+            <aside className="sticky top-[74px] w-16 bg-white dark:bg-black hidden md:flex flex-col items-center py-6 z-40 h-[calc(100vh-74px)] shrink-0">
                 <nav className="flex flex-col items-center gap-5 flex-1">
                     {navItems.map(({ path, icon, label }) => (
                         <SidebarButton
