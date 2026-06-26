@@ -105,7 +105,7 @@ const CreateAuraPage = () => {
     };
 
     return (
-        <div className="w-full min-h-full px-10 py-8 flex flex-col items-center">
+        <div className="w-full min-h-full px-4 py-6 sm:px-10 sm:py-8 flex flex-col items-center">
 
             <div className="flex items-center justify-between mb-8 w-full max-w-[580px]">
                 <div className="flex items-center gap-3">
@@ -124,9 +124,9 @@ const CreateAuraPage = () => {
 
             <div className="w-full max-w-[580px] flex flex-col gap-5">
 
-                <div className="flex gap-10 items-start">
-                    <div className="shrink-0 flex flex-col gap-2">
-                        <div className="w-[200px] min-h-[200px] rounded-2xl overflow-hidden bg-white dark:bg-[#1e1e1e] border border-[#A1A1A1] dark:border-[#333] flex items-center justify-center">
+                <div className="flex flex-col sm:flex-row gap-5 sm:gap-10 items-start">
+                    <div className="w-full sm:w-auto shrink-0 flex flex-col gap-2">
+                        <div className="w-full sm:w-[200px] min-h-[200px] rounded-2xl overflow-hidden bg-white dark:bg-[#1e1e1e] border border-[#A1A1A1] dark:border-[#333] flex items-center justify-center">
                             {previewUrl ? (
                                 <img
                                     src={previewUrl}
@@ -152,7 +152,7 @@ const CreateAuraPage = () => {
                         </label>
                     </div>
 
-                    <div className="w-[340px] flex flex-col gap-5">
+                    <div className="w-full sm:w-[340px] flex flex-col gap-5">
                         <div className="flex flex-col gap-1.5">
                             <label className="text-black dark:text-white text-xs font-medium">Name</label>
                             <input
@@ -192,8 +192,8 @@ const CreateAuraPage = () => {
                     </div>
                 </div>
 
-                <div className="flex gap-10 items-start">
-                    <div className="shrink-0 w-[200px] flex flex-col gap-1.5 relative" ref={categoryBoxRef}>
+                <div className="flex flex-col sm:flex-row gap-5 sm:gap-10 items-start">
+                    <div className="w-full sm:w-[200px] shrink-0 flex flex-col gap-1.5 relative" ref={categoryBoxRef}>
                         <label className="text-black dark:text-white text-xs font-medium">Category</label>
                         <button
                             type="button"
@@ -250,7 +250,7 @@ const CreateAuraPage = () => {
                         )}
                     </div>
 
-                    <div className="w-[340px] flex flex-col gap-1.5 relative" ref={tagBoxRef}>
+                    <div className="w-full sm:w-[340px] flex flex-col gap-1.5 relative" ref={tagBoxRef}>
                         <label className="text-black dark:text-white text-xs font-medium">Tags</label>
 
                         <input

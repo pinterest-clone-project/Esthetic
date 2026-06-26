@@ -17,6 +17,7 @@ const ShareIcon = () => (
 
 const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     const [hovered, setHovered] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
     const [liked, setLiked] = useState(pin.isLikedByMe ?? false);
     const [likesCount, setLikesCount] = useState(pin.likesCount);
     const [saveModalOpen, setSaveModalOpen] = useState(false);
@@ -60,6 +61,8 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
         );
     };
 
+    // onMouseLeave={() => setMenuOpen(false)}
+
     return (
         <div
             className="relative break-inside-avoid mb-3 rounded-xl overflow-hidden group cursor-pointer"
@@ -79,7 +82,7 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
 
             {/* Title */}
             {pin.title && (
-                <div className={`absolute bottom-0 left-0 right-0 px-3 py-2.5 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
+                <div className="absolute bottom-0 left-0 right-0 px-3 py-2.5 transition-opacity duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100">
                     <p className="text-white text-xs font-medium truncate drop-shadow-lg">{pin.title}</p>
                 </div>
             )}

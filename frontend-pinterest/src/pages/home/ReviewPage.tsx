@@ -18,7 +18,7 @@ const ReviewPage = () => {
     );
 
     return (
-        <div className="w-full min-h-full bg-white dark:bg-black px-6 py-6">
+        <div className="w-full min-h-full bg-white dark:bg-black px-2 py-4 sm:px-6 sm:py-6">
 
             {isError && (
                 <div className="flex items-center justify-center h-40">

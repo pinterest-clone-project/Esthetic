@@ -67,7 +67,7 @@ const Header: React.FC = () => {
                     />
 
                     {!user && (
-                        <a className="text-black dark:text-white font-bold text-xl leading-5 tracking-[-0.5px]" href="/">
+                        <a className="hidden md:block text-black dark:text-white font-bold text-xl leading-5 tracking-[-0.5px]" href="/">
                             Esthetic
                         </a>
                     )}
