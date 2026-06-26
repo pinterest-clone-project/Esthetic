@@ -29,7 +29,7 @@ const FirstPage = () => {
                         (category) => (
                             <button
                                 key={category}
-                                className="bg-[#A2A2A2] dark:bg-[#535353] lg:text-sm text-[11px] px-8 py-2 rounded-[5px] lg:min-w-[200px] md:min-w-[190px] min-w-[130px] lg:min-h-[35px] min-h-[27px] text-black dark:text-white hover:bg-[#666] hover:cursor-pointer"
+                                className="bg-[#A2A2A2] dark:bg-[#535353] lg:text-sm text-[11px] px-8 py-2 rounded-[5px] lg:min-w-[200px] md:min-w-[190px] min-w-[130px] lg:min-h-[35px] min-h-[27px] text-black dark:text-white hover:bg-[#666] cursor-pointer"
                             >
                                 {category}
                             </button>

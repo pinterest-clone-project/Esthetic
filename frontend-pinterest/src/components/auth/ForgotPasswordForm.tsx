@@ -76,7 +76,7 @@ const ForgotPasswordForm = ({ onSuccess, onBack }: ForgotPasswordFormProps) => {
                 <button
                     type="button"
                     onClick={onBack}
-                    className="text-xs text-[var(--color-text-muted)] mt-4 hover:text-[var(--color-btn-primary)] transition-colors"
+                    className="text-xs text-[var(--color-text-muted)] mt-4 hover:text-[var(--color-btn-primary)] transition-colors cursor-pointer"
                 >
                     Back to login
                 </button>

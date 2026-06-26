@@ -126,7 +126,7 @@ const ResetPasswordForm = ({ email: initialEmail = "", onSuccess, onBack }: Rese
                         <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#A1A1A1] hover:text-white dark:hover:text-black transition"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#A1A1A1] hover:text-white dark:hover:text-black transition cursor-pointer"
                         >
                             {showPassword ? (
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -163,7 +163,7 @@ const ResetPasswordForm = ({ email: initialEmail = "", onSuccess, onBack }: Rese
                 <button
                     type="button"
                     onClick={onBack}
-                    className="text-xs text-[var(--color-text-muted)] mt-4 hover:text-[var(--color-btn-primary)] transition-colors"
+                    className="text-xs text-[var(--color-text-muted)] mt-4 hover:text-[var(--color-btn-primary)] transition-colors cursor-pointer"
                 >
                     Back
                 </button>
