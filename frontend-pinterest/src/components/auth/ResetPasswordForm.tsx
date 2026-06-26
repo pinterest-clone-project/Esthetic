@@ -1,9 +1,30 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useResetPasswordMutation } from "@/services/accountService.ts";
 import Button from "@/components/button/Button.tsx";
 import logo from "@/assets/logo.png";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { parseError } from "@/hooks/useApiError.ts";
+
+const schema = z.object({
+    email: z
+        .string()
+        .min(1, "Email обов'язковий")
+        .email("Введіть коректний email"),
+    code: z
+        .string()
+        .length(6, "Код підтвердження — рівно 6 цифр")
+        .regex(/^\d{6}$/, "Код має містити лише цифри"),
+    password: z
+        .string()
+        .min(8, "Мінімум 8 символів")
+        .regex(/[!@#$%^&*(),.?":{}|<>]/, "Потрібен хоча б один спецсимвол")
+        .regex(/\d/, "Потрібна хоча б одна цифра"),
+});
+
+type FormValues = z.infer<typeof schema>;
 
 interface ResetPasswordFormProps {
     email?: string;
@@ -12,55 +33,52 @@ interface ResetPasswordFormProps {
 }
 
 const ResetPasswordForm = ({ email: initialEmail = "", onSuccess, onBack }: ResetPasswordFormProps) => {
-    const [email, setEmail] = useState(initialEmail);
-    const [code, setCode] = useState("");
-    const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [serverError, setServerError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
 
     const [resetPassword, { isLoading }] = useResetPasswordMutation();
 
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        watch,
+        formState: { errors },
+    } = useForm<FormValues>({
+        resolver: zodResolver(schema),
+        defaultValues: { email: initialEmail, code: "", password: "" },
+    });
+
     useEffect(() => {
-        if (initialEmail) setEmail(initialEmail);
-    }, [initialEmail]);
+        if (initialEmail) setValue("email", initialEmail);
+    }, [initialEmail, setValue]);
 
+    const password = watch("password", "");
     const hasMinLength = password.length >= 8;
-    const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-    const hasNumber = /\d/.test(password);
+    const hasSymbol    = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const hasNumber    = /\d/.test(password);
 
-    const isFormValid =
-        email.includes("@") &&
-        email.includes(".") &&
-        code.trim().length === 6 &&
-        hasMinLength &&
-        hasSymbol &&
-        hasNumber;
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setErrorMessage(null);
-
+    const onSubmit = async (values: FormValues) => {
+        setServerError(null);
         try {
             await resetPassword({
-                email: email.trim(),
-                code: code.trim(),
-                newPassword: password,
+                email:       values.email,
+                code:        values.code,
+                newPassword: values.password,
             }).unwrap();
             setSuccess(true);
             setTimeout(() => onSuccess?.(), 1500);
         } catch (err) {
             const apiError = parseError(err as FetchBaseQueryError);
-            setErrorMessage(apiError.detail ?? apiError.title);
+            setServerError(apiError.detail ?? apiError.title);
         }
     };
 
     if (success) {
         return (
             <div className="flex flex-col items-center py-4">
-                <div className="w-11 h-11 rounded-full flex items-center justify-center mb-3">
-                    <img src={logo} className="w-11 h-11" alt="" />
-                </div>
+                <img src={logo} className="w-11 h-11 mb-3" alt="" />
                 <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] mb-2">
                     Password updated
                 </h2>
@@ -73,9 +91,7 @@ const ResetPasswordForm = ({ email: initialEmail = "", onSuccess, onBack }: Rese
 
     return (
         <div className="flex flex-col items-center">
-            <div className="w-11 h-11 rounded-full flex items-center justify-center mb-3">
-                <img src={logo} className="w-11 h-11" alt="" />
-            </div>
+            <img src={logo} className="w-11 h-11 mb-3" alt="" />
 
             <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px]">
                 Reset password
@@ -84,43 +100,48 @@ const ResetPasswordForm = ({ email: initialEmail = "", onSuccess, onBack }: Rese
                 Enter the code from your email and choose a new password
             </p>
 
-            <form className="w-full space-y-3" onSubmit={handleSubmit}>
+            <form className="w-full space-y-3" onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label className="block text-sm text-white dark:text-black mb-1">Email</label>
                     <input
+                        {...register("email")}
                         type="email"
                         placeholder="yourgmail@gmail.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
                         readOnly={!!initialEmail}
-                        className="w-full h-10 px-4 rounded-[5px] text-white dark:text-black text-sm outline-none transition border-[var(--color-btn-primary)] border"
+                        className="w-full h-10 px-4 rounded-[5px] text-white dark:text-black text-sm outline-none transition border border-[var(--color-btn-primary)]"
                     />
+                    {errors.email && (
+                        <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+                    )}
                 </div>
 
                 <div>
                     <label className="block text-sm text-white dark:text-black mb-1">Confirmation code</label>
                     <input
+                        {...register("code")}
                         type="text"
                         inputMode="numeric"
                         maxLength={6}
                         placeholder="123456"
-                        value={code}
-                        onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-                        required
-                        className="w-full h-10 px-4 rounded-[5px] text-white dark:text-black text-sm outline-none transition border-[var(--color-btn-primary)] border tracking-[0.3em]"
+                        onChange={(e) => {
+                            // дозволяємо лише цифри
+                            const digits = e.target.value.replace(/\D/g, "");
+                            setValue("code", digits, { shouldValidate: true });
+                        }}
+                        className="w-full h-10 px-4 rounded-[5px] text-white dark:text-black text-sm outline-none transition border border-[var(--color-btn-primary)] tracking-[0.3em]"
                     />
+                    {errors.code && (
+                        <p className="text-red-500 text-xs mt-1">{errors.code.message}</p>
+                    )}
                 </div>
 
                 <div>
                     <label className="block text-sm text-white dark:text-black mb-1">New password</label>
                     <div className="relative">
                         <input
+                            {...register("password")}
                             type={showPassword ? "text" : "password"}
                             placeholder="your new password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
                             className="w-full h-10 px-4 pr-10 rounded-[5px] text-white dark:text-black text-sm outline-none transition border border-[var(--color-btn-primary)]"
                         />
                         <button
@@ -142,16 +163,28 @@ const ResetPasswordForm = ({ email: initialEmail = "", onSuccess, onBack }: Rese
                             )}
                         </button>
                     </div>
+
+                    {password.length > 0 && (
+                        <ul className="mt-1.5 space-y-0.5">
+                            <PasswordHint ok={hasMinLength} label="Мінімум 8 символів" />
+                            <PasswordHint ok={hasNumber}    label="Хоча б одна цифра" />
+                            <PasswordHint ok={hasSymbol}    label="Хоча б один спецсимвол (!@#...)" />
+                        </ul>
+                    )}
+
+                    {errors.password && !password.length && (
+                        <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+                    )}
                 </div>
 
-                {errorMessage && (
-                    <p className="text-red-500 text-xs">{errorMessage}</p>
+                {serverError && (
+                    <p className="text-red-500 text-xs">{serverError}</p>
                 )}
 
                 <Button
                     type="submit"
-                    disabled={isLoading || !isFormValid}
-                    variant={isFormValid ? "primary" : "secondary"}
+                    disabled={isLoading}
+                    variant="primary"
                     fullWidth
                     radius={5}
                 >
@@ -171,5 +204,12 @@ const ResetPasswordForm = ({ email: initialEmail = "", onSuccess, onBack }: Rese
         </div>
     );
 };
+
+const PasswordHint = ({ ok, label }: { ok: boolean; label: string }) => (
+    <li className={`flex items-center gap-1.5 text-xs transition-colors ${ok ? "text-[#1DB954]" : "text-[#A1A1A1]"}`}>
+        <span>{ok ? "✓" : "○"}</span>
+        {label}
+    </li>
+);
 
 export default ResetPasswordForm;
