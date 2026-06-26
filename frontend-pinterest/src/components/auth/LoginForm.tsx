@@ -8,9 +8,10 @@ import logo from "@/assets/logo.png";
 
 interface LoginFormProps {
     onSuccess?: () => void;
+    onForgotPassword?: () => void;
 }
 
-const LoginForm = ({ onSuccess }: LoginFormProps) => {
+const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -92,6 +93,15 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
                     </button>
                 </div>
 
+                {onForgotPassword && (
+                    <button
+                        type="button"
+                        onClick={onForgotPassword}
+                        className="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-btn-primary)] transition-colors"
+                    >
+                        Forgot password?
+                    </button>
+                )}
 
                 {error && <p className="text-red-500 text-xs">Невірний email або пароль</p>}
 

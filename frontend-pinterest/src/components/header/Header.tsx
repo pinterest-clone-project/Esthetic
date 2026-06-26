@@ -5,6 +5,8 @@ import Button from "@/components/button/Button.tsx";
 import {useEffect, useRef, useState} from "react";
 import LoginForm from "@/components/auth/LoginForm.tsx";
 import RegisterForm from "@/components/auth/RegisterForm.tsx";
+import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm.tsx";
+import ResetPasswordForm from "@/components/auth/ResetPasswordForm.tsx";
 import {useAppDispatch, useAppSelector} from "@/store";
 import userIcon from "../../../src/assets/icons/user_icon.svg";
 import {clearUser} from "@/store/slices/authSlice.ts";
@@ -17,10 +19,11 @@ import NotificationBell from "@/components/header/NotificationBell.tsx";
 import {useTheme} from "@/context/ThemeContext.tsx";
 import Modal from "@/components/ui/Modal.tsx";
 
-type ModalType = "login" | "signup" | null;
+type ModalType = "login" | "signup" | "forgot-password" | "reset-password" | null;
 
 const Header: React.FC = () => {
     const [activeModal, setActiveModal] = useState<ModalType>(null);
+    const [resetEmail, setResetEmail] = useState("");
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const user = useAppSelector((state) => state.auth.user);
@@ -190,7 +193,33 @@ const Header: React.FC = () => {
 
             <Modal isOpen={activeModal === "login"} onClose={() => setActiveModal(null)}
                    width={450} height={438} borderRadius={20}>
-                <LoginForm onSuccess={() => setActiveModal(null)} />
+                <LoginForm
+                    onSuccess={() => setActiveModal(null)}
+                    onForgotPassword={() => setActiveModal("forgot-password")}
+                />
+            </Modal>
+
+            <Modal isOpen={activeModal === "forgot-password"} onClose={() => setActiveModal(null)}
+                   width={450} height="auto" borderRadius={20}>
+                <ForgotPasswordForm
+                    onSuccess={(email) => {
+                        setResetEmail(email);
+                        setActiveModal("reset-password");
+                    }}
+                    onBack={() => setActiveModal("login")}
+                />
+            </Modal>
+
+            <Modal isOpen={activeModal === "reset-password"} onClose={() => setActiveModal(null)}
+                   width={450} height="auto" borderRadius={20}>
+                <ResetPasswordForm
+                    email={resetEmail}
+                    onSuccess={() => {
+                        setResetEmail("");
+                        setActiveModal("login");
+                    }}
+                    onBack={() => setActiveModal("forgot-password")}
+                />
             </Modal>
 
         </header>
