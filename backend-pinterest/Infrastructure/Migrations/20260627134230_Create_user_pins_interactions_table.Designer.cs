@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260627090436_Add_user_pins_interactions_table")]
-    partial class Add_user_pins_interactions_table
+    [Migration("20260627134230_Create_user_pins_interactions_table")]
+    partial class Create_user_pins_interactions_table
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,6 +1,8 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Validators;
+using Application.Models.DTO.Pin;
 using Application.UseCases.Recommended.Command;
+using Application.UseCases.Recommended.Query;
 using Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -13,14 +15,15 @@ namespace backend_pinterest.Controllers;
 [ApiController]
 public class RecommendedController(IMediator mediator) : ControllerBase
 {
-    private Guid CurrentUserId => Guid.Parse(
-        User.FindFirstValue(JwtClaims.Id)
-        ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized));
+    private Guid CurrentUserId =>
+    Guid.TryParse(User.FindFirstValue(JwtClaims.Id), out var id) ? id : Guid.Empty;
 
     [Authorize]
     [HttpPost("track-view/{pinId}")]
     public async Task<IActionResult> TrackView([FromRoute] Guid pinId)
     {
+        if(CurrentUserId == Guid.Empty)
+            throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
         var command = new TrackPinViewCommand
         {
             UserId = CurrentUserId,
@@ -30,5 +33,12 @@ public class RecommendedController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(command);
         return Ok(result);
 
+    }
+    [HttpGet("recommended")]
+    public async Task<List<PinSummaryDTO>> GetRecommended()
+    {
+        var query = new GetRecommendedPinsQuery(CurrentUserId);
+        var result = await mediator.Send(query);
+        return result;
     }
 }
