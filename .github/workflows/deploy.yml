@@ -17,14 +17,21 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Build and Push Docker Images
       run: |
+        SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+        
         cd frontend-pinterest
         docker build --build-arg VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }} --build-arg VITE_APP_IMAGE_URL=${{ secrets.VITE_APP_IMAGE_URL }} --build-arg VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }} -t esthetic-web .
         docker tag esthetic-web:latest jacobs51/esthetic-web:latest
+        docker tag esthetic-web:latest jacobs51/esthetic-web:$SHORT_SHA
         docker push jacobs51/esthetic-web:latest
+        docker push jacobs51/esthetic-web:$SHORT_SHA
+        
         cd ../backend-pinterest
         docker build -t esthetic-api .
         docker tag esthetic-api:latest jacobs51/esthetic-api:latest
+        docker tag esthetic-api:latest jacobs51/esthetic-api:$SHORT_SHA
         docker push jacobs51/esthetic-api:latest
+        docker push jacobs51/esthetic-api:$SHORT_SHA
 
     - name: Deploy to Server via SSH
       uses: appleboy/ssh-action@v1.0.3
@@ -34,5 +41,12 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           cd /var/www/esthetic
+          
+          if [ -f .last_deployed_sha ]; then
+            cp .last_deployed_sha .previous_deployed_sha
+          fi
+          echo "${{ github.sha }}" | cut -c1-7 > .last_deployed_sha
+          
           docker compose -f docker-compose.prod.yml pull
           docker compose -f docker-compose.prod.yml up -d
+          docker image prune -f
