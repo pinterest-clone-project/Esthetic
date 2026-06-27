@@ -5,7 +5,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
     volumes:
-      - ./backend-pinterest/backend-pinterest/appsettings.Production.json:/app/appsettings.Production.json:ro
+      - ./appsettings.Production.json:/app/appsettings.Production.json:ro
       - /var/www/esthetic-images:/app/images
     depends_on:
       - redis
