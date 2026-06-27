@@ -104,7 +104,14 @@ const FirstPage = () => {
 
                 <div className={"grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-0 text-white w-full"}>
 
-                    <section className=" hidden md:hidden lg:flex justify-center">
+                    {/* Mobile images */}
+                    <div className="flex lg:hidden gap-2 w-full px-4">
+                        <img src={im6} className="w-0 flex-1 object-cover rounded-[12px]" style={{height: "48vw"}} />
+                        <img src={im7} className="w-0 flex-1 object-cover rounded-[12px] self-start" style={{height: "54vw"}} />
+                        <img src={im8} className="w-0 flex-1 object-cover rounded-[12px]" style={{height: "48vw"}} />
+                    </div>
+
+                    <section className="hidden lg:flex justify-center">
                         <div className="relative w-full max-w-[700px] h-[500px]">
 
                             <img src={im6} className="absolute top-[4%] left-[23%] w-[150px] h-[150px] object-cover rounded-[15px]" />

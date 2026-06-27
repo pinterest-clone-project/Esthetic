@@ -204,7 +204,7 @@ if (isLoading) return <p>Завантаження...</p>;
                 <button
                     type="button"
                     onClick={handleLogout}
-                    className="md:hidden mt-6 w-full px-4 py-2 text-left text-sm text-red-700 dark:text-red-400 cursor-pointer hover:bg-[#A1A1A1] dark:hover:bg-[#535353] transition flex items-center gap-2 rounded-xl"
+                    className="md:hidden mt-6 w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-red-500 text-red-500 text-sm font-medium hover:bg-red-500/10 transition"
                 >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
