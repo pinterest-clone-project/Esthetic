@@ -22,8 +22,6 @@ public class RecommendedController(IMediator mediator) : ControllerBase
     [HttpPost("track-view/{pinId}")]
     public async Task<IActionResult> TrackView([FromRoute] Guid pinId)
     {
-        if(CurrentUserId == Guid.Empty)
-            throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized);
         var command = new TrackPinViewCommand
         {
             UserId = CurrentUserId,
