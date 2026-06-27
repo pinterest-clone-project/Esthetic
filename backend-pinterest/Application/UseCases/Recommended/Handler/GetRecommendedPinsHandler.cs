@@ -14,13 +14,14 @@ public class GetRecommendedPinsHandler(IRecommendedRepository recommendedReposit
     {
         if (request.UserId == Guid.Empty)
         {
-            var pins = await pinRepository.GetAllWithDetailsAsync(ct);
-
-            return pins.Take(20).Select(p => pinMapper.ToSummaryDto(p, Guid.Empty)).ToList();
+            return await GetRandom(ct);
         }
         else
         {
             var userPinsInteractions = await recommendedRepository.GetAllByUserAsync(request.UserId);
+            if (userPinsInteractions.Count < 1)
+                return await GetRandom(ct);
+
             var pinIds = userPinsInteractions.OrderByDescending(x => x.ViewCount).ThenByDescending(x => x.LastViewedAt).Take(30).Select(x => x.PinId).ToList();
             var tagIds = await pinRepository.GetTagIdsByPinIdsAsync(pinIds, ct);
 
@@ -31,5 +32,12 @@ public class GetRecommendedPinsHandler(IRecommendedRepository recommendedReposit
             return recommendedPins.Select(p => pinMapper.ToSummaryDto(p, request.UserId)).ToList();
         }
 
+    }
+
+    private async Task<List<PinSummaryDTO>> GetRandom(CancellationToken ct)
+    {
+        var pins = await pinRepository.GetAllWithDetailsAsync(ct);
+
+        return pins.Take(20).Select(p => pinMapper.ToSummaryDto(p, Guid.Empty)).ToList();
     }
 }
