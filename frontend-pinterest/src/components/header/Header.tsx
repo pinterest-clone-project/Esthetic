@@ -5,6 +5,8 @@ import Button from "@/components/button/Button.tsx";
 import {useEffect, useRef, useState} from "react";
 import LoginForm from "@/components/auth/LoginForm.tsx";
 import RegisterForm from "@/components/auth/RegisterForm.tsx";
+import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm.tsx";
+import ResetPasswordForm from "@/components/auth/ResetPasswordForm.tsx";
 import {useAppDispatch, useAppSelector} from "@/store";
 import userIcon from "../../../src/assets/icons/user_icon.svg";
 import {clearUser} from "@/store/slices/authSlice.ts";
@@ -17,10 +19,11 @@ import NotificationBell from "@/components/header/NotificationBell.tsx";
 import {useTheme} from "@/context/ThemeContext.tsx";
 import Modal from "@/components/ui/Modal.tsx";
 
-type ModalType = "login" | "signup" | null;
+type ModalType = "login" | "signup" | "forgot-password" | "reset-password" | null;
 
 const Header: React.FC = () => {
     const [activeModal, setActiveModal] = useState<ModalType>(null);
+    const [resetEmail, setResetEmail] = useState("");
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const user = useAppSelector((state) => state.auth.user);
@@ -60,7 +63,7 @@ const Header: React.FC = () => {
             <div className="max-w-[1505px] h-[50px] mx-auto px-4 flex items-center justify-between gap-4
             ">
 
-                <div className="flex items-center gap-3 shrink-0 hover:cursor-pointer -ml-1.5">
+                <div className="flex items-center gap-3 shrink-0 cursor-pointer -ml-1.5">
                     <img
                         className="w-11 h-11"
                         src={logo}
@@ -77,7 +80,7 @@ const Header: React.FC = () => {
                     <div className="flex items-center bg-[#A2A2A2] dark:bg-[#535353] rounded-[10px] px-4 h-9 w-full max-w-[586px] h-[40px]">
                         <img
                             src={theme === "dark" ? searchIconDark : searchIconLight}
-                            className="w-[27px] h-[27px] opacity-70 hover:cursor-pointer"
+                            className="w-[27px] h-[27px] opacity-70 cursor-pointer"
                         />
 
                         <input
@@ -91,13 +94,13 @@ const Header: React.FC = () => {
                 <nav className="hidden md:flex items-center gap-5 shrink-0">
                     {!user && (
                         <div className="hidden lg:flex items-center gap-5">
-                            <a className="text-black dark:text-white hover:text-green-400 hover:cursor-pointer transition font-normal text-sm leading-5 tracking-[-0.5px]">
+                            <a className="text-black dark:text-white hover:text-green-400 cursor-pointer transition font-normal text-sm leading-5 tracking-[-0.5px]">
                                 About Us
                             </a>
-                            <a className="text-black dark:text-white text-sm hover:text-green-400 hover:cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
+                            <a className="text-black dark:text-white text-sm hover:text-green-400 cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
                                 For Business
                             </a>
-                            <a className="text-black dark:text-white text-sm hover:text-green-400 hover:cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
+                            <a className="text-black dark:text-white text-sm hover:text-green-400 cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
                                 News
                             </a>
                         </div>
@@ -123,7 +126,10 @@ const Header: React.FC = () => {
                                             )}
                                         </div>
                                     </Link>
-                                    <button onClick={() => setDropdownOpen(!dropdownOpen)}>
+                                    <button
+                                        onClick={() => setDropdownOpen(!dropdownOpen)}
+                                        className="cursor-pointer"
+                                    >
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={theme === "dark" ? "#FFFFFF" : "#000000"} strokeWidth="2">
                                             <path d="M6 9l6 6 6-6"/>
                                         </svg>
@@ -142,7 +148,7 @@ const Header: React.FC = () => {
                                                     setDropdownOpen(false);
                                                     navigate("/admin");
                                                 }}
-                                                className="w-full px-4 py-2 text-left text-sm text-white hover:bg-[#535353] transition flex items-center gap-2"
+                                                className="w-full px-4 py-2 text-left text-sm text-white hover:bg-[#535353] transition flex items-center gap-2 cursor-pointer"
                                             >
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                                                     <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z"/>
@@ -189,8 +195,34 @@ const Header: React.FC = () => {
             </Modal>
 
             <Modal isOpen={activeModal === "login"} onClose={() => setActiveModal(null)}
-                   width={450} height={438} borderRadius={20}>
-                <LoginForm onSuccess={() => setActiveModal(null)} />
+                   width={450} height="auto" borderRadius={20}>
+                <LoginForm
+                    onSuccess={() => setActiveModal(null)}
+                    onForgotPassword={() => setActiveModal("forgot-password")}
+                />
+            </Modal>
+
+            <Modal isOpen={activeModal === "forgot-password"} onClose={() => setActiveModal(null)}
+                   width={450} height="auto" borderRadius={20}>
+                <ForgotPasswordForm
+                    onSuccess={(email) => {
+                        setResetEmail(email);
+                        setActiveModal("reset-password");
+                    }}
+                    onBack={() => setActiveModal("login")}
+                />
+            </Modal>
+
+            <Modal isOpen={activeModal === "reset-password"} onClose={() => setActiveModal(null)}
+                   width={450} height="auto" borderRadius={20}>
+                <ResetPasswordForm
+                    email={resetEmail}
+                    onSuccess={() => {
+                        setResetEmail("");
+                        setActiveModal("login");
+                    }}
+                    onBack={() => setActiveModal("forgot-password")}
+                />
             </Modal>
 
         </header>

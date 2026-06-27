@@ -67,7 +67,7 @@ const Modal = ({
                             </h2>
                             <button
                                 onClick={onClose}
-                                className="w-7 h-7 flex items-center justify-center rounded-full bg-[#A1A1A1] dark:bg-[#a2a2a2] hover:bg-[#3a3a3a] transition-colors"
+                                className="w-7 h-7 flex items-center justify-center rounded-full bg-[#A1A1A1] dark:bg-[#a2a2a2] hover:bg-[#3a3a3a] transition-colors cursor-pointer"
                             >
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
                                     <path d="M18 6L6 18M6 6l12 12" />
@@ -91,8 +91,13 @@ const Modal = ({
             onClick={closeOnOverlay ? onClose : undefined}
         >
             <div
-                style={{ width, height: height === "auto" ? undefined : height, borderRadius }}
-                className="bg-black dark:bg-white shadow-2xl overflow-y-auto p-8"
+                style={{
+                    width,
+                    height: height === "auto" ? undefined : height,
+                    maxHeight: "90vh",
+                    borderRadius,
+                }}
+                className="bg-black dark:bg-white shadow-2xl p-8 overflow-y-auto overscroll-contain"
                 onClick={(e) => e.stopPropagation()}
             >
                 {children}

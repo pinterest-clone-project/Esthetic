@@ -1,6 +1,6 @@
-import { useGetAllPinsQuery } from "../../services/pinService.ts";
 import PinCard from "@/components/ui/PinCard.tsx";
 import {useMemo} from "react";
+import {useGetRecommendedPinsQuery} from "@/services/recommendedPinsService.ts";
 
 
 
@@ -10,7 +10,7 @@ const PinCardSkeleton = ({ height }: { height: number }) => (
 );
 
 const ReviewPage = () => {
-    const { data: pins, isLoading, isError } = useGetAllPinsQuery();
+    const { data: pins, isLoading, isError } = useGetRecommendedPinsQuery();
 
     const skeletonHeights = useMemo(
         () => Array.from({ length: 12 }, () => Math.floor(Math.random() * 120) + 160),
