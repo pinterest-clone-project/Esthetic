@@ -28,4 +28,7 @@ dist-ssr
 .env.production
 .env.local
 
+# Superpowers / AI tooling
+docs/superpowers/
+
 
