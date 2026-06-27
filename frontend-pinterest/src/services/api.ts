@@ -12,7 +12,8 @@ export const api = createApi({
         "MyMoodboards",
         "Chat",
         "Message",
-        "Notification"
+        "Notification",
+        "RecommendedPins"
     ],
     endpoints: () => ({})
 });

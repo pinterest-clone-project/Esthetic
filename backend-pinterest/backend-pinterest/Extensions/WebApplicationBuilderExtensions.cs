@@ -231,6 +231,7 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<IChatRepository, ChatRepository>();
         services.AddScoped<IMessageRepository, MessageRepository>();
         services.AddScoped<INotificationRepository, NotificationRepository>();
+        services.AddScoped<IRecommendedRepository, RecommendedRepository>();
 
         services.AddScoped<IEmailJobScheduler, EmailJobScheduler>();
 

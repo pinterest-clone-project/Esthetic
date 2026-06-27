@@ -10,6 +10,7 @@ using Domain.Entities.Like;
 using Domain.Entities.Notification;
 using Domain.Entities.Pin;
 using Domain.Entities.PinTag;
+using Domain.Entities.Recommended;
 using Domain.Entities.Report;
 using Domain.Entities.Tag;
 using Domain.Entities.UserBlock;
@@ -45,6 +46,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     public DbSet<MessageEntity> Messages { get; set; }
     public DbSet<TagEntity> Tags { get; set; }
     public DbSet<NotificationEntity> Notifications { get; set; }
+    public DbSet<UserPinInteraction> UserPinInteractions { get; set; }
 
     public IDbContextTransaction? CurrentTransaction => Database.CurrentTransaction;
 
@@ -76,6 +78,8 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
                     property.SetValueConverter(nullableDateTimeConverter);
             }
         }
+
+        builder.Entity<UserPinInteraction>().HasIndex(x => new { x.UserId, x.PinId }).IsUnique();
 
     }
 }

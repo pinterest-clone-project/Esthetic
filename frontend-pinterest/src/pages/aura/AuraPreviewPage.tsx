@@ -7,17 +7,21 @@ import PinCard from "@/components/ui/PinCard.tsx";
 import BackButton from "@/components/ui/BackButton.tsx";
 import { APP_ENV } from "@/constants/env";
 import SaveModal from "@/components/ui/SaveModal.tsx";
+import {useTrackViewPinMutation} from "@/services/recommendedPinsService.ts";
 
 const AuraPreviewPage = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
     const { data: pin, isLoading, isError } = useGetPinByIdQuery(id!);
+
+    const [trackView] = useTrackViewPinMutation();
     // Sync liked state once pin data loads
     useEffect(() => {
         if (pin) {
             setLiked(pin.isLikedByMe ?? false);
             setLikesCount(pin.likesCount);
+            trackView(pin.id);
         }
     }, [pin?.id]);
     const { data: allPins } = useGetAllPinsQuery();

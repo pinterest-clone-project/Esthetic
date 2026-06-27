@@ -31,4 +31,13 @@ public class PinRepository(AppDbContext db) : BaseRepository<PinEntity>(db), IPi
         .Include(p => p.Comments)
         .Where(p => !p.IsDeleted && p.CreatorId == userId)
         .ToListAsync(ct);
+
+    public async Task<List<Guid>> GetTagIdsByPinIdsAsync(List<Guid> pinIds,CancellationToken ct = default)
+    =>
+         await _db.PinTags
+            .Where(pt => pinIds.Contains(pt.PinId))
+            .Select(pt => pt.TagId)
+            .Distinct()
+            .ToListAsync(ct);
+    
 }
