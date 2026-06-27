@@ -70,13 +70,13 @@ const Header: React.FC = () => {
                     />
 
                     {!user && (
-                        <a className="hidden md:block text-black dark:text-white font-bold text-xl leading-5 tracking-[-0.5px]" href="/">
+                        <a className="text-black dark:text-white font-bold text-xl leading-5 tracking-[-0.5px]" href="/">
                             Esthetic
                         </a>
                     )}
                 </div>
 
-                <div className="flex-1 flex justify-center">
+                <div className={`flex-1 flex justify-center ${!user ? "hidden md:flex" : ""}`}>
                     <div className="flex items-center bg-[#A2A2A2] dark:bg-[#535353] rounded-[10px] px-4 h-9 w-full max-w-[586px] h-[40px]">
                         <img
                             src={theme === "dark" ? searchIconDark : searchIconLight}
@@ -90,6 +90,19 @@ const Header: React.FC = () => {
                         />
                     </div>
                 </div>
+
+                {!user && (
+                    <div className="flex md:hidden items-center gap-2 shrink-0">
+                        <Button variant="primary" size="sm" radius={4} className="!w-auto px-3"
+                                onClick={() => setActiveModal("signup")}>
+                            Sign Up
+                        </Button>
+                        <Button variant={theme === "dark" ? "dark" : "light"} size="sm" radius={4} className="!w-auto px-3"
+                                onClick={() => setActiveModal("login")}>
+                            Log in
+                        </Button>
+                    </div>
+                )}
 
                 <nav className="hidden md:flex items-center gap-5 shrink-0">
                     {!user && (

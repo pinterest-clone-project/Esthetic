@@ -18,13 +18,15 @@ const FirstPage = () => {
     return (
         <div className="scroll-smooth">
 
+            <div className="md:contents flex flex-col min-h-[calc(100vh-72px)]">
+
             <section className={"flex-col flex items-center pt-8"}>
                 <div className={"lg:text-[64px] text-4xl font-bold top-32 leading-[45px] tracking-normal text-center text-black dark:text-white "}>
                     Explore new ideas & inspirations</div>
                 <div className={"lg:text-[24px] text-sm top-32 lg:leading-[45px] leading-[20px] lg:pt-6 pt-3 tracking-normal text-center max-w-[1011px] text-[#A1A1A1A1] "}>
                     Discover and save your favourites from around the web</div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mt-8">
+                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 mt-8">
                     {["Concept Art", "Photography", "Nature", "Wallpapers"].map(
                         (category) => (
                             <button
@@ -38,7 +40,15 @@ const FirstPage = () => {
                 </div>
             </section>
 
-            <section className="mt-[60px] flex justify-center h-[330px] sm:h-[400px] lg:h-[475px] md:h-[475px]">
+            <section className="mt-[40px] flex justify-center md:h-[475px] lg:h-[475px]">
+
+                {/* Mobile: 3 images in a row */}
+                <div className="flex md:hidden gap-2 w-full px-4">
+                    <img src={im1} className="w-0 flex-1 object-cover rounded-[12px]" style={{height: "48vw"}} />
+                    <img src={im2} className="w-0 flex-1 object-cover rounded-[12px] self-start" style={{height: "54vw"}} />
+                    <img src={im3} className="w-0 flex-1 object-cover rounded-[12px]" style={{height: "48vw"}} />
+                </div>
+
                 <div className="hidden relative lg:block md:block w-full max-w-[1400px]">
 
                     <img
@@ -70,8 +80,8 @@ const FirstPage = () => {
             </section>
 
             {!user && (
-            <section className="relative w-screen ml-[calc(50%-50vw)]">
-                <a href={"#see-how-it-works"} className="w-full h-[70px] bg-btn-primary text-white dark:text-black font-medium text-2xl flex items-center justify-center gap-2 ">
+            <section className="relative w-screen ml-[calc(50%-50vw)] mt-auto md:mt-0">
+                <a href={"#see-how-it-works"} className="w-full h-[50px] md:h-[70px] bg-btn-primary text-white dark:text-black font-medium text-base md:text-2xl flex items-center justify-center gap-2 ">
                     See how it works
                     <svg
                         width="20"
@@ -86,6 +96,8 @@ const FirstPage = () => {
                 </a>
             </section>
             )}
+
+            </div>
 
 
             <section id={"see-how-it-works"} className={"min-h-screen flex items-center"}>
