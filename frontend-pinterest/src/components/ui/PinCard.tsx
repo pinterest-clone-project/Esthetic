@@ -91,7 +91,7 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
             <div className={`absolute top-2 left-2 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
                 <button
                     onClick={handleLike}
-                    className="flex items-center gap-1 bg-black/50 hover:bg-black/70 rounded-full px-2 py-1 transition-colors"
+                    className="flex items-center gap-1 bg-black/50 hover:bg-black/70 rounded-full px-2 py-1 transition-colors cursor-pointer"
                 >
                     <span className={`text-xs transition-colors ${liked ? 'text-[#4ade80]' : 'text-white/70'}`}>♥</span>
                     <span className="text-white text-[10px]">{likesCount}</span>

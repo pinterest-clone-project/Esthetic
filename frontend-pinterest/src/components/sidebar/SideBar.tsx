@@ -51,7 +51,7 @@ interface SidebarButtonProps {
 const SidebarButton = ({ icon, label, active, onClick, extraImgClass = "", children, isDark }: SidebarButtonProps) => (
     <button
         onClick={onClick}
-        className="relative group flex items-center justify-center w-[40px] h-[46px] rounded-lg transition-all duration-200 hover:bg-gray-200 dark:hover:bg-[#1a1a1a]"
+        className="relative group flex items-center justify-center w-[40px] h-[46px] rounded-lg transition-all duration-200 hover:bg-gray-200 dark:hover:bg-[#1a1a1a] cursor-pointer"
     >
         <img
             src={icon}
