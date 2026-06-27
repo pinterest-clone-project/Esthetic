@@ -77,7 +77,7 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
             <div className="absolute top-2 left-2 transition-opacity duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100">
                 <button
                     onClick={handleLike}
-                    className="flex items-center gap-1 bg-black/50 hover:bg-black/70 rounded-full px-2 py-1 transition-colors"
+                    className="flex items-center gap-1 bg-black/50 hover:bg-black/70 rounded-full px-2 py-1 transition-colors cursor-pointer"
                 >
                     <span className={`text-xs transition-colors ${liked ? 'text-[#4ade80]' : 'text-white/70'}`}>♥</span>
                     <span className="text-white text-[10px]">{likesCount}</span>
@@ -88,7 +88,7 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
             <div className="absolute bottom-2 right-2 transition-opacity duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100">
                 <button
                     onClick={(e) => { e.stopPropagation(); setMenuOpen(p => !p); }}
-                    className="flex items-center gap-[3px] bg-black/50 hover:bg-black/70 rounded-full px-2 py-1.5 transition-colors"
+                    className="flex items-center gap-[3px] bg-black/50 hover:bg-black/70 rounded-full px-2 py-1.5 transition-colors cursor-pointer"
                 >
                     {[0, 1, 2].map(i => (
                         <span key={i} className="w-1 h-1 rounded-full bg-[#4ade80] block" />
