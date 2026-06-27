@@ -6,6 +6,7 @@ import { useLikeMutation, useUnlikeMutation } from "../../services/likeService.t
 import PinCard from "@/components/ui/PinCard.tsx";
 import BackButton from "@/components/ui/BackButton.tsx";
 import { APP_ENV } from "@/constants/env";
+import SaveModal from "@/components/ui/SaveModal.tsx";
 
 const AuraPreviewPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -29,6 +30,7 @@ const AuraPreviewPage = () => {
     // Ideally seed `liked` from pin.isLikedByMe if your API provides it
     const [liked, setLiked] = useState(false);
     const [likesCount, setLikesCount] = useState<number | null>(null);
+    const [saveModalOpen, setSaveModalOpen] = useState(false);
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: "instant" });
@@ -94,41 +96,52 @@ const AuraPreviewPage = () => {
                     {/* Actions row */}
                     <div className="flex flex-wrap items-center justify-between gap-3">
                         <div className="flex items-center gap-3">
-                            {/* Like button */}
                             <button
                                 onClick={handleLike}
                                 className="flex items-center gap-1.5 text-xs transition-colors group"
                             >
-                                <span className={`transition-colors ${liked ? 'text-[#4ade80]' : 'text-gray-500 group-hover:text-[#4ade80]'}`}>
-                                    ♥
-                                </span>
-                                <span className={`transition-colors ${liked ? 'text-black dark:text-white' : 'text-gray-500'}`}>
-                                    {displayLikesCount}
-                                </span>
+                                <span className={`transition-colors ${liked ? 'text-[#4ade80]' : 'text-gray-500 group-hover:text-[#4ade80]'}`}>♥</span>
+                                <span className={`transition-colors ${liked ? 'text-white' : 'text-gray-500'}`}>{displayLikesCount}</span>
                             </button>
-
                             <span className="flex items-center gap-1.5 text-gray-500 text-xs">
                                 <span className="text-[#4ade80]">💬</span>
                                 {pin.commentsCount}
                             </span>
                         </div>
-
-                        {isOwner && (
-                            <div className="flex items-center gap-2">
-                                <button
-                                    onClick={() => navigate(`/aura/edit/${pin.id}`)}
-                                    className="text-xs text-gray-400 hover:text-white border border-white/10 hover:border-white/30 px-3 py-1.5 rounded-lg transition-colors"
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    onClick={handleDelete}
-                                    className="text-xs text-red-400 hover:text-red-300 border border-red-500/20 hover:border-red-400/40 px-3 py-1.5 rounded-lg transition-colors"
-                                >
-                                    Delete
-                                </button>
-                            </div>
-                        )}
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => {
+                                    navigator.clipboard.writeText(
+                                        `${window.location.origin}/aura/preview/${pin.id}`
+                                    );
+                                }}
+                                className="text-xs text-gray-400 hover:text-white border border-white/10 hover:border-white/30 px-3 py-1.5 rounded-lg transition-colors"
+                            >
+                                Share
+                            </button>
+                            <button
+                                onClick={() => setSaveModalOpen(true)}
+                                className="text-xs text-[#4ade80] border border-[#4ade80]/30 hover:border-[#4ade80] px-3 py-1.5 rounded-lg transition-colors"
+                            >
+                                Save
+                            </button>
+                            {isOwner && (
+                                <>
+                                    <button
+                                        onClick={() => navigate(`/aura/edit/${pin.id}`)}
+                                        className="text-xs text-gray-400 hover:text-white border border-white/10 hover:border-white/30 px-3 py-1.5 rounded-lg transition-colors"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        onClick={handleDelete}
+                                        className="text-xs text-red-400 hover:text-red-300 border border-red-500/20 hover:border-red-400/40 px-3 py-1.5 rounded-lg transition-colors"
+                                    >
+                                        Delete
+                                    </button>
+                                </>
+                            )}
+                        </div>
                     </div>
 
                     {/* Title */}
@@ -202,6 +215,9 @@ const AuraPreviewPage = () => {
                         ))}
                     </div>
                 </>
+            )}
+            {saveModalOpen && (
+                <SaveModal pinId={pin.id} onClose={() => setSaveModalOpen(false)} />
             )}
         </div>
     );

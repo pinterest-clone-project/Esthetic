@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useEffect } from "react";
 import { useCreatePinMutation } from "@/services/pinService.ts";
 import { useGetAllCategoriesQuery } from "@/services/categoryService.ts";
 import { useGetAllTagsQuery } from "@/services/tagService.ts";
+import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
 import {APP_ENV} from "@/constants/env";
 import { useNavigate } from "react-router";
 import BackButton from "@/components/ui/BackButton.tsx";
@@ -12,6 +13,7 @@ const CreateAuraPage = () => {
     const { data: categories } = useGetAllCategoriesQuery();
     const { data: tags } = useGetAllTagsQuery();
 
+    const [cropperSrc, setCropperSrc] = useState<string | null>(null);
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [mediaUrl, setMediaUrl] = useState("");
     const [title, setTitle] = useState("");
@@ -66,9 +68,22 @@ const CreateAuraPage = () => {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        setImageFile(file);
+        const objectUrl = URL.createObjectURL(file);
+        setCropperSrc(objectUrl);
+        e.target.value = "";
+    };
+
+    const handleCropDone = (croppedFile: File) => {
+        if (cropperSrc) URL.revokeObjectURL(cropperSrc);
+        setCropperSrc(null);
+        setImageFile(croppedFile);
         setMediaUrl("");
-        setPreviewUrl(URL.createObjectURL(file));
+        setPreviewUrl(URL.createObjectURL(croppedFile));
+    };
+
+    const handleCropCancel = () => {
+        if (cropperSrc) URL.revokeObjectURL(cropperSrc);
+        setCropperSrc(null);
     };
 
     const handleMediaUrlBlur = () => {
@@ -319,6 +334,13 @@ const CreateAuraPage = () => {
                     />
                 </div>
             </div>
+            {cropperSrc && (
+                <ImageCropperModal
+                    imageSrc={cropperSrc}
+                    onCrop={handleCropDone}
+                    onClose={handleCropCancel}
+                />
+            )}
         </div>
     );
 };
