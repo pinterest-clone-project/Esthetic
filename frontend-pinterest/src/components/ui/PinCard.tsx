@@ -17,7 +17,7 @@ const ShareIcon = () => (
 
 const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     const [hovered, setHovered] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
+    // const [menuOpen, setMenuOpen] = useState(false);
     const [liked, setLiked] = useState(pin.isLikedByMe ?? false);
     const [likesCount, setLikesCount] = useState(pin.likesCount);
     const [saveModalOpen, setSaveModalOpen] = useState(false);
