@@ -26,8 +26,7 @@ public class GetRecommendedPinsHandler(IRecommendedRepository recommendedReposit
             var tagIds = await pinRepository.GetTagIdsByPinIdsAsync(pinIds, ct);
 
             var recommendedPins = await pinRepository.GetAllWithDetailsAsync(ct);
-            recommendedPins = recommendedPins.Where(p => p.PinTags!.Any(t => tagIds.Contains(t.TagId)))
-                .Where(p => !pinIds.Contains(p.Id)).ToList();
+            recommendedPins = recommendedPins.Where(p => p.PinTags!.Any(t => tagIds.Contains(t.TagId))).ToList();
 
             return recommendedPins.Select(p => pinMapper.ToSummaryDto(p, request.UserId)).ToList();
         }
