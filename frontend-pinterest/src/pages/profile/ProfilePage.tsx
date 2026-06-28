@@ -3,12 +3,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import {useEditProfileMutation, useGetMeQuery} from "@/services/accountService.ts";
+import {useEditProfileMutation, useGetMeQuery, useLogoutMutation} from "@/services/accountService.ts";
 import {useApiError} from "@/hooks/useApiError.ts";
 import {useFormServerErrors} from "@/hooks/useFormServerErrors.ts";
 import type {IEditRequest} from "@/types/account/requests/IEditRequest.ts";
 import {APP_ENV} from "@/constants/env";
 import {useToast} from "@/components/ui/Toast/UseToast.ts";
+import {useAppDispatch} from "@/store";
+import {clearUser} from "@/store/slices/authSlice.ts";
+import {api} from "@/services/api.ts";
+import {useNavigate} from "react-router";
 
 const schema = z.object({
     firstName:   z.string().min(1, "Імʼя обовʼязкове").max(50).or(z.literal("")).optional(),
@@ -32,6 +36,16 @@ const ProfilePage = () => {
     const { data: me, isLoading } = useGetMeQuery();
     const [editProfile, { isLoading: isSaving, error: rawError }] = useEditProfileMutation();
     const { showToast } = useToast();
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const [logout] = useLogoutMutation();
+
+    const handleLogout = async () => {
+        try { await logout(); } catch {}
+        dispatch(clearUser());
+        dispatch(api.util.resetApiState());
+        navigate("/");
+    };
 
     const {
         register,
@@ -186,6 +200,19 @@ if (isLoading) return <p>Завантаження...</p>;
                 {apiError && !apiError.errors && (
                     <p className="text-red-400 text-sm mt-4">{apiError.detail ?? apiError.title}</p>
                 )}
+
+                <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="md:hidden mt-6 w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-red-500 text-red-500 text-sm font-medium hover:bg-red-500/10 transition"
+                >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    Logout
+                </button>
             </form>
         </div>
     );

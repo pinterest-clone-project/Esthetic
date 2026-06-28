@@ -92,12 +92,12 @@ const Modal = ({
         >
             <div
                 style={{
-                    width,
+                    maxWidth: width,
                     height: height === "auto" ? undefined : height,
                     maxHeight: "90vh",
                     borderRadius,
                 }}
-                className="bg-black dark:bg-white shadow-2xl p-8 overflow-y-auto overscroll-contain"
+                className="w-full mx-4 bg-black dark:bg-white shadow-2xl p-8 overflow-y-auto overscroll-contain"
                 onClick={(e) => e.stopPropagation()}
             >
                 {children}

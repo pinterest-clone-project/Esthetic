@@ -137,7 +137,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
 
     return (
-        <div className="flex flex-col items-center px-16">
+        <div className="flex flex-col items-center px-4 sm:px-16">
 
             <style>{`
         @keyframes stepFadeIn {
