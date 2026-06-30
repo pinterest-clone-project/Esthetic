@@ -250,6 +250,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Block reason.
+        /// </summary>
+        internal static string FieldBlockReason {
+            get {
+                return ResourceManager.GetString("FieldBlockReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Code.
         /// </summary>
         internal static string FieldCode {

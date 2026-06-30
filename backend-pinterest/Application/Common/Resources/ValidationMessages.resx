@@ -273,4 +273,7 @@
   <data name="ErrorConflict" xml:space="preserve">
     <value>Conflict request</value>
   </data>
+  <data name="FieldBlockReason" xml:space="preserve">
+    <value>Block reason</value>
+  </data>
 </root>

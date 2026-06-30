@@ -73,6 +73,7 @@ public static class ValidationMessages
     public static string UserAlreadyBlocked => Get("UserAlreadyBlocked");
     public static string UserNotBlocked => Get("UserNotBlocked");
     public static string ErrorConflict => Get("ErrorConflict");
+    public static string FieldBlockReason => Get("FieldBlockReason");
     private static string Get(string key)
         => _manager.GetString(key, CultureInfo.CurrentCulture) ?? key;
 }

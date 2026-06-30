@@ -273,4 +273,7 @@
   <data name="ErrorConflict" xml:space="preserve">
     <value>Конфліктний запит</value>
   </data>
+  <data name="FieldBlockReason" xml:space="preserve">
+    <value>Причина блокування</value>
+  </data>
 </root>
