@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router";
 import { lazy, Suspense, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "./store";
+import { useAppDispatch } from "./store";
 import { setUser } from "./store/slices/authSlice";
 import { useGetMeQuery } from "./services/accountService";
 import { useChatRealtime } from "@/hooks/useChatRealtime.ts";
@@ -12,6 +12,8 @@ import Layout from "@/layouts/Layout.tsx";
 import AdminLayout from "@/layouts/AdminLayout.tsx";
 import PrivateRoute from "@/components/routes/PrivateRoute.tsx";
 import AdminRoute from "@/components/routes/AdminRoute.tsx";
+import {useSelector} from "react-redux";
+import {selectUser} from "@/store/selectors/authSelectors.ts";
 
 const FirstPage            = lazy(() => import("@/pages/home/FirstPage.tsx"));
 const ReviewPage           = lazy(() => import("@/pages/home/ReviewPage.tsx"));
@@ -27,6 +29,7 @@ const ChatPage             = lazy(() => import("@/pages/chat/ChatPage.tsx"));
 const ForgotPasswordPage   = lazy(() => import("@/pages/auth/ForgotPasswordPage.tsx"));
 const ResetPasswordPage    = lazy(() => import("@/pages/auth/ResetPasswordPage.tsx"));
 const NotFoundPage         = lazy(() => import("./pages/NotFoundPage.tsx"));
+const BlockedPage = lazy(() => import("@/pages/auth/BlockedPage.tsx"));
 
 const PageLoader = () => (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white dark:bg-[#121212]">
@@ -91,56 +94,61 @@ const AppInit = ({ children }: { children: React.ReactNode }) => {
 };
 
 const RootPage = () => {
-    const user = useAppSelector((state) => state.auth.user);
+    const user = useSelector(selectUser);
     return user ? <ReviewPage /> : <FirstPage />;
 };
 
 const App = () => {
+    const user = useSelector(selectUser);
+
     return (
         <ToastProvider>
             <AppInit>
                 <Suspense fallback={<PageLoader />}>
-                    <Routes>
-                        <Route element={<Layout />}>
-                            <Route path="/">
-                                <Route index element={<RootPage />} />
-                                <Route path="review" element={<ReviewPage />} />
-                                <Route path="forgot-password" element={<ForgotPasswordPage />} />
-                                <Route path="reset-password" element={<ResetPasswordPage />} />
-                            </Route>
-
-                            <Route element={<PrivateRoute />}>
-                                <Route path="/profile" element={<ProfilePage />} />
-
-                                <Route path="aura">
-                                    <Route path="create" element={<CreateAuraPage />} />
-                                    <Route path="edit/:id" element={<EditAuraPage />} />
-                                    <Route path="preview/:id" element={<AuraPreviewPage />} />
+                    {user?.isBlocked ? (
+                        <BlockedPage />
+                    ) : (
+                        <Routes>
+                            <Route element={<Layout />}>
+                                <Route path="/">
+                                    <Route index element={<RootPage />} />
+                                    <Route path="review" element={<ReviewPage />} />
+                                    <Route path="forgot-password" element={<ForgotPasswordPage />} />
+                                    <Route path="reset-password" element={<ResetPasswordPage />} />
                                 </Route>
 
-                                <Route path="moodboard">
-                                    <Route path="preview/:id" element={<MoodboardPreviewPage />} />
+                                <Route element={<PrivateRoute />}>
+                                    <Route path="/profile" element={<ProfilePage />} />
+
+                                    <Route path="aura">
+                                        <Route path="create" element={<CreateAuraPage />} />
+                                        <Route path="edit/:id" element={<EditAuraPage />} />
+                                        <Route path="preview/:id" element={<AuraPreviewPage />} />
+                                    </Route>
+
+                                    <Route path="moodboard">
+                                        <Route path="preview/:id" element={<MoodboardPreviewPage />} />
+                                    </Route>
+
+                                    <Route path="/collections" element={<Navigate to="/collections/aura" replace />} />
+                                    <Route path="/collections/aura" element={<CollectionsPage />} />
+                                    <Route path="/collections/moodboard" element={<CollectionsPage />} />
+                                    <Route path="/collections/ai" element={<CollectionsPage />} />
+
+                                    <Route path="/chat" element={<ChatPage />} />
                                 </Route>
-
-                                <Route path="/collections" element={<Navigate to="/collections/aura" replace />} />
-                                <Route path="/collections/aura" element={<CollectionsPage />} />
-                                <Route path="/collections/moodboard" element={<CollectionsPage />} />
-                                <Route path="/collections/ai" element={<CollectionsPage />} />
-
-                                <Route path="/chat" element={<ChatPage />} />
-
                             </Route>
-                        </Route>
 
-                        <Route element={<AdminRoute />}>
-                            <Route element={<AdminLayout />}>
-                                <Route path="/admin" element={<AdminDashboard />} />
-                                <Route path="/admin/users" element={<AdminUsersPage />} />
+                            <Route element={<AdminRoute />}>
+                                <Route element={<AdminLayout />}>
+                                    <Route path="/admin" element={<AdminDashboard />} />
+                                    <Route path="/admin/users" element={<AdminUsersPage />} />
+                                </Route>
                             </Route>
-                        </Route>
 
-                        <Route path="*" element={<NotFoundPage />} />
-                    </Routes>
+                            <Route path="*" element={<NotFoundPage />} />
+                        </Routes>
+                    )}
                 </Suspense>
             </AppInit>
         </ToastProvider>
