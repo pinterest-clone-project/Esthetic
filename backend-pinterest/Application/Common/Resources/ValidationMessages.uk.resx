@@ -276,4 +276,7 @@
   <data name="FieldBlockReason" xml:space="preserve">
     <value>Причина блокування</value>
   </data>
+  <data name="MustBePast" xml:space="preserve">
+    <value>{0} має бути в минулому</value>
+  </data>
 </root>

@@ -457,6 +457,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} must be in the past.
+        /// </summary>
+        internal static string MustBePast {
+            get {
+                return ResourceManager.GetString("MustBePast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} not found.
         /// </summary>
         internal static string NotFound {

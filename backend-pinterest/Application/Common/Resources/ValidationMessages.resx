@@ -276,4 +276,7 @@
   <data name="FieldBlockReason" xml:space="preserve">
     <value>Block reason</value>
   </data>
+  <data name="MustBePast" xml:space="preserve">
+    <value>{0} must be in the past</value>
+  </data>
 </root>
