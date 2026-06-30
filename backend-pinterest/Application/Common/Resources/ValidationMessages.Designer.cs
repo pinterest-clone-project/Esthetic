@@ -295,6 +295,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Image URL.
+        /// </summary>
+        internal static string FieldMediaUrl {
+            get {
+                return ResourceManager.GetString("FieldMediaUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New password.
         /// </summary>
         internal static string FieldNewPassword {
@@ -336,6 +345,24 @@ namespace Application.Common.Resources {
         internal static string FieldSlug {
             get {
                 return ResourceManager.GetString("FieldSlug", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source URL.
+        /// </summary>
+        internal static string FieldSourceUrl {
+            get {
+                return ResourceManager.GetString("FieldSourceUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        internal static string FieldTitle {
+            get {
+                return ResourceManager.GetString("FieldTitle", resourceCulture);
             }
         }
         
@@ -430,6 +457,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Image file or image URL is required.
+        /// </summary>
+        internal static string PinImageRequired {
+            get {
+                return ResourceManager.GetString("PinImageRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} is required.
         /// </summary>
         internal static string Required {
@@ -453,6 +489,15 @@ namespace Application.Common.Resources {
         internal static string Tag {
             get {
                 return ResourceManager.GetString("Tag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User is already blocked.
+        /// </summary>
+        internal static string UserAlreadyBlocked {
+            get {
+                return ResourceManager.GetString("UserAlreadyBlocked", resourceCulture);
             }
         }
         

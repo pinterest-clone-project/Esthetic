@@ -264,4 +264,7 @@
   <data name="FieldTitle" xml:space="preserve">
     <value>Назва</value>
   </data>
+  <data name="UserAlreadyBlocked" xml:space="preserve">
+    <value>Користувач вже заблокований</value>
+  </data>
 </root>

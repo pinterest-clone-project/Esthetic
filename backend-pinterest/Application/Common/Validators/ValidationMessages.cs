@@ -70,6 +70,7 @@ public static class ValidationMessages
     public static string EmailAlreadyExists => Get("EmailAlreadyExists");
     public static string GoogleLinkFailed => Get("GoogleLinkFailed");
     public static string ExternalLoginLinkFailed => Get("ExternalLoginLinkFailed");
+    public static string UserAlreadyBlocked => Get("UserAlreadyBlocked");
     private static string Get(string key)
         => _manager.GetString(key, CultureInfo.CurrentCulture) ?? key;
 }

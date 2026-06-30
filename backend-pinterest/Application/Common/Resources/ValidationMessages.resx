@@ -264,4 +264,7 @@
   <data name="FieldTitle" xml:space="preserve">
     <value>Title</value>
   </data>
+  <data name="UserAlreadyBlocked" xml:space="preserve">
+    <value>User is already blocked</value>
+  </data>
 </root>
