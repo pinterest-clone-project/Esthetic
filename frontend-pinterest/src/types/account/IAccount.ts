@@ -8,6 +8,8 @@ export interface IAccount {
     phoneNumber: string;
     bio: string;
     isPrivate: boolean;
+    isBlocked: boolean;
+    blockReason: string | null;
     createdAt: string;
     updatedAt: string;
     roles: string[];

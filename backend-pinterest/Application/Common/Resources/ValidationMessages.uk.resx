@@ -264,4 +264,19 @@
   <data name="FieldTitle" xml:space="preserve">
     <value>Назва</value>
   </data>
+  <data name="UserAlreadyBlocked" xml:space="preserve">
+    <value>Користувач вже заблокований</value>
+  </data>
+  <data name="UserNotBlocked" xml:space="preserve">
+    <value>Користувач не заблокований</value>
+  </data>
+  <data name="ErrorConflict" xml:space="preserve">
+    <value>Конфліктний запит</value>
+  </data>
+  <data name="FieldBlockReason" xml:space="preserve">
+    <value>Причина блокування</value>
+  </data>
+  <data name="MustBePast" xml:space="preserve">
+    <value>{0} має бути в минулому</value>
+  </data>
 </root>

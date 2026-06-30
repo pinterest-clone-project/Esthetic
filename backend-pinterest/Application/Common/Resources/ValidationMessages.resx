@@ -264,4 +264,19 @@
   <data name="FieldTitle" xml:space="preserve">
     <value>Title</value>
   </data>
+  <data name="UserAlreadyBlocked" xml:space="preserve">
+    <value>User is already blocked</value>
+  </data>
+  <data name="UserNotBlocked" xml:space="preserve">
+    <value>User is not blocked</value>
+  </data>
+  <data name="ErrorConflict" xml:space="preserve">
+    <value>Conflict request</value>
+  </data>
+  <data name="FieldBlockReason" xml:space="preserve">
+    <value>Block reason</value>
+  </data>
+  <data name="MustBePast" xml:space="preserve">
+    <value>{0} must be in the past</value>
+  </data>
 </root>

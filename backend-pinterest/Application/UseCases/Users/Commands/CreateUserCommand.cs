@@ -4,7 +4,6 @@ using Domain.Constants;
 using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Application.UseCases.Users.Commands;
 

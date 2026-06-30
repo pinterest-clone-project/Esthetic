@@ -1,11 +1,12 @@
 using Application.Interfaces.Caching;
+using Application.Models.DTO.User;
 using Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Application.UseCases.Users.Commands;
 
-public record UpdateUserCommand : IRequest<Unit>, ICacheInvalidator
+public record UpdateUserCommand : IRequest<UserDTO>, ICacheInvalidator
 {
     [BindNever]
     public Guid Id { get; init; }

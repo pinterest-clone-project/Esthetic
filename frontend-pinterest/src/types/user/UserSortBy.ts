@@ -1,0 +1,1 @@
+export type UserSortBy = "CreatedAt" | "UserName";

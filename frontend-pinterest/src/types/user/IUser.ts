@@ -8,6 +8,8 @@ export interface IUser {
     gender: number | null;
     image: string | null;
     isPrivate: boolean;
+    isBlocked: boolean;
+    blockReason: string | null;
     phoneNumber: string | null;
     birthDate: string | null;
     createdAt: string;
