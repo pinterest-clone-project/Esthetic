@@ -22,6 +22,7 @@ const ProfilePage          = lazy(() => import("@/pages/profile/ProfilePage.tsx"
 const CollectionsPage      = lazy(() => import("@/pages/collections/CollectionsPage.tsx"));
 const MoodboardPreviewPage = lazy(() => import("@/pages/moodboard/MoodboardPreviewPage.tsx"));
 const AdminDashboard       = lazy(() => import("@/pages/admin/AdminDashboard.tsx"));
+const AdminUsersPage       = lazy(() => import("@/pages/admin/AdminUsersPage.tsx"));
 const ChatPage             = lazy(() => import("@/pages/chat/ChatPage.tsx"));
 const ForgotPasswordPage   = lazy(() => import("@/pages/auth/ForgotPasswordPage.tsx"));
 const ResetPasswordPage    = lazy(() => import("@/pages/auth/ResetPasswordPage.tsx"));
@@ -134,6 +135,7 @@ const App = () => {
                         <Route element={<AdminRoute />}>
                             <Route element={<AdminLayout />}>
                                 <Route path="/admin" element={<AdminDashboard />} />
+                                <Route path="/admin/users" element={<AdminUsersPage />} />
                             </Route>
                         </Route>
 
