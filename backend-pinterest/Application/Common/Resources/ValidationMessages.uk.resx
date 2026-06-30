@@ -267,4 +267,7 @@
   <data name="UserAlreadyBlocked" xml:space="preserve">
     <value>Користувач вже заблокований</value>
   </data>
+  <data name="UserNotBlocked" xml:space="preserve">
+    <value>Користувач не заблокований</value>
+  </data>
 </root>

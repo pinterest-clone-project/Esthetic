@@ -502,6 +502,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User is not blocked.
+        /// </summary>
+        internal static string UserNotBlocked {
+            get {
+                return ResourceManager.GetString("UserNotBlocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User not found.
         /// </summary>
         internal static string UserNotFound {
