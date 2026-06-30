@@ -270,4 +270,7 @@
   <data name="UserNotBlocked" xml:space="preserve">
     <value>User is not blocked</value>
   </data>
+  <data name="ErrorConflict" xml:space="preserve">
+    <value>Conflict request</value>
+  </data>
 </root>

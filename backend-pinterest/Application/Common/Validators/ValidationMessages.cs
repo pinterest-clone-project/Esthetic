@@ -72,6 +72,7 @@ public static class ValidationMessages
     public static string ExternalLoginLinkFailed => Get("ExternalLoginLinkFailed");
     public static string UserAlreadyBlocked => Get("UserAlreadyBlocked");
     public static string UserNotBlocked => Get("UserNotBlocked");
+    public static string ErrorConflict => Get("ErrorConflict");
     private static string Get(string key)
         => _manager.GetString(key, CultureInfo.CurrentCulture) ?? key;
 }

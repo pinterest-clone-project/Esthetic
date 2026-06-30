@@ -19,6 +19,7 @@ public class GlobalExceptionHandler : IExceptionHandler
             UnauthorizedException => (401, ValidationMessages.ErrorUnauthorized),
             ForbiddenException => (403, ValidationMessages.ErrorForbidden),
             NotFoundException => (404, ValidationMessages.ErrorNotFound),
+            ConflictException => (409, ValidationMessages.ErrorConflict),
             DomainException => (422, ValidationMessages.ErrorDomain),   
             _ => (500, ValidationMessages.ErrorInternal)
         };

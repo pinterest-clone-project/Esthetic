@@ -19,7 +19,7 @@ public class AdminUnblockUserHandler(
             ?? throw new NotFoundException(ValidationMessages.NotFound(nameof(UserEntity)));
 
         if (!user.IsBlocked)
-            throw new BadRequestException(ValidationMessages.UserNotBlocked);
+            throw new ConflictException(ValidationMessages.UserNotBlocked);
 
         user.IsBlocked = false;
         user.BlockReason = null;

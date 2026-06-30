@@ -142,6 +142,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Conflict request.
+        /// </summary>
+        internal static string ErrorConflict {
+            get {
+                return ResourceManager.GetString("ErrorConflict", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Business rule violation.
         /// </summary>
         internal static string ErrorDomain {

@@ -19,7 +19,7 @@ public class BlockUserHandler(
             ?? throw new NotFoundException(ValidationMessages.NotFound(nameof(UserEntity)));
 
         if (user.IsBlocked)
-            throw new BadRequestException(ValidationMessages.UserAlreadyBlocked);
+            throw new ConflictException(ValidationMessages.UserAlreadyBlocked);
 
         user.IsBlocked = true;
         user.BlockReason = request.Reason;

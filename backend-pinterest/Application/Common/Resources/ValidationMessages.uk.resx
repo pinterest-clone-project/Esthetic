@@ -270,4 +270,7 @@
   <data name="UserNotBlocked" xml:space="preserve">
     <value>Користувач не заблокований</value>
   </data>
+  <data name="ErrorConflict" xml:space="preserve">
+    <value>Конфліктний запит</value>
+  </data>
 </root>
