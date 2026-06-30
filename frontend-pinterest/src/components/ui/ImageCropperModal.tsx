@@ -6,10 +6,16 @@ interface ImageCropperModalProps {
     imageSrc: string;
     onCrop: (file: File) => void;
     onClose: () => void;
-    aspect?: number;
+    defaultWidth?: number;
+    defaultHeight?: number;
 }
 
-const createCroppedImage = async (imageSrc: string, cropArea: Area): Promise<File> => {
+const createCroppedImage = async (
+    imageSrc: string,
+    cropArea: Area,
+    outputWidth?: number,
+    outputHeight?: number
+): Promise<File> => {
     const image = await new Promise<HTMLImageElement>((resolve, reject) => {
         const img = new Image();
         img.crossOrigin = "anonymous";
@@ -19,8 +25,8 @@ const createCroppedImage = async (imageSrc: string, cropArea: Area): Promise<Fil
     });
 
     const canvas = document.createElement("canvas");
-    canvas.width = cropArea.width;
-    canvas.height = cropArea.height;
+    canvas.width = outputWidth ?? cropArea.width;
+    canvas.height = outputHeight ?? cropArea.height;
 
     const ctx = canvas.getContext("2d")!;
     ctx.drawImage(
@@ -28,7 +34,7 @@ const createCroppedImage = async (imageSrc: string, cropArea: Area): Promise<Fil
         cropArea.x, cropArea.y,
         cropArea.width, cropArea.height,
         0, 0,
-        cropArea.width, cropArea.height
+        canvas.width, canvas.height
     );
 
     return new Promise((resolve, reject) => {
@@ -39,21 +45,76 @@ const createCroppedImage = async (imageSrc: string, cropArea: Area): Promise<Fil
     });
 };
 
-const ImageCropperModal = ({ imageSrc, onCrop, onClose, aspect }: ImageCropperModalProps) => {
+const PRESETS = [
+    { label: "Free", width: null, height: null },
+    { label: "1:1", width: 1000, height: 1000 },
+    { label: "4:3", width: 1200, height: 900 },
+    { label: "3:4", width: 900, height: 1200 },
+    { label: "16:9", width: 1600, height: 900 },
+];
+
+const ImageCropperModal = ({
+    imageSrc,
+    onCrop,
+    onClose,
+    defaultWidth,
+    defaultHeight,
+}: ImageCropperModalProps) => {
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
 
+    const [lockAspect, setLockAspect] = useState(
+        !!(defaultWidth && defaultHeight)
+    );
+    const [outputWidth, setOutputWidth] = useState<string>(
+        defaultWidth ? String(defaultWidth) : ""
+    );
+    const [outputHeight, setOutputHeight] = useState<string>(
+        defaultHeight ? String(defaultHeight) : ""
+    );
+
+    const parsedWidth = outputWidth ? Number(outputWidth) : undefined;
+    const parsedHeight = outputHeight ? Number(outputHeight) : undefined;
+    const aspect =
+        lockAspect && parsedWidth && parsedHeight
+            ? parsedWidth / parsedHeight
+            : undefined;
+
     const onCropComplete = useCallback((_: Area, croppedPixels: Area) => {
         setCroppedAreaPixels(croppedPixels);
     }, []);
+
+    const handlePreset = (w: number | null, h: number | null) => {
+        if (w === null || h === null) {
+            setOutputWidth("");
+            setOutputHeight("");
+            setLockAspect(false);
+        } else {
+            setOutputWidth(String(w));
+            setOutputHeight(String(h));
+            setLockAspect(true);
+        }
+    };
+
+    const handleWidthChange = (v: string) => {
+        setOutputWidth(v);
+        if (lockAspect && parsedHeight && Number(v)) {
+            // keep aspect by not adjusting height — user controls both
+        }
+    };
 
     const handleConfirm = async () => {
         if (!croppedAreaPixels) return;
         setIsProcessing(true);
         try {
-            const file = await createCroppedImage(imageSrc, croppedAreaPixels);
+            const file = await createCroppedImage(
+                imageSrc,
+                croppedAreaPixels,
+                parsedWidth,
+                parsedHeight
+            );
             onCrop(file);
             onClose();
         } catch (e) {
@@ -79,8 +140,34 @@ const ImageCropperModal = ({ imageSrc, onCrop, onClose, aspect }: ImageCropperMo
                     </button>
                 </div>
 
+                {/* Presets */}
+                <div className="flex items-center gap-2">
+                    <span className="text-gray-500 text-xs shrink-0">Preset</span>
+                    <div className="flex gap-1.5 flex-wrap">
+                        {PRESETS.map(p => {
+                            const active = p.width === null
+                                ? !lockAspect && !outputWidth && !outputHeight
+                                : outputWidth === String(p.width) && outputHeight === String(p.height);
+                            return (
+                                <button
+                                    key={p.label}
+                                    type="button"
+                                    onClick={() => handlePreset(p.width, p.height)}
+                                    className={`px-2.5 py-1 rounded-md text-xs transition-colors
+                                        ${active
+                                            ? "bg-[#4ade80] text-black font-semibold"
+                                            : "bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/20"
+                                        }`}
+                                >
+                                    {p.label}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+
                 {/* Crop area */}
-                <div className="relative w-full h-[360px] rounded-xl overflow-hidden bg-black">
+                <div className="relative w-full h-[320px] rounded-xl overflow-hidden bg-black">
                     <Cropper
                         image={imageSrc}
                         crop={crop}
@@ -114,12 +201,91 @@ const ImageCropperModal = ({ imageSrc, onCrop, onClose, aspect }: ImageCropperMo
                     <span className="text-gray-500 text-xs w-8 text-right shrink-0">{zoom.toFixed(1)}x</span>
                 </div>
 
-                {/* No aspect hint */}
-                {!aspect && (
-                    <p className="text-gray-500 text-[10px] text-center -mt-2">
-                        Free crop — drag to reposition, pinch or scroll to zoom
-                    </p>
-                )}
+                {/* Output size */}
+                <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                        <span className="text-gray-500 text-xs">Output size (px)</span>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                            <span className="text-gray-500 text-xs">Lock aspect</span>
+                            <div
+                                onClick={() => setLockAspect(p => !p)}
+                                className={`w-8 h-4 rounded-full transition-colors relative cursor-pointer
+                                    ${lockAspect ? "bg-[#4ade80]" : "bg-gray-600"}`}
+                            >
+                                <div className={`absolute top-0.5 w-3 h-3 rounded-full bg-white transition-transform
+                                    ${lockAspect ? "translate-x-4" : "translate-x-0.5"}`}
+                                />
+                            </div>
+                        </label>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                        {/* Width */}
+                        <div className="flex-1 flex flex-col gap-1">
+                            <label className="text-gray-500 text-[10px]">Width</label>
+                            <input
+                                type="number"
+                                value={outputWidth}
+                                onChange={e => handleWidthChange(e.target.value)}
+                                placeholder="Auto"
+                                min={1}
+                                className="bg-white dark:bg-[#1e1e1e] border border-gray-200 dark:border-white/10 rounded-md px-2.5 h-8 text-black dark:text-white text-xs
+                                    placeholder:text-gray-400 outline-none focus:border-[#4ade80] transition-colors"
+                            />
+                        </div>
+
+                        {/* Link icon */}
+                        <div className="pt-5">
+                            <svg
+                                width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                stroke={lockAspect ? "#4ade80" : "#6b7280"}
+                                strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                            >
+                                <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" />
+                                <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" />
+                            </svg>
+                        </div>
+
+                        {/* Height */}
+                        <div className="flex-1 flex flex-col gap-1">
+                            <label className="text-gray-500 text-[10px]">Height</label>
+                            <input
+                                type="number"
+                                value={outputHeight}
+                                onChange={e => setOutputHeight(e.target.value)}
+                                placeholder="Auto"
+                                min={1}
+                                className="bg-white dark:bg-[#1e1e1e] border border-gray-200 dark:border-white/10 rounded-md px-2.5 h-8 text-black dark:text-white text-xs
+                                    placeholder:text-gray-400 outline-none focus:border-[#4ade80] transition-colors"
+                            />
+                        </div>
+
+                        {/* Clear */}
+                        {(outputWidth || outputHeight) && (
+                            <div className="pt-5">
+                                <button
+                                    type="button"
+                                    onClick={() => { setOutputWidth(""); setOutputHeight(""); setLockAspect(false); }}
+                                    className="text-gray-400 hover:text-gray-600 dark:hover:text-white text-xs transition-colors"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    {parsedWidth && parsedHeight && (
+                        <p className="text-[10px] text-gray-400">
+                            Output: {parsedWidth} × {parsedHeight}px
+                            {" — "}aspect {(parsedWidth / parsedHeight).toFixed(2)}:1
+                        </p>
+                    )}
+                    {(!outputWidth || !outputHeight) && (
+                        <p className="text-[10px] text-gray-400">
+                            Leave blank to use the natural crop size
+                        </p>
+                    )}
+                </div>
 
                 {/* Actions */}
                 <div className="flex gap-3">

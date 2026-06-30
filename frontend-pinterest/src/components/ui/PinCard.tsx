@@ -4,6 +4,7 @@ import type { IPinSummaryResponse } from "../../types/pin/responses/IPinSummaryR
 import { useGetMeQuery } from "../../services/accountService.ts";
 import { useDeletePinMutation } from "../../services/pinService.ts";
 import { useLikeMutation, useUnlikeMutation } from "../../services/likeService.ts";
+import {useToast} from "@/components/ui/Toast/UseToast.ts";
 import { APP_ENV } from "@/constants/env";
 import SaveModal from "./SaveModal.tsx";
 
@@ -28,6 +29,7 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     const [deletePin] = useDeletePinMutation();
     const [like] = useLikeMutation();
     const [unlike] = useUnlikeMutation();
+    const { showToast } = useToast();
 
     const isOwner = !!me && me.id === pin.creatorId;
 
@@ -59,6 +61,7 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
         navigator.clipboard.writeText(
             `${window.location.origin}/aura/preview/${pin.id}`
         );
+        showToast("Link to aura copied!", "success");
     };
 
     // onMouseLeave={() => setMenuOpen(false)}
