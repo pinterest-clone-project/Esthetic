@@ -31,7 +31,12 @@ public class SearchUsersHandler(
                 Image = u.Image,
                 IsPrivate = u.IsPrivate,
                 CreatedAt = u.CreatedAt,
-                UpdatedAt = u.UpdatedAt
+                UpdatedAt = u.UpdatedAt,
+                IsBlocked = u.IsBlocked,
+                BlockReason = u.BlockReason,
+                PhoneNumber = u.PhoneNumber,
+                BirthDate = u.BirthDate,
+                Roles = u.UserRoles.Select(ur => ur.Role.Name).ToList()
             },
             request.Page,
             request.PageSize,
