@@ -1,6 +1,8 @@
 using Application.UseCases.Users.Commands;
 using Application.UseCases.Users.Queries;
+using Domain.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend_pinterest.Controllers;
@@ -10,6 +12,7 @@ namespace backend_pinterest.Controllers;
 public class UsersController(IMediator mediator) : ControllerBase
 {
     [HttpPost("create")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Create([FromBody] CreateUserCommand request)
     {
         var user = await mediator.Send(request);
@@ -32,6 +35,7 @@ public class UsersController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut("update/{id}")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserCommand request)
     {
         var command = request with { Id = id };
@@ -40,6 +44,7 @@ public class UsersController(IMediator mediator) : ControllerBase
     }
 
     [HttpDelete("delete/{id}")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Delete(Guid id)
     {
         await mediator.Send(new DeleteUserCommand(id));
@@ -51,4 +56,21 @@ public class UsersController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(query);
         return Ok(result);
     }
+
+    [HttpPut("block/{id}")]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<IActionResult> Block([FromRoute] Guid id, [FromBody] AdminBlockUserRequest request)
+    {
+        var user = await mediator.Send(new AdminBlockUserCommand(id, request.Reason));
+        return Ok(user);
+    }
+
+    [HttpPut("unblock/{id}")]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<IActionResult> Unblock([FromRoute] Guid id)
+    {
+        var user = await mediator.Send(new AdminUnblockUserCommand(id));
+        return Ok(user);
+    }
 }
+public record AdminBlockUserRequest(string Reason);
