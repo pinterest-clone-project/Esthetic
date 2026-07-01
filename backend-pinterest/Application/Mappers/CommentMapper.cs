@@ -10,4 +10,8 @@ public partial class CommentMapper
 {
     public partial CommentEntity ToEntity(CreateCommentCommand src);
     public partial CommentDTO ToDto(CommentEntity src);
+
+    [MapProperty(nameof(CommentEntity.User.UserName), nameof(CommentResponseDTO.Username))]
+    [MapProperty(nameof(CommentEntity.User.Image), nameof(CommentResponseDTO.UserImage))]
+    public partial CommentResponseDTO ToResponseDto(CommentEntity src);
 }

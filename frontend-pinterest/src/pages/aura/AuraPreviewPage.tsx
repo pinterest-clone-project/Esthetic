@@ -7,6 +7,7 @@ import PinCard from "@/components/ui/PinCard.tsx";
 import BackButton from "@/components/ui/BackButton.tsx";
 import { APP_ENV } from "@/constants/env";
 import SaveModal from "@/components/ui/SaveModal.tsx";
+import CommentsSection from "@/components/ui/CommentsSection.tsx";
 import {useTrackViewPinMutation} from "@/services/recommendedPinsService.ts";
 
 const AuraPreviewPage = () => {
@@ -200,6 +201,11 @@ const AuraPreviewPage = () => {
                             day: "numeric", month: "long", year: "numeric"
                         })}
                     </p>
+
+                    {/* Comments */}
+                    <div className="mt-2 border-t border-white/5 pt-5">
+                        <CommentsSection pinId={pin.id} />
+                    </div>
                 </div>
             </div>
 

@@ -8,11 +8,11 @@ namespace Application.UseCases.Comments.Handlers;
 
 public class GetCommentsByPinHandler(
     ICommentRepository repository,
-    CommentMapper commentMapper) : IRequestHandler<GetCommentsByPinQuery, List<CommentDTO>>
+    CommentMapper commentMapper) : IRequestHandler<GetCommentsByPinQuery, List<CommentResponseDTO>>
 {
-    public async Task<List<CommentDTO>> Handle(GetCommentsByPinQuery request, CancellationToken cancellationToken)
+    public async Task<List<CommentResponseDTO>> Handle(GetCommentsByPinQuery request, CancellationToken cancellationToken)
     {
         var comments = await repository.GetByPinIdAsync(request.PinId, cancellationToken);
-        return comments.Select(commentMapper.ToDto).ToList();
+        return comments.Select(commentMapper.ToResponseDto).ToList();
     }
 }

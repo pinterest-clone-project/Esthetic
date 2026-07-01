@@ -9,6 +9,7 @@ export const api = createApi({
         "CurrentUser",
         "MyPins",
         "AllPins",
+        "Comments",
         "MyMoodboards",
         "Chat",
         "Message",
