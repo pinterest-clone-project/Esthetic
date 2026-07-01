@@ -7,4 +7,5 @@ public class PinSummaryDTO
     public string Image { get; set; } = string.Empty;
     public int LikesCount { get; set; }
     public bool IsLikedByMe { get; set; }
+    public Guid CreatorId { get; set; }
 }
