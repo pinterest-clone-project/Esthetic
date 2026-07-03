@@ -16,6 +16,7 @@ export const api = createApi({
         "RecommendedPins",
         "AllUsers",
         "AllReports",
+        "MyReports",
     ],
     endpoints: () => ({})
 });
