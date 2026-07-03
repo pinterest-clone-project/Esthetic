@@ -1,8 +1,8 @@
 import {useState, useEffect} from "react";
 import {useParams, useNavigate} from "react-router";
-import {useGetPinByIdQuery, useGetAllPinsQuery, useDeletePinMutation} from "../../services/pinService.ts";
-import {useGetMeQuery} from "../../services/accountService.ts";
-import {useLikeMutation, useUnlikeMutation} from "../../services/likeService.ts";
+import {useGetPinByIdQuery, useGetAllPinsQuery, useDeletePinMutation} from "@/services/pinService.ts";
+import {useGetMeQuery} from "@/services/accountService.ts";
+import {useLikeMutation, useUnlikeMutation} from "@/services/likeService.ts";
 import PinCard from "@/components/ui/PinCard.tsx";
 import BackButton from "@/components/ui/BackButton.tsx";
 import {APP_ENV} from "@/constants/env";
@@ -235,7 +235,11 @@ const AuraPreviewPage = () => {
                 <SaveModal pinId={pin.id} onClose={() => setSaveModalOpen(false)}/>
             )}
             {reportModalOpen && (
-                <ReportModal pinId={pin.id} onClose={() => setReportModalOpen(false)}/>
+                <ReportModal
+                    pinId={pin.id}
+                    userId={pin.creatorId}
+                    onClose={() => setReportModalOpen(false)}
+                />
             )}
         </div>
     );
