@@ -6,6 +6,7 @@ import { useDeletePinMutation } from "../../services/pinService.ts";
 import { useLikeMutation, useUnlikeMutation } from "../../services/likeService.ts";
 import { APP_ENV } from "@/constants/env";
 import SaveModal from "./SaveModal.tsx";
+import ReportModal from "./ReportModal.tsx";
 
 const ShareIcon = () => (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -17,10 +18,10 @@ const ShareIcon = () => (
 
 const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     const [hovered, setHovered] = useState(false);
-    // const [menuOpen, setMenuOpen] = useState(false);
     const [liked, setLiked] = useState(pin.isLikedByMe ?? false);
     const [likesCount, setLikesCount] = useState(pin.likesCount);
     const [saveModalOpen, setSaveModalOpen] = useState(false);
+    const [reportModalOpen, setReportModalOpen] = useState(false);
     const [showEditMenu, setShowEditMenu] = useState(false);
 
     const navigate = useNavigate();
@@ -39,6 +40,12 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     const handleEdit = (e: React.MouseEvent) => {
         e.stopPropagation();
         navigate(`/aura/edit/${pin.id}`);
+    };
+
+    const handleReport = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setShowEditMenu(false);
+        setReportModalOpen(true);
     };
 
     const handleLike = async (e: React.MouseEvent) => {
@@ -60,8 +67,6 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
             `${window.location.origin}/aura/preview/${pin.id}`
         );
     };
-
-    // onMouseLeave={() => setMenuOpen(false)}
 
     return (
         <div
@@ -98,34 +103,43 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
                 </button>
             </div>
 
-            {/* Top-right: Save button */}
+            {/* Top-right: Save button + menu (Edit/Delete for owner, Report for others) */}
             <div className={`absolute top-2 right-2 flex items-center gap-1.5 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
-                {isOwner && (
-                    <div className="relative">
-                        <button
-                            onClick={(e) => { e.stopPropagation(); setShowEditMenu(p => !p); }}
-                            className="bg-black/50 hover:bg-black/70 text-white text-[10px] font-medium px-2.5 py-1.5 rounded-full transition-colors"
-                        >
-                            ···
-                        </button>
-                        {showEditMenu && (
-                            <div className="absolute top-8 right-0 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-2xl overflow-hidden w-28 z-10">
+                <div className="relative">
+                    <button
+                        onClick={(e) => { e.stopPropagation(); setShowEditMenu(p => !p); }}
+                        className="bg-black/50 hover:bg-black/70 text-white text-[10px] font-medium px-2.5 py-1.5 rounded-full transition-colors"
+                    >
+                        ···
+                    </button>
+                    {showEditMenu && (
+                        <div className="absolute top-8 right-0 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-2xl overflow-hidden w-28 z-10">
+                            {isOwner ? (
+                                <>
+                                    <button
+                                        className="w-full text-left px-4 py-2.5 text-xs text-gray-300 hover:bg-white/10 hover:text-white transition-colors"
+                                        onClick={handleEdit}
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        className="w-full text-left px-4 py-2.5 text-xs text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
+                                        onClick={handleDelete}
+                                    >
+                                        Delete
+                                    </button>
+                                </>
+                            ) : (
                                 <button
                                     className="w-full text-left px-4 py-2.5 text-xs text-gray-300 hover:bg-white/10 hover:text-white transition-colors"
-                                    onClick={handleEdit}
+                                    onClick={handleReport}
                                 >
-                                    Edit
+                                    Report
                                 </button>
-                                <button
-                                    className="w-full text-left px-4 py-2.5 text-xs text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
-                                    onClick={handleDelete}
-                                >
-                                    Delete
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                )}
+                            )}
+                        </div>
+                    )}
+                </div>
                 <button
                     onClick={(e) => { e.stopPropagation(); setSaveModalOpen(true); }}
                     className="bg-[#4ade80] hover:bg-[#22c55e] text-black text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors"
@@ -146,6 +160,9 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
 
             {saveModalOpen && (
                 <SaveModal pinId={pin.id} onClose={() => setSaveModalOpen(false)} />
+            )}
+            {reportModalOpen && (
+                <ReportModal pinId={pin.id} onClose={() => setReportModalOpen(false)} />
             )}
         </div>
     );
