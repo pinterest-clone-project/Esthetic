@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import type { IPinSummaryResponse } from "../../types/pin/responses/IPinSummaryResponse.ts";
-import { useGetMeQuery } from "../../services/accountService.ts";
-import { useDeletePinMutation } from "../../services/pinService.ts";
-import { useLikeMutation, useUnlikeMutation } from "../../services/likeService.ts";
+import type { IPinSummaryResponse } from "@/types/pin/responses/IPinSummaryResponse.ts";
+import { useGetMeQuery } from "@/services/accountService.ts";
+import { useDeletePinMutation } from "@/services/pinService.ts";
+import { useLikeMutation, useUnlikeMutation } from "@/services/likeService.ts";
 import { APP_ENV } from "@/constants/env";
 import SaveModal from "./SaveModal.tsx";
 
