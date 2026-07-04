@@ -23,7 +23,8 @@ public class CommentsController(IMediator mediator) : ControllerBase
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> CreateComment([FromForm] CreateCommentCommand command)
     {
-        var comment = await mediator.Send(command);
+        var commandWithUser = command with { UserId = CurrentUserId };
+        var comment = await mediator.Send(commandWithUser);
         return Ok(comment);
     }
 
