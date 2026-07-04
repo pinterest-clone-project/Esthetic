@@ -54,9 +54,9 @@
     }
 }
 
-html {
-    scroll-behavior: smooth;
-}
+/*html {*/
+/*    scroll-behavior: smooth;*/
+/*}*/
 
 @keyframes pulse {
     0%, 100% { opacity: 0.35; }
@@ -74,6 +74,10 @@ html {
 }
 
 
-html {
-    scrollbar-gutter: stable;
+/*html {*/
+/*    scrollbar-gutter: stable;*/
+/*}*/
+
+html, body {
+    overflow-x: hidden;
 }
