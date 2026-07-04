@@ -1,20 +1,21 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router";
-import { useGetPinByIdQuery, useGetAllPinsQuery, useDeletePinMutation } from "../../services/pinService.ts";
-import { useGetMeQuery } from "../../services/accountService.ts";
-import { useLikeMutation, useUnlikeMutation } from "../../services/likeService.ts";
+import {useState, useEffect} from "react";
+import {useParams, useNavigate} from "react-router";
+import {useGetPinByIdQuery, useGetAllPinsQuery, useDeletePinMutation} from "@/services/pinService.ts";
+import {useGetMeQuery} from "@/services/accountService.ts";
+import {useLikeMutation, useUnlikeMutation} from "@/services/likeService.ts";
 import PinCard from "@/components/ui/PinCard.tsx";
 import BackButton from "@/components/ui/BackButton.tsx";
-import { APP_ENV } from "@/constants/env";
+import {APP_ENV} from "@/constants/env";
 import SaveModal from "@/components/ui/SaveModal.tsx";
 import CommentsSection from "@/components/ui/CommentsSection.tsx";
+import ReportModal from "@/components/ui/ReportModal.tsx";
 import {useTrackViewPinMutation} from "@/services/recommendedPinsService.ts";
 
 const AuraPreviewPage = () => {
-    const { id } = useParams<{ id: string }>();
+    const {id} = useParams<{ id: string }>();
     const navigate = useNavigate();
 
-    const { data: pin, isLoading, isError } = useGetPinByIdQuery(id!);
+    const {data: pin, isLoading, isError} = useGetPinByIdQuery(id!);
 
     const [trackView] = useTrackViewPinMutation();
     // Sync liked state once pin data loads
@@ -25,8 +26,8 @@ const AuraPreviewPage = () => {
             trackView(pin.id);
         }
     }, [pin?.id]);
-    const { data: allPins } = useGetAllPinsQuery();
-    const { data: me } = useGetMeQuery();
+    const {data: allPins} = useGetAllPinsQuery();
+    const {data: me} = useGetMeQuery();
 
     const [deletePin] = useDeletePinMutation();
     const [like] = useLikeMutation();
@@ -36,9 +37,10 @@ const AuraPreviewPage = () => {
     const [liked, setLiked] = useState(false);
     const [likesCount, setLikesCount] = useState<number | null>(null);
     const [saveModalOpen, setSaveModalOpen] = useState(false);
+    const [reportModalOpen, setReportModalOpen] = useState(false);
 
     useEffect(() => {
-        window.scrollTo({ top: 0, behavior: "instant" });
+        window.scrollTo({top: 0, behavior: "instant"});
     }, [id]);
 
     const isOwner = me?.id === pin?.creatorId;
@@ -68,7 +70,7 @@ const AuraPreviewPage = () => {
 
     if (isLoading) return (
         <div className="w-full min-h-full bg-white dark:bg-[#000000] flex items-center justify-center">
-            <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-[#4ade80] animate-spin" />
+            <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-[#4ade80] animate-spin"/>
         </div>
     );
 
@@ -81,7 +83,7 @@ const AuraPreviewPage = () => {
     return (
         <div className="w-full min-h-full bg-white dark:bg-[#000000] px-3 py-4 md:px-6 md:py-8">
 
-            <BackButton />
+            <BackButton/>
 
             {/* Pin detail */}
             <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start max-w-4xl mx-auto mb-16">
@@ -105,8 +107,10 @@ const AuraPreviewPage = () => {
                                 onClick={handleLike}
                                 className="flex items-center gap-1.5 text-xs transition-colors group"
                             >
-                                <span className={`transition-colors ${liked ? 'text-[#4ade80]' : 'text-gray-500 group-hover:text-[#4ade80]'}`}>♥</span>
-                                <span className={`transition-colors ${liked ? 'text-white' : 'text-gray-500'}`}>{displayLikesCount}</span>
+                                <span
+                                    className={`transition-colors ${liked ? 'text-[#4ade80]' : 'text-gray-500 group-hover:text-[#4ade80]'}`}>♥</span>
+                                <span
+                                    className={`transition-colors ${liked ? 'text-white' : 'text-gray-500'}`}>{displayLikesCount}</span>
                             </button>
                             <span className="flex items-center gap-1.5 text-gray-500 text-xs">
                                 <span className="text-[#4ade80]">💬</span>
@@ -130,7 +134,7 @@ const AuraPreviewPage = () => {
                             >
                                 Save
                             </button>
-                            {isOwner && (
+                            {isOwner ? (
                                 <>
                                     <button
                                         onClick={() => navigate(`/aura/edit/${pin.id}`)}
@@ -145,6 +149,13 @@ const AuraPreviewPage = () => {
                                         Delete
                                     </button>
                                 </>
+                            ) : (
+                                <button
+                                    onClick={() => setReportModalOpen(true)}
+                                    className="text-xs text-gray-400 hover:text-red-400 border border-white/10 hover:border-red-400/40 px-3 py-1.5 rounded-lg transition-colors"
+                                >
+                                    Report
+                                </button>
                             )}
                         </div>
                     </div>
@@ -213,21 +224,28 @@ const AuraPreviewPage = () => {
             {suggestions.length > 0 && (
                 <>
                     <div className="flex items-center gap-4 mb-6 max-w-4xl mx-auto">
-                        <div className="flex-1 h-px bg-white/5" />
+                        <div className="flex-1 h-px bg-white/5"/>
                         <span className="text-gray-600 text-xs tracking-widest uppercase">More Auras</span>
-                        <div className="flex-1 h-px bg-white/5" />
+                        <div className="flex-1 h-px bg-white/5"/>
                     </div>
 
                     {/* Suggestions masonry */}
                     <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3">
                         {suggestions.map(p => (
-                            <PinCard key={p.id} pin={p} />
+                            <PinCard key={p.id} pin={p}/>
                         ))}
                     </div>
                 </>
             )}
             {saveModalOpen && (
-                <SaveModal pinId={pin.id} onClose={() => setSaveModalOpen(false)} />
+                <SaveModal pinId={pin.id} onClose={() => setSaveModalOpen(false)}/>
+            )}
+            {reportModalOpen && (
+                <ReportModal
+                    pinId={pin.id}
+                    userId={pin.creatorId}
+                    onClose={() => setReportModalOpen(false)}
+                />
             )}
         </div>
     );
