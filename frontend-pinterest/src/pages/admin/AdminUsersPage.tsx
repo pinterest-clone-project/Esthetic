@@ -56,7 +56,6 @@ const AdminUsersPage = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data, totalPages]);
 
-    // адмін не може заблокувати іншого адміна або самого себе
     const canBlockUser = (user: IUser) => {
         if (user.id === currentUser?.id) return false;
         if (user.roles?.includes("Admin")) return false;
