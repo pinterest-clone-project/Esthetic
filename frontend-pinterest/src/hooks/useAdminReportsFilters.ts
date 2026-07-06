@@ -14,6 +14,13 @@ const STATUS_NAME_TO_ENUM: Record<string, ReportStatus> = {
     Dismissed: ReportStatus.Dismissed,
 };
 
+const STATUS_ENUM_TO_NAME: Record<ReportStatus, string> = {
+    [ReportStatus.Pending]: "Pending",
+    [ReportStatus.Reviewed]: "Reviewed",
+    [ReportStatus.Resolved]: "Resolved",
+    [ReportStatus.Dismissed]: "Dismissed",
+};
+
 const parseStatus = (raw: string | null): ReportStatusFilter => {
     if (raw && raw in STATUS_NAME_TO_ENUM) return STATUS_NAME_TO_ENUM[raw];
     return "all";
@@ -61,7 +68,7 @@ export const useAdminReportsFilters = () => {
     const setStatus = (value: ReportStatusFilter) => {
         setStatusState(value);
         updateParams({
-            status: value !== "all" ? ReportStatus[value] : null,
+            status: value !== "all" ? STATUS_ENUM_TO_NAME[value] : null,
             page: "1",
         });
     };
