@@ -1,6 +1,8 @@
 using Application.UseCases.Categories.Commands;
 using Application.UseCases.Categories.Queries;
+using Domain.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend_pinterest.Controllers;
@@ -33,6 +35,7 @@ public class CategoriesController(IMediator mediator) : ControllerBase
 
     [HttpPut("update/{id}")]
     [Consumes("multipart/form-data")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromForm] UpdateCategoryCommand command)
     {
         var commandWithId = command with { Id = id };
@@ -41,6 +44,7 @@ public class CategoriesController(IMediator mediator) : ControllerBase
     }
 
     [HttpDelete("delete/{id}")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         await mediator.Send(new DeleteCategoryCommand(id));

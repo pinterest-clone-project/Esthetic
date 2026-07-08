@@ -1,6 +1,8 @@
 ﻿using Application.UseCases.Tags.Commands;
 using Application.UseCases.Tags.Queries;
+using Domain.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend_pinterest.Controllers;
@@ -32,6 +34,7 @@ public class TagsController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut("update/{id}")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateTagCommand request)
     {
         var command = request with { Id = id };
@@ -40,6 +43,7 @@ public class TagsController(IMediator mediator) : ControllerBase
     }
 
     [HttpDelete("delete/{id}")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Delete(Guid id)
     {
         await mediator.Send(new DeleteTagCommand(id));
