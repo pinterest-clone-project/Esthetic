@@ -45,4 +45,11 @@ public class TagsController(IMediator mediator) : ControllerBase
         await mediator.Send(new DeleteTagCommand(id));
         return NoContent();
     }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> Search([FromQuery] SearchTagsQuery query)
+    {
+        var result = await mediator.Send(query);
+        return Ok(result);
+    }
 }
