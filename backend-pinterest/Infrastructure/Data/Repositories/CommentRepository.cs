@@ -10,8 +10,10 @@ public class CommentRepository : BaseRepository<CommentEntity>, ICommentReposito
     public async Task<List<CommentEntity>> GetByPinIdAsync(Guid pinId, CancellationToken ct = default)
     {
         return await _db.Comments
-            .Where(c => c.PinId == pinId && !c.IsDeleted)
+            .Where(c => c.PinId == pinId && !c.IsDeleted && c.ParentCommentId == null)
             .Include(c => c.User)
+            .Include(c => c.Replies)
+            .ThenInclude(r => r.User)
             .OrderByDescending(c => c.CreatedAt)
             .ToListAsync(ct);
     }

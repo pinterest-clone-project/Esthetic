@@ -13,6 +13,14 @@ export const commentService = api.injectEndpoints({
             }),
             invalidatesTags: (_res, _err, arg) => [{ type: 'Comments', id: arg.pinId }],
         }),
+        updateComment: builder.mutation<IComment, { id: string; text: string; pinId: string }>({
+            query: ({ id, text }) => ({
+                url: 'Comments/update',
+                method: 'PUT',
+                body: serialize({ commentId: id, text }),
+            }),
+            invalidatesTags: (_res, _err, arg) => [{ type: 'Comments', id: arg.pinId }],
+        }),
         deleteComment: builder.mutation<void, { id: string; pinId: string }>({
             query: ({ id }) => ({
                 url: `Comments/delete/${id}`,
@@ -32,6 +40,7 @@ export const commentService = api.injectEndpoints({
 
 export const {
     useCreateCommentMutation,
+    useUpdateCommentMutation,
     useDeleteCommentMutation,
     useGetCommentsQuery,
 } = commentService;
