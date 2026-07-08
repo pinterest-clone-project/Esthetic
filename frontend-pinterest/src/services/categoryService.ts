@@ -1,6 +1,8 @@
 import { api } from "./api.ts";
 import type {ICategory} from "@/types/categories/ICategory.ts";
 import {serialize} from "object-to-formdata";
+import type {IPagedResult} from "@/types/IPagedResult.ts";
+import type {ISearchCategoriesParams} from "@/types/categories/requests/ISearchCategoriesParams.ts";
 
 export const categoryService = api.injectEndpoints({
     endpoints: (builder) => ({
@@ -9,6 +11,11 @@ export const categoryService = api.injectEndpoints({
                 url: 'Categories/getAll',
                 method: 'GET',
             }),
+            providesTags: ["AllCategories"],
+        }),
+        searchCategories: builder.query<IPagedResult<ICategory>, ISearchCategoriesParams>({
+            query: (params) => ({ url: "Categories/search", method: "GET", params }),
+            providesTags: ["AllCategories"],
         }),
         getCategoryById: builder.query<ICategory, string>({
             query: (id) => ({
@@ -22,6 +29,7 @@ export const categoryService = api.injectEndpoints({
                 method: 'POST',
                 body: serialize(data),
             }),
+            invalidatesTags: ["AllCategories"],
         }),
         updateCategory: builder.mutation<void, ICategory>({
             query: ({ id, ...data }) => ({
@@ -29,12 +37,14 @@ export const categoryService = api.injectEndpoints({
                 method: 'PUT',
                 body: serialize(data),
             }),
+            invalidatesTags: ["AllCategories"],
         }),
         deleteCategory: builder.mutation<void, string>({
             query: (id) => ({
                 url: `Categories/delete/${id}`,
                 method: 'DELETE',
             }),
+            invalidatesTags: ["AllCategories"],
         }),
     }),
 });

@@ -8,6 +8,7 @@ export const tagService = api.injectEndpoints({
     endpoints: (builder) => ({
         getAllTags: builder.query<ITagResponse[], void>({
             query: () => ({ url: "Tags/getAll", method: "GET" }),
+            providesTags: ["AllTags"],
         }),
 
         searchTags: builder.query<IPagedResult<ITagResponse>, ISearchTagsParams>({
