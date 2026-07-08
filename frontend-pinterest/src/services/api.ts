@@ -18,6 +18,7 @@ export const api = createApi({
         "AllUsers",
         "AllReports",
         "MyReports",
+        "AllTags",
     ],
     endpoints: () => ({})
 });
