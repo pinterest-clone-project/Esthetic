@@ -50,4 +50,11 @@ public class CategoriesController(IMediator mediator) : ControllerBase
         await mediator.Send(new DeleteCategoryCommand(id));
         return NoContent();
     }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> Search([FromQuery] SearchCategoriesQuery query)
+    {
+        var result = await mediator.Send(query);
+        return Ok(result);
+    }
 }
