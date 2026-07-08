@@ -4,9 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useCreateCategoryMutation, useUpdateCategoryMutation } from "@/services/categoryService.ts";
 import { toSlug } from "@/utils/slugify.ts";
-import {useToast} from "@/components/ui/Toast/UseToast.ts";
-import type {ICategory} from "@/types/categories/ICategory.ts";
+import { useToast } from "@/components/ui/Toast/UseToast.ts";
+import type { ICategory } from "@/types/categories/ICategory.ts";
 import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
+import {APP_ENV} from "@/constants/env";
 
 const categorySchema = z.object({
     name: z.string().min(1, "Назва обов'язкова").max(60, "Максимум 60 символів"),
@@ -27,6 +28,8 @@ const getErrorMessage = (err: unknown): string => {
     }
     return "Щось пішло не так. Спробуйте ще раз.";
 };
+
+const getCategoryImageUrl = (image: string): string => `${APP_ENV.IMAGES_200_URL}${image}`;
 
 const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
     const isEdit = !!category;
@@ -51,7 +54,9 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
 
     const [rawImageSrc, setRawImageSrc] = useState<string | null>(null);
     const [imageFile, setImageFile] = useState<File | null>(null);
-    const [imagePreview, setImagePreview] = useState<string | null>(category?.image ?? null);
+    const [imagePreview, setImagePreview] = useState<string | null>(
+        category?.image ? getCategoryImageUrl(category.image) : null
+    );
 
     const [createCategory] = useCreateCategoryMutation();
     const [updateCategory] = useUpdateCategoryMutation();
@@ -81,18 +86,23 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
             return;
         }
 
-        const formData = new FormData();
-        formData.append("Name", values.name);
-        formData.append("Slug", slug);
-        formData.append("Description", values.description ?? "");
-        if (imageFile) formData.append("Image", imageFile);
-
         try {
             if (isEdit) {
-                await updateCategory({ id: category.id, formData }).unwrap();
+                await updateCategory({
+                    id: category.id,
+                    name: values.name,
+                    slug,
+                    description: values.description ?? "",
+                    ...(imageFile ? { imageFile } : {}),
+                }).unwrap();
                 showToast("Категорію оновлено", "success");
             } else {
-                await createCategory(formData).unwrap();
+                await createCategory({
+                    name: values.name,
+                    slug,
+                    description: values.description ?? "",
+                    imageFile: imageFile!,
+                }).unwrap();
                 showToast("Категорію створено", "success");
             }
             onClose();
