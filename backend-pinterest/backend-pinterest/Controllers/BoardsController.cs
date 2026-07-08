@@ -43,6 +43,14 @@ public class BoardsController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("search")]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<IActionResult> Search([FromQuery] SearchBoardsQuery query)
+    {
+        var result = await mediator.Send(query);
+        return Ok(result);
+    }
+
     [HttpDelete("delete/{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -62,7 +70,8 @@ public class BoardsController(IMediator mediator) : ControllerBase
         var commandWithIds = command with
         {
             Id = id,
-            OwnerId = CurrentUserId
+            OwnerId = CurrentUserId,
+            SkipOwnerValidation = User.IsInRole(Roles.Admin)
         };
 
         var result = await mediator.Send(commandWithIds);

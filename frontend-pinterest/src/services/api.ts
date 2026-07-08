@@ -11,6 +11,7 @@ export const api = createApi({
         "AllPins",
         "Comments",
         "MyMoodboards",
+        "AllMoodboards",
         "Chat",
         "Message",
         "Notification",

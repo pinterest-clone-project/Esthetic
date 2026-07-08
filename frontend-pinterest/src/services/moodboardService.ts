@@ -1,5 +1,7 @@
 import { api } from "@/services/api.ts";
 import {serialize} from "object-to-formdata";
+import type { IPagedResult } from "@/types/IPagedResult.ts";
+import type { ISearchBoardsParams } from "@/types/board/requests/ISearchBoardsParams.ts";
 
 export interface Moodboard {
     id: string;
@@ -38,11 +40,36 @@ export interface MoodboardDetail {
     previewImageUrls: string[];
 }
 
+export interface MoodboardAdmin {
+    id: string;
+    title: string;
+    description?: string;
+    coverImageUrl: string | null;
+    isPrivate: boolean;
+    isArchived: boolean;
+    ownerId: string;
+    createdAt: string;
+    updatedAt: string | null;
+    pinsCount: number;
+}
+
+export interface UpdateMoodboardRequest {
+    id: string;
+    title?: string;
+    description?: string;
+    isPrivate?: boolean;
+    coverImageFile?: File;
+}
+
 export const moodboardService = api.injectEndpoints({
     endpoints: (builder) => ({
         getMyMoodboards: builder.query<MoodboardPage, void>({
             query: () => "Boards/my",
             providesTags: ["MyMoodboards"],
+        }),
+        searchMoodboards: builder.query<IPagedResult<MoodboardAdmin>, ISearchBoardsParams>({
+            query: (params) => ({ url: "Boards/search", method: "GET", params }),
+            providesTags: ["AllMoodboards"],
         }),
         createMoodboard: builder.mutation<Moodboard, CreateMoodboardRequest>({
             query: (body) => ({
@@ -54,9 +81,23 @@ export const moodboardService = api.injectEndpoints({
         }),
         getMoodboardById: builder.query<MoodboardDetail, string>({
             query: (id) => `Boards/getById/${id}`,
-            providesTags: ["MyMoodboards"],
+            providesTags: ["MyMoodboards", "AllMoodboards"],
+        }),
+        updateMoodboard: builder.mutation<MoodboardAdmin, UpdateMoodboardRequest>({
+            query: ({ id, ...body }) => ({
+                url: `Boards/update/${id}`,
+                method: "PUT",
+                body: serialize(body, { indices: true, booleansAsIntegers: false }),
+            }),
+            invalidatesTags: ["MyMoodboards", "AllMoodboards"],
         }),
     }),
 });
 
-export const { useGetMyMoodboardsQuery, useCreateMoodboardMutation, useGetMoodboardByIdQuery  } = moodboardService;
+export const {
+    useGetMyMoodboardsQuery,
+    useCreateMoodboardMutation,
+    useGetMoodboardByIdQuery,
+    useSearchMoodboardsQuery,
+    useUpdateMoodboardMutation,
+} = moodboardService;

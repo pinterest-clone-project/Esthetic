@@ -25,6 +25,14 @@ public class PinsController(IMediator mediator) : ControllerBase
         return Ok(pins);
     }
 
+    [HttpGet("search")]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<IActionResult> Search([FromQuery] SearchPinsQuery query)
+    {
+        var result = await mediator.Send(query);
+        return Ok(result);
+    }
+
     [HttpGet("getById/{id}")]
     public async Task<IActionResult> GetById(Guid id)
     {

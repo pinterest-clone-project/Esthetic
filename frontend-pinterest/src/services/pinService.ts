@@ -4,6 +4,8 @@ import type { ICreatePinRequest } from "../types/pin/requests/ICreatePinRequest.
 import { serialize } from "object-to-formdata";
 import type {IUpdatePinRequest} from "@/types/pin/requests/IUpdatePinResponse.ts";
 import type {IPinResponse} from "@/types/pin/responses/IPinResponses.ts";
+import type { IPagedResult } from "@/types/IPagedResult.ts";
+import type { ISearchPinsParams } from "@/types/pin/requests/ISearchPinsParams.ts";
 
 export const pinService = api.injectEndpoints({
     endpoints: (builder) => ({
@@ -17,6 +19,10 @@ export const pinService = api.injectEndpoints({
                 method: 'GET',
             }),
             providesTags: ["AllPins"],
+        }),
+        searchPins: builder.query<IPagedResult<IPinResponse>, ISearchPinsParams>({
+            query: (params) => ({ url: 'Pins/search', method: 'GET', params }),
+            providesTags: ['AllPins'],
         }),
         createPin: builder.mutation<IPinResponse, ICreatePinRequest>({
             query: (data) => ({
@@ -74,6 +80,7 @@ export const pinService = api.injectEndpoints({
 export const {
     useGetAllPinsQuery,
     useGetPinByIdQuery,
+    useSearchPinsQuery,
     useCreatePinMutation,
     useUpdatePinMutation,
     useDeletePinMutation,
