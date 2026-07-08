@@ -16,6 +16,7 @@ export const pinService = api.injectEndpoints({
                 url: `Pins/getById/${id}`,
                 method: 'GET',
             }),
+            providesTags: ["AllPins"],
         }),
         createPin: builder.mutation<IPinResponse, ICreatePinRequest>({
             query: (data) => ({
