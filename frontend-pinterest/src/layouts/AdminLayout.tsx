@@ -99,7 +99,7 @@ const AdminLayout = () => {
                     </button>
                 </header>
 
-                <main className="flex-1 overflow-y-auto px-4 py-6 sm:px-8 md:px-10 md:py-8">
+                <main className="flex-1 overflow-y-auto scrollbar-hide px-4 py-6 sm:px-8 md:px-10 md:py-8">
                     <Outlet />
                 </main>
             </div>

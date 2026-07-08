@@ -1,5 +1,5 @@
 import { Pencil, Trash2 } from "lucide-react";
-import type {ITagResponse} from "@/types/tag/responses/ITagReponse.ts";
+import type { ITagResponse } from "@/types/tag/responses/ITagReponse.ts";
 
 interface TagRowProps {
     tag: ITagResponse;
@@ -9,7 +9,12 @@ interface TagRowProps {
 
 const TagRow = ({ tag, onEdit, onDelete }: TagRowProps) => (
     <div className="flex items-center justify-between gap-3 bg-white/5 border border-white/8 rounded-2xl px-4 py-3">
-        <span className="text-sm text-white/80 truncate">{tag.name}</span>
+        <div className="flex items-center gap-2.5 min-w-0">
+            <span className="text-sm text-white/80 truncate">{tag.name}</span>
+            <span className="shrink-0 text-xs text-white/40 bg-white/8 px-2 py-0.5 rounded-full">
+                {tag.pinsCount} {tag.pinsCount === 1 ? "пін" : "пінів"}
+            </span>
+        </div>
         <div className="flex items-center gap-1.5 shrink-0">
             <button
                 onClick={() => onEdit(tag)}

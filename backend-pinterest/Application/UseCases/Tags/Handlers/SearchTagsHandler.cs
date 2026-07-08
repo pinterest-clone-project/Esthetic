@@ -23,7 +23,8 @@ public class SearchTagsHandler(
             t => new TagDTO
             {
                 Id = t.Id,
-                Name = t.Name
+                Name = t.Name,
+                PinsCount = t.PinTags!.Count
             },
             request.Page,
             request.PageSize,
