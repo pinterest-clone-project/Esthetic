@@ -16,6 +16,7 @@ import {useSelector} from "react-redux";
 import {selectUser} from "@/store/selectors/authSelectors.ts";
 import AdminReportsPage from "@/pages/admin/AdminReportsPage.tsx";
 import AdminTagsPage from "@/pages/admin/AdminTagsPage.tsx";
+import AdminCategoriesPage from "@/pages/admin/AdminCategoriesPage.tsx";
 
 const FirstPage            = lazy(() => import("@/pages/home/FirstPage.tsx"));
 const ReviewPage           = lazy(() => import("@/pages/home/ReviewPage.tsx"));
@@ -147,6 +148,7 @@ const App = () => {
                                     <Route path="/admin/users" element={<AdminUsersPage />} />
                                     <Route path="/admin/reports" element={<AdminReportsPage />} />
                                     <Route path="/admin/tags" element={<AdminTagsPage />} />
+                                    <Route path="/admin/categories" element={<AdminCategoriesPage />} />
                                 </Route>
                             </Route>
 

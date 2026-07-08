@@ -55,5 +55,6 @@ export const {
     useCreateCategoryMutation,
     useUpdateCategoryMutation,
     useDeleteCategoryMutation,
+    useSearchCategoriesQuery
 } = categoryService;
 
