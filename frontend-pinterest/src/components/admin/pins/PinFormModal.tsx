@@ -5,6 +5,7 @@ import { useUpdatePinMutation } from "@/services/pinService.ts";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import { APP_ENV } from "@/constants/env";
 import type { IPinResponse } from "@/types/pin/responses/IPinResponses.ts";
+import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
 
 interface PinFormModalProps {
     pin: IPinResponse;
@@ -28,11 +29,14 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
     const [title, setTitle] = useState(pin.title ?? "");
     const [description, setDescription] = useState(pin.description ?? "");
     const [sourceUrl, setSourceUrl] = useState(pin.sourceUrl ?? "");
-    const [mediaUrl, setMediaUrl] = useState("");
     const [categoryId, setCategoryId] = useState(pin.categoryId ?? "");
     const [tagIds, setTagIds] = useState<string[]>(pin.tags.map((tag) => tag.id));
     const [imageFile, setImageFile] = useState<File | null>(null);
-    const [previewUrl, setPreviewUrl] = useState(pin.image ? `${APP_ENV.IMAGES_200_URL}${pin.image}` : "");
+    const [previewUrl, setPreviewUrl] = useState(pin.image ? `${APP_ENV.IMAGES_1200_URL}${pin.image}` : "");
+    const [showCropper, setShowCropper] = useState(false);
+    const [cropperImageSrc, setCropperImageSrc] = useState("");
+    const [categorySearch, setCategorySearch] = useState("");
+    const [tagSearch, setTagSearch] = useState("");
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
@@ -59,10 +63,16 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (!file) return;
-        setImageFile(file);
-        setMediaUrl("");
-        setPreviewUrl(URL.createObjectURL(file));
+        setCropperImageSrc(URL.createObjectURL(file));
+        setShowCropper(true);
         event.target.value = "";
+    };
+
+    const handleCropComplete = (croppedFile: File) => {
+        setImageFile(croppedFile);
+        setPreviewUrl(URL.createObjectURL(croppedFile));
+        setShowCropper(false);
+        setCropperImageSrc("");
     };
 
     const handleSave = async (event: React.FormEvent) => {
@@ -77,7 +87,6 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
                 categoryId: categoryId || undefined,
                 tagIds,
                 imageFile: imageFile ?? undefined,
-                mediaUrl: !imageFile && mediaUrl.trim() ? mediaUrl.trim() : undefined,
             }).unwrap();
             showToast("Пін оновлено", "success");
             onClose();
@@ -110,27 +119,38 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
                             className="bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50"
                         />
                         <input
-                            value={mediaUrl}
-                            onChange={(event) => setMediaUrl(event.target.value)}
-                            placeholder="URL нового зображення"
-                            className="bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50"
-                        />
-                        <input
                             value={sourceUrl}
                             onChange={(event) => setSourceUrl(event.target.value)}
                             placeholder="Посилання на джерело"
                             className="bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50"
                         />
-                        <select
-                            value={categoryId}
-                            onChange={(event) => setCategoryId(event.target.value)}
-                            className="bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50"
-                        >
-                            <option value="">Без категорії</option>
-                            {categories?.map((category) => (
-                                <option key={category.id} value={category.id}>{category.name}</option>
-                            ))}
-                        </select>
+                        <div className="relative">
+                            <input
+                                value={categorySearch}
+                                onChange={(event) => setCategorySearch(event.target.value)}
+                                placeholder={categoryId && categories?.find(c => c.id === categoryId)?.name || "Категорія"}
+                                className="bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50 w-full"
+                            />
+                            {categorySearch && (
+                                <div className="absolute z-10 w-full mt-1 bg-[#1a1a1a] border border-white/8 rounded-2xl max-h-48 overflow-y-auto">
+                                    {categories?.filter(c => 
+                                        c.name.toLowerCase().includes(categorySearch.toLowerCase())
+                                    ).map((category) => (
+                                        <button
+                                            key={category.id}
+                                            type="button"
+                                            onClick={() => {
+                                                setCategoryId(category.id);
+                                                setCategorySearch("");
+                                            }}
+                                            className="w-full text-left px-4 py-2 text-sm text-white/80 hover:bg-white/10 transition-colors"
+                                        >
+                                            {category.name}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
@@ -143,19 +163,33 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
                 />
 
                 <div className="mt-4">
-                    <select
-                        value=""
-                        onChange={(event) => {
-                            if (!event.target.value) return;
-                            setTagIds((prev) => [...prev, event.target.value]);
-                        }}
-                        className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50"
-                    >
-                        <option value="">Додати тег</option>
-                        {availableTags.map((tag) => (
-                            <option key={tag.id} value={tag.id}>#{tag.name}</option>
-                        ))}
-                    </select>
+                    <div className="relative">
+                        <input
+                            value={tagSearch}
+                            onChange={(event) => setTagSearch(event.target.value)}
+                            placeholder="Додати тег"
+                            className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50"
+                        />
+                        {tagSearch && (
+                            <div className="absolute z-10 w-full mt-1 bg-[#1a1a1a] border border-white/8 rounded-2xl max-h-48 overflow-y-auto">
+                                {availableTags.filter(t => 
+                                    t.name.toLowerCase().includes(tagSearch.toLowerCase())
+                                ).map((tag) => (
+                                    <button
+                                        key={tag.id}
+                                        type="button"
+                                        onClick={() => {
+                                            setTagIds((prev) => [...prev, tag.id]);
+                                            setTagSearch("");
+                                        }}
+                                        className="w-full text-left px-4 py-2 text-sm text-white/80 hover:bg-white/10 transition-colors"
+                                    >
+                                        #{tag.name}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                     <div className="flex flex-wrap gap-2 mt-3">
                         {selectedTags.map((tag) => (
                             <button
@@ -179,6 +213,16 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
                     </button>
                 </div>
             </form>
+            {showCropper && (
+                <ImageCropperModal
+                    imageSrc={cropperImageSrc}
+                    onCrop={handleCropComplete}
+                    onClose={() => {
+                        setShowCropper(false);
+                        setCropperImageSrc("");
+                    }}
+                />
+            )}
         </div>
     );
 };
