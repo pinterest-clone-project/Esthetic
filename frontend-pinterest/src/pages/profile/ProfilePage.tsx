@@ -140,8 +140,9 @@ const onSubmit = async (formValues: FormValues) => {
 if (isLoading) return <p>Завантаження...</p>;
 
     return (
-        <div className="flex justify-center py-4 sm:py-8">
-            <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-[680px] px-3 sm:px-6 text-black dark:text-white">
+        <div className="flex justify-center py-4 sm:py-8 px-3 sm:px-6">
+            <div className="flex flex-col md:flex-row gap-6 w-full max-w-5xl">
+            <form onSubmit={handleSubmit(onSubmit)} className="flex-1 text-black dark:text-white">
 
                 <div className="flex items-center gap-5 mb-8">
                     <div className="relative group cursor-pointer">
@@ -309,6 +310,7 @@ if (isLoading) return <p>Завантаження...</p>;
                     Logout
                 </button>
             </form>
+            </div>
         </div>
     );
 };
