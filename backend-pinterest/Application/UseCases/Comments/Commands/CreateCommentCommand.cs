@@ -10,4 +10,5 @@ public record CreateCommentCommand : IRequest<CommentDTO>
     public Guid UserId { get; init; }
     public Guid PinId { get; init; }
     public required string Text { get; init; }
+    public Guid? ParentCommentId { get; init; }
 }

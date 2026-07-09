@@ -161,7 +161,7 @@ const Header: React.FC = () => {
                                                     setDropdownOpen(false);
                                                     navigate("/admin");
                                                 }}
-                                                className="w-full px-4 py-2 text-left text-sm text-white hover:bg-[#535353] transition flex items-center gap-2 cursor-pointer"
+                                                className="w-full px-4 py-2 text-left text-sm text-black dark:text-white hover:bg-[#A1A1A1] dark:hover:bg-[#535353] transition flex items-center gap-2 cursor-pointer"
                                             >
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                                                     <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z"/>

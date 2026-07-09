@@ -6,4 +6,6 @@ export interface IComment {
     createdAt: string;
     username?: string;
     userImage?: string;
+    parentCommentId?: string;
+    replies?: IComment[];
 }

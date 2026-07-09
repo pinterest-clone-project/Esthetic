@@ -29,9 +29,9 @@ public class ReportsController(IMediator mediator) : ControllerBase
 
     [Authorize(Roles = Roles.Admin)]
     [HttpGet("getAll")]
-    public async Task<IActionResult> GetAllReports()
+    public async Task<IActionResult> GetAllReports([FromQuery] GetAllReportsQuery query)
     {
-        var result = await mediator.Send(new GetAllReportsQuery());
+        var result = await mediator.Send(query);
         return Ok(result);
     }
 
@@ -42,5 +42,14 @@ public class ReportsController(IMediator mediator) : ControllerBase
         var commandWithId = command with { ReporterId = CurrentUserId };
         var result = await mediator.Send(commandWithId);
         return Ok(result);
+    }
+
+    [Authorize(Roles = Roles.Admin)]
+    [HttpPatch("{id:guid}/status")]
+    public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateReportStatusCommand command)
+    {
+        var commandWithId = command with { Id = id };
+        await mediator.Send(commandWithId);
+        return NoContent();
     }
 }

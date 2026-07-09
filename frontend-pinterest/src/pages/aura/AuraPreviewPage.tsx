@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useParams, useNavigate} from "react-router";
 import {useGetPinByIdQuery, useGetAllPinsQuery, useDeletePinMutation} from "@/services/pinService.ts";
 import {useGetMeQuery} from "@/services/accountService.ts";
@@ -16,28 +16,22 @@ const AuraPreviewPage = () => {
     const navigate = useNavigate();
 
     const {data: pin, isLoading, isError} = useGetPinByIdQuery(id!);
-
-    const [trackView] = useTrackViewPinMutation();
-    // Sync liked state once pin data loads
-    useEffect(() => {
-        if (pin) {
-            setLiked(pin.isLikedByMe ?? false);
-            setLikesCount(pin.likesCount);
-            trackView(pin.id);
-        }
-    }, [pin?.id]);
     const {data: allPins} = useGetAllPinsQuery();
     const {data: me} = useGetMeQuery();
 
+    const [trackView] = useTrackViewPinMutation();
     const [deletePin] = useDeletePinMutation();
     const [like] = useLikeMutation();
     const [unlike] = useUnlikeMutation();
 
-    // Ideally seed `liked` from pin.isLikedByMe if your API provides it
-    const [liked, setLiked] = useState(false);
-    const [likesCount, setLikesCount] = useState<number | null>(null);
     const [saveModalOpen, setSaveModalOpen] = useState(false);
     const [reportModalOpen, setReportModalOpen] = useState(false);
+
+    useEffect(() => {
+        if (pin) {
+            trackView(pin.id);
+        }
+    }, [pin?.id]);
 
     useEffect(() => {
         window.scrollTo({top: 0, behavior: "instant"});
@@ -46,19 +40,15 @@ const AuraPreviewPage = () => {
     const isOwner = me?.id === pin?.creatorId;
     const suggestions = allPins?.filter(p => p.id !== id) ?? [];
 
-    // Use local state for likes count once pin loads; fall back to pin.likesCount
-    const displayLikesCount = likesCount ?? pin?.likesCount ?? 0;
+    const liked = pin?.isLikedByMe ?? false;
+    const displayLikesCount = pin?.likesCount ?? 0;
 
     const handleLike = async () => {
         if (!pin) return;
         if (liked) {
             await unlike(pin.id);
-            setLiked(false);
-            setLikesCount(displayLikesCount - 1);
         } else {
             await like(pin.id);
-            setLiked(true);
-            setLikesCount(displayLikesCount + 1);
         }
     };
 
@@ -215,7 +205,7 @@ const AuraPreviewPage = () => {
 
                     {/* Comments */}
                     <div className="mt-2 border-t border-white/5 pt-5">
-                        <CommentsSection pinId={pin.id} />
+                        <CommentsSection pinId={pin.id}/>
                     </div>
                 </div>
             </div>
