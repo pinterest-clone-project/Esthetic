@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
-type Step = 1 | 2 | 3 | 4 | 5;
+type Step = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
-interface FormData {
+export interface FormData {
     email: string;
     password: string;
     firstName: string;
@@ -12,6 +12,9 @@ interface FormData {
     bio: string;
     phoneNumber: string;
     gender: "Male" | "Female" | "Other" | null;
+    country: string;
+    language: string;
+    categoryIds: string[];
     imageFile: File | null;
 }
 
@@ -25,6 +28,9 @@ const initialFormData: FormData = {
     bio: "",
     phoneNumber: "",
     gender: null,
+    country: "",
+    language: "",
+    categoryIds: [],
     imageFile: null,
 };
 

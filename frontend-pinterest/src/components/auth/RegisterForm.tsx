@@ -6,24 +6,13 @@ import {setUser} from "@/store/slices/authSlice.ts";
 import Button from "@/components/button/Button.tsx";
 import GoogleIcon from "@/assets/icons/GoogleIcon.tsx";
 import logo from "@/assets/logo.png";
-import {useRegisterFormStore} from "@/store/slices/registerFormStore.tsx";
 import {StepIndicator} from "@/components/ui/StepIndicator.tsx";
+import {useGetAllCategoriesQuery} from "@/services/categoryService.ts";
+import { useRegisterFormStore, type FormData } from "@/store/slices/registerFormStore.tsx";
+import {APP_ENV} from "@/constants/env";
 
 interface RegisterFormProps {
     onSuccess?: () => void;
-}
-
-interface FormData {
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    username: string;
-    birthDate: string;
-    bio: string;
-    phoneNumber: string;
-    gender: "Male" | "Female" | "Other" | null;
-    imageFile: File | null;
 }
 
 const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
@@ -60,12 +49,25 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
         formData.lastName.trim().length > 0 &&
         formData.username.trim().length >= 3;
 
+    const isStep4Valid =
+        formData.country.trim().length > 0 && formData.language.trim().length > 0;
+
+    const toggleCategory = (id: string) => {
+        const next = formData.categoryIds.includes(id)
+            ? formData.categoryIds.filter((c) => c !== id)
+            : [...formData.categoryIds, id];
+        updateField("categoryIds", next);
+    };
+
+    const { data: categories } = useGetAllCategoriesQuery();
+
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
         updateField("imageFile", file);
         setImagePreview(URL.createObjectURL(file));
     };
+
 
     const handleSubmit = async () => {
         try {
@@ -79,10 +81,13 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 Bio: formData.bio || undefined,
                 PhoneNumber: formData.phoneNumber || undefined,
                 Gender: formData.gender ? genderMap[formData.gender] : undefined,
+                Country: formData.country || undefined,
+                Language: formData.language || undefined,
+                CategoryIds: formData.categoryIds,
                 ImageFile: formData.imageFile || undefined,
             }).unwrap();
             dispatch(setUser(account));
-            setStep(5);
+            setStep(7);
             setTimeout(() => {
                 onSuccess?.();
                 reset();
@@ -131,7 +136,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 <img src={logo} className="w-11 h-11" />
             </div>
 
-            {step > 1 && <StepIndicator step={step} totalSteps={5} />}
+            {step > 1 && <StepIndicator step={step} totalSteps={7} />}
 
             <div key={step} className="step-animate w-full">
 
@@ -384,6 +389,60 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 {step === 4 && (
                     <div className="w-full">
                         <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] text-center">
+                            Where do you live and what language do you speak?
+                        </h2>
+                        <p className="text-sm text-white dark:text-black mt-1 mb-5 text-center">
+                            This information will always be private.
+                        </p>
+
+                        <div className="space-y-3">
+                            <div>
+                                <label className="block text-sm text-white dark:text-black mb-1">Country</label>
+                                <input
+                                    type="text"
+                                    placeholder="Your country"
+                                    value={formData.country}
+                                    onChange={update("country")}
+                                    className="w-full h-10 px-4 rounded-[5px] text-sm text-white dark:text-black outline-none border-[var(--color-btn-primary)] transition border"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm text-white dark:text-black mb-1">Language</label>
+                                <input
+                                    type="text"
+                                    placeholder="Your language"
+                                    value={formData.language}
+                                    onChange={update("language")}
+                                    className="w-full h-10 px-4 rounded-[5px] text-sm text-white dark:text-black outline-none border-[var(--color-btn-primary)] transition border"
+                                />
+                            </div>
+
+                            <Button
+                                type="button"
+                                disabled={!isStep4Valid}
+                                variant={isStep4Valid ? "primary" : "secondary"}
+                                fullWidth
+                                radius={5}
+                                onClick={() => setStep(5)}
+                            >
+                                Continue
+                            </Button>
+
+                            <button
+                                type="button"
+                                onClick={() => setStep(3)}
+                                className="w-full text-center text-sm text-[#A1A1A1] hover:text-white dark:hover:text-black transition mt-1"
+                            >
+                                ← Back
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {step === 5 && (
+                    <div className="w-full">
+                        <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] text-center">
                             Almost done!
                         </h2>
                         <p className="text-sm text-white dark:text-black mt-1 mb-5 text-center">
@@ -439,18 +498,18 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
                             <Button
                                 type="button"
-                                disabled={isLoading}
+                                disabled={false}
                                 variant="primary"
                                 fullWidth
                                 radius={5}
-                                onClick={handleSubmit}
+                                onClick={() => setStep(6)}
                             >
-                                {isLoading ? "Creating account..." : "Let's go!"}
+                                Continue
                             </Button>
 
                             <button
                                 type="button"
-                                onClick={() => setStep(3)}
+                                onClick={() => setStep(4)}
                                 className="w-full text-center text-sm text-[#A1A1A1] hover:text-white dark:hover:text-black transition mt-1"
                             >
                                 ← Back
@@ -459,7 +518,72 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                     </div>
                 )}
 
-                {step === 5 && (
+                {step === 6 && (
+                    <div className="w-full">
+                        <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] text-center">
+                            So that you would like to create
+                        </h2>
+
+                        <div className="grid grid-cols-4 gap-3 mt-5">
+                            {categories?.map((category) => {
+                                const isSelected = formData.categoryIds.includes(category.id);
+                                return (
+                                    <button
+                                        key={category.id}
+                                        type="button"
+                                        onClick={() => toggleCategory(category.id)}
+                                        className="flex flex-col items-center gap-1.5"
+                                    >
+                                        <div
+                                            className={`relative w-full aspect-square rounded-[14px] overflow-hidden border-2 transition ${
+                                                isSelected ? "border-[var(--color-btn-primary)]" : "border-transparent"
+                                            }`}
+                                        >
+                                            <img
+                                                src={`${APP_ENV.IMAGES_100_URL}${category.image}`}
+                                                className="w-full h-full object-cover"
+                                            />
+                                            {isSelected && (
+                                                <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[var(--color-btn-primary)] flex items-center justify-center">
+                                                    <svg width="8" height="6" viewBox="0 0 8 6" fill="none">
+                                                        <path d="M1 3L3 5L7 1" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                                    </svg>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <span className="text-xs text-white dark:text-black">{category.name}</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        <Button
+                            type="button"
+                            disabled={formData.categoryIds.length < 3 || isLoading}
+                            variant={formData.categoryIds.length >= 3 ? "primary" : "secondary"}
+                            fullWidth
+                            radius={5}
+                            onClick={handleSubmit}
+                            className="mt-5"
+                        >
+                            {isLoading
+                                ? "Creating account..."
+                                : formData.categoryIds.length >= 3
+                                    ? "Continue"
+                                    : `Select ${3 - formData.categoryIds.length} or more, to continue`}
+                        </Button>
+
+                        <button
+                            type="button"
+                            onClick={() => setStep(5)}
+                            className="w-full text-center text-sm text-[#A1A1A1] hover:text-white dark:hover:text-black transition mt-2"
+                        >
+                            ← Back
+                        </button>
+                    </div>
+                )}
+
+                {step === 7 && (
                     <div className="w-full flex flex-col items-center">
                         <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] text-center max-w-[280px]">
                             Your account successfully created

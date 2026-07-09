@@ -8,5 +8,8 @@ export interface IRegisterRequest {
     PhoneNumber?: string;
     BirthDate: string;
     Gender?: number;
+    Country?: string;
+    Language?: string;
+    CategoryIds?: string[];
     ImageFile?: File | null;
 }
