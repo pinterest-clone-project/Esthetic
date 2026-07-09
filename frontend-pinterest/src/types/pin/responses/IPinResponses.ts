@@ -15,4 +15,6 @@ export interface IPinResponse {
     isLikedByMe: boolean;
     commentsCount: number;
     createdAt: string;
+    creatorName: string;
+    creatorImage: string;
 }

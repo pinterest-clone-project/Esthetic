@@ -11,6 +11,7 @@ public class PinRepository(AppDbContext db) : BaseRepository<PinEntity>(db), IPi
             .Include(p => p.Category)
             .Include(p => p.Likes)
             .Include(p => p.Comments)
+            .Include(p => p.Creator)  // add this
             .Where(p => !p.IsDeleted && p.Id == id)
             .FirstOrDefaultAsync(ct);
 
@@ -23,15 +24,6 @@ public class PinRepository(AppDbContext db) : BaseRepository<PinEntity>(db), IPi
             .Where(p => !p.IsDeleted)
             .ToListAsync(ct);
 
-    public async Task<List<PinEntity>> GetByUserIdAsync(Guid userId, CancellationToken ct = default)
-    => await _db.Pins
-        .Include(p => p.PinTags).ThenInclude(pt => pt.Tag)
-        .Include(p => p.Category)
-        .Include(p => p.Likes)
-        .Include(p => p.Comments)
-        .Where(p => !p.IsDeleted && p.CreatorId == userId)
-        .ToListAsync(ct);
-
     public async Task<List<Guid>> GetTagIdsByPinIdsAsync(List<Guid> pinIds,CancellationToken ct = default)
     =>
          await _db.PinTags
@@ -39,5 +31,12 @@ public class PinRepository(AppDbContext db) : BaseRepository<PinEntity>(db), IPi
             .Select(pt => pt.TagId)
             .Distinct()
             .ToListAsync(ct);
-    
+    public async Task<List<PinEntity>> GetByUserIdAsync(Guid userId, CancellationToken ct = default)
+        => await _db.Pins
+            .Include(p => p.PinTags).ThenInclude(pt => pt.Tag)
+            .Include(p => p.Likes)
+            .Include(p => p.Category)
+            .Where(p => p.CreatorId == userId && !p.IsDeleted)
+            .OrderByDescending(p => p.CreatedAt)
+            .ToListAsync(ct);
 }

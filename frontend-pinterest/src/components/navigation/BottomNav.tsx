@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useAppSelector } from "@/store";
+import {useGetMeQuery} from "@/services/accountService.ts";
 import { useTheme } from "@/context/ThemeContext";
 import homeIcon from "@/assets/icons/home_icon.svg";
 import collectionIcon from "@/assets/icons/collection_icon.svg";
@@ -27,7 +28,7 @@ const navItems: NavItem[] = [
     { label: "Chat", icon: profileIcon, path: "/chat" },
     { label: "Create", icon: addIcon, path: "/aura/create", isCreate: true },
     { label: "Collections", icon: collectionIcon, path: "/collections/aura" },
-    { label: "Profile", icon: userIcon, path: "/profile" },
+    { label: "Profile", icon: userIcon, path: "/user/" },
 ];
 
 const BottomNav = () => {
@@ -38,6 +39,7 @@ const BottomNav = () => {
     const defaultFilter = theme === "dark" ? defaultFilterDark : defaultFilterLight;
     const [createOpen, setCreateOpen] = useState(false);
     const createRef = useRef<HTMLDivElement>(null);
+    const {data: me} = useGetMeQuery();
 
     useEffect(() => {
         const handler = (e: MouseEvent) => {
@@ -52,6 +54,9 @@ const BottomNav = () => {
     if (!user) return null;
 
     const handleClick = (item: NavItem) => {
+        if(item.path === "/user/"){
+            item.path += me?.id;
+        }
         navigate(item.path);
     };
 

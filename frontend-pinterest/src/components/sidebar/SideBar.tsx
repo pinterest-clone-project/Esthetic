@@ -9,6 +9,7 @@ import themeIcon from "../../../src/assets/icons/theme_mode.svg"
 import React, {useEffect, useState} from "react";
 import {useLogoutMutation} from "@/services/accountService.ts";
 import {clearUser} from "@/store/slices/authSlice.ts";
+import {useGetMeQuery} from "@/services/accountService.ts";
 import {api} from "@/services/api.ts";
 import {useAppDispatch} from "@/store";
 import type { IChat } from "@/types/chat/IChat";
@@ -104,6 +105,7 @@ const Sidebar = () => {
         { search: debouncedSearch, pageSize: 10 },
         { skip: debouncedSearch.trim().length < 2 }
     );
+    const {data: me} = useGetMeQuery();
     const [getOrCreateChat] = useGetOrCreateChatMutation();
 
     useEffect(() => {
@@ -242,7 +244,7 @@ const Sidebar = () => {
 
             <Modal isOpen={activeModal === 'settings'} onClose={closeModal} variant="sidebar" title="Settings" width={300}>
                 <button
-                    onClick={() => { navigate('/profile'); closeModal(); }}
+                    onClick={() => { navigate('/user/'+ me?.id); closeModal(); }}
                     className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group "
                 >
                     <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1] flex items-center justify-center transition-colors shrink-0">

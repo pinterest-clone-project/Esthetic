@@ -165,6 +165,25 @@ const AuraPreviewPage = () => {
                         <h1 className="text-black dark:text-white text-2xl font-semibold leading-tight">{pin.title}</h1>
                     )}
 
+                    {/* Creator */}
+                    <button
+                        onClick={() => navigate(`/user/${pin.creatorId}`)}
+                        className="flex items-center gap-2 group w-fit"
+                    >
+                        <div className="w-7 h-7 rounded-full overflow-hidden bg-white/10 shrink-0">
+                            {pin.creatorImage ? (
+                                <img src={`${APP_ENV.IMAGES_100_URL}${pin.creatorImage}`} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-400 bg-white/5">
+                                    {pin.creatorName?.[0]?.toUpperCase()}
+                                </div>
+                            )}
+                        </div>
+                        <span className="text-gray-400 group-hover:text-white text-xs transition-colors">
+                            {pin.creatorName ?? "View profile"}
+                        </span>
+                    </button>
+
                     {/* Description */}
                     {pin.description && (
                         <p className="text-gray-400 text-sm leading-relaxed">{pin.description}</p>
