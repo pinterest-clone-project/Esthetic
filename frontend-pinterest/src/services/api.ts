@@ -21,6 +21,7 @@ export const api = createApi({
         "MyReports",
         "AllTags",
         "AllCategories",
+        "Statistics",
     ],
     endpoints: () => ({})
 });
