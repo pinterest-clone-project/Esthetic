@@ -13,6 +13,7 @@ import {useAppDispatch} from "@/store";
 import {clearUser} from "@/store/slices/authSlice.ts";
 import {api} from "@/services/api.ts";
 import {useNavigate} from "react-router";
+import { useGetAllCategoriesQuery } from "@/services/categoryService.ts";
 
 const schema = z.object({
     firstName:   z.string().min(1, "Імʼя обовʼязкове").max(50).or(z.literal("")).optional(),
@@ -28,6 +29,9 @@ const schema = z.object({
     birthDate:   z.string().optional(),
     isPrivate:   z.boolean().optional(),
     imageFile:   z.instanceof(File).optional(),
+    country:     z.string().max(100).or(z.literal("")).optional(),
+    language:    z.string().max(50).or(z.literal("")).optional(),
+    categoryIds: z.array(z.string()).optional(),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -53,8 +57,20 @@ const ProfilePage = () => {
         reset,
         setValue,
         setError,
+        watch,
         formState: { errors },
     } = useForm<FormValues>({ resolver: zodResolver(schema) });
+
+    const { data: categories } = useGetAllCategoriesQuery();
+    const selectedCategoryIds = watch("categoryIds") ?? [];
+
+    const toggleCategory = (id: string) => {
+        const current = selectedCategoryIds;
+        const next = current.includes(id)
+            ? current.filter((c) => c !== id)
+            : [...current, id];
+        setValue("categoryIds", next, { shouldDirty: true });
+    };
 
     // Парсимо помилку
     const apiError = useApiError(rawError as FetchBaseQueryError | undefined);
@@ -63,18 +79,21 @@ const ProfilePage = () => {
     useFormServerErrors(apiError, setError);
 
     useEffect(() => {
-    if (!me) return;
-    reset({
-        firstName:   me.firstName   ?? "",
-        lastName:    me.lastName    ?? "",
-        email:       me.email       ?? "",
-        bio:         me.bio         ?? "",
-        phoneNumber: me.phoneNumber ?? "",
-        gender:      me.gender      ?? undefined,
-        birthDate:   me.birthDate   ? me.birthDate.slice(0, 10) : "",
-        isPrivate:   me.isPrivate   ?? false,
-    });
-}, [me, reset]);
+        if (!me) return;
+        reset({
+            firstName:   me.firstName   ?? "",
+            lastName:    me.lastName    ?? "",
+            email:       me.email       ?? "",
+            bio:         me.bio         ?? "",
+            phoneNumber: me.phoneNumber ?? "",
+            gender:      me.gender      ?? undefined,
+            birthDate:   me.birthDate   ? me.birthDate.slice(0, 10) : "",
+            isPrivate:   me.isPrivate   ?? false,
+            country:     me.country     ?? "",
+            language:    me.language    ?? "",
+            categoryIds: me.categoryIds ?? [],
+        });
+    }, [me, reset]);
 
 const onSubmit = async (formValues: FormValues) => {
     const patch: IEditRequest = {};
@@ -92,6 +111,16 @@ const onSubmit = async (formValues: FormValues) => {
     compareStr("bio",         me?.bio);
     compareStr("phoneNumber", me?.phoneNumber);
     compareStr("birthDate",   me?.birthDate?.slice(0, 10));
+    compareStr("country",  me?.country);
+    compareStr("language", me?.language);
+
+    const currentCategoryIds = me?.categoryIds ?? [];
+    const newCategoryIds = formValues.categoryIds ?? [];
+    const categoriesChanged =
+        currentCategoryIds.length !== newCategoryIds.length ||
+        !currentCategoryIds.every((id) => newCategoryIds.includes(id));
+
+    if (categoriesChanged) patch.categoryIds = newCategoryIds;
 
     if (formValues.gender    !== me?.gender)    patch.gender    = formValues.gender;
     if (formValues.isPrivate !== me?.isPrivate) patch.isPrivate = formValues.isPrivate;
@@ -167,6 +196,19 @@ if (isLoading) return <p>Завантаження...</p>;
                     </div>
                 </div>
 
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">Country</label>
+                        <input {...register("country")} placeholder="Ukraine"
+                               className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
+                    </div>
+                    <div>
+                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">Language</label>
+                        <input {...register("language")} placeholder="Ukrainian"
+                               className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
+                    </div>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">Gender</label>
@@ -185,7 +227,30 @@ if (isLoading) return <p>Завантаження...</p>;
                     </div>
                 </div>
 
-                {/* Private + Save */}
+                <div className="mb-6">
+                    <label className="text-xs text-[#A1A1A1] mb-2 block">Interests</label>
+                    <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
+                        {categories
+                            ?.filter((category) => selectedCategoryIds.includes(category.id))
+                            .map((category) => (
+                                <button
+                                    key={category.id}
+                                    type="button"
+                                    onClick={() => toggleCategory(category.id)}
+                                    className="flex flex-col items-center gap-1.5"
+                                >
+                                    <div className="relative w-full aspect-square rounded-[14px] overflow-hidden border-2 border-[#1DB954]">
+                                        <img
+                                            src={`${APP_ENV.IMAGES_100_URL}${category.image}`}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                    <span className="text-[10px] text-[#A1A1A1] text-center">{category.name}</span>
+                                </button>
+                            ))}
+                    </div>
+                </div>
+
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     <label className="flex items-center gap-3 cursor-pointer">
                         <input {...register("isPrivate")} type="checkbox" className="accent-[#1DB954] w-4 h-4" />
