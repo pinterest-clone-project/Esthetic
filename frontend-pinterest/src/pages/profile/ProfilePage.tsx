@@ -67,6 +67,19 @@ const ProfilePage = () => {
     const watchedFirstName = watch("firstName") ?? me?.firstName ?? "";
     const watchedLastName = watch("lastName") ?? me?.lastName ?? "";
     const watchedBio = watch("bio") ?? me?.bio ?? "";
+    const watchedImageFile = watch("imageFile");
+
+    const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (watchedImageFile instanceof File) {
+            const url = URL.createObjectURL(watchedImageFile);
+            setAvatarPreview(url);
+            return () => URL.revokeObjectURL(url);
+        } else {
+            setAvatarPreview(null);
+        }
+    }, [watchedImageFile]);
 
     const toggleCategory = (id: string) => {
         const current = selectedCategoryIds;
@@ -146,14 +159,14 @@ if (isLoading) return <p>Завантаження...</p>;
         <div className="flex justify-center py-4 sm:py-8 px-3 sm:px-6">
             <div className="flex flex-col md:flex-row gap-6 w-full max-w-5xl">
             {/* Sidebar */}
-<aside className="md:w-[280px] md:sticky md:top-8 md:self-start">
+<aside className="md:w-[280px] md:self-start">
     <div className="border border-[#A1A1A1] dark:border-[#333] rounded-2xl p-6 flex flex-col items-center gap-4 text-black dark:text-white">
 
         {/* Avatar with upload */}
         <div className="relative group cursor-pointer">
             <div className="w-24 h-24 rounded-full bg-[#2a2a2a] border-2 border-[#1DB954] overflow-hidden">
-                {me?.image
-                    ? <img src={`${APP_ENV.IMAGES_800_URL}${me.image}`} className="w-full h-full object-cover" alt="avatar" />
+                {avatarPreview || me?.image
+                    ? <img src={avatarPreview ?? `${APP_ENV.IMAGES_800_URL}${me!.image}`} className="w-full h-full object-cover" alt="avatar" />
                     : <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#1DB954" strokeWidth="1.5" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
                 }
             </div>
