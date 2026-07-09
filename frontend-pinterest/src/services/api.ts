@@ -11,6 +11,7 @@ export const api = createApi({
         "AllPins",
         "Comments",
         "MyMoodboards",
+        "AllMoodboards",
         "Chat",
         "Message",
         "Notification",
@@ -19,6 +20,9 @@ export const api = createApi({
         "AllReports",
         "MyReports",
         "FollowStats",
+        "AllTags",
+        "AllCategories",
+        "Statistics",
     ],
     endpoints: () => ({})
 });

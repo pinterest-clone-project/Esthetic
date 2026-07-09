@@ -20,4 +20,7 @@ public record UpdateBoardCommand : IRequest<BoardDTO>
 
     [BindNever]
     public Guid OwnerId { get; init; }
+
+    [BindNever]
+    public bool SkipOwnerValidation { get; init; }
 }

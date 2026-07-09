@@ -19,7 +19,7 @@ public class UpdateBoardHandler(
         var board = await boardRepository.GetByIdAsync(request.Id, cancellationToken)
             ?? throw new NotFoundException(ValidationMessages.NotFound(ValidationMessages.Board));
 
-        if (board.OwnerId != request.OwnerId)
+        if (!request.SkipOwnerValidation && board.OwnerId != request.OwnerId)
             throw new UnauthorizedException(ValidationMessages.BoardUpdateOwnBoards);
 
         boardMapper.Patch(request, board);

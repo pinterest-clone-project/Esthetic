@@ -10,6 +10,7 @@ namespace Application.Mappers;
 public partial class ReportMapper
 {
     [MapperIgnoreTarget(nameof(ReportDTO.Status))]
+    [MapperIgnoreTarget(nameof(ReportDTO.ReporterUserName))]
     private partial ReportDTO ToDtoInternal(ReportEntity src);
 
     [MapperIgnoreTarget(nameof(ReportEntity.Status))]
@@ -19,6 +20,7 @@ public partial class ReportMapper
     {
         var dto = ToDtoInternal(src);
         dto.Status = src.Status.ToString();
+        dto.ReporterUserName = src.Reporter?.UserName;
         return dto;
     }
 

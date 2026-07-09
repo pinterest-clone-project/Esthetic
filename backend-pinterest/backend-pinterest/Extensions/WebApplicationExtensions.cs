@@ -60,6 +60,7 @@ public static class WebApplicationExtensions
 
         app.MapControllers();
         app.MapHub<ChatHub>("/hubs/chat");
+        app.MapHub<CommentHub>("/hubs/comments");
         #endregion
 
         return app;
