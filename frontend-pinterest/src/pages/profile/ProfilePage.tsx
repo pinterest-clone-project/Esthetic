@@ -93,7 +93,7 @@ const ProfilePage = () => {
             language:    me.language    ?? "",
             categoryIds: me.categoryIds ?? [],
         });
-    }, [me, reset]);
+    }, [me?.id]);
 
 const onSubmit = async (formValues: FormValues) => {
     const patch: IEditRequest = {};

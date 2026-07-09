@@ -61,5 +61,34 @@ public class EditValidator : AbstractValidator<EditCommand>
                 else if (optional.Value!.Length > FieldLengths.PhoneMax)
                     ctx.AddFailure(ValidationMessages.MaxLength(ValidationMessages.FieldPhone, FieldLengths.PhoneMax));
             });
+
+
+        RuleFor(x => x.Country)
+    .Custom((optional, ctx) =>
+    {
+        if (!optional.HasValue || optional.IsCleared) return;
+        if (string.IsNullOrWhiteSpace(optional.Value))
+            ctx.AddFailure(ValidationMessages.Required(ValidationMessages.FieldCountry));
+        else if (optional.Value!.Length > FieldLengths.CountryMax)
+            ctx.AddFailure(ValidationMessages.MaxLength(ValidationMessages.FieldCountry, FieldLengths.CountryMax));
+    });
+
+        RuleFor(x => x.Language)
+            .Custom((optional, ctx) =>
+            {
+                if (!optional.HasValue || optional.IsCleared) return;
+                if (string.IsNullOrWhiteSpace(optional.Value))
+                    ctx.AddFailure(ValidationMessages.Required(ValidationMessages.FieldLanguage));
+                else if (optional.Value!.Length > FieldLengths.LanguageMax)
+                    ctx.AddFailure(ValidationMessages.MaxLength(ValidationMessages.FieldLanguage, FieldLengths.LanguageMax));
+            });
+
+        RuleFor(x => x.CategoryIds)
+            .Custom((optional, ctx) =>
+            {
+                if (!optional.HasValue || optional.IsCleared) return;
+                if (optional.Value is not { Count: >= 3 })
+                    ctx.AddFailure(ValidationMessages.MinItems(ValidationMessages.FieldCategoryIds, 3));
+            });
     }
 }
