@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -50,6 +50,7 @@ const ProfilePage = () => {
         dispatch(api.util.resetApiState());
         navigate("/");
     };
+    const [isEditingInterests, setIsEditingInterests] = useState(false);
 
     const {
         register,
@@ -228,27 +229,56 @@ if (isLoading) return <p>Завантаження...</p>;
                 </div>
 
                 <div className="mb-6">
-                    <label className="text-xs text-[#A1A1A1] mb-2 block">Interests</label>
+                    <div className="flex items-center justify-between mb-2">
+                        <label className="text-xs text-[#A1A1A1]">Interests</label>
+                        <button
+                            type="button"
+                            onClick={() => setIsEditingInterests((prev) => !prev)}
+                            className="text-xs text-[#1DB954] hover:underline"
+                        >
+                            {isEditingInterests ? "Done" : "Edit"}
+                        </button>
+                    </div>
+
                     <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
-                        {categories
-                            ?.filter((category) => selectedCategoryIds.includes(category.id))
-                            .map((category) => (
+                        {(isEditingInterests
+                                ? categories
+                                : categories?.filter((category) => selectedCategoryIds.includes(category.id))
+                        )?.map((category) => {
+                            const isSelected = selectedCategoryIds.includes(category.id);
+                            return (
                                 <button
                                     key={category.id}
                                     type="button"
                                     onClick={() => toggleCategory(category.id)}
                                     className="flex flex-col items-center gap-1.5"
                                 >
-                                    <div className="relative w-full aspect-square rounded-[14px] overflow-hidden border-2 border-[#1DB954]">
+                                    <div
+                                        className={`relative w-full aspect-square rounded-[14px] overflow-hidden border-2 transition ${
+                                            isSelected ? "border-[#1DB954]" : "border-transparent"
+                                        }`}
+                                    >
                                         <img
                                             src={`${APP_ENV.IMAGES_100_URL}${category.image}`}
                                             className="w-full h-full object-cover"
                                         />
+                                        {isEditingInterests && isSelected && (
+                                            <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#1DB954] flex items-center justify-center">
+                                                <svg width="8" height="6" viewBox="0 0 8 6" fill="none">
+                                                    <path d="M1 3L3 5L7 1" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                                </svg>
+                                            </div>
+                                        )}
                                     </div>
                                     <span className="text-[10px] text-[#A1A1A1] text-center">{category.name}</span>
                                 </button>
-                            ))}
+                            );
+                        })}
                     </div>
+
+                    {!isEditingInterests && selectedCategoryIds.length === 0 && (
+                        <p className="text-sm text-[#A1A1A1] mt-2">You haven't selected any interests yet.</p>
+                    )}
                 </div>
 
                 <div className="flex flex-wrap items-center justify-between gap-3">
