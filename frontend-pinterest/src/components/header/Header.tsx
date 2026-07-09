@@ -104,6 +104,22 @@ const Header: React.FC = () => {
                     </div>
                 )}
 
+                {user && (
+                    <div className="flex md:hidden items-center gap-2 shrink-0">
+                        <NotificationBell />
+                        <Link to="/profile">
+                            <div className={`w-9 h-9 rounded-full overflow-hidden flex items-center justify-center
+                                ${user.image ? "" : "bg-[var(--color-btn-primary)]"}`}>
+                                {user.image ? (
+                                    <img src={`${APP_ENV.IMAGES_100_URL}${user.image}`} className="w-full h-full object-cover" />
+                                ) : (
+                                    <img src={userIcon} className="w-5 h-6 object-contain" />
+                                )}
+                            </div>
+                        </Link>
+                    </div>
+                )}
+
                 <nav className="hidden md:flex items-center gap-5 shrink-0">
                     {!user && (
                         <div className="hidden lg:flex items-center gap-5">

@@ -26,6 +26,7 @@ const MoodboardPreviewPage = lazy(() => import("@/pages/moodboard/MoodboardPrevi
 const AdminDashboard       = lazy(() => import("@/pages/admin/AdminDashboard.tsx"));
 const AdminUsersPage       = lazy(() => import("@/pages/admin/AdminUsersPage.tsx"));
 const ChatPage             = lazy(() => import("@/pages/chat/ChatPage.tsx"));
+const SettingsPage         = lazy(() => import("@/pages/settings/SettingsPage.tsx"));
 const ForgotPasswordPage   = lazy(() => import("@/pages/auth/ForgotPasswordPage.tsx"));
 const ResetPasswordPage    = lazy(() => import("@/pages/auth/ResetPasswordPage.tsx"));
 const NotFoundPage         = lazy(() => import("./pages/NotFoundPage.tsx"));
@@ -136,6 +137,7 @@ const App = () => {
                                     <Route path="/collections/ai" element={<CollectionsPage />} />
 
                                     <Route path="/chat" element={<ChatPage />} />
+                                    <Route path="/settings" element={<SettingsPage />} />
                                 </Route>
                             </Route>
 
