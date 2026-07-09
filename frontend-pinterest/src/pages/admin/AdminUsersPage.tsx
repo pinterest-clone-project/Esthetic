@@ -6,9 +6,9 @@ import { selectUser } from "@/store/selectors/authSelectors";
 import {useAdminUsersFilters} from "@/hooks/useAdminUsersFilters.ts";
 import UsersFilters from "@/components/admin/users/UsersFilters.tsx";
 import UsersTable from "@/components/admin/users/UsersTable.tsx";
-import UsersPagination from "@/components/admin/users/UsersPagination.tsx";
 import BlockUserModal from "@/components/admin/users/BlockUserModal.tsx";
 import BlockReasonModal from "@/components/admin/users/BlockReasonModal.tsx";
+import Pagination from "@/components/common/Pagination.tsx";
 
 const AdminUsersPage = () => {
     const currentUser = useSelector(selectUser);
@@ -56,7 +56,6 @@ const AdminUsersPage = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data, totalPages]);
 
-    // адмін не може заблокувати іншого адміна або самого себе
     const canBlockUser = (user: IUser) => {
         if (user.id === currentUser?.id) return false;
         if (user.roles?.includes("Admin")) return false;
@@ -113,12 +112,11 @@ const AdminUsersPage = () => {
             />
 
             {!isLoadingState && data && (
-                <UsersPagination
+                <Pagination
                     page={data.page}
                     totalPages={totalPages}
                     totalCount={data.totalCount}
-                    onPageChange={setPage}
-                />
+                    onPageChange={setPage} />
             )}
 
             {blockTarget && (

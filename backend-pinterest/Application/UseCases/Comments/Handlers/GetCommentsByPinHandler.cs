@@ -13,6 +13,19 @@ public class GetCommentsByPinHandler(
     public async Task<List<CommentResponseDTO>> Handle(GetCommentsByPinQuery request, CancellationToken cancellationToken)
     {
         var comments = await repository.GetByPinIdAsync(request.PinId, cancellationToken);
-        return comments.Select(commentMapper.ToResponseDto).ToList();
+        
+        var result = new List<CommentResponseDTO>();
+        foreach (var comment in comments)
+        {
+            var dto = commentMapper.ToResponseDto(comment);
+            dto.Replies = comment.Replies
+                .Where(r => !r.IsDeleted)
+                .OrderBy(r => r.CreatedAt)
+                .Select(commentMapper.ToResponseDto)
+                .ToList();
+            result.Add(dto);
+        }
+        
+        return result;
     }
 }

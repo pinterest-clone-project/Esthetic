@@ -14,6 +14,11 @@ import PrivateRoute from "@/components/routes/PrivateRoute.tsx";
 import AdminRoute from "@/components/routes/AdminRoute.tsx";
 import {useSelector} from "react-redux";
 import {selectUser} from "@/store/selectors/authSelectors.ts";
+import AdminReportsPage from "@/pages/admin/AdminReportsPage.tsx";
+import AdminTagsPage from "@/pages/admin/AdminTagsPage.tsx";
+import AdminCategoriesPage from "@/pages/admin/AdminCategoriesPage.tsx";
+import AdminPinsPage from "@/pages/admin/AdminPinsPage.tsx";
+import AdminBoardsPage from "@/pages/admin/AdminBoardsPage.tsx";
 
 const FirstPage            = lazy(() => import("@/pages/home/FirstPage.tsx"));
 const ReviewPage           = lazy(() => import("@/pages/home/ReviewPage.tsx"));
@@ -145,6 +150,11 @@ const App = () => {
                                 <Route element={<AdminLayout />}>
                                     <Route path="/admin" element={<AdminDashboard />} />
                                     <Route path="/admin/users" element={<AdminUsersPage />} />
+                                    <Route path="/admin/reports" element={<AdminReportsPage />} />
+                                    <Route path="/admin/pins" element={<AdminPinsPage />} />
+                                    <Route path="/admin/boards" element={<AdminBoardsPage />} />
+                                    <Route path="/admin/tags" element={<AdminTagsPage />} />
+                                    <Route path="/admin/categories" element={<AdminCategoriesPage />} />
                                 </Route>
                             </Route>
 

@@ -22,6 +22,7 @@
     "fortawesome": "^0.0.1-security",
     "i": "^0.3.7",
     "jwt-decode": "^4.0.0",
+    "lucide-react": "^1.23.0",
     "npm": "^11.12.1",
     "object-to-formdata": "^4.5.1",
     "react": "^19.2.4",
@@ -33,6 +34,8 @@
     "react-redux": "^9.2.0",
     "react-router": "^7.14.0",
     "react-router-dom": "^7.18.1",
+    "slugify": "^1.6.9",
+    "zod": "^4.4.3"
     "zod": "^4.4.3",
     "zustand": "^5.0.14"
   },

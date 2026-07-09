@@ -4,6 +4,7 @@ public class ReportDTO
 {
     public Guid Id { get; set; }
     public Guid ReporterId { get; set; }
+    public string? ReporterUserName { get; set; }
     public Guid? ReportedUserId { get; set; }
     public Guid? ReportedPinId { get; set; }
     public string Reason { get; set; } = string.Empty;

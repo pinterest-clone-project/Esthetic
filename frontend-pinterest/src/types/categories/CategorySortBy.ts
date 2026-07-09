@@ -1,0 +1,1 @@
+export type CategorySortBy = "Name" | "CreatedAt" | "PinsCount";

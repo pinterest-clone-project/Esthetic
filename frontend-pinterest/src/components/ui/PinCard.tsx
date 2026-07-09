@@ -19,9 +19,6 @@ const ShareIcon = () => (
 
 const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     const [hovered, setHovered] = useState(false);
-    // const [menuOpen, setMenuOpen] = useState(false);
-    const [liked, setLiked] = useState(pin.isLikedByMe ?? false);
-    const [likesCount, setLikesCount] = useState(pin.likesCount);
     const [saveModalOpen, setSaveModalOpen] = useState(false);
     const [showEditMenu, setShowEditMenu] = useState(false);
 
@@ -33,6 +30,8 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     const { showToast } = useToast();
 
     const isOwner = !!me && me.id === pin.creatorId;
+    const liked = pin.isLikedByMe ?? false;
+    const likesCount = pin.likesCount;
 
     const handleDelete = async (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -48,12 +47,8 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
         e.stopPropagation();
         if (liked) {
             await unlike(pin.id);
-            setLiked(false);
-            setLikesCount(c => c - 1);
         } else {
             await like(pin.id);
-            setLiked(true);
-            setLikesCount(c => c + 1);
         }
     };
 
@@ -64,8 +59,6 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
         );
         showToast("Link to aura copied!", "success");
     };
-
-    // onMouseLeave={() => setMenuOpen(false)}
 
     return (
         <div
