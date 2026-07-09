@@ -14,6 +14,7 @@ import {clearUser} from "@/store/slices/authSlice.ts";
 import {api} from "@/services/api.ts";
 import {useNavigate} from "react-router";
 import { useGetAllCategoriesQuery } from "@/services/categoryService.ts";
+import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
 
 const schema = z.object({
     firstName:   z.string().min(1, "Імʼя обовʼязкове").max(50).or(z.literal("")).optional(),
@@ -51,6 +52,7 @@ const ProfilePage = () => {
         navigate("/");
     };
     const [isEditingInterests, setIsEditingInterests] = useState(false);
+    const [cropperSrc, setCropperSrc] = useState<string | null>(null);
 
     const {
         register,
@@ -156,6 +158,7 @@ const onSubmit = async (formValues: FormValues) => {
 if (isLoading) return <p>Завантаження...</p>;
 
     return (
+        <>
         <div className="flex justify-center py-4 sm:py-8 px-3 sm:px-6">
             <div className="flex flex-col md:flex-row gap-6 w-full max-w-5xl">
             {/* Sidebar */}
@@ -172,7 +175,12 @@ if (isLoading) return <p>Завантаження...</p>;
             </div>
             <label className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition cursor-pointer">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                <input type="file" accept="image/*" className="hidden" onChange={(e) => setValue("imageFile", e.target.files?.[0])} />
+                <input type="file" accept="image/*" className="hidden" onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    setCropperSrc(URL.createObjectURL(file));
+                    e.target.value = "";
+                }} />
             </label>
         </div>
 
@@ -370,6 +378,24 @@ if (isLoading) return <p>Завантаження...</p>;
             </form>
             </div>
         </div>
+
+        {cropperSrc && (
+            <ImageCropperModal
+                imageSrc={cropperSrc}
+                defaultWidth={500}
+                defaultHeight={500}
+                onCrop={(croppedFile) => {
+                    URL.revokeObjectURL(cropperSrc);
+                    setCropperSrc(null);
+                    setValue("imageFile", croppedFile);
+                }}
+                onClose={() => {
+                    URL.revokeObjectURL(cropperSrc);
+                    setCropperSrc(null);
+                }}
+            />
+        )}
+        </>
     );
 };
 

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
 import { useGoogleLogin } from "@react-oauth/google";
 import {useGoogleLoginMutation, useRegisterMutation} from "@/services/accountService.ts";
 import { useAppDispatch } from "@/store";
@@ -18,6 +19,7 @@ interface RegisterFormProps {
 const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
     const [showPassword, setShowPassword] = useState(false);
     const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+    const [cropperSrc, setCropperSrc] = useState<string | null>(null);
 
     const { step, formData, imagePreview, setStep, updateField, setImagePreview, reset } =
         useRegisterFormStore();
@@ -64,8 +66,8 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        updateField("imageFile", file);
-        setImagePreview(URL.createObjectURL(file));
+        setCropperSrc(URL.createObjectURL(file));
+        e.target.value = "";
     };
 
 
@@ -118,6 +120,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
 
     return (
+        <>
         <div className="flex flex-col items-center px-4 sm:px-16">
 
             <style>
@@ -592,8 +595,26 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 )}
 
             </div>
-
         </div>
+
+        {cropperSrc && (
+            <ImageCropperModal
+                imageSrc={cropperSrc}
+                defaultWidth={500}
+                defaultHeight={500}
+                onCrop={(croppedFile) => {
+                    URL.revokeObjectURL(cropperSrc);
+                    setCropperSrc(null);
+                    updateField("imageFile", croppedFile);
+                    setImagePreview(URL.createObjectURL(croppedFile));
+                }}
+                onClose={() => {
+                    URL.revokeObjectURL(cropperSrc);
+                    setCropperSrc(null);
+                }}
+            />
+        )}
+        </>
     );
 };
 
