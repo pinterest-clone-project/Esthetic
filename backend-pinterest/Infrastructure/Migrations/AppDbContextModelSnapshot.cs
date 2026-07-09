@@ -60,7 +60,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Boards");
+                    b.ToTable("Boards", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Board.BoardPinEntity", b =>
@@ -96,7 +96,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("BoardId", "PinId")
                         .IsUnique();
 
-                    b.ToTable("BoardPins");
+                    b.ToTable("BoardPins", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.BoardSection.BoardSectionEntity", b =>
@@ -125,7 +125,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("BoardId");
 
-                    b.ToTable("BoardSections");
+                    b.ToTable("BoardSections", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Category.CategoryEntity", b =>
@@ -161,7 +161,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Chat.ChatEntity", b =>
@@ -192,7 +192,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("User1Id", "User2Id")
                         .IsUnique();
 
-                    b.ToTable("Chats");
+                    b.ToTable("Chats", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Chat.MessageEntity", b =>
@@ -225,7 +225,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("SentAt");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Comment.CommentEntity", b =>
@@ -259,7 +259,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Follow.FollowEntity", b =>
@@ -277,7 +277,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("FolloweeId");
 
-                    b.ToTable("Follows");
+                    b.ToTable("Follows", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Identity.RefreshTokenEntity", b =>
@@ -301,7 +301,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Identity.RoleEntity", b =>
@@ -353,9 +353,6 @@ namespace Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
-                    b.Property<string>("Country")
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -383,9 +380,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<bool>("IsPrivate")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("Language")
-                        .HasColumnType("text");
 
                     b.Property<string>("LastName")
                         .HasColumnType("text");
@@ -489,7 +483,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Likes");
+                    b.ToTable("Likes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Notification.NotificationEntity", b =>
@@ -535,7 +529,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Pin.PinEntity", b =>
@@ -578,7 +572,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Pins");
+                    b.ToTable("Pins", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.PinTag.PinTagEntity", b =>
@@ -593,7 +587,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("PinTags");
+                    b.ToTable("PinTags", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Recommended.UserPinInteraction", b =>
@@ -621,7 +615,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId", "PinId")
                         .IsUnique();
 
-                    b.ToTable("users_pins_interactions");
+                    b.ToTable("users_pins_interactions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Report.ReportEntity", b =>
@@ -664,7 +658,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ReporterId");
 
-                    b.ToTable("Reports");
+                    b.ToTable("Reports", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Tag.TagEntity", b =>
@@ -688,7 +682,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.UserBlock.UserBlockEntity", b =>
@@ -706,22 +700,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("BlockedId");
 
-                    b.ToTable("UserBlocks");
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserCategory", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("UserId", "CategoryId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("UserCategories");
+                    b.ToTable("UserBlocks", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -1081,25 +1060,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Blocker");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserCategory", b =>
-                {
-                    b.HasOne("Domain.Entities.Category.CategoryEntity", "Category")
-                        .WithMany("UserCategories")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Identity.UserEntity", "User")
-                        .WithMany("UserCategories")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Domain.Entities.Identity.RoleEntity", null)
@@ -1142,8 +1102,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Category.CategoryEntity", b =>
                 {
                     b.Navigation("Pins");
-
-                    b.Navigation("UserCategories");
                 });
 
             modelBuilder.Entity("Domain.Entities.Chat.ChatEntity", b =>
@@ -1173,8 +1131,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("ReceivedReports");
 
                     b.Navigation("SentReports");
-
-                    b.Navigation("UserCategories");
 
                     b.Navigation("UserLogins");
 
