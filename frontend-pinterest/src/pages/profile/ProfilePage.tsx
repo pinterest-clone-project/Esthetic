@@ -64,6 +64,9 @@ const ProfilePage = () => {
 
     const { data: categories } = useGetAllCategoriesQuery();
     const selectedCategoryIds = watch("categoryIds") ?? [];
+    const watchedFirstName = watch("firstName") ?? me?.firstName ?? "";
+    const watchedLastName = watch("lastName") ?? me?.lastName ?? "";
+    const watchedBio = watch("bio") ?? me?.bio ?? "";
 
     const toggleCategory = (id: string) => {
         const current = selectedCategoryIds;
@@ -142,25 +145,67 @@ if (isLoading) return <p>Завантаження...</p>;
     return (
         <div className="flex justify-center py-4 sm:py-8 px-3 sm:px-6">
             <div className="flex flex-col md:flex-row gap-6 w-full max-w-5xl">
+            {/* Sidebar */}
+<aside className="md:w-[280px] md:sticky md:top-8 md:self-start">
+    <div className="border border-[#A1A1A1] dark:border-[#333] rounded-2xl p-6 flex flex-col items-center gap-4 text-black dark:text-white">
+
+        {/* Avatar with upload */}
+        <div className="relative group cursor-pointer">
+            <div className="w-24 h-24 rounded-full bg-[#2a2a2a] border-2 border-[#1DB954] overflow-hidden">
+                {me?.image
+                    ? <img src={`${APP_ENV.IMAGES_800_URL}${me.image}`} className="w-full h-full object-cover" alt="avatar" />
+                    : <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#1DB954" strokeWidth="1.5" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                }
+            </div>
+            <label className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition cursor-pointer">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <input type="file" accept="image/*" className="hidden" onChange={(e) => setValue("imageFile", e.target.files?.[0])} />
+            </label>
+        </div>
+
+        {/* Name */}
+        <div className="text-center">
+            <p className="font-bold text-lg leading-tight">
+                {[watchedFirstName, watchedLastName].filter(Boolean).join(" ") || "Your Name"}
+            </p>
+            {me?.username && (
+                <p className="text-[#A1A1A1] text-sm mt-0.5">@{me.username}</p>
+            )}
+        </div>
+
+        {/* Bio preview */}
+        {watchedBio && (
+            <p className="text-sm text-[#A1A1A1] text-center line-clamp-2">{watchedBio}</p>
+        )}
+
+        {/* Stats */}
+        <div className="w-full border-t border-[#333] pt-4 flex flex-col gap-2">
+            {me?.createdAt && (
+                <div className="flex items-center gap-2 text-sm text-[#A1A1A1]">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    <span>Joined {new Date(me.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" })}</span>
+                </div>
+            )}
+            {me?.country && (
+                <div className="flex items-center gap-2 text-sm text-[#A1A1A1]">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    <span>{me.country}</span>
+                </div>
+            )}
+            {me?.language && (
+                <div className="flex items-center gap-2 text-sm text-[#A1A1A1]">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    <span>{me.language}</span>
+                </div>
+            )}
+        </div>
+    </div>
+</aside>
             <form onSubmit={handleSubmit(onSubmit)} className="flex-1 text-black dark:text-white">
 
-                <div className="flex items-center gap-5 mb-8">
-                    <div className="relative group cursor-pointer">
-                        <div className="w-20 h-20 rounded-full bg-[#2a2a2a] border-2 border-[#1DB954] overflow-hidden">
-                            {me?.image
-                                ? <img src={`${APP_ENV.IMAGES_800_URL}${me.image}`} className="w-full h-full object-cover" />
-                                : <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1DB954" strokeWidth="1.5" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-                            }
-                        </div>
-                        <label className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition cursor-pointer">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                            <input type="file" accept="image/*" className="hidden" onChange={(e) => setValue("imageFile", e.target.files?.[0])} />
-                        </label>
-                    </div>
-                    <div>
-                        <h1 className="text-2xl font-bold">Edit your profile</h1>
-                        <p className="text-[#A1A1A1] text-sm mt-1">Your info is visible to users who can view your profile</p>
-                    </div>
+                <div className="mb-6">
+                    <h1 className="text-2xl font-bold">Edit your profile</h1>
+                    <p className="text-[#A1A1A1] text-sm mt-1">Your info is visible to users who can view your profile</p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
