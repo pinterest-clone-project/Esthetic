@@ -21,6 +21,8 @@ public class UserEntity : IdentityUser<Guid>, IEntity
     public bool IsBlocked { get; set; } = false;
     public string? BlockReason { get; set; } = null;
     public DateTime? BirthDate { get; set; } = null;
+    public string? Country { get; set; }
+    public string? Language { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
 

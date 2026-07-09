@@ -1,4 +1,3 @@
-// components/StepIndicator.tsx
 type StepIndicatorProps = {
     step: number;
     totalSteps: number;
