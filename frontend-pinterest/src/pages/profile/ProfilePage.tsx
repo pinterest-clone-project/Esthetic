@@ -286,7 +286,7 @@ if (isLoading) return <p>Завантаження...</p>;
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
                         {(isEditingInterests
                                 ? categories
                                 : categories?.filter((category) => selectedCategoryIds.includes(category.id))
@@ -305,7 +305,7 @@ if (isLoading) return <p>Завантаження...</p>;
                                         }`}
                                     >
                                         <img
-                                            src={`${APP_ENV.IMAGES_100_URL}${category.image}`}
+                                            src={`${APP_ENV.IMAGES_1200_URL}${category.image}`}
                                             className="w-full h-full object-cover"
                                         />
                                         {isEditingInterests && isSelected && (
