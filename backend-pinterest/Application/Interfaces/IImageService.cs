@@ -9,4 +9,5 @@ public interface IImageService
     Task DeleteImageAsync(string name);
     Task<string> SaveImageFromBase64Async(string name);
     Task<string> SaveImageFromPathAsync(string filePath);
+    Task<string> CreateCollageAsync(List<string> imageNames);
 }

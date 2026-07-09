@@ -5,4 +5,5 @@ public interface IBoardPinRepository : IBaseRepository<BoardPinEntity>
 {
     Task<BoardPinEntity?> GetByPinAndBoardAsync(Guid pinId, Guid boardId, CancellationToken ct = default);
     Task<bool> ExistsAsync(Guid pinId, Guid boardId, CancellationToken ct = default);
+    Task AddRangeAsync(IEnumerable<BoardPinEntity> entities, CancellationToken ct = default);
 }

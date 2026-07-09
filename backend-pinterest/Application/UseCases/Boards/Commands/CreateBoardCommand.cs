@@ -14,9 +14,7 @@ public record CreateBoardCommand : IRequest<BoardDTO>
     public required string Title { get; init; }
     public string? Description { get; init; }
     public bool IsPrivate { get; init; }
-
-    [FromForm]
-    public IFormFile? CoverImageFile { get; init; }
+    public List<Guid>? PinIds { get; init; }
 
     [BindNever]
     public Guid OwnerId { get; init; }
