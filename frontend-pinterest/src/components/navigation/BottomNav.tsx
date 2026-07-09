@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useAppSelector } from "@/store";
+import { selectIsAdmin } from "@/store/selectors/authSelectors";
 import { useTheme } from "@/context/ThemeContext";
 import homeIcon from "@/assets/icons/home_icon.svg";
 import collectionIcon from "@/assets/icons/collection_icon.svg";
@@ -34,6 +35,7 @@ const BottomNav = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const user = useAppSelector((state) => state.auth.user);
+    const isAdmin = useAppSelector(selectIsAdmin);
     const { theme } = useTheme();
     const defaultFilter = theme === "dark" ? defaultFilterDark : defaultFilterLight;
     const [createOpen, setCreateOpen] = useState(false);
@@ -63,6 +65,23 @@ const BottomNav = () => {
 
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 flex md:hidden items-center justify-around bg-white dark:bg-black border-t border-[#A2A2A2] dark:border-[#535353] h-16 px-2">
+            {isAdmin && (
+                <button
+                    onClick={() => navigate("/admin")}
+                    className="flex flex-col items-center gap-0.5 px-2 py-1"
+                >
+                    <svg
+                        width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke={location.pathname.startsWith("/admin") ? "#1DB954" : (theme === "dark" ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)")}
+                        strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
+                    >
+                        <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z"/>
+                    </svg>
+                    <span className={`text-[10px] ${location.pathname.startsWith("/admin") ? "text-[#1DB954]" : "text-[#A2A2A2]"}`}>
+                        Admin
+                    </span>
+                </button>
+            )}
             {navItems.map((item) =>
                 item.isCreate ? (
                     <div key={item.path} className="relative" ref={createRef}>
