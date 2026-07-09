@@ -6,13 +6,12 @@ import {setUser} from "@/store/slices/authSlice.ts";
 import Button from "@/components/button/Button.tsx";
 import GoogleIcon from "@/assets/icons/GoogleIcon.tsx";
 import logo from "@/assets/logo.png";
+import {useRegisterFormStore} from "@/store/slices/registerFormStore.tsx";
+import {StepIndicator} from "@/components/ui/StepIndicator.tsx";
 
 interface RegisterFormProps {
     onSuccess?: () => void;
 }
-
-type Step = 1 | 2 | 3 | 4 | 5;
-
 
 interface FormData {
     email: string;
@@ -29,26 +28,20 @@ interface FormData {
 
 const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
     const [showPassword, setShowPassword] = useState(false);
-    const [step, setStep] = useState<Step>(1);
-    const [formData, setFormData] = useState<FormData>({
-        email: "",
-        password: "",
-        firstName: "",
-        lastName: "",
-        username: "",
-        birthDate: "",
-        bio: "",
-        phoneNumber: "",
-        imageFile: null,
-        gender: null,
-    });
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+
+    const { step, formData, imagePreview, setStep, updateField, setImagePreview, reset } =
+        useRegisterFormStore();
+
+    const genderMap: Record<"Male" | "Female" | "Other", number> = {
+        Male: 0,
+        Female: 1,
+        Other: 2,
+    };
 
     const dispatch = useAppDispatch();
     const [register, { isLoading }] = useRegisterMutation();
     const [loginByGoogle] = useGoogleLoginMutation();
-    const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-
 
     const hasMinLength = formData.password.length >= 8;
     const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(formData.password);
@@ -62,7 +55,6 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
         hasNumber &&
         formData.birthDate.trim().length > 0;
 
-
     const isStep2Valid =
         formData.firstName.trim().length > 0 &&
         formData.lastName.trim().length > 0 &&
@@ -71,10 +63,9 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        setFormData((prev) => ({ ...prev, imageFile: file }));
+        updateField("imageFile", file);
         setImagePreview(URL.createObjectURL(file));
     };
-
 
     const handleSubmit = async () => {
         try {
@@ -87,19 +78,19 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 BirthDate: formData.birthDate,
                 Bio: formData.bio || undefined,
                 PhoneNumber: formData.phoneNumber || undefined,
-                Gender: formData.gender || undefined,
+                Gender: formData.gender ? genderMap[formData.gender] : undefined,
                 ImageFile: formData.imageFile || undefined,
             }).unwrap();
             dispatch(setUser(account));
             setStep(5);
             setTimeout(() => {
                 onSuccess?.();
+                reset();
             }, 2000);
         } catch (err) {
             console.error("Register failed", err);
         }
     };
-
 
     const loginWithGoogle = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
@@ -118,42 +109,29 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
     const update = (field: keyof FormData) => (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-
-    const StepIndicator = () => (
-        <div className="flex w-full gap-1 mb-6">
-            {([1, 2, 3, 4 , 5] as Step[]).map((s) => (
-                <div
-                    key={s}
-                    className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-                        s <= step
-                            ? "bg-[var(--color-btn-primary)]"
-                            : "bg-[#A1A1A1]"
-                    }`}
-                />
-            ))}
-        </div>
-    );
+    ) => updateField(field, e.target.value as never);
 
 
     return (
         <div className="flex flex-col items-center px-4 sm:px-16">
 
-            <style>{`
-        @keyframes stepFadeIn {
-            0%   { opacity: 0; transform: translateX(12px); }
-            100% { opacity: 1; transform: translateX(0); }
-        }
-        .step-animate {
-            animation: stepFadeIn 0.3s ease-out forwards;
-        }
-        `}</style>
+            <style>
+                {`
+                    @keyframes stepFadeIn {
+                        0%   { opacity: 0; transform: translateX(12px); }
+                        100% { opacity: 1; transform: translateX(0); }
+                    }
+                    .step-animate {
+                        animation: stepFadeIn 0.3s ease-out forwards;
+                    }
+                `}
+            </style>
 
             <div className="w-11 h-11 rounded-full flex items-center justify-center mb-3">
                 <img src={logo} className="w-11 h-11" />
             </div>
 
-            {<StepIndicator />}
+            {step > 1 && <StepIndicator step={step} totalSteps={5} />}
 
             <div key={step} className="step-animate w-full">
 
@@ -359,7 +337,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 fullWidth
                                 radius={5}
                                 onClick={() => {
-                                    setFormData((prev) => ({ ...prev, gender: "Male" }));
+                                    updateField("gender", "Male");
                                     setStep(4);
                                 }}
                             >
@@ -372,7 +350,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 fullWidth
                                 radius={5}
                                 onClick={() => {
-                                    setFormData((prev) => ({ ...prev, gender: "Female" }));
+                                    updateField("gender", "Female");
                                     setStep(4);
                                 }}
                             >
@@ -385,7 +363,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 fullWidth
                                 radius={5}
                                 onClick={() => {
-                                    setFormData((prev) => ({ ...prev, gender: "Other" }));
+                                    updateField("gender", "Other");
                                     setStep(4);
                                 }}
                             >

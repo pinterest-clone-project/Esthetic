@@ -5,8 +5,8 @@ export interface IRegisterRequest {
     Bio?: string;
     Email: string;
     Password: string;
-    BirthDate: string;
     PhoneNumber?: string;
-    Gender?: string;
+    BirthDate: string;
+    Gender?: number;
     ImageFile?: File | null;
 }
