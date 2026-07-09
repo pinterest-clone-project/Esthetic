@@ -10,7 +10,16 @@ namespace Application.Mappers;
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.None)]
 public partial class UserMapper
 {
-    public partial UserDTO ToDto(UserEntity src);
+    [MapperIgnoreTarget(nameof(UserDTO.CategoryIds))]
+    private partial UserDTO ToDtoInternal(UserEntity src);
+
+    public UserDTO ToDto(UserEntity src)
+    {
+        var dto = ToDtoInternal(src);
+        dto.CategoryIds = src.UserCategories?.Select(uc => uc.CategoryId).ToList() ?? [];
+        return dto;
+    }
+
     public partial UserEntity ToEntity(CreateUserCommand src);
     public partial UserEntity ToEntity(UpdateUserCommand src);
     public partial UserEntity ToEntity(RegisterCommand src);

@@ -13,6 +13,7 @@ using Infrastructure.Data;
 using Infrastructure.Data.Repositories;
 using Infrastructure.Jobs;
 using Infrastructure.Middleware;
+using Infrastructure.Repositories;
 using Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -232,6 +233,7 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<IMessageRepository, MessageRepository>();
         services.AddScoped<INotificationRepository, NotificationRepository>();
         services.AddScoped<IRecommendedRepository, RecommendedRepository>();
+        services.AddScoped<IUserCategoryRepository, UserCategoryRepository>();
 
         services.AddScoped<IEmailJobScheduler, EmailJobScheduler>();
 
@@ -241,6 +243,7 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<ISmtpService, SmtpService>();
         services.AddScoped<IPagedService, PagedService>();
         services.AddScoped<ICookieService, CookieService>();
+
 
         services.AddSingleton<IChatNotifier, SignalRChatNotifier>();
         services.AddSingleton<INotificationNotifier, SignalRNotificationNotifier>();

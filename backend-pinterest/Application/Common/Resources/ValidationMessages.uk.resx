@@ -279,4 +279,16 @@
   <data name="MustBePast" xml:space="preserve">
     <value>{0} має бути в минулому</value>
   </data>
+  <data name="FieldCountry" xml:space="preserve">
+    <value>Країна</value>
+  </data>
+  <data name="FieldLanguage" xml:space="preserve">
+    <value>Мова</value>
+  </data>
+  <data name="FieldCategoryIds" xml:space="preserve">
+    <value>Категорії</value>
+  </data>
+  <data name="MinItems" xml:space="preserve">
+    <value>{0} має містити щонайменше {1} елементів.</value>
+  </data>
 </root>

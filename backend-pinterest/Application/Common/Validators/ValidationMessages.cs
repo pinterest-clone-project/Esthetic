@@ -74,6 +74,11 @@ public static class ValidationMessages
     public static string UserNotBlocked => Get("UserNotBlocked");
     public static string ErrorConflict => Get("ErrorConflict");
     public static string FieldBlockReason => Get("FieldBlockReason");
+    public static string FieldCountry => Get("FieldCountry");
+    public static string FieldLanguage => Get("FieldLanguage");
+    public static string FieldCategoryIds => Get("FieldCategoryIds");
+    public static string MinItems(string field, int min)
+    => string.Format(Get("MinItems"), field, min);
     public static string MustBePast(string field)
         => string.Format(Get("MustBePast"), field);
     private static string Get(string key)
