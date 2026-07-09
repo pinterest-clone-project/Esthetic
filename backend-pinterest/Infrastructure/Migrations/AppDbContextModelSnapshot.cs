@@ -240,6 +240,9 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<Guid?>("ParentCommentId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("PinId")
                         .HasColumnType("uuid");
 
@@ -254,6 +257,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentCommentId");
 
                     b.HasIndex("PinId");
 
@@ -867,6 +872,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Comment.CommentEntity", b =>
                 {
+                    b.HasOne("Domain.Entities.Comment.CommentEntity", "ParentComment")
+                        .WithMany("Replies")
+                        .HasForeignKey("ParentCommentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Domain.Entities.Pin.PinEntity", "Pin")
                         .WithMany("Comments")
                         .HasForeignKey("PinId")
@@ -878,6 +888,8 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ParentComment");
 
                     b.Navigation("Pin");
 
@@ -1116,6 +1128,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Chat.ChatEntity", b =>
                 {
                     b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Comment.CommentEntity", b =>
+                {
+                    b.Navigation("Replies");
                 });
 
             modelBuilder.Entity("Domain.Entities.Identity.RoleEntity", b =>

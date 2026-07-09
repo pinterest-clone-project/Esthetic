@@ -1,0 +1,1 @@
+export type TagSortBy = "Name" | "CreatedAt" | "PinsCount";

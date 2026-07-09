@@ -24,7 +24,8 @@ public class CreateCommentCommandHandler(
         {
             UserId = request.UserId,
             PinId = request.PinId,
-            Text = request.Text
+            Text = request.Text,
+            ParentCommentId = request.ParentCommentId
         }, ct);
 
         var pin = await pinRepository.GetByIdAsync(request.PinId, ct)

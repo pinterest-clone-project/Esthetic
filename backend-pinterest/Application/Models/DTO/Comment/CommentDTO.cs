@@ -7,4 +7,5 @@ public class CommentDTO
     public Guid UserId { get; set; }
     public string Text { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
+    public Guid? ParentCommentId { get; set; }
 }

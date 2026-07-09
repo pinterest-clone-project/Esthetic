@@ -5,7 +5,7 @@ export const recommendedPinsService = api.injectEndpoints({
     endpoints: (builder) => ({
         getRecommendedPins: builder.query<IPinSummaryResponse[], void>({
             query: () => ({ url: 'recommended/recommended', method: 'GET' }),
-            providesTags: ['RecommendedPins'],
+            providesTags: ['RecommendedPins', 'AllPins'],
         }),
         trackViewPin: builder.mutation<void, string>({
             query: (pinId) => ({
