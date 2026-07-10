@@ -2,6 +2,7 @@ import { api } from "@/services/api.ts";
 import {serialize} from "object-to-formdata";
 import type { IPagedResult } from "@/types/IPagedResult.ts";
 import type { ISearchBoardsParams } from "@/types/board/requests/ISearchBoardsParams.ts";
+import type {IPinSummaryResponse} from "@/types/pin/responses/IPinSummaryResponse.ts";
 
 export interface Moodboard {
     id: string;
@@ -37,7 +38,7 @@ export interface MoodboardDetail {
     createdAt: string;
     updatedAt: string | null;
     pinsCount: number;
-    previewImageUrls: string[];
+    previewPins: IPinSummaryResponse[];
 }
 
 export interface MoodboardAdmin {

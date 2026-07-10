@@ -2,6 +2,7 @@ import { useGetMoodboardByIdQuery } from "@/services/moodboardService.ts";
 import { useParams } from "react-router";
 import { APP_ENV } from "@/constants/env";
 import BackButton from "@/components/ui/BackButton.tsx";
+import PinCard from "@/components/ui/PinCard.tsx";
 
 const MoodboardPreviewPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -68,25 +69,22 @@ const MoodboardPreviewPage: React.FC = () => {
             </div>
 
             <div className="px-6 py-8">
-                {board.previewImageUrls.length > 0 ? (
+                {board.previewPins.length > 0 ? (
                     <>
-                        <div className="flex items-center gap-4 mb-6">
-                            <div className="flex-1 h-px bg-black/5 dark:bg-white/5" />
-                            <span className="text-gray-600 text-xs tracking-widest uppercase">Pins</span>
-                            <div className="flex-1 h-px bg-black/5 dark:bg-white/5" />
-                        </div>
-                        <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3">
-                            {board.previewImageUrls.map((url) => (
-                                <div key={url} className="break-inside-avoid mb-3">
-                                    <img
-                                        src={`${APP_ENV.IMAGES_800_URL}${url}`}
-                                        className="w-full rounded-xl object-cover"
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </>
-                ) : (
+                            <div className="flex items-center gap-4 mb-6">
+                                <div className="flex-1 h-px bg-black/5 dark:bg-white/5" />
+                                <span className="text-gray-600 text-xs tracking-widest uppercase">Pins</span>
+                                <div className="flex-1 h-px bg-black/5 dark:bg-white/5" />
+                            </div>
+                            <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3">
+                                {board.previewPins.map((pin) => (
+                                    <div key={pin.id} className="break-inside-avoid mb-3">
+                                        <PinCard pin={pin} />
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    ) : (
                     <div className="flex flex-col items-center justify-center h-64 text-black dark:text-[#A1A1A1]">
                         <p className="text-lg mb-2">No pins yet</p>
                         <p className="text-sm">Save pins to this board to see them here</p>

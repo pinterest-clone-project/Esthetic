@@ -1,4 +1,6 @@
-﻿namespace Application.Models.DTO.Board;
+﻿using Application.Models.DTO.Pin;
+
+namespace Application.Models.DTO.Board;
 
 public class BoardDetailsDTO
 {
@@ -13,5 +15,5 @@ public class BoardDetailsDTO
     public DateTime? UpdatedAt { get; set; }
 
     public int PinsCount { get; set; }
-    public IReadOnlyList<string> PreviewImageUrls { get; set; } = [];
+    public IReadOnlyList<PinSummaryDTO> PreviewPins { get; set; } = new List<PinSummaryDTO>();
 }
