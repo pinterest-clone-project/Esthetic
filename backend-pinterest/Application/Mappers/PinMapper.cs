@@ -41,6 +41,8 @@ public partial class PinMapper
         dto.CategoryName = src.Category?.Name;
         dto.LikesCount = src.Likes?.Count ?? 0;
         dto.CommentsCount = src.Comments?.Count ?? 0;
+        dto.CreatorName = src.Creator?.UserName;
+        dto.CreatorImage = src.Creator?.Image;
         dto.IsLikedByMe = currentUserId.HasValue
             && (src.Likes?.Any(l => l.UserId == currentUserId.Value) ?? false);
         return dto;

@@ -26,6 +26,7 @@ const CreateAuraPage       = lazy(() => import("./pages/aura/CreateAuraPage.tsx"
 const EditAuraPage         = lazy(() => import("./pages/aura/EditAuraPage.tsx"));
 const AuraPreviewPage      = lazy(() => import("./pages/aura/AuraPreviewPage.tsx"));
 const ProfilePage          = lazy(() => import("@/pages/profile/ProfilePage.tsx"));
+const UserPage             = lazy(() => import("@/pages/user/UserPage.tsx"));
 const CollectionsPage      = lazy(() => import("@/pages/collections/CollectionsPage.tsx"));
 const MoodboardPreviewPage = lazy(() => import("@/pages/moodboard/MoodboardPreviewPage.tsx"));
 const AdminDashboard       = lazy(() => import("@/pages/admin/AdminDashboard.tsx"));
@@ -125,6 +126,9 @@ const App = () => {
                                 <Route element={<PrivateRoute />}>
                                     <Route path="/profile" element={<ProfilePage />} />
 
+                                    <Route path="user">
+                                        <Route path=":id" element={<UserPage />} />
+                                    </Route>
                                     <Route path="aura">
                                         <Route path="create" element={<CreateAuraPage />} />
                                         <Route path="edit/:id" element={<EditAuraPage />} />

@@ -126,7 +126,7 @@ const Header: React.FC = () => {
 
                             <div className="relative" ref={dropdownRef}>
                                 <div className="flex items-center gap-1">
-                                    <Link to="/profile">
+                                    <Link to={"/user/" + user.id}>
                                         <div  className={`w-11 h-11 rounded-full flex items-center justify-center overflow-hidden
                                             ${user.image ? "" : "bg-[var(--color-btn-primary)]"}`}>
                                             {user.image ? (

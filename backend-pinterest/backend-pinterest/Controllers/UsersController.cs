@@ -4,6 +4,9 @@ using Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Application.Common.Exceptions;
+using Application.Common.Validators;
+using System.Security.Claims;
 
 namespace backend_pinterest.Controllers;
 
@@ -11,6 +14,10 @@ namespace backend_pinterest.Controllers;
 [Route("api/[controller]")]
 public class UsersController(IMediator mediator) : ControllerBase
 {
+    private Guid CurrentUserId => Guid.Parse(
+        User.FindFirstValue(JwtClaims.Id)
+        ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized));
+
     [HttpGet("getAll")]
     [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> GetAll()
@@ -72,6 +79,13 @@ public class UsersController(IMediator mediator) : ControllerBase
     {
         var user = await mediator.Send(new AdminUnblockUserCommand(id));
         return Ok(user);
+    }
+
+    [HttpGet("{id:guid}/follow-stats")]
+    public async Task<IActionResult> GetFollowStats([FromRoute] Guid id)
+    {
+        var result = await mediator.Send(new GetUserFollowStatsQuery(id, CurrentUserId));
+        return Ok(result);
     }
 }
 public record AdminBlockUserRequest(string Reason);

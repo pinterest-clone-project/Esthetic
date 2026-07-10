@@ -99,4 +99,12 @@ public class PinsController(IMediator mediator) : ControllerBase
         var boardIds = await mediator.Send(new GetPinSavedBoardsQuery(pinId, CurrentUserId));
         return Ok(boardIds);
     }
+
+    [HttpGet("byUser/{userId:guid}")]
+    public async Task<IActionResult> GetByUser([FromRoute] Guid userId)
+    {
+        var currentUserId = Guid.TryParse(User.FindFirstValue(JwtClaims.Id), out var id) ? id : Guid.Empty;
+        var pins = await mediator.Send(new GetUserPinsQuery(userId, currentUserId));
+        return Ok(pins);
+    }
 }
