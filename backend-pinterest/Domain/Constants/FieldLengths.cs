@@ -10,6 +10,8 @@ public static class FieldLengths
     public const int PasswordMax = 100;
     public const int PhoneMax = 20;
     public const int BlockReasonMax = 250;
+    public const int CountryMax = 100;
+    public const int LanguageMax = 50;
 
     // Category fields
     public const int SlugMax = 100;

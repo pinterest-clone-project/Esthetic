@@ -5,7 +5,9 @@ using Application.Mappers;
 using Application.Models.DTO.User;
 using Application.UseCases.Account.Commands;
 using Domain.Constants;
+using Domain.Entities;
 using Domain.Entities.Identity;
+using Domain.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
@@ -16,7 +18,8 @@ public class RegisterHandler(
     RoleManager<RoleEntity> roleManager,
     UserMapper userMapper,
     IJwtTokenService tokenService,
-    IImageService imageService) : IRequestHandler<RegisterCommand, TokenDTO>
+    IImageService imageService, 
+    IUserCategoryRepository userCategoryRepository) : IRequestHandler<RegisterCommand, TokenDTO>
 {
     public async Task<TokenDTO> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
@@ -36,11 +39,14 @@ public class RegisterHandler(
             if (!addPasswordResult.Succeeded)
                 throw new BadRequestException(string.Join(", ", addPasswordResult.Errors.Select(e => e.Description)));
 
+            existingUser.Country = request.Country;
+            existingUser.Language = request.Language;
+
             if (request.ImageFile != null)
-            {
                 existingUser.Image = await imageService.SaveImageAsync(request.ImageFile);
-                await userManager.UpdateAsync(existingUser);
-            }
+
+            await userManager.UpdateAsync(existingUser);
+            await AddUserCategoriesAsync(existingUser.Id, request.CategoryIds, cancellationToken);
 
             return await tokenService.CreateTokenAsync(existingUser);
         }
@@ -58,6 +64,20 @@ public class RegisterHandler(
             await roleManager.CreateAsync(new RoleEntity { Name = Roles.User });
 
         await userManager.AddToRoleAsync(user, Roles.User);
+        await AddUserCategoriesAsync(user.Id, request.CategoryIds, cancellationToken);
+
         return await tokenService.CreateTokenAsync(user);
+    }
+
+    private async Task AddUserCategoriesAsync(Guid userId, IList<Guid>? categoryIds, CancellationToken cancellationToken)
+    {
+        if (categoryIds is not { Count: > 0 })
+            return;
+
+        var userCategories = categoryIds
+            .Distinct()
+            .Select(categoryId => new UserCategory { UserId = userId, CategoryId = categoryId });
+
+        await userCategoryRepository.AddRangeAsync(userCategories, cancellationToken);
     }
 }

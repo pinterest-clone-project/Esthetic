@@ -7,7 +7,9 @@ public class OptionalBinderProvider : IModelBinderProvider
 {
     public IModelBinder? GetBinder(ModelBinderProviderContext context)
     {
-        if (context.Metadata.ModelType == typeof(Optional<string>))
+        var modelType = context.Metadata.ModelType;
+
+        if (modelType.IsGenericType && modelType.GetGenericTypeDefinition() == typeof(Optional<>))
             return new BinderTypeModelBinder(typeof(OptionalBinder));
 
         return null;

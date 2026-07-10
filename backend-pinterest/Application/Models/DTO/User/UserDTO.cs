@@ -17,6 +17,9 @@ public class UserDTO
     public string? BlockReason { get; set; }
     public string? PhoneNumber { get; set; }
     public DateTime? BirthDate { get; set; }
+    public string? Country { get; set; }
+    public string? Language { get; set; }
+    public IList<Guid> CategoryIds { get; set; } = [];
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
     public IList<string> Roles { get; set; } = [];

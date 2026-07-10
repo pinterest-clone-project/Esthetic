@@ -259,11 +259,29 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Categories.
+        /// </summary>
+        internal static string FieldCategoryIds {
+            get {
+                return ResourceManager.GetString("FieldCategoryIds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Code.
         /// </summary>
         internal static string FieldCode {
             get {
                 return ResourceManager.GetString("FieldCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Country.
+        /// </summary>
+        internal static string FieldCountry {
+            get {
+                return ResourceManager.GetString("FieldCountry", resourceCulture);
             }
         }
         
@@ -300,6 +318,15 @@ namespace Application.Common.Resources {
         internal static string FieldId {
             get {
                 return ResourceManager.GetString("FieldId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        internal static string FieldLanguage {
+            get {
+                return ResourceManager.GetString("FieldLanguage", resourceCulture);
             }
         }
         
@@ -444,6 +471,15 @@ namespace Application.Common.Resources {
         internal static string MaxLength {
             get {
                 return ResourceManager.GetString("MaxLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must contain at least {1} items..
+        /// </summary>
+        internal static string MinItems {
+            get {
+                return ResourceManager.GetString("MinItems", resourceCulture);
             }
         }
         

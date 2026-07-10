@@ -20,8 +20,7 @@ public class BoardsController(IMediator mediator) : ControllerBase
         ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized));
 
     [HttpPost("create")]
-    [Consumes("multipart/form-data")]
-    public async Task<IActionResult> Create([FromForm] CreateBoardCommand command)
+    public async Task<IActionResult> Create([FromBody] CreateBoardCommand command)
     {
         var commandWithOwner = command with { OwnerId = CurrentUserId };
         var result = await mediator.Send(commandWithOwner);

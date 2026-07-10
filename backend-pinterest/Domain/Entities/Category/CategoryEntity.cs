@@ -12,4 +12,5 @@ public class CategoryEntity : BaseEntity
     public string Description { get; set; } = string.Empty;
     public string Image { get; set; } = string.Empty;
     public virtual ICollection<PinEntity>? Pins { get; set; }
+    public virtual ICollection<UserCategory>? UserCategories { get; set; }
 }

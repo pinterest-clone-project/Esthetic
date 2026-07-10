@@ -15,4 +15,7 @@ export interface IAccount {
     roles: string[];
     gender: number;
     birthDate: string;
+    country: string | null;
+    language: string | null;
+    categoryIds: string[];
 }

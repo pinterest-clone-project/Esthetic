@@ -15,7 +15,7 @@ export interface CreateMoodboardRequest {
     title: string;
     description?: string;
     isPrivate: boolean;
-    coverImageFile?: File;
+    pinIds?: string[];
 }
 
 export interface MoodboardPage {
@@ -75,7 +75,7 @@ export const moodboardService = api.injectEndpoints({
             query: (body) => ({
                 url: "Boards/create",
                 method: "POST",
-                body: serialize(body, { indices: true, booleansAsIntegers: false }),
+                body,
             }),
             invalidatesTags: ["MyMoodboards"],
         }),

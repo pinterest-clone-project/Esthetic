@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Webp;
+using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
 namespace Infrastructure.Services;
@@ -120,4 +121,65 @@ public class ImageService(IConfiguration configuration) : IImageService
 
         await image.SaveAsync(path, new WebpEncoder());
     }
+
+
+    public async Task<string> CreateCollageAsync(List<string> imageNames)
+    {
+        if (imageNames.Count == 0)
+            throw new ArgumentException("At least one image is required for a collage.");
+
+        if (imageNames.Count == 1)
+            return imageNames[0];
+
+        const int tileSourceSize = 400;
+        const int canvasSize = 800;
+        var dir = Path.Combine(Directory.GetCurrentDirectory(), configuration["ImagesDir"]!);
+
+        var tiles = imageNames
+            .Take(4)
+            .Select(name => Image.Load(Path.Combine(dir, $"{tileSourceSize}_{name}")))
+            .ToList();
+
+        using var canvas = new Image<Rgba32>(canvasSize, canvasSize);
+
+        canvas.Mutate(ctx =>
+        {
+            switch (tiles.Count)
+            {
+                case 2:
+                    DrawTile(ctx, tiles[0], 0, 0, canvasSize / 2, canvasSize);
+                    DrawTile(ctx, tiles[1], canvasSize / 2, 0, canvasSize / 2, canvasSize);
+                    break;
+                case 3:
+                    DrawTile(ctx, tiles[0], 0, 0, canvasSize / 2, canvasSize);
+                    DrawTile(ctx, tiles[1], canvasSize / 2, 0, canvasSize / 2, canvasSize / 2);
+                    DrawTile(ctx, tiles[2], canvasSize / 2, canvasSize / 2, canvasSize / 2, canvasSize / 2);
+                    break;
+                default:
+                    DrawTile(ctx, tiles[0], 0, 0, canvasSize / 2, canvasSize / 2);
+                    DrawTile(ctx, tiles[1], canvasSize / 2, 0, canvasSize / 2, canvasSize / 2);
+                    DrawTile(ctx, tiles[2], 0, canvasSize / 2, canvasSize / 2, canvasSize / 2);
+                    DrawTile(ctx, tiles[3], canvasSize / 2, canvasSize / 2, canvasSize / 2, canvasSize / 2);
+                    break;
+            }
+        });
+
+        foreach (var tile in tiles) tile.Dispose();
+
+        using var ms = new MemoryStream();
+        await canvas.SaveAsync(ms, new WebpEncoder());
+
+        return await SaveImageAsync(ms.ToArray());
+    }
+
+    private static void DrawTile(IImageProcessingContext ctx, Image tile, int x, int y, int w, int h)
+    {
+        tile.Mutate(t => t.Resize(new ResizeOptions
+        {
+            Size = new Size(w, h),
+            Mode = ResizeMode.Crop
+        }));
+        ctx.DrawImage(tile, new Point(x, y), 1f);
+    }
+
 }

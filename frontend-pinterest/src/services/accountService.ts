@@ -23,7 +23,7 @@ export const accountService = api.injectEndpoints({
             query: (credentials) => ({
                 url: "Account/register",
                 method: "POST",
-                body: serialize(credentials),
+                body: serialize(credentials, { noAttributesWithArrayNotation: true }),
             }),
         }),
 

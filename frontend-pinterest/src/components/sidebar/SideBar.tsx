@@ -152,9 +152,9 @@ const Sidebar = () => {
                                     isDark={theme === "dark"}
                                 >
                                     {totalUnread > 0 && (
-                                        <span className="absolute top-0.5 right-0.5 min-w-[16px] h-[16px] px-0.5 rounded-full bg-[#1DB954] text-black text-[9px] font-bold flex items-center justify-center leading-none">
-                    {totalUnread > 9 ? "9+" : totalUnread}
-                </span>
+                                        <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-[#1DB954] text-black text-[9px] font-bold flex items-center justify-center">
+                                            {totalUnread > 9 ? "9+" : totalUnread}
+                                        </span>
                                     )}
                                 </SidebarButton>
                             ) : (
@@ -231,9 +231,9 @@ const Sidebar = () => {
                                         )}
                                     </div>
                                     {chat.unreadCount > 0 && chat.id !== activeChat?.id && (
-                                        <span className="bg-[#1DB954] text-black text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center shrink-0">
-                                {chat.unreadCount}
-                            </span>
+                                        <span className="bg-[#1DB954] text-black text-[10px] font-bold rounded-full min-w-[20px] h-5 px-1 flex items-center justify-center shrink-0">
+                                            {chat.unreadCount > 99 ? "99+" : chat.unreadCount}
+                                        </span>
                                     )}
                                 </button>
                             ))}

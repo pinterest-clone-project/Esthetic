@@ -21,6 +21,9 @@ public record EditCommand : IRequest<string>, ITransactionalCommand
     public Gender? Gender { get; init; }
     public DateTime? BirthDate { get; set; }
     public bool? IsPrivate { get; init; }
+    public Optional<string> Country { get; init; }
+    public Optional<string> Language { get; init; }
+    public Optional<List<Guid>> CategoryIds { get; init; }
 
     [FromForm]
     public IFormFile? ImageFile { get; init; }
