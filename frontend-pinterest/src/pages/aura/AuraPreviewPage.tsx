@@ -10,6 +10,7 @@ import SaveModal from "@/components/ui/SaveModal.tsx";
 import CommentsSection from "@/components/ui/CommentsSection.tsx";
 import ReportModal from "@/components/ui/ReportModal.tsx";
 import {useTrackViewPinMutation} from "@/services/recommendedPinsService.ts";
+import {useToast} from "@/components/ui/Toast/UseToast.ts";
 
 const AuraPreviewPage = () => {
     const {id} = useParams<{ id: string }>();
@@ -20,6 +21,7 @@ const AuraPreviewPage = () => {
     const {data: me} = useGetMeQuery();
 
     const [trackView] = useTrackViewPinMutation();
+    const { showToast } = useToast();
     const [deletePin] = useDeletePinMutation();
     const [like] = useLikeMutation();
     const [unlike] = useUnlikeMutation();
@@ -108,42 +110,72 @@ const AuraPreviewPage = () => {
                             </span>
                         </div>
                         <div className="flex items-center gap-2">
+                            {/* Save — primary */}
+                            <button
+                                onClick={() => setSaveModalOpen(true)}
+                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#4ade80] hover:bg-[#22c55e] text-black text-xs font-semibold transition-all duration-150 shadow-[0_0_12px_rgba(74,222,128,0.25)] hover:shadow-[0_0_18px_rgba(74,222,128,0.4)]"
+                            >
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                                    <polyline points="17 21 17 13 7 13 7 21"/>
+                                    <polyline points="7 3 7 8 15 8"/>
+                                </svg>
+                                Save
+                            </button>
+
+                            {/* Share — secondary */}
                             <button
                                 onClick={() => {
                                     navigator.clipboard.writeText(
                                         `${window.location.origin}/aura/preview/${pin.id}`
                                     );
+                                    showToast("Link copied to clipboard", "success");
                                 }}
-                                className="text-xs text-gray-400 hover:text-white border border-white/10 hover:border-white/30 px-3 py-1.5 rounded-lg transition-colors"
+                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-gray-300 hover:text-white text-xs font-medium transition-all duration-150"
                             >
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                                </svg>
                                 Share
                             </button>
-                            <button
-                                onClick={() => setSaveModalOpen(true)}
-                                className="text-xs text-[#4ade80] border border-[#4ade80]/30 hover:border-[#4ade80] px-3 py-1.5 rounded-lg transition-colors"
-                            >
-                                Save
-                            </button>
+
                             {isOwner ? (
                                 <>
                                     <button
                                         onClick={() => navigate(`/aura/edit/${pin.id}`)}
-                                        className="text-xs text-gray-400 hover:text-white border border-white/10 hover:border-white/30 px-3 py-1.5 rounded-lg transition-colors"
+                                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-gray-300 hover:text-white text-xs font-medium transition-all duration-150"
                                     >
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                        </svg>
                                         Edit
                                     </button>
                                     <button
                                         onClick={handleDelete}
-                                        className="text-xs text-red-400 hover:text-red-300 border border-red-500/20 hover:border-red-400/40 px-3 py-1.5 rounded-lg transition-colors"
+                                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-400/40 text-red-400 hover:text-red-300 text-xs font-medium transition-all duration-150"
                                     >
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <polyline points="3 6 5 6 21 6"/>
+                                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                                            <path d="M10 11v6"/><path d="M14 11v6"/>
+                                            <path d="M9 6V4h6v2"/>
+                                        </svg>
                                         Delete
                                     </button>
                                 </>
                             ) : (
                                 <button
                                     onClick={() => setReportModalOpen(true)}
-                                    className="text-xs text-gray-400 hover:text-red-400 border border-white/10 hover:border-red-400/40 px-3 py-1.5 rounded-lg transition-colors"
+                                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-gray-600 hover:text-red-400 hover:bg-red-500/10 text-xs font-medium transition-all duration-150"
+                                    title="Report"
                                 >
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                                        <line x1="4" y1="22" x2="4" y2="15"/>
+                                    </svg>
                                     Report
                                 </button>
                             )}

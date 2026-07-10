@@ -42,6 +42,19 @@ public class BoardsController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("byUser/{userId:guid}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetPublicBoardsByUser(Guid userId, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    {
+        var result = await mediator.Send(new GetPublicBoardsByUserQuery
+        {
+            UserId = userId,
+            Page = page,
+            PageSize = pageSize
+        });
+        return Ok(result);
+    }
+
     [HttpGet("search")]
     [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Search([FromQuery] SearchBoardsQuery query)

@@ -92,6 +92,9 @@ export const moodboardService = api.injectEndpoints({
             }),
             invalidatesTags: ["MyMoodboards", "AllMoodboards"],
         }),
+        getPublicBoardsByUser: builder.query<MoodboardPage, string>({
+            query: (userId) => ({ url: `Boards/byUser/${userId}`, method: "GET" }),
+        }),
     }),
 });
 
@@ -101,4 +104,5 @@ export const {
     useGetMoodboardByIdQuery,
     useSearchMoodboardsQuery,
     useUpdateMoodboardMutation,
+    useGetPublicBoardsByUserQuery,
 } = moodboardService;
