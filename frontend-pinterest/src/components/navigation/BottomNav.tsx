@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useAppSelector } from "@/store";
-import {useGetMeQuery} from "@/services/accountService.ts";
 import { useTheme } from "@/context/ThemeContext";
 import homeIcon from "@/assets/icons/home_icon.svg";
 import collectionIcon from "@/assets/icons/collection_icon.svg";
 import addIcon from "@/assets/icons/add_icon.svg";
 import profileIcon from "../../../src/assets/icons/profile_icon.svg";
 import auraIcon from "../../../src/assets/icons/aura_icon.svg";
-import userIcon from "@/assets/icons/user_icon.svg";
-import {APP_ENV} from "@/constants/env";
+import settingsIcon from "@/assets/icons/settings_icon.svg";
 
 const greenFilter =
     "brightness(0) saturate(100%) invert(58%) sepia(61%) saturate(450%) hue-rotate(95deg) brightness(95%)";
@@ -28,7 +26,7 @@ const navItems: NavItem[] = [
     { label: "Chat", icon: profileIcon, path: "/chat" },
     { label: "Create", icon: addIcon, path: "/aura/create", isCreate: true },
     { label: "Collections", icon: collectionIcon, path: "/collections/aura" },
-    { label: "Profile", icon: userIcon, path: "/user/" },
+    { label: "Settings", icon: settingsIcon, path: "/settings" },
 ];
 
 const BottomNav = () => {
@@ -39,7 +37,6 @@ const BottomNav = () => {
     const defaultFilter = theme === "dark" ? defaultFilterDark : defaultFilterLight;
     const [createOpen, setCreateOpen] = useState(false);
     const createRef = useRef<HTMLDivElement>(null);
-    const { data: me } = useGetMeQuery();
 
     useEffect(() => {
         const handler = (e: MouseEvent) => {
@@ -54,12 +51,10 @@ const BottomNav = () => {
     if (!user) return null;
 
     const handleClick = (item: NavItem) => {
-        const path = item.path === "/user/" ? `/user/${me?.id}` : item.path;
-        navigate(path);
+        navigate(item.path);
     };
 
     const isActive = (item: NavItem) => {
-        if (item.path === "/user/") return location.pathname.startsWith("/user/");
         return location.pathname === item.path;
     };
 
@@ -94,29 +89,6 @@ const BottomNav = () => {
                             <img src={item.icon} className="w-6 h-6" style={{ filter: "brightness(0)" }} alt={item.label} />
                         </button>
                     </div>
-                ) : item.label === "Profile" ? (
-                    <button
-                        key={item.path}
-                        onClick={() => handleClick(item)}
-                        className="flex flex-col items-center gap-0.5 px-2 py-1"
-                    >
-                        <div className={`w-7 h-7 rounded-full overflow-hidden flex items-center justify-center
-                            ${user.image ? "" : "bg-[var(--color-btn-primary)]"}
-                            ${isActive(item) ? "ring-2 ring-[#1DB954]" : ""}`}>
-                            {user.image ? (
-                                <img
-                                    src={`${APP_ENV.IMAGES_100_URL}${user.image}`}
-                                    className="w-full h-full object-cover"
-                                    alt="Profile"
-                                />
-                            ) : (
-                                <img src={userIcon} className="w-4 h-4 object-contain" alt="Profile" />
-                            )}
-                        </div>
-                        <span className={`text-[10px] ${isActive(item) ? "text-[#1DB954]" : "text-[#A2A2A2]"}`}>
-                            {item.label}
-                        </span>
-                    </button>
                 ) : (
                     <button
                         key={item.path}

@@ -107,7 +107,7 @@ const Header: React.FC = () => {
                 {user && (
                     <div className="flex md:hidden items-center gap-2 shrink-0">
                         <NotificationBell />
-                        <Link to="/profile">
+                        <Link to={"/user/" + user.id}>
                             <div className={`w-9 h-9 rounded-full overflow-hidden flex items-center justify-center
                                 ${user.image ? "" : "bg-[var(--color-btn-primary)]"}`}>
                                 {user.image ? (
