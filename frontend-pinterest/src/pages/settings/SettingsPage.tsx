@@ -29,7 +29,6 @@ const SettingsPage = () => {
         <div className="flex flex-col px-4 py-6 gap-2 text-black dark:text-white">
             <h1 className="text-xl font-bold mb-4">Settings</h1>
 
-            {/* Profile preview */}
             {user && (
                 <button
                     onClick={() => navigate("/profile")}
@@ -51,7 +50,6 @@ const SettingsPage = () => {
                 </button>
             )}
 
-            {/* Theme */}
             <div className="flex items-center justify-between w-full px-4 py-4 rounded-2xl bg-[#f5f5f5] dark:bg-[#1a1a1a]">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] flex items-center justify-center shrink-0">
@@ -65,7 +63,6 @@ const SettingsPage = () => {
                 <ThemeToggle />
             </div>
 
-            {/* Admin panel */}
             {isAdmin && (
                 <button
                     onClick={() => navigate("/admin")}
@@ -86,7 +83,6 @@ const SettingsPage = () => {
                 </button>
             )}
 
-            {/* Logout */}
             <button
                 onClick={handleLogout}
                 className="flex items-center gap-3 w-full px-4 py-4 rounded-2xl bg-red-500/10 mt-2"

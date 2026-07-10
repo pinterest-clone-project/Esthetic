@@ -47,9 +47,7 @@ const UserPage = () => {
         <div className="w-full min-h-full bg-white dark:bg-black px-6 py-8">
             <BackButton />
 
-            {/* Profile header */}
             <div className="flex flex-col items-center gap-4 max-w-2xl mx-auto mb-12 text-center">
-                {/* Avatar */}
                 <div className="w-24 h-24 rounded-full overflow-hidden bg-white/10 shrink-0">
                     {user.image ? (
                         <img
@@ -64,7 +62,6 @@ const UserPage = () => {
                     )}
                 </div>
 
-                {/* Name */}
                 <div className="flex flex-col gap-1">
                     <h1 className="text-black dark:text-white text-xl font-semibold">
                         {user.firstName && user.lastName
@@ -76,12 +73,10 @@ const UserPage = () => {
                     )}
                 </div>
 
-                {/* Bio */}
                 {user.bio && (
                     <p className="text-gray-400 text-sm leading-relaxed max-w-md">{user.bio}</p>
                 )}
 
-                {/* Stats */}
                 <div className="flex items-center gap-8">
                     <div className="flex flex-col items-center gap-0.5">
                         <span className="text-black dark:text-white text-sm font-semibold">
@@ -103,7 +98,6 @@ const UserPage = () => {
                     </div>
                 </div>
 
-                {/* Actions */}
                 {!isMe && (
                     <div className="flex items-center gap-2">
                         <button
@@ -129,14 +123,12 @@ const UserPage = () => {
                 )}
             </div>
 
-            {/* Pins divider */}
             <div className="flex items-center gap-4 mb-6 max-w-4xl mx-auto">
                 <div className="flex-1 h-px bg-white/5" />
                 <span className="text-gray-600 text-xs tracking-widest uppercase">Auras</span>
                 <div className="flex-1 h-px bg-white/5" />
             </div>
 
-            {/* Pins grid */}
             {pinsLoading && (
                 <div className="flex justify-center py-12">
                     <div className="w-6 h-6 rounded-full border-2 border-white/20 border-t-[#4ade80] animate-spin" />

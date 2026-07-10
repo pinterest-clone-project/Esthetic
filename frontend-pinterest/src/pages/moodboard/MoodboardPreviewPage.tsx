@@ -67,7 +67,6 @@ const MoodboardPreviewPage: React.FC = () => {
                 </div>
             </div>
 
-            {/* Pins */}
             <div className="px-6 py-8">
                 {board.previewImageUrls.length > 0 ? (
                     <>

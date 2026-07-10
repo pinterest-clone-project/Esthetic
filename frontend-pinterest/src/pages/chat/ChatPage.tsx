@@ -15,7 +15,6 @@ import type { IChat } from "@/types/chat/IChat";
 const formatTime = (iso: string) =>
     new Date(iso).toLocaleTimeString("uk-UA", { hour: "2-digit", minute: "2-digit" });
 
-// ── Inline chat view ──────────────────────────────────────────────────────────
 
 const ChatView = ({ chat, onBack }: { chat: IChat; onBack: () => void }) => {
     const currentUserId = useAppSelector((s) => s.auth.user?.id);
@@ -50,7 +49,6 @@ const ChatView = ({ chat, onBack }: { chat: IChat; onBack: () => void }) => {
 
     return (
         <div className="flex flex-col h-full">
-            {/* Header */}
             <div className="flex items-center gap-3 px-4 py-3 border-b border-[#A2A2A2] dark:border-[#535353] shrink-0">
                 <button
                     onClick={onBack}
@@ -69,7 +67,7 @@ const ChatView = ({ chat, onBack }: { chat: IChat; onBack: () => void }) => {
                 <span className="text-black dark:text-white font-medium text-sm">{chat.otherUser.username}</span>
             </div>
 
-            {/* Messages */}
+
             <div className="flex-1 overflow-y-auto px-4 py-3 flex flex-col gap-2" style={{ scrollbarWidth: "none" }}>
                 {messages.map((m) => {
                     const isOwn = m.senderId === currentUserId;
@@ -91,7 +89,6 @@ const ChatView = ({ chat, onBack }: { chat: IChat; onBack: () => void }) => {
                 <div ref={bottomRef} />
             </div>
 
-            {/* Input */}
             <div className="px-3 py-3 border-t border-[#A2A2A2] dark:border-[#535353] shrink-0">
                 <div className="flex items-center gap-2 bg-[#D1D1D1] dark:bg-[#1e1e1e] rounded-full px-4 py-2">
                     <input
@@ -116,7 +113,6 @@ const ChatView = ({ chat, onBack }: { chat: IChat; onBack: () => void }) => {
     );
 };
 
-// ── Main ChatPage ─────────────────────────────────────────────────────────────
 
 const ChatPage = () => {
     const navigate = useNavigate();
@@ -131,7 +127,6 @@ const ChatPage = () => {
     );
     const [getOrCreateChat] = useGetOrCreateChatMutation();
 
-    // Redirect to home on desktop
     useEffect(() => {
         const check = () => {
             if (window.innerWidth >= 768) navigate("/", { replace: true });
@@ -164,7 +159,6 @@ const ChatPage = () => {
         <div className="flex flex-col pt-2">
             <h1 className="text-black dark:text-white font-semibold text-lg px-4 mb-3">Messages</h1>
 
-            {/* Search */}
             <div className="flex items-center gap-2 bg-[#D1D1D1] dark:bg-[#2a2a2a] rounded-xl px-3 py-2 mx-4 mb-3">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2">
                     <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
@@ -177,7 +171,6 @@ const ChatPage = () => {
                 />
             </div>
 
-            {/* List */}
             <div className="flex flex-col gap-1 px-2">
                 {debouncedSearch.trim().length >= 2 ? (
                     <>

@@ -3,81 +3,225 @@ import { useGetNotificationsQuery, useMarkAllAsReadMutation } from "@/services/n
 import { getNotificationUrl } from "@/utils/getNotificationUrl.ts";
 import { formatTimeLabel } from "@/utils/formatTimeLabel.ts";
 import { APP_ENV } from "@/constants/env";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import userIcon from "@/assets/icons/user_icon.svg";
+
+type Filter = "all" | 0 | 1 | 2;
+
+const FILTERS: { label: string; value: Filter; color: string }[] = [
+    { label: "All",      value: "all", color: "#A1A1A1" },
+    { label: "Follows",  value: 0,     color: "#1DB954" },
+    { label: "Likes",    value: 1,     color: "#e11d48" },
+    { label: "Comments", value: 2,     color: "#f59e0b" },
+];
 
 const NotificationsPage = () => {
     const navigate = useNavigate();
-    const { data: notifications = [] } = useGetNotificationsQuery();
+    const { data: notifications = [], isLoading } = useGetNotificationsQuery();
     const [markAllAsRead] = useMarkAllAsReadMutation();
+    const [activeFilter, setActiveFilter] = useState<Filter>("all");
 
-    const unreadCount = notifications.filter((n) => !n.isRead).length;
+    const unread = notifications.filter((n) => !n.isRead);
 
     useEffect(() => {
-        if (unreadCount > 0) markAllAsRead();
+        if (unread.length > 0) markAllAsRead();
     }, []);
+
+    const filtered = activeFilter === "all"
+        ? notifications
+        : notifications.filter((n) => n.type === activeFilter);
+
+    const filteredUnread = filtered.filter((n) => !n.isRead);
+    const filteredRead   = filtered.filter((n) => n.isRead);
 
     const handleClick = (notification: (typeof notifications)[0]) => {
         const url = getNotificationUrl(notification);
         if (url) navigate(url);
     };
 
-    return (
-        <div className="flex flex-col px-4 py-6 gap-2 text-black dark:text-white max-w-lg mx-auto">
-            <h1 className="text-xl font-bold mb-4">Notifications</h1>
+    const goToActor = (e: React.MouseEvent, actorId?: string | null) => {
+        e.stopPropagation();
+        if (actorId) navigate(`/user/${actorId}`);
+    };
 
-            {notifications.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-20 gap-3 text-[#A1A1A1]">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
-                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                    </svg>
-                    <p className="text-sm">Поки що порожньо</p>
+    const getTypeAccent = (type: number) => {
+        switch (type) {
+            case 0: return "#1DB954";
+            case 1: return "#e11d48";
+            case 2: return "#f59e0b";
+            default: return "#A1A1A1";
+        }
+    };
+
+    const countOf = (type: Filter) =>
+        type === "all" ? notifications.length : notifications.filter((n) => n.type === type).length;
+
+    const renderItem = (n: (typeof notifications)[0], index: number) => {
+        const url = getNotificationUrl(n);
+        const color = getTypeAccent(n.type);
+
+        return (
+            <div
+                key={n.id}
+                onClick={() => handleClick(n)}
+                style={{ animationDelay: `${index * 40}ms` }}
+                className={`group relative flex items-start gap-3 p-4 rounded-2xl border transition-all duration-200 animate-[fadeSlideIn_0.3s_ease_forwards] opacity-0
+                    ${!n.isRead
+                        ? "bg-white dark:bg-[#111] border-[#e8e8e8] dark:border-[#222] shadow-sm"
+                        : "bg-transparent border-transparent hover:bg-[#f9f9f9] dark:hover:bg-[#111]"
+                    }
+                    ${url ? "cursor-pointer" : "cursor-default"}
+                `}
+            >
+                {!n.isRead && (
+                    <div className="absolute left-0 top-3 bottom-3 w-[3px] rounded-full" style={{ background: color }} />
+                )}
+
+                <div className="relative shrink-0 mt-0.5" onClick={(e) => goToActor(e, n.actorId)}>
+                    <div className="w-10 h-10 rounded-full overflow-hidden bg-[#e8e8e8] dark:bg-[#2a2a2a] flex items-center justify-center ring-2 ring-transparent group-hover:ring-[#1DB954]/30 transition-all duration-200">
+                        {n.actorImage ? (
+                            <img src={`${APP_ENV.IMAGES_100_URL}${n.actorImage}`} className="w-full h-full object-cover" />
+                        ) : (
+                            <img src={userIcon} className="w-5 h-5 opacity-40" />
+                        )}
+                    </div>
+                    <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full flex items-center justify-center" style={{ background: color }}>
+                        {n.type === 0 && (
+                            <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <line x1="19" y1="8" x2="19" y2="14"/>
+                                <line x1="22" y1="11" x2="16" y2="11"/>
+                            </svg>
+                        )}
+                        {n.type === 1 && (
+                            <svg width="8" height="8" viewBox="0 0 24 24" fill="black" stroke="none">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        )}
+                        {n.type === 2 && (
+                            <svg width="8" height="8" viewBox="0 0 24 24" fill="black" stroke="none">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        )}
+                    </div>
                 </div>
-            ) : (
-                <div className="flex flex-col gap-1">
-                    {notifications.map((n) => {
-                        const url = getNotificationUrl(n);
-                        return (
-                            <div
-                                key={n.id}
-                                onClick={() => handleClick(n)}
-                                className={`flex items-start gap-3 px-4 py-3 rounded-2xl transition
-                                    ${url ? "cursor-pointer hover:bg-[#f0f0f0] dark:hover:bg-[#1a1a1a]" : "cursor-default"}
-                                    ${!n.isRead ? "bg-[#f5f5f5] dark:bg-[#1a1a1a]" : ""}
-                                `}
+
+                <div className="flex-1 min-w-0">
+                    <div className="flex items-baseline gap-1.5 flex-wrap">
+                        {n.actorUsername && (
+                            <span
+                                className="text-sm font-semibold text-black dark:text-white hover:underline cursor-pointer leading-snug"
+                                onClick={(e) => goToActor(e, n.actorId)}
                             >
-                                <div
-                                    className="w-10 h-10 rounded-full bg-[#d1d1d1] dark:bg-[#2a2a2a] shrink-0 overflow-hidden cursor-pointer"
-                                    onClick={(e) => { e.stopPropagation(); if (n.actorId) navigate(`/user/${n.actorId}`); }}
-                                >
-                                    {n.actorImage && (
-                                        <img
-                                            src={`${APP_ENV.IMAGES_100_URL}${n.actorImage}`}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    )}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    {n.actorUsername && (
-                                        <span
-                                            className="text-sm font-semibold cursor-pointer hover:underline"
-                                            onClick={(e) => { e.stopPropagation(); if (n.actorId) navigate(`/user/${n.actorId}`); }}
-                                        >
-                                            {n.actorUsername}{" "}
-                                        </span>
-                                    )}
-                                    <p className="text-sm leading-snug">{n.message}</p>
-                                    <p className="text-[#A1A1A1] text-xs mt-0.5">{formatTimeLabel(n.createdAt)}</p>
-                                </div>
-                                {!n.isRead && (
-                                    <span className="w-2 h-2 rounded-full bg-btn-primary shrink-0 mt-2" />
+                                {n.actorUsername}
+                            </span>
+                        )}
+                        <span className="text-sm text-black/70 dark:text-white/60 leading-snug">{n.message}</span>
+                    </div>
+                    <p className="text-xs text-[#A1A1A1] mt-1">{formatTimeLabel(n.createdAt)}</p>
+                </div>
+
+                {!n.isRead && (
+                    <span className="w-2 h-2 rounded-full shrink-0 mt-2" style={{ background: color }} />
+                )}
+            </div>
+        );
+    };
+
+    return (
+        <>
+            <style>{`
+                @keyframes fadeSlideIn {
+                    from { opacity: 0; transform: translateY(8px); }
+                    to   { opacity: 1; transform: translateY(0); }
+                }
+            `}</style>
+
+            <div className="px-4 py-6 text-black dark:text-white max-w-2xl mx-auto">
+
+                <div className="flex items-center justify-between mb-5">
+                    <h1 className="text-2xl font-bold tracking-tight">Notifications</h1>
+                    {unread.length > 0 && (
+                        <span className="text-xs font-semibold px-2.5 py-1 rounded-full text-black" style={{ background: "#1DB954" }}>
+                            {unread.length} new
+                        </span>
+                    )}
+                </div>
+
+                <div className="flex gap-2 mb-6 flex-wrap">
+                    {FILTERS.map((f) => {
+                        const count = countOf(f.value);
+                        const isActive = activeFilter === f.value;
+                        return (
+                            <button
+                                key={String(f.value)}
+                                onClick={() => setActiveFilter(f.value)}
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-150 border"
+                                style={{
+                                    background: isActive ? f.color : "transparent",
+                                    color: isActive ? (f.value === "all" ? "#fff" : "#000") : "#A1A1A1",
+                                    borderColor: isActive ? f.color : "#e8e8e8",
+                                }}
+                            >
+                                {f.label}
+                                {count > 0 && (
+                                    <span
+                                        className="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                                        style={{
+                                            background: isActive ? "rgba(0,0,0,0.2)" : "#f0f0f0",
+                                            color: isActive ? "#fff" : "#555",
+                                        }}
+                                    >
+                                        {count}
+                                    </span>
                                 )}
-                            </div>
+                            </button>
                         );
                     })}
                 </div>
-            )}
-        </div>
+
+                {isLoading ? (
+                    <div className="flex items-center justify-center py-24">
+                        <div className="w-7 h-7 rounded-full border-2 border-black/10 dark:border-white/10 border-t-[#1DB954] animate-spin" />
+                    </div>
+                ) : filtered.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-24 gap-4">
+                        <div className="w-16 h-16 rounded-2xl bg-[#f5f5f5] dark:bg-[#1a1a1a] flex items-center justify-center">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#A1A1A1" strokeWidth="1.5">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                            </svg>
+                        </div>
+                        <div className="text-center">
+                            <p className="text-sm font-medium">Nothing here</p>
+                            <p className="text-xs text-[#A1A1A1] mt-1">No notifications in this category</p>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="flex flex-col gap-6">
+                        {filteredUnread.length > 0 && (
+                            <section>
+                                <p className="text-[11px] font-bold uppercase tracking-widest text-[#A1A1A1] mb-3 px-1">New</p>
+                                <div className="flex flex-col gap-2">
+                                    {filteredUnread.map((n, i) => renderItem(n, i))}
+                                </div>
+                            </section>
+                        )}
+                        {filteredRead.length > 0 && (
+                            <section>
+                                {filteredUnread.length > 0 && (
+                                    <p className="text-[11px] font-bold uppercase tracking-widest text-[#A1A1A1] mb-3 px-1">Earlier</p>
+                                )}
+                                <div className="flex flex-col gap-2">
+                                    {filteredRead.map((n, i) => renderItem(n, filteredUnread.length + i))}
+                                </div>
+                            </section>
+                        )}
+                    </div>
+                )}
+            </div>
+        </>
     );
 };
 
