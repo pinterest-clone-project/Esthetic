@@ -18,9 +18,17 @@ public class SavePinHandler(
         if (board.OwnerId != request.UserId)
             throw new ForbiddenException(ValidationMessages.ErrorNoPermission);
 
-        var alreadySaved = await boardPinRepository.ExistsAsync(request.PinId, request.BoardId, cancellationToken);
-        if (alreadySaved)
+        var existing = await boardPinRepository.GetByPinAndBoardIncludingDeletedAsync(request.PinId, request.BoardId, cancellationToken);
+
+        if (existing != null)
+        {
+            if (!existing.IsDeleted)
+                return Unit.Value;
+
+            existing.IsDeleted = false;
+            await boardPinRepository.UpdateAsync(existing, cancellationToken);
             return Unit.Value;
+        }
 
         var boardPin = new BoardPinEntity
         {
