@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useCreateMoodboardMutation } from "@/services/moodboardService.ts";
 import {useGetMyPinsQuery} from "@/services/pinService.ts";
 import { APP_ENV } from "@/constants/env";
@@ -19,12 +19,17 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
     const { data: myPins } = useGetMyPinsQuery(undefined, { skip: step === 1 });
     const { data: recommendedPins } = useGetRecommendedPinsQuery(undefined, { skip: step === 1 });
 
-    const pinsToShow = [
+    const [showAll, setShowAll] = useState(false);
+
+    const allPins = [
         ...(myPins ?? []),
         ...(recommendedPins ?? []).filter(
             (rec) => !myPins?.some((mine) => mine.id === rec.id)
         ),
     ];
+
+    const shuffled = useMemo(() => [...allPins].sort(() => Math.random() - 0.5), [myPins, recommendedPins]);
+    const pinsToShow = showAll ? allPins : shuffled.slice(0, 6);
 
 
     const [selectedPinIds, setSelectedPinIds] = useState<string[]>([]);
@@ -152,31 +157,53 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
                         Choose Aura
                     </h2>
 
-                    {pinsToShow && pinsToShow.length > 0 ? (
-                        <div className="grid grid-cols-3 gap-3 mb-6 max-h-[340px] overflow-y-auto">
-                            {pinsToShow.map((pin) => {
-                                const isSelected = selectedPinIds.includes(pin.id);
-                                return (
-                                    <div
-                                        key={pin.id}
-                                        onClick={() => togglePin(pin.id)}
-                                        className="relative cursor-pointer rounded-lg overflow-hidden aspect-square"
-                                    >
-                                        <img
-                                            src={pin.image ? `${APP_ENV.IMAGES_800_URL}${pin.image}` : undefined}
-                                            className="w-full h-full object-cover"
-                                        />
-                                        {isSelected && (
-                                            <div className="absolute bottom-1.5 right-1.5 w-6 h-6 rounded-full bg-[#1DB954] flex items-center justify-center">
-                                                <svg width="12" height="10" viewBox="0 0 10 8" fill="none">
-                                                    <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                                </svg>
-                                            </div>
-                                        )}
-                                    </div>
-                                );
-                            })}
-                        </div>
+                    {!showAll && (
+                        <p className="text-xs text-gray-400 mb-3 text-center">Suggested pins for you</p>
+                    )}
+
+                    {pinsToShow.length > 0 ? (
+                        <>
+                            <div className="grid grid-cols-3 gap-3 mb-3 max-h-[340px] overflow-y-auto">
+                                {pinsToShow.map((pin) => {
+                                    const isSelected = selectedPinIds.includes(pin.id);
+                                    return (
+                                        <div
+                                            key={pin.id}
+                                            onClick={() => togglePin(pin.id)}
+                                            className="relative cursor-pointer rounded-lg overflow-hidden aspect-square"
+                                        >
+                                            <img
+                                                src={pin.image ? `${APP_ENV.IMAGES_800_URL}${pin.image}` : undefined}
+                                                className="w-full h-full object-cover"
+                                            />
+                                            {isSelected && (
+                                                <div className="absolute bottom-1.5 right-1.5 w-6 h-6 rounded-full bg-[#1DB954] flex items-center justify-center">
+                                                    <svg width="12" height="10" viewBox="0 0 10 8" fill="none">
+                                                        <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                                    </svg>
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            {!showAll && allPins.length > 6 && (
+                                <button
+                                    onClick={() => setShowAll(true)}
+                                    className="w-full text-xs text-gray-400 hover:text-white transition-colors py-2 mb-3"
+                                >
+                                    Show all ({allPins.length})
+                                </button>
+                            )}
+                            {showAll && (
+                                <button
+                                    onClick={() => setShowAll(false)}
+                                    className="w-full text-xs text-gray-400 hover:text-white transition-colors py-2 mb-3"
+                                >
+                                    Show less
+                                </button>
+                            )}
+                        </>
                     ) : (
                         <p className="text-sm text-gray-400 mb-6">Nothing to show here</p>
                     )}
