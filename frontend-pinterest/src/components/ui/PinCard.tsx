@@ -74,17 +74,14 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
                 loading="lazy"
             />
 
-            {/* Overlay */}
             <div className={`absolute inset-0 rounded-xl bg-black/30 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`} />
 
-            {/* Title */}
             {pin.title && (
                 <div className="absolute bottom-0 left-0 right-0 px-3 py-2.5 transition-opacity duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100">
                     <p className="text-white text-xs font-medium truncate drop-shadow-lg">{pin.title}</p>
                 </div>
             )}
 
-            {/* Top-left: Like */}
             <div className={`absolute top-2 left-2 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
                 <button
                     onClick={handleLike}
@@ -95,7 +92,7 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
                 </button>
             </div>
 
-            {/* Top-right: Save button */}
+
             <div className={`absolute top-2 right-2 flex items-center gap-1.5 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
                 {isOwner && (
                     <div className="relative">
@@ -142,7 +139,9 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
             </div>
 
             {saveModalOpen && (
-                <SaveModal pinId={pin.id} onClose={() => setSaveModalOpen(false)} />
+                <div onClick={(e) => e.stopPropagation()}>
+                    <SaveModal pinId={pin.id} onClose={() => setSaveModalOpen(false)} />
+                </div>
             )}
         </div>
     );
