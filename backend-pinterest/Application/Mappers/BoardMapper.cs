@@ -34,7 +34,6 @@ public partial class BoardMapper
     private static IReadOnlyList<string> MapPreviewImageUrls(ICollection<BoardPinEntity> boardPins) =>
         boardPins
             .OrderByDescending(bp => bp.CreatedAt)
-            .Take(4)
             .Select(bp => bp.Pin.Image)
             .Where(image => !string.IsNullOrEmpty(image))
             .ToList();
