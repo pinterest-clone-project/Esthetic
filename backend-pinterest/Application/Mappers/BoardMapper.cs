@@ -28,16 +28,18 @@ public partial class BoardMapper(PinMapper pinMapper)
     {
         var dto = ToDetailsDtoInternal(src);
         dto.PreviewPins = src.BoardPins
+            .Where(bp => !bp.IsDeleted)
             .OrderByDescending(bp => bp.CreatedAt)
             .Select(bp => pinMapper.ToSummaryDto(bp.Pin, currentUserId))
             .ToList();
+        dto.PinsCount = dto.PreviewPins.Count;
         return dto;
     }
 
     public partial BoardEntity ToEntity(CreateBoardCommand src);
 
     private static int MapPinsCount(ICollection<BoardPinEntity> boardPins) =>
-        boardPins.Count;
+        boardPins.Count(bp => !bp.IsDeleted);
 
 
 }
