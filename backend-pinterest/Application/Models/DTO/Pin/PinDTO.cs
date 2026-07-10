@@ -17,4 +17,6 @@ public class PinDTO
     public int CommentsCount { get; set; }
     public DateTime CreatedAt { get; set; }
     public bool IsLikedByMe { get; set; }
+    public string? CreatorName { get; set; }
+    public string? CreatorImage { get; set; }
 }

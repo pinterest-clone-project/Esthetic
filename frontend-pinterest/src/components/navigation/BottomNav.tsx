@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useAppSelector } from "@/store";
+import {useGetMeQuery} from "@/services/accountService.ts";
 import { useTheme } from "@/context/ThemeContext";
 import homeIcon from "@/assets/icons/home_icon.svg";
 import collectionIcon from "@/assets/icons/collection_icon.svg";
@@ -26,6 +27,7 @@ const navItems: NavItem[] = [
     { label: "Chat", icon: profileIcon, path: "/chat" },
     { label: "Create", icon: addIcon, path: "/aura/create", isCreate: true },
     { label: "Collections", icon: collectionIcon, path: "/collections/aura" },
+    { label: "Profile", icon: userIcon, path: "/profile" },
 ];
 
 const BottomNav = () => {
@@ -36,6 +38,7 @@ const BottomNav = () => {
     const defaultFilter = theme === "dark" ? defaultFilterDark : defaultFilterLight;
     const [createOpen, setCreateOpen] = useState(false);
     const createRef = useRef<HTMLDivElement>(null);
+    const {data: me} = useGetMeQuery();
 
     useEffect(() => {
         const handler = (e: MouseEvent) => {
@@ -49,7 +52,12 @@ const BottomNav = () => {
 
     if (!user) return null;
 
-    const isActive = (path: string) => location.pathname === path;
+    const handleClick = (item: NavItem) => {
+        if(item.path === "/user/"){
+            item.path += me?.id;
+        }
+        navigate(item.path);
+    };
 
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 flex md:hidden items-center justify-around bg-white dark:bg-black border-t border-[#A2A2A2] dark:border-[#535353] h-16 px-2">

@@ -3,7 +3,7 @@ using Domain.Interfaces;
 
 namespace Infrastructure.Data.Repositories;
 
-public class FollowRepository(AppDbContext context) : IFollowRepository
+public class FollowRepository(AppDbContext context) : BaseRepository<FollowEntity>(context), IFollowRepository
 {
     public async Task FollowAsync(Guid followerId, Guid followeeId, CancellationToken ct = default)
     {

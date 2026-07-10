@@ -74,6 +74,10 @@ export const pinService = api.injectEndpoints({
             query: (pinId) => `Pins/${pinId}/saved-boards`,
             providesTags: ['MyMoodboards'],
         }),
+        getPinsByUser: builder.query<IPinSummaryResponse[], string>({
+            query: (userId) => ({ url: `Pins/byUser/${userId}`, method: 'GET' }),
+            providesTags: ['AllPins'],
+        }),
     }),
 });
 
@@ -85,6 +89,7 @@ export const {
     useUpdatePinMutation,
     useDeletePinMutation,
     useGetMyPinsQuery,
+    useGetPinsByUserQuery,
     useGetSavedBoardsQuery,
     useSavePinMutation,
     useUnsavePinMutation,

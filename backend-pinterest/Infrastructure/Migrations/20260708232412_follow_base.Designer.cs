@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260708232412_follow_base")]
+    partial class follow_base
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,7 +63,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Boards", (string)null);
+                    b.ToTable("Boards");
                 });
 
             modelBuilder.Entity("Domain.Entities.Board.BoardPinEntity", b =>
@@ -96,7 +99,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("BoardId", "PinId")
                         .IsUnique();
 
-                    b.ToTable("BoardPins", (string)null);
+                    b.ToTable("BoardPins");
                 });
 
             modelBuilder.Entity("Domain.Entities.BoardSection.BoardSectionEntity", b =>
@@ -125,7 +128,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("BoardId");
 
-                    b.ToTable("BoardSections", (string)null);
+                    b.ToTable("BoardSections");
                 });
 
             modelBuilder.Entity("Domain.Entities.Category.CategoryEntity", b =>
@@ -161,7 +164,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Domain.Entities.Chat.ChatEntity", b =>
@@ -192,7 +195,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("User1Id", "User2Id")
                         .IsUnique();
 
-                    b.ToTable("Chats", (string)null);
+                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("Domain.Entities.Chat.MessageEntity", b =>
@@ -225,7 +228,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("SentAt");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Domain.Entities.Comment.CommentEntity", b =>
@@ -239,9 +242,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
-
-                    b.Property<Guid?>("ParentCommentId")
-                        .HasColumnType("uuid");
 
                     b.Property<Guid>("PinId")
                         .HasColumnType("uuid");
@@ -258,13 +258,11 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ParentCommentId");
-
                     b.HasIndex("PinId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Domain.Entities.Follow.FollowEntity", b =>
@@ -291,7 +289,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("FolloweeId");
 
-                    b.ToTable("Follows", (string)null);
+                    b.ToTable("Follows");
                 });
 
             modelBuilder.Entity("Domain.Entities.Identity.RefreshTokenEntity", b =>
@@ -315,7 +313,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RefreshTokens", (string)null);
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Domain.Entities.Identity.RoleEntity", b =>
@@ -497,7 +495,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Likes", (string)null);
+                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("Domain.Entities.Notification.NotificationEntity", b =>
@@ -543,7 +541,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Domain.Entities.Pin.PinEntity", b =>
@@ -586,7 +584,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Pins", (string)null);
+                    b.ToTable("Pins");
                 });
 
             modelBuilder.Entity("Domain.Entities.PinTag.PinTagEntity", b =>
@@ -601,7 +599,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("PinTags", (string)null);
+                    b.ToTable("PinTags");
                 });
 
             modelBuilder.Entity("Domain.Entities.Recommended.UserPinInteraction", b =>
@@ -629,7 +627,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId", "PinId")
                         .IsUnique();
 
-                    b.ToTable("users_pins_interactions", (string)null);
+                    b.ToTable("users_pins_interactions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Report.ReportEntity", b =>
@@ -672,7 +670,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ReporterId");
 
-                    b.ToTable("Reports", (string)null);
+                    b.ToTable("Reports");
                 });
 
             modelBuilder.Entity("Domain.Entities.Tag.TagEntity", b =>
@@ -696,7 +694,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags", (string)null);
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserBlock.UserBlockEntity", b =>
@@ -714,7 +712,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("BlockedId");
 
-                    b.ToTable("UserBlocks", (string)null);
+                    b.ToTable("UserBlocks");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -872,11 +870,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Comment.CommentEntity", b =>
                 {
-                    b.HasOne("Domain.Entities.Comment.CommentEntity", "ParentComment")
-                        .WithMany("Replies")
-                        .HasForeignKey("ParentCommentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Domain.Entities.Pin.PinEntity", "Pin")
                         .WithMany("Comments")
                         .HasForeignKey("PinId")
@@ -888,8 +881,6 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ParentComment");
 
                     b.Navigation("Pin");
 
@@ -1128,11 +1119,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Chat.ChatEntity", b =>
                 {
                     b.Navigation("Messages");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Comment.CommentEntity", b =>
-                {
-                    b.Navigation("Replies");
                 });
 
             modelBuilder.Entity("Domain.Entities.Identity.RoleEntity", b =>
