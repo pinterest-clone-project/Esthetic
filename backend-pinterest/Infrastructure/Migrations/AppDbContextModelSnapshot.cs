@@ -358,9 +358,6 @@ namespace Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
-                    b.Property<string>("Country")
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -388,9 +385,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<bool>("IsPrivate")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("Language")
-                        .HasColumnType("text");
 
                     b.Property<string>("LastName")
                         .HasColumnType("text");
@@ -712,21 +706,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("BlockedId");
 
                     b.ToTable("UserBlocks", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Entities.UserCategory", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("UserId", "CategoryId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("UserCategories", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -1093,25 +1072,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Blocker");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserCategory", b =>
-                {
-                    b.HasOne("Domain.Entities.Category.CategoryEntity", "Category")
-                        .WithMany("UserCategories")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Identity.UserEntity", "User")
-                        .WithMany("UserCategories")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Domain.Entities.Identity.RoleEntity", null)
@@ -1154,8 +1114,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Category.CategoryEntity", b =>
                 {
                     b.Navigation("Pins");
-
-                    b.Navigation("UserCategories");
                 });
 
             modelBuilder.Entity("Domain.Entities.Chat.ChatEntity", b =>
@@ -1190,8 +1148,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("ReceivedReports");
 
                     b.Navigation("SentReports");
-
-                    b.Navigation("UserCategories");
 
                     b.Navigation("UserLogins");
 
