@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useAppSelector } from "@/store";
+import { useGetChatsQuery } from "@/services/chatService";
 import { useTheme } from "@/context/ThemeContext";
 import homeIcon from "@/assets/icons/home_icon.svg";
 import collectionIcon from "@/assets/icons/collection_icon.svg";
@@ -37,6 +38,8 @@ const BottomNav = () => {
     const defaultFilter = theme === "dark" ? defaultFilterDark : defaultFilterLight;
     const [createOpen, setCreateOpen] = useState(false);
     const createRef = useRef<HTMLDivElement>(null);
+    const { data: chats = [] } = useGetChatsQuery(undefined, { skip: !user });
+    const totalUnread = chats.reduce((sum, c) => sum + c.unreadCount, 0);
 
     useEffect(() => {
         const handler = (e: MouseEvent) => {
@@ -95,12 +98,19 @@ const BottomNav = () => {
                         onClick={() => handleClick(item)}
                         className="flex flex-col items-center gap-0.5 px-2 py-1"
                     >
-                        <img
-                            src={item.icon}
-                            className="w-6 h-6"
-                            style={{ filter: isActive(item) ? greenFilter : defaultFilter }}
-                            alt={item.label}
-                        />
+                        <div className="relative">
+                            <img
+                                src={item.icon}
+                                className="w-6 h-6"
+                                style={{ filter: isActive(item) ? greenFilter : defaultFilter }}
+                                alt={item.label}
+                            />
+                            {item.label === "Chat" && totalUnread > 0 && (
+                                <span className="absolute -top-2 -right-2 min-w-[16px] h-4 px-1 rounded-full bg-[#1DB954] text-black text-[9px] font-bold flex items-center justify-center leading-none">
+                                    {totalUnread > 9 ? "9+" : totalUnread}
+                                </span>
+                            )}
+                        </div>
                         <span className={`text-[10px] ${isActive(item) ? "text-[#1DB954]" : "text-[#A2A2A2]"}`}>
                             {item.label}
                         </span>

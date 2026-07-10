@@ -211,8 +211,8 @@ const ChatPage = () => {
                                     )}
                                 </div>
                                 {chat.unreadCount > 0 && (
-                                    <span className="bg-[#1DB954] text-black text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center shrink-0">
-                                        {chat.unreadCount}
+                                    <span className="bg-[#1DB954] text-black text-[10px] font-bold rounded-full min-w-[20px] h-5 px-1 flex items-center justify-center shrink-0">
+                                        {chat.unreadCount > 99 ? "99+" : chat.unreadCount}
                                     </span>
                                 )}
                             </button>
