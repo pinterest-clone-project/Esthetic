@@ -2,7 +2,7 @@ import { useState } from "react";
 import im1 from "@/assets/defaults/def-9.jpg";
 import im2 from "@/assets/defaults/def-10.jpg";
 import im3 from "@/assets/defaults/def-11.jpg";
-import {useGetAllPinsQuery, useGetMyPinsQuery} from "@/services/pinService.ts";
+import {useGetAllPinsQuery, useGetMyPinsQuery, useGetSavedPinsQuery} from "@/services/pinService.ts";
 import {useLocation, useNavigate} from "react-router";
 import {useGetMyMoodboardsQuery} from "@/services/moodboardService.ts";
 import CreateMoodboardForm from "@/components/moodboard/CreateMoodboardForm.tsx";
@@ -20,6 +20,7 @@ const CollectionsPage = () => {
     const { data: myPins } = useGetMyPinsQuery();
     const { data: Pins } = useGetAllPinsQuery();
     const { data: moodboards } = useGetMyMoodboardsQuery();
+    const { data: savedPins } = useGetSavedPinsQuery();
 
 
     const location = useLocation();
@@ -93,12 +94,20 @@ const CollectionsPage = () => {
                             </button>
                         </div>
 
-                        <h2 className="text-lg mt-4">Your saved Auras</h2>
-                        <div className="mt-4">
-                            <p className="text-white/30 text-sm text-center py-8 border border-white/10 rounded-xl">
+                        <h2 className="text-lg mt-8 mb-3">Your saved Auras</h2>
+                        {savedPins && savedPins.length > 0 ? (
+                            <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3 mt-4">
+                                {savedPins.map((pin) => (
+                                    <div key={pin.id} className="break-inside-avoid mb-3">
+                                        <PinCard pin={pin} />
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-[#A1A1A1] dark:text-white/30 text-sm text-center py-8 border border-black/10 dark:border-white/10 rounded-xl">
                                 You haven't saved any Auras yet
                             </p>
-                        </div>
+                        )}
                     </div>
                 ) : (
                     <div className="flex flex-col items-center justify-center mt-16 gap-6">
