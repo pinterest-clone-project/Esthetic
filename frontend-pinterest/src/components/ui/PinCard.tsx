@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import type { IPinSummaryResponse } from "@/types/pin/responses/IPinSummaryResponse.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
-import { useDeletePinMutation } from "@/services/pinService.ts";
+import { useDeletePinMutation, useUnsavePinMutation } from "@/services/pinService.ts";
 import { useLikeMutation, useUnlikeMutation } from "@/services/likeService.ts";
 
 import { APP_ENV } from "@/constants/env";
@@ -17,7 +17,7 @@ const ShareIcon = () => (
     </svg>
 );
 
-const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
+const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string }) => {
     const [hovered, setHovered] = useState(false);
     const [saveModalOpen, setSaveModalOpen] = useState(false);
     const [showEditMenu, setShowEditMenu] = useState(false);
@@ -25,6 +25,7 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     const navigate = useNavigate();
     const { data: me } = useGetMeQuery();
     const [deletePin] = useDeletePinMutation();
+    const [unsavePin] = useUnsavePinMutation();
     const [like] = useLikeMutation();
     const [unlike] = useUnlikeMutation();
     const { showToast } = useToast();
@@ -52,6 +53,17 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
         }
     };
 
+    const handleUnsave = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!boardId) return;
+        try {
+            await unsavePin({ pinId: pin.id, boardId }).unwrap();
+            showToast("Removed from board", "success");
+        } catch {
+            showToast("Something went wrong", "error");
+        }
+    };
+
     const handleShare = (e: React.MouseEvent) => {
         e.stopPropagation();
         navigator.clipboard.writeText(
@@ -74,17 +86,14 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
                 loading="lazy"
             />
 
-            {/* Overlay */}
             <div className={`absolute inset-0 rounded-xl bg-black/30 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`} />
 
-            {/* Title */}
             {pin.title && (
                 <div className="absolute bottom-0 left-0 right-0 px-3 py-2.5 transition-opacity duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100">
                     <p className="text-white text-xs font-medium truncate drop-shadow-lg">{pin.title}</p>
                 </div>
             )}
 
-            {/* Top-left: Like */}
             <div className={`absolute top-2 left-2 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
                 <button
                     onClick={handleLike}
@@ -95,7 +104,7 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
                 </button>
             </div>
 
-            {/* Top-right: Save button */}
+
             <div className={`absolute top-2 right-2 flex items-center gap-1.5 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
                 {isOwner && (
                     <div className="relative">
@@ -123,12 +132,21 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
                         )}
                     </div>
                 )}
-                <button
-                    onClick={(e) => { e.stopPropagation(); setSaveModalOpen(true); }}
-                    className="bg-[#4ade80] hover:bg-[#22c55e] text-black text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors"
-                >
-                    Save
-                </button>
+                {boardId ? (
+                    <button
+                        onClick={handleUnsave}
+                        className="bg-red-500 hover:bg-red-600 text-white text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors"
+                    >
+                        Unsave
+                    </button>
+                ) : (
+                    <button
+                        onClick={(e) => { e.stopPropagation(); setSaveModalOpen(true); }}
+                        className="bg-[#4ade80] hover:bg-[#22c55e] text-black text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors"
+                    >
+                        Save
+                    </button>
+                )}
             </div>
 
             {/* Bottom-right: Share */}
@@ -142,7 +160,9 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
             </div>
 
             {saveModalOpen && (
-                <SaveModal pinId={pin.id} onClose={() => setSaveModalOpen(false)} />
+                <div onClick={(e) => e.stopPropagation()}>
+                    <SaveModal pinId={pin.id} onClose={() => setSaveModalOpen(false)} />
+                </div>
             )}
         </div>
     );

@@ -30,7 +30,7 @@ public class BoardsController(IMediator mediator) : ControllerBase
     [HttpGet("getById/{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var result = await mediator.Send(new GetBoardByIdQuery(id));
+        var result = await mediator.Send(new GetBoardByIdQuery(id, CurrentUserId));
         return Ok(result);
     }
 

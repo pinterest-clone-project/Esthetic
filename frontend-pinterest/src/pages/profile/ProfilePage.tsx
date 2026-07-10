@@ -16,6 +16,7 @@ import {useNavigate} from "react-router";
 import { useGetAllCategoriesQuery } from "@/services/categoryService.ts";
 import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
 
+
 const schema = z.object({
     firstName:   z.string().min(1, "Імʼя обовʼязкове").max(50).or(z.literal("")).optional(),
     lastName:    z.string().min(1, "Прізвище обовʼязкове").max(50).or(z.literal("")).optional(),

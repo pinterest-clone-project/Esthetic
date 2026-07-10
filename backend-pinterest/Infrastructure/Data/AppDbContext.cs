@@ -99,5 +99,10 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
+        builder.Entity<BoardPinEntity>()
+        .HasIndex(bp => new { bp.BoardId, bp.PinId })
+        .IsUnique()
+        .HasFilter("\"IsDeleted\" = false");
+
     }
 }

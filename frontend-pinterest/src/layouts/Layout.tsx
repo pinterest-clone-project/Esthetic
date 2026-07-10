@@ -9,12 +9,12 @@ const Layout = () => {
     const user = useAppSelector((state) => state.auth.user);
 
     return (
-        <div className="flex flex-col min-h-screen bg-white dark:bg-black">
+        <div className="flex flex-col h-screen overflow-hidden bg-white dark:bg-black">
             <TopProgressBar />
             <Header />
-            <div className="flex flex-1 max-w-[1505px] mx-auto w-full">
+            <div className="flex flex-1 max-w-[1505px] mx-auto w-full min-h-0">
                 {user && <Sidebar />}
-                <main className="flex-1 px-4 scroll-smooth pb-20 md:pb-0">
+                <main className="flex-1 px-4 overflow-y-auto scroll-smooth pb-20 md:pb-0 main-scroll">
                     <Outlet />
                 </main>
             </div>

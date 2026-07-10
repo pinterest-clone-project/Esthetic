@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Application.UseCases.Boards.Queries;
 
-public record GetBoardByIdQuery(Guid Id) : IRequest<BoardDetailsDTO>;
+public record GetBoardByIdQuery(Guid Id, Guid? CurrentUserId = null) : IRequest<BoardDetailsDTO>;
