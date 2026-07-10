@@ -1,5 +1,4 @@
 import {api} from "@/services/api.ts";
-import type {IUser} from "@/types/user/IUser.ts"; import type {ISearchUsersParams} from "@/types/user/ISearchUsersParams.ts";
 export const followService = api.injectEndpoints({
     endpoints: (builder) => ({
         follow: builder.mutation<void, string>({

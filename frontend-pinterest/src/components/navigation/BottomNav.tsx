@@ -8,12 +8,13 @@ import collectionIcon from "@/assets/icons/collection_icon.svg";
 import addIcon from "@/assets/icons/add_icon.svg";
 import profileIcon from "../../../src/assets/icons/profile_icon.svg";
 import auraIcon from "../../../src/assets/icons/aura_icon.svg";
+import userIcon from "@/assets/icons/user_icon.svg";
+import {APP_ENV} from "@/constants/env";
 
 const greenFilter =
     "brightness(0) saturate(100%) invert(58%) sepia(61%) saturate(450%) hue-rotate(95deg) brightness(95%)";
 const defaultFilterLight = "brightness(0) opacity(0.4)";
 const defaultFilterDark = "brightness(0) invert(1) opacity(0.4)";
-
 
 interface NavItem {
     label: string;
@@ -27,7 +28,7 @@ const navItems: NavItem[] = [
     { label: "Chat", icon: profileIcon, path: "/chat" },
     { label: "Create", icon: addIcon, path: "/aura/create", isCreate: true },
     { label: "Collections", icon: collectionIcon, path: "/collections/aura" },
-    { label: "Profile", icon: userIcon, path: "/profile" },
+    { label: "Profile", icon: userIcon, path: "/user/" },
 ];
 
 const BottomNav = () => {
@@ -38,7 +39,7 @@ const BottomNav = () => {
     const defaultFilter = theme === "dark" ? defaultFilterDark : defaultFilterLight;
     const [createOpen, setCreateOpen] = useState(false);
     const createRef = useRef<HTMLDivElement>(null);
-    const {data: me} = useGetMeQuery();
+    const { data: me } = useGetMeQuery();
 
     useEffect(() => {
         const handler = (e: MouseEvent) => {
@@ -53,76 +54,87 @@ const BottomNav = () => {
     if (!user) return null;
 
     const handleClick = (item: NavItem) => {
-        if(item.path === "/user/"){
-            item.path += me?.id;
-        }
-        navigate(item.path);
+        const path = item.path === "/user/" ? `/user/${me?.id}` : item.path;
+        navigate(path);
+    };
+
+    const isActive = (item: NavItem) => {
+        if (item.path === "/user/") return location.pathname.startsWith("/user/");
+        return location.pathname === item.path;
     };
 
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 flex md:hidden items-center justify-around bg-white dark:bg-black border-t border-[#A2A2A2] dark:border-[#535353] h-16 px-2">
-                {navItems.map((item) =>
-                    item.isCreate ? (
-                        <div key={item.path} className="relative" ref={createRef}>
-                            {createOpen && (
-                                <div className="absolute bottom-16 left-1/2 -translate-x-1/2 bg-white dark:bg-[#1a1a1a] border border-[#A2A2A2] dark:border-[#535353] rounded-2xl shadow-2xl overflow-hidden w-44">
-                                    <button
-                                        onClick={() => { setCreateOpen(false); navigate("/aura/create"); }}
-                                        className="flex items-center gap-3 w-full px-4 py-3 text-sm text-black dark:text-white hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a] transition-colors"
-                                    >
-                                        <img src={auraIcon} className="w-5 h-5 object-contain" style={{ filter: defaultFilter }} />
-                                        Aura
-                                    </button>
-                                    <div className="h-px bg-[#A2A2A2] dark:bg-[#535353]" />
-                                    <button
-                                        onClick={() => { setCreateOpen(false); navigate("/collections/moodboard"); }}
-                                        className="flex items-center gap-3 w-full px-4 py-3 text-sm text-black dark:text-white hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a] transition-colors"
-                                    >
-                                        <img src={collectionIcon} className="w-5 h-5 object-contain" style={{ filter: defaultFilter }} />
-                                        Moodboard
-                                    </button>
-                                </div>
-                            )}
-                            <button
-                                onClick={() => setCreateOpen(p => !p)}
-                                className={`flex items-center justify-center w-12 h-12 rounded-full bg-[#1DB954] shadow-md active:scale-95 transition-all ${createOpen ? "rotate-45" : ""}`}
-                            >
-                                <img src={item.icon} className="w-6 h-6" style={{ filter: "brightness(0)" }} alt={item.label} />
-                            </button>
-                        </div>
-                    ) : (
+            {navItems.map((item) =>
+                item.isCreate ? (
+                    <div key={item.path} className="relative" ref={createRef}>
+                        {createOpen && (
+                            <div className="absolute bottom-16 left-1/2 -translate-x-1/2 bg-white dark:bg-[#1a1a1a] border border-[#A2A2A2] dark:border-[#535353] rounded-2xl shadow-2xl overflow-hidden w-44">
+                                <button
+                                    onClick={() => { setCreateOpen(false); navigate("/aura/create"); }}
+                                    className="flex items-center gap-3 w-full px-4 py-3 text-sm text-black dark:text-white hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a] transition-colors"
+                                >
+                                    <img src={auraIcon} className="w-5 h-5 object-contain" style={{ filter: defaultFilter }} />
+                                    Aura
+                                </button>
+                                <div className="h-px bg-[#A2A2A2] dark:bg-[#535353]" />
+                                <button
+                                    onClick={() => { setCreateOpen(false); navigate("/collections/moodboard"); }}
+                                    className="flex items-center gap-3 w-full px-4 py-3 text-sm text-black dark:text-white hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a] transition-colors"
+                                >
+                                    <img src={collectionIcon} className="w-5 h-5 object-contain" style={{ filter: defaultFilter }} />
+                                    Moodboard
+                                </button>
+                            </div>
+                        )}
                         <button
-                            key={item.path}
-                            onClick={() => navigate(item.path)}
-                            className="flex flex-col items-center gap-0.5 px-2 py-1"
+                            onClick={() => setCreateOpen(p => !p)}
+                            className={`flex items-center justify-center w-12 h-12 rounded-full bg-[#1DB954] shadow-md active:scale-95 transition-all ${createOpen ? "rotate-45" : ""}`}
                         >
-                            <img
-                                src={item.icon}
-                                className="w-6 h-6"
-                                style={{ filter: isActive(item.path) ? greenFilter : defaultFilter }}
-                                alt={item.label}
-                            />
-                            <span className={`text-[10px] ${isActive(item.path) ? "text-[#1DB954]" : "text-[#A2A2A2]"}`}>
-                                {item.label}
-                            </span>
+                            <img src={item.icon} className="w-6 h-6" style={{ filter: "brightness(0)" }} alt={item.label} />
                         </button>
-                    )
-                )}
-
-                <button
-                    onClick={() => navigate("/settings")}
-                    className="flex flex-col items-center gap-0.5 px-2 py-1"
-                >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke={location.pathname === "/settings" ? "#1DB954" : (theme === "dark" ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)")}
-                        strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="12" cy="12" r="3"/>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                    </svg>
-                    <span className={`text-[10px] ${location.pathname === "/settings" ? "text-[#1DB954]" : "text-[#A2A2A2]"}`}>
-                        Settings
-                    </span>
-                </button>
+                    </div>
+                ) : item.label === "Profile" ? (
+                    <button
+                        key={item.path}
+                        onClick={() => handleClick(item)}
+                        className="flex flex-col items-center gap-0.5 px-2 py-1"
+                    >
+                        <div className={`w-7 h-7 rounded-full overflow-hidden flex items-center justify-center
+                            ${user.image ? "" : "bg-[var(--color-btn-primary)]"}
+                            ${isActive(item) ? "ring-2 ring-[#1DB954]" : ""}`}>
+                            {user.image ? (
+                                <img
+                                    src={`${APP_ENV.IMAGES_100_URL}${user.image}`}
+                                    className="w-full h-full object-cover"
+                                    alt="Profile"
+                                />
+                            ) : (
+                                <img src={userIcon} className="w-4 h-4 object-contain" alt="Profile" />
+                            )}
+                        </div>
+                        <span className={`text-[10px] ${isActive(item) ? "text-[#1DB954]" : "text-[#A2A2A2]"}`}>
+                            {item.label}
+                        </span>
+                    </button>
+                ) : (
+                    <button
+                        key={item.path}
+                        onClick={() => handleClick(item)}
+                        className="flex flex-col items-center gap-0.5 px-2 py-1"
+                    >
+                        <img
+                            src={item.icon}
+                            className="w-6 h-6"
+                            style={{ filter: isActive(item) ? greenFilter : defaultFilter }}
+                            alt={item.label}
+                        />
+                        <span className={`text-[10px] ${isActive(item) ? "text-[#1DB954]" : "text-[#A2A2A2]"}`}>
+                            {item.label}
+                        </span>
+                    </button>
+                )
+            )}
         </nav>
     );
 };

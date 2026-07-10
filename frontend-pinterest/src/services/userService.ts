@@ -1,6 +1,7 @@
 import {api} from "@/services/api.ts";
 import type {IPagedResult} from "@/types/IPagedResult.ts";
 import type {IUser} from "@/types/user/IUser.ts"; import type {ISearchUsersParams} from "@/types/user/ISearchUsersParams.ts"; import type {IAdminBlockUserRequest} from "@/types/admin/IAdminIBlockUserRequest.ts";
+import type {IUserFollowStats} from "@/types/user/IUserFollowStats.ts";
 export const userService = api.injectEndpoints({
     endpoints: (builder) => ({
         searchUsers: builder.query<IPagedResult<IUser>, ISearchUsersParams>({
@@ -16,7 +17,7 @@ export const userService = api.injectEndpoints({
                 url: `Users/getById/${id}`,
                 method: 'GET',
             }),
-            invalidatesTags: ['AllUsers'],
+            providesTags: ['AllUsers'],
         }),
         blockUser: builder.mutation<IUser, IAdminBlockUserRequest>({
             query: ({ id, ...data }) => ({
