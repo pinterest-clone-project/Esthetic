@@ -8,6 +8,7 @@ import {useGetMyMoodboardsQuery} from "@/services/moodboardService.ts";
 import CreateMoodboardForm from "@/components/moodboard/CreateMoodboardForm.tsx";
 import {APP_ENV} from "@/constants/env";
 import Modal from "@/components/ui/Modal.tsx";
+import PinCard from "@/components/ui/PinCard.tsx";
 
 type CollectionTab = "Aura" | "Moodboard" | "Esthetic AI";
 
@@ -78,7 +79,7 @@ const CollectionsPage = () => {
                         <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3 mt-4">
                             {myPins!.map((pin) => (
                                 <div key={pin.id} className="break-inside-avoid mb-3">
-                                    <img src={pin.image ? `${APP_ENV.IMAGES_800_URL}${pin.image}` : undefined} className="w-full rounded-xl object-cover" />
+                                    <PinCard pin={pin} />
                                 </div>
                             ))}
 
@@ -168,7 +169,7 @@ const CollectionsPage = () => {
                     <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-6 gap-3">
                         {Pins?.map((pin) => (
                             <div key={pin.id} className="break-inside-avoid mb-3">
-                                <img src={pin.image ? `${APP_ENV.IMAGES_800_URL}${pin.image}` : undefined} className="w-full rounded-xl object-cover" />
+                                <PinCard pin={pin} />
                             </div>
                         ))}
                     </div>
