@@ -46,7 +46,10 @@ const NotificationsPage = () => {
                                     ${!n.isRead ? "bg-[#f5f5f5] dark:bg-[#1a1a1a]" : ""}
                                 `}
                             >
-                                <div className="w-10 h-10 rounded-full bg-[#d1d1d1] dark:bg-[#2a2a2a] shrink-0 overflow-hidden">
+                                <div
+                                    className="w-10 h-10 rounded-full bg-[#d1d1d1] dark:bg-[#2a2a2a] shrink-0 overflow-hidden cursor-pointer"
+                                    onClick={(e) => { e.stopPropagation(); if (n.actorId) navigate(`/user/${n.actorId}`); }}
+                                >
                                     {n.actorImage && (
                                         <img
                                             src={`${APP_ENV.IMAGES_100_URL}${n.actorImage}`}
@@ -55,6 +58,14 @@ const NotificationsPage = () => {
                                     )}
                                 </div>
                                 <div className="flex-1 min-w-0">
+                                    {n.actorUsername && (
+                                        <span
+                                            className="text-sm font-semibold cursor-pointer hover:underline"
+                                            onClick={(e) => { e.stopPropagation(); if (n.actorId) navigate(`/user/${n.actorId}`); }}
+                                        >
+                                            {n.actorUsername}{" "}
+                                        </span>
+                                    )}
                                     <p className="text-sm leading-snug">{n.message}</p>
                                     <p className="text-[#A1A1A1] text-xs mt-0.5">{formatTimeLabel(n.createdAt)}</p>
                                 </div>

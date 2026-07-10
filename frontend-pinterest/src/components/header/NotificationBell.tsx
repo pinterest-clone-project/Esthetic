@@ -70,12 +70,23 @@ const NotificationBell: React.FC = () => {
                                         ${!n.isRead ? "bg-white/[0.03]" : ""}
                                     `}
                                 >
-                                    <div className="w-8 h-8 rounded-full bg-[#2a2a2a] shrink-0 overflow-hidden">
+                                    <div
+                                        className="w-8 h-8 rounded-full bg-[#2a2a2a] shrink-0 overflow-hidden cursor-pointer"
+                                        onClick={(e) => { e.stopPropagation(); if (n.actorId) { navigate(`/user/${n.actorId}`); setOpen(false); } }}
+                                    >
                                         {n.actorImage && (
                                             <img src={`${APP_ENV.IMAGES_100_URL}${n.actorImage}`} className="w-full h-full object-cover" />
                                         )}
                                     </div>
                                     <div className="min-w-0 flex-1">
+                                        {n.actorUsername && (
+                                            <span
+                                                className="text-black dark:text-white text-xs font-semibold cursor-pointer hover:underline"
+                                                onClick={(e) => { e.stopPropagation(); if (n.actorId) { navigate(`/user/${n.actorId}`); setOpen(false); } }}
+                                            >
+                                                {n.actorUsername}{" "}
+                                            </span>
+                                        )}
                                         <p className="text-black dark:text-white text-sm leading-snug">{n.message}</p>
                                         <p className="text-black dark:text-[#A1A1A1] text-xs mt-0.5">
                                             {formatTimeLabel(n.createdAt)}
