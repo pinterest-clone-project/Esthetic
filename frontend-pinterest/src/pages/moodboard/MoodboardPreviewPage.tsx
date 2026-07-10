@@ -1,4 +1,5 @@
 import { useGetMoodboardByIdQuery } from "@/services/moodboardService.ts";
+import { useGetMeQuery } from "@/services/accountService.ts";
 import { useParams } from "react-router";
 import { APP_ENV } from "@/constants/env";
 import BackButton from "@/components/ui/BackButton.tsx";
@@ -7,6 +8,8 @@ import PinCard from "@/components/ui/PinCard.tsx";
 const MoodboardPreviewPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const { data: board, isLoading, isError } = useGetMoodboardByIdQuery(id!);
+    const { data: me } = useGetMeQuery();
+    const isOwner = !!me && !!board && me.id === board.ownerId;
 
     if (isLoading) return (
         <div className="w-full min-h-full bg-white dark:bg-[#000000] flex items-center justify-center">
@@ -79,7 +82,7 @@ const MoodboardPreviewPage: React.FC = () => {
                             <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3">
                                 {board.previewPins.map((pin) => (
                                     <div key={pin.id} className="break-inside-avoid mb-3">
-                                        <PinCard pin={pin} boardId={board.id} />
+                                        <PinCard pin={pin} boardId={isOwner ? board.id : undefined} />
                                     </div>
                                 ))}
                             </div>

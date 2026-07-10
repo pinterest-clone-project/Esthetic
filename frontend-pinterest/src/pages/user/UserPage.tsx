@@ -198,7 +198,6 @@ const UserPage = () => {
                                     <p className="text-black dark:text-white text-sm mt-2 truncate group-hover:text-[#4ade80] transition-colors duration-200">
                                         {mb.title}
                                     </p>
-                                    <p className="text-gray-500 text-xs">{mb.pinsCount} pins</p>
                                 </button>
                             ))}
                         </div>
