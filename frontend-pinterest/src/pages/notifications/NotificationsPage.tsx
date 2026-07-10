@@ -149,7 +149,7 @@ const NotificationsPage = () => {
                     )}
                 </div>
 
-                <div className="flex gap-2 mb-6 flex-wrap">
+                <div className="flex gap-2 mb-6 overflow-x-auto pb-1 scrollbar-none">
                     {FILTERS.map((f) => {
                         const count = countOf(f.value);
                         const isActive = activeFilter === f.value;
@@ -157,7 +157,7 @@ const NotificationsPage = () => {
                             <button
                                 key={String(f.value)}
                                 onClick={() => setActiveFilter(f.value)}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-150 border"
+                                className="flex shrink-0 items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-150 border"
                                 style={{
                                     background: isActive ? f.color : "transparent",
                                     color: isActive ? (f.value === "all" ? "#fff" : "#000") : "#A1A1A1",
