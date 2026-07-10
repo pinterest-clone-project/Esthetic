@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import type { IPinSummaryResponse } from "@/types/pin/responses/IPinSummaryResponse.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
-import { useDeletePinMutation } from "@/services/pinService.ts";
+import { useDeletePinMutation, useUnsavePinMutation } from "@/services/pinService.ts";
 import { useLikeMutation, useUnlikeMutation } from "@/services/likeService.ts";
 
 import { APP_ENV } from "@/constants/env";
@@ -17,7 +17,7 @@ const ShareIcon = () => (
     </svg>
 );
 
-const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
+const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string }) => {
     const [hovered, setHovered] = useState(false);
     const [saveModalOpen, setSaveModalOpen] = useState(false);
     const [showEditMenu, setShowEditMenu] = useState(false);
@@ -25,6 +25,7 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
     const navigate = useNavigate();
     const { data: me } = useGetMeQuery();
     const [deletePin] = useDeletePinMutation();
+    const [unsavePin] = useUnsavePinMutation();
     const [like] = useLikeMutation();
     const [unlike] = useUnlikeMutation();
     const { showToast } = useToast();
@@ -49,6 +50,17 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
             await unlike(pin.id);
         } else {
             await like(pin.id);
+        }
+    };
+
+    const handleUnsave = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!boardId) return;
+        try {
+            await unsavePin({ pinId: pin.id, boardId }).unwrap();
+            showToast("Removed from board", "success");
+        } catch {
+            showToast("Something went wrong", "error");
         }
     };
 
@@ -120,12 +132,21 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse }) => {
                         )}
                     </div>
                 )}
-                <button
-                    onClick={(e) => { e.stopPropagation(); setSaveModalOpen(true); }}
-                    className="bg-[#4ade80] hover:bg-[#22c55e] text-black text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors"
-                >
-                    Save
-                </button>
+                {boardId ? (
+                    <button
+                        onClick={handleUnsave}
+                        className="bg-red-500 hover:bg-red-600 text-white text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors"
+                    >
+                        Unsave
+                    </button>
+                ) : (
+                    <button
+                        onClick={(e) => { e.stopPropagation(); setSaveModalOpen(true); }}
+                        className="bg-[#4ade80] hover:bg-[#22c55e] text-black text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors"
+                    >
+                        Save
+                    </button>
+                )}
             </div>
 
             {/* Bottom-right: Share */}

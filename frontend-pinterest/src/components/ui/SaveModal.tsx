@@ -21,6 +21,8 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
 
 
     const [localSaved, setLocalSaved] = useState<Record<string, boolean>>({});
+    const [savedCount, setSavedCount] = useState(0);
+    const [unsavedCount, setUnsavedCount] = useState(0);
 
     const isSaved = (boardId: string) =>
         localSaved[boardId] !== undefined
@@ -37,10 +39,10 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
         try {
             if (currentlySaved) {
                 await unsavePin({ pinId, boardId }).unwrap();
-                showToast("Removed from board", "success");
+                setUnsavedCount(prev => prev + 1);
             } else {
                 await savePin({ pinId, boardId }).unwrap();
-                showToast("Saved to board", "success");
+                setSavedCount(prev => prev + 1);
             }
         } catch {
             setLocalSaved(prev => ({ ...prev, [boardId]: currentlySaved }));
@@ -48,6 +50,17 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
         } finally {
             setPendingBoardId(null);
         }
+    };
+
+    const handleDone = () => {
+        if (savedCount > 0 && unsavedCount === 0) {
+            showToast("Saved to board", "success");
+        } else if (unsavedCount > 0 && savedCount === 0) {
+            showToast("Removed from board", "success");
+        } else if (savedCount > 0 || unsavedCount > 0) {
+            showToast("Boards updated", "success");
+        }
+        onClose();
     };
 
     const isLoading = boardsLoading || savedLoading;
@@ -139,7 +152,7 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                     )}
 
                     <button
-                        onClick={onClose}
+                        onClick={handleDone}
                         className="w-full h-10 bg-[#1DB954] hover:bg-[#1aa34a]
                         text-white dark:text-black text-sm font-medium rounded-lg transition-colors mt-1"
                     >
