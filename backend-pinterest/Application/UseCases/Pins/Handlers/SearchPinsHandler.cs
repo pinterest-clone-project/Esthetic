@@ -20,6 +20,7 @@ public class SearchPinsHandler(
         var query = pinRepository.GetQueryable()
             .Include(p => p.PinTags)!.ThenInclude(pt => pt.Tag)
             .Include(p => p.Category)
+            .Include(p => p.Creator)
             .Include(p => p.Likes)
             .Include(p => p.Comments)
             .ApplyFilters(request)
