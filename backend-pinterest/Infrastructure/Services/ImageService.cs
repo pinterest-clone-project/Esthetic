@@ -128,17 +128,19 @@ public class ImageService(IConfiguration configuration) : IImageService
         if (imageNames.Count == 0)
             throw new ArgumentException("At least one image is required for a collage.");
 
-        if (imageNames.Count == 1)
-            return imageNames[0];
-
         const int tileSourceSize = 400;
         const int canvasSize = 800;
         var dir = Path.Combine(Directory.GetCurrentDirectory(), configuration["ImagesDir"]!);
 
         var tiles = imageNames
             .Take(4)
-            .Select(name => Image.Load(Path.Combine(dir, $"{tileSourceSize}_{name}")))
+            .Select(name => Path.Combine(dir, $"{tileSourceSize}_{name}"))
+            .Where(File.Exists)
+            .Select(Image.Load)
             .ToList();
+
+        if (tiles.Count == 0)
+            throw new ArgumentException("None of the provided images exist on disk.");
 
         using var canvas = new Image<Rgba32>(canvasSize, canvasSize);
 
@@ -146,6 +148,9 @@ public class ImageService(IConfiguration configuration) : IImageService
         {
             switch (tiles.Count)
             {
+                case 1:
+                    DrawTile(ctx, tiles[0], 0, 0, canvasSize, canvasSize);
+                    break;
                 case 2:
                     DrawTile(ctx, tiles[0], 0, 0, canvasSize / 2, canvasSize);
                     DrawTile(ctx, tiles[1], canvasSize / 2, 0, canvasSize / 2, canvasSize);
