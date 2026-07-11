@@ -5,7 +5,9 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.UseCases.Users.Handlers;
-public class GetUserFollowStatsHandler(IFollowRepository followRepository)
+public class GetUserFollowStatsHandler(
+    IFollowRepository followRepository,
+    IFollowRequestRepository followRequestRepository)
     : IRequestHandler<GetUserFollowStatsQuery, UserFollowStatsDTO>
 {
     public async Task<UserFollowStatsDTO> Handle(GetUserFollowStatsQuery request, CancellationToken ct)
@@ -20,11 +22,15 @@ public class GetUserFollowStatsHandler(IFollowRepository followRepository)
             && await followRepository.GetQueryable()
                 .AnyAsync(f => f.FollowerId == request.CurrentUserId && f.FolloweeId == request.UserId, ct);
 
+        var isRequestedByMe = request.CurrentUserId != Guid.Empty
+            && await followRequestRepository.HasPendingRequestAsync(request.CurrentUserId, request.UserId, ct);
+
         return new UserFollowStatsDTO
         {
             FollowersCount = followersCount,
             FollowingCount = followingCount,
             IsFollowedByMe = isFollowedByMe,
+            IsRequestedByMe = isRequestedByMe,
         };
     }
 }
