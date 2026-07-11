@@ -131,7 +131,7 @@ const AuraPreviewPage = () => {
                                     );
                                     showToast("Link copied to clipboard", "success");
                                 }}
-                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-gray-300 hover:text-white text-xs font-medium transition-all duration-150"
+                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/5 dark:hover:bg-white/10 hover:bg-black/5 border dark:border-white/10 dark:hover:border-white/20 border-black/10 hover:border-black/20 dark:text-gray-300 text-gray-700 dark:hover:text-white text-black text-xs font-medium transition-all duration-150"
                             >
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
@@ -201,7 +201,7 @@ const AuraPreviewPage = () => {
                                 </div>
                             )}
                         </div>
-                        <span className="text-gray-400 group-hover:text-white text-xs transition-colors">
+                        <span className="text-gray-400 dark:group-hover:text-white group-hover:text-black text-xs transition-colors">
                             {pin.creatorName ?? "View profile"}
                         </span>
                     </button>

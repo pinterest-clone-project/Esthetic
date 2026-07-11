@@ -93,12 +93,12 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
         return (
             <div key={comment.id} className={`flex gap-2.5 items-start group ${isReply ? 'ml-9 mt-2' : ''}`}>
                 {/* Avatar */}
-                <div className="w-7 h-7 rounded-full bg-white/10 shrink-0 overflow-hidden mt-0.5">
+                <div onClick={() => navigate(`/user/${comment.userId}`)} className="w-7 h-7 rounded-full bg-white/10 shrink-0 overflow-hidden mt-0.5 hover:pointer">
                     {comment.userImage ? (
                         <img
                             src={`${APP_ENV.IMAGES_100_URL}${comment.userImage}`}
                             alt={comment.username}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover cursor-pointer"
                         />
                     ) : (
                         <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-400 font-medium bg-white/5">
