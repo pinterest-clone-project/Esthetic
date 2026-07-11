@@ -19,7 +19,7 @@ public class GetRecommendedPinsHandler(IRecommendedRepository recommendedReposit
         else
         {
             var userPinsInteractions = await recommendedRepository.GetAllByUserAsync(request.UserId);
-            if (userPinsInteractions.Count < 1)
+            if (userPinsInteractions.Count < 10)
                 return await GetRandom(ct);
 
             var pinIds = userPinsInteractions.OrderByDescending(x => x.ViewCount).ThenByDescending(x => x.LastViewedAt).Take(30).Select(x => x.PinId).ToList();
