@@ -127,7 +127,22 @@ const UserPage = () => {
                 )}
             </div>
 
-            {/* Tabs */}
+            {user.isPrivate && !isMe && !stats?.isFollowedByMe && (
+                <div className="flex flex-col items-center gap-3 py-16 text-center">
+                    <div className="w-14 h-14 rounded-full bg-white/5 dark:bg-white/5 flex items-center justify-center">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-400">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                    </div>
+                    <p className="text-black dark:text-white text-sm font-medium">This account is private</p>
+                    <p className="text-gray-500 text-xs max-w-xs">Follow this account to see their auras and moodboards</p>
+                </div>
+            )}
+
+            {(!user.isPrivate || isMe || stats?.isFollowedByMe) && (
+            <>
+
             <div className="flex items-center justify-center gap-6 mb-8">
                 {(["auras", "moodboards"] as const).map((tab) => (
                     <button
@@ -203,6 +218,8 @@ const UserPage = () => {
                         </div>
                     )}
                 </>
+            )}
+            </>
             )}
         </div>
     );
