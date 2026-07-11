@@ -4,7 +4,7 @@ import { useGetByIdQuery } from "@/services/userService.ts";
 import { useGetFollowStatsQuery } from "@/services/userService.ts";
 import { useGetPinsByUserQuery } from "@/services/pinService.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
-import { useFollowMutation, useUnfollowMutation } from "@/services/followService.ts";
+import { useFollowMutation, useUnfollowMutation, useSendFollowRequestMutation, useCancelFollowRequestMutation } from "@/services/followService.ts";
 import { useGetPublicBoardsByUserQuery } from "@/services/moodboardService.ts";
 import PinCard from "@/components/ui/PinCard.tsx";
 import BackButton from "@/components/ui/BackButton.tsx";
@@ -22,6 +22,8 @@ const UserPage = () => {
 
     const [follow] = useFollowMutation();
     const [unfollow] = useUnfollowMutation();
+    const [sendFollowRequest] = useSendFollowRequestMutation();
+    const [cancelFollowRequest] = useCancelFollowRequestMutation();
     const [activeTab, setActiveTab] = useState<"auras" | "moodboards">("auras");
 
     const isMe = me?.id === id;
@@ -30,6 +32,12 @@ const UserPage = () => {
         if (!id) return;
         if (stats?.isFollowedByMe) {
             await unfollow(id);
+        } else if (user?.isPrivate) {
+            if (stats?.isRequestedByMe) {
+                await cancelFollowRequest(id);
+            } else {
+                await sendFollowRequest(id);
+            }
         } else {
             await follow(id);
         }
@@ -108,11 +116,13 @@ const UserPage = () => {
                             onClick={handleFollowToggle}
                             className={`px-5 py-2 rounded-xl text-sm font-semibold transition-colors
                                 ${stats?.isFollowedByMe
-                                    ? "bg-white/10 hover:bg-white/20 text-white border border-white/10"
-                                    : "bg-[#4ade80] hover:bg-[#22c55e] text-black"
+                                    ? "bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20 text-black dark:text-white border border-black/10 dark:border-white/10"
+                                    : stats?.isRequestedByMe
+                                        ? "bg-black/5 dark:bg-white/5 text-black/50 dark:text-white/50 border border-black/10 dark:border-white/10 hover:border-red-400 hover:text-red-400"
+                                        : "bg-[#4ade80] hover:bg-[#22c55e] text-black"
                                 }`}
                         >
-                            {stats?.isFollowedByMe ? "Following" : "Follow"}
+                            {stats?.isFollowedByMe ? "Following" : stats?.isRequestedByMe ? "Requested" : "Follow"}
                         </button>
                     </div>
                 )}
@@ -142,7 +152,6 @@ const UserPage = () => {
 
             {(!user.isPrivate || isMe || stats?.isFollowedByMe) && (
             <>
-
             <div className="flex items-center justify-center gap-6 mb-8">
                 {(["auras", "moodboards"] as const).map((tab) => (
                     <button

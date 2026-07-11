@@ -20,6 +20,7 @@ export const api = createApi({
         "AllReports",
         "MyReports",
         "FollowStats",
+        "FollowRequests",
         "AllTags",
         "AllCategories",
         "Statistics",

@@ -1,6 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router";
 import {useGetNotificationsQuery, useMarkAllAsReadMutation} from "@/services/notificationService.ts";
+import {useAcceptFollowRequestMutation, useDeclineFollowRequestMutation} from "@/services/followService.ts";
 import {getNotificationUrl} from "@/utils/getNotificationUrl.ts";
 import bellIcon from "@/assets/icons/bell_icon.svg";
 import {formatTimeLabel} from "@/utils/formatTimeLabel.ts";
@@ -13,6 +14,8 @@ const NotificationBell: React.FC = () => {
 
     const { data: notifications = [] } = useGetNotificationsQuery();
     const [markAllAsRead] = useMarkAllAsReadMutation();
+    const [acceptRequest] = useAcceptFollowRequestMutation();
+    const [declineRequest] = useDeclineFollowRequestMutation();
 
     const unreadCount = notifications.filter((n) => !n.isRead).length;
 
@@ -61,12 +64,15 @@ const NotificationBell: React.FC = () => {
                     ) : (
                         notifications.map((n) => {
                             const url = getNotificationUrl(n);
+                            const isFollowRequest = n.type === 4;
+                            const accentColor = n.type === 0 ? "#1DB954" : n.type === 1 ? "#e11d48" : n.type === 4 ? "#3b82f6" : "#f59e0b";
+
                             return (
                                 <div
                                     key={n.id}
-                                    onClick={() => handleNotificationClick(n)}
+                                    onClick={() => !isFollowRequest && handleNotificationClick(n)}
                                     className={`w-full px-4 py-3 flex items-start gap-3 transition
-                                        ${url ? "cursor-pointer hover:bg-[#A1A1A1] dark:hover:bg-[#535353]" : "cursor-default"}
+                                        ${!isFollowRequest && url ? "cursor-pointer hover:bg-[#A1A1A1] dark:hover:bg-[#535353]" : "cursor-default"}
                                         ${!n.isRead ? "bg-white/[0.03]" : ""}
                                     `}
                                 >
@@ -81,7 +87,7 @@ const NotificationBell: React.FC = () => {
                                         </div>
                                         <div
                                             className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full flex items-center justify-center"
-                                            style={{ background: n.type === 0 ? "#1DB954" : n.type === 1 ? "#e11d48" : "#f59e0b" }}
+                                            style={{ background: accentColor }}
                                         >
                                             {n.type === 0 && (
                                                 <svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3">
@@ -101,6 +107,12 @@ const NotificationBell: React.FC = () => {
                                                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                                                 </svg>
                                             )}
+                                            {n.type === 4 && (
+                                                <svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
+                                                    <rect x="3" y="11" width="18" height="11" rx="2"/>
+                                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                                </svg>
+                                            )}
                                         </div>
                                     </div>
                                     <div className="min-w-0 flex-1">
@@ -116,6 +128,22 @@ const NotificationBell: React.FC = () => {
                                         <p className="text-black dark:text-[#A1A1A1] text-xs mt-0.5">
                                             {formatTimeLabel(n.createdAt)}
                                         </p>
+                                        {isFollowRequest && n.actorId && (
+                                            <div className="flex gap-2 mt-2" onClick={(e) => e.stopPropagation()}>
+                                                <button
+                                                    onClick={() => { acceptRequest(n.actorId!); }}
+                                                    className="px-3 py-1 rounded-lg bg-[#1DB954] hover:bg-[#1aa34a] text-black text-[11px] font-semibold transition-colors"
+                                                >
+                                                    Accept
+                                                </button>
+                                                <button
+                                                    onClick={() => { declineRequest(n.actorId!); }}
+                                                    className="px-3 py-1 rounded-lg bg-[#2a2a2a] hover:bg-[#333] text-white text-[11px] font-semibold transition-colors"
+                                                >
+                                                    Decline
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                     {!n.isRead && (
                                         <span className="w-2 h-2 rounded-full bg-btn-primary shrink-0 mt-1.5" />
