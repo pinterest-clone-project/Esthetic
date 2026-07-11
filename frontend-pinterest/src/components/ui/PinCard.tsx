@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import type { IPinSummaryResponse } from "@/types/pin/responses/IPinSummaryResponse.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
 import { useDeletePinMutation, useUnsavePinMutation } from "@/services/pinService.ts";
 import { useLikeMutation, useUnlikeMutation } from "@/services/likeService.ts";
+import { api } from "@/services/api.ts";
 
 import { APP_ENV } from "@/constants/env";
 import SaveModal from "./SaveModal.tsx";
@@ -23,6 +25,7 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
     const [showEditMenu, setShowEditMenu] = useState(false);
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { data: me } = useGetMeQuery();
     const [deletePin] = useDeletePinMutation();
     const [unsavePin] = useUnsavePinMutation();
@@ -31,8 +34,13 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
     const { showToast } = useToast();
 
     const isOwner = !!me && me.id === pin.creatorId;
-    const liked = pin.isLikedByMe ?? false;
-    const likesCount = pin.likesCount;
+    const [liked, setLiked] = useState(pin.isLikedByMe ?? false);
+    const [likesCount, setLikesCount] = useState(pin.likesCount);
+
+    useEffect(() => {
+        setLiked(pin.isLikedByMe ?? false);
+        setLikesCount(pin.likesCount);
+    }, [pin.isLikedByMe, pin.likesCount]);
 
     const handleDelete = async (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -47,19 +55,41 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
     const handleLike = async (e: React.MouseEvent) => {
         e.stopPropagation();
         if (liked) {
-            await unlike(pin.id);
+            setLiked(false);
+            setLikesCount(c => c - 1);
+            try {
+                await unlike(pin.id).unwrap();
+            } catch {
+                setLiked(true);
+                setLikesCount(c => c + 1);
+            }
         } else {
-            await like(pin.id);
+            setLiked(true);
+            setLikesCount(c => c + 1);
+            try {
+                await like(pin.id).unwrap();
+            } catch {
+                setLiked(false);
+                setLikesCount(c => c - 1);
+            }
         }
     };
 
     const handleUnsave = async (e: React.MouseEvent) => {
         e.stopPropagation();
         if (!boardId) return;
+
+        const patch = dispatch(
+            api.util.updateQueryData("getMoodboardById", boardId, (draft) => {
+                draft.previewPins = draft.previewPins.filter((p) => p.id !== pin.id);
+            })
+        );
+        showToast("Removed from board", "success");
+
         try {
             await unsavePin({ pinId: pin.id, boardId }).unwrap();
-            showToast("Removed from board", "success");
         } catch {
+            patch.undo();
             showToast("Something went wrong", "error");
         }
     };

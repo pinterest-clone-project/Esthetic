@@ -21,28 +21,30 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
 
 
     const [localSaved, setLocalSaved] = useState<Record<string, boolean>>({});
-    const [savedCount, setSavedCount] = useState(0);
-    const [unsavedCount, setUnsavedCount] = useState(0);
 
     const isSaved = (boardId: string) =>
         localSaved[boardId] !== undefined
             ? localSaved[boardId]
             : savedBoardIds.includes(boardId);
 
-
     const handleToggle = async (boardId: string) => {
-        if (pendingBoardId === boardId) return; // ignore spam-clicks
+        if (pendingBoardId === boardId) return;
         setPendingBoardId(boardId);
 
         const currentlySaved = isSaved(boardId);
         setLocalSaved(prev => ({ ...prev, [boardId]: !currentlySaved }));
+
+        if (currentlySaved) {
+            showToast("Removed from board", "success");
+        } else {
+            showToast("Saved to board", "success");
+        }
+
         try {
             if (currentlySaved) {
                 await unsavePin({ pinId, boardId }).unwrap();
-                setUnsavedCount(prev => prev + 1);
             } else {
                 await savePin({ pinId, boardId }).unwrap();
-                setSavedCount(prev => prev + 1);
             }
         } catch {
             setLocalSaved(prev => ({ ...prev, [boardId]: currentlySaved }));
@@ -53,13 +55,6 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
     };
 
     const handleDone = () => {
-        if (savedCount > 0 && unsavedCount === 0) {
-            showToast("Saved to board", "success");
-        } else if (unsavedCount > 0 && savedCount === 0) {
-            showToast("Removed from board", "success");
-        } else if (savedCount > 0 || unsavedCount > 0) {
-            showToast("Boards updated", "success");
-        }
         onClose();
     };
 
