@@ -31,7 +31,7 @@ public class PinCreatedNotificationHandler(
                 Message = $"{e.Event.CreatorUsername} створив новий пін \"{e.Event.PinTitle}\"",
                 ActorId = e.Event.CreatorId,
                 ActorUsername = e.Event.CreatorUsername,
-                ActorImage = e.Event.creatorImage,
+                ActorImage = e.Event.CreatorImage,
                 TargetId = e.Event.PinId
             }, ct);
 
