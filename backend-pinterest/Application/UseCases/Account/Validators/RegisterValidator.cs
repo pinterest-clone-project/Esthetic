@@ -16,5 +16,17 @@ public class RegisterValidator : AbstractValidator<RegisterCommand>
         RuleFor(x => x.Password).PasswordRules(ValidationMessages.FieldPassword);
         RuleFor(x => x.PhoneNumber).PhoneRules();
         RuleFor(x => x.BirthDate).BirthDateRules();
+
+        RuleFor(x => x.Country)
+            .NotEmpty().WithMessage(ValidationMessages.Required(ValidationMessages.FieldCountry))
+            .MaximumLength(100).WithMessage(ValidationMessages.MaxLength(ValidationMessages.FieldCountry, 100));
+
+        RuleFor(x => x.Language)
+            .NotEmpty().WithMessage(ValidationMessages.Required(ValidationMessages.FieldLanguage))
+            .MaximumLength(50).WithMessage(ValidationMessages.MaxLength(ValidationMessages.FieldLanguage, 50));
+
+        RuleFor(x => x.CategoryIds)
+            .Must(ids => ids is { Count: >= 3 })
+            .WithMessage(ValidationMessages.MinItems(ValidationMessages.FieldCategoryIds, 3));  
     }
 }

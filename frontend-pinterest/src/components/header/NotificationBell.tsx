@@ -70,12 +70,48 @@ const NotificationBell: React.FC = () => {
                                         ${!n.isRead ? "bg-white/[0.03]" : ""}
                                     `}
                                 >
-                                    <div className="w-8 h-8 rounded-full bg-[#2a2a2a] shrink-0 overflow-hidden">
-                                        {n.actorImage && (
-                                            <img src={`${APP_ENV.IMAGES_100_URL}${n.actorImage}`} className="w-full h-full object-cover" />
-                                        )}
+                                    <div
+                                        className="relative shrink-0 cursor-pointer"
+                                        onClick={(e) => { e.stopPropagation(); if (n.actorId) { navigate(`/user/${n.actorId}`); setOpen(false); } }}
+                                    >
+                                        <div className="w-8 h-8 rounded-full bg-[#2a2a2a] overflow-hidden">
+                                            {n.actorImage && (
+                                                <img src={`${APP_ENV.IMAGES_100_URL}${n.actorImage}`} className="w-full h-full object-cover" />
+                                            )}
+                                        </div>
+                                        <div
+                                            className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full flex items-center justify-center"
+                                            style={{ background: n.type === 0 ? "#1DB954" : n.type === 1 ? "#e11d48" : "#f59e0b" }}
+                                        >
+                                            {n.type === 0 && (
+                                                <svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3">
+                                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                                                    <circle cx="9" cy="7" r="4"/>
+                                                    <line x1="19" y1="8" x2="19" y2="14"/>
+                                                    <line x1="22" y1="11" x2="16" y2="11"/>
+                                                </svg>
+                                            )}
+                                            {n.type === 1 && (
+                                                <svg width="7" height="7" viewBox="0 0 24 24" fill="black" stroke="none">
+                                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                                </svg>
+                                            )}
+                                            {n.type === 2 && (
+                                                <svg width="7" height="7" viewBox="0 0 24 24" fill="black" stroke="none">
+                                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                                </svg>
+                                            )}
+                                        </div>
                                     </div>
                                     <div className="min-w-0 flex-1">
+                                        {n.actorUsername && (
+                                            <span
+                                                className="text-black dark:text-white text-xs font-semibold cursor-pointer hover:underline"
+                                                onClick={(e) => { e.stopPropagation(); if (n.actorId) { navigate(`/user/${n.actorId}`); setOpen(false); } }}
+                                            >
+                                                {n.actorUsername}{" "}
+                                            </span>
+                                        )}
                                         <p className="text-black dark:text-white text-sm leading-snug">{n.message}</p>
                                         <p className="text-black dark:text-[#A1A1A1] text-xs mt-0.5">
                                             {formatTimeLabel(n.createdAt)}

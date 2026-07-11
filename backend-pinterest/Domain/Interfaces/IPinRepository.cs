@@ -8,4 +8,5 @@ public interface IPinRepository : IBaseRepository<PinEntity>
     Task<List<PinEntity>> GetAllWithDetailsAsync(CancellationToken ct = default);
     Task<List<Guid>> GetTagIdsByPinIdsAsync(List<Guid> pinIds, CancellationToken ct = default);
     Task<List<PinEntity>> GetByUserIdAsync(Guid userId, CancellationToken ct = default);
+    Task<List<PinEntity>> GetSavedByUserIdAsync(Guid userId, CancellationToken ct = default);
 }

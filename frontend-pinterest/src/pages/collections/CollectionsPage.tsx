@@ -2,12 +2,13 @@ import { useState } from "react";
 import im1 from "@/assets/defaults/def-9.jpg";
 import im2 from "@/assets/defaults/def-10.jpg";
 import im3 from "@/assets/defaults/def-11.jpg";
-import {useGetAllPinsQuery, useGetMyPinsQuery} from "@/services/pinService.ts";
+import {useGetAllPinsQuery, useGetMyPinsQuery, useGetSavedPinsQuery} from "@/services/pinService.ts";
 import {useLocation, useNavigate} from "react-router";
 import {useGetMyMoodboardsQuery} from "@/services/moodboardService.ts";
 import CreateMoodboardForm from "@/components/moodboard/CreateMoodboardForm.tsx";
 import {APP_ENV} from "@/constants/env";
 import Modal from "@/components/ui/Modal.tsx";
+import PinCard from "@/components/ui/PinCard.tsx";
 
 type CollectionTab = "Aura" | "Moodboard" | "Esthetic AI";
 
@@ -19,6 +20,7 @@ const CollectionsPage = () => {
     const { data: myPins } = useGetMyPinsQuery();
     const { data: Pins } = useGetAllPinsQuery();
     const { data: moodboards } = useGetMyMoodboardsQuery();
+    const { data: savedPins } = useGetSavedPinsQuery();
 
 
     const location = useLocation();
@@ -78,7 +80,7 @@ const CollectionsPage = () => {
                         <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3 mt-4">
                             {myPins!.map((pin) => (
                                 <div key={pin.id} className="break-inside-avoid mb-3">
-                                    <img src={pin.image ? `${APP_ENV.IMAGES_800_URL}${pin.image}` : undefined} className="w-full rounded-xl object-cover" />
+                                    <PinCard pin={pin} />
                                 </div>
                             ))}
 
@@ -92,12 +94,20 @@ const CollectionsPage = () => {
                             </button>
                         </div>
 
-                        <h2 className="text-lg mt-4">Your saved Auras</h2>
-                        <div className="mt-4">
-                            <p className="text-white/30 text-sm text-center py-8 border border-white/10 rounded-xl">
+                        <h2 className="text-lg mt-8 mb-3">Your saved Auras</h2>
+                        {savedPins && savedPins.length > 0 ? (
+                            <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3 mt-4">
+                                {savedPins.map((pin) => (
+                                    <div key={pin.id} className="break-inside-avoid mb-3">
+                                        <PinCard pin={pin} />
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-[#A1A1A1] dark:text-white/30 text-sm text-center py-8 border border-black/10 dark:border-white/10 rounded-xl">
                                 You haven't saved any Auras yet
                             </p>
-                        </div>
+                        )}
                     </div>
                 ) : (
                     <div className="flex flex-col items-center justify-center mt-16 gap-6">
@@ -135,7 +145,7 @@ const CollectionsPage = () => {
                                 <div className="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-[#D1D1D1] dark:bg-[#2a2a2a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-2xl">
                                     {mb.coverImageUrl ? (
                                         <img
-                                            src={`${APP_ENV.IMAGES_800_URL}${mb.coverImageUrl}`}
+                                            src={`${APP_ENV.IMAGES_1200_URL}${mb.coverImageUrl}`}
                                             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                                         />
                                     ) : (
@@ -168,7 +178,7 @@ const CollectionsPage = () => {
                     <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-6 gap-3">
                         {Pins?.map((pin) => (
                             <div key={pin.id} className="break-inside-avoid mb-3">
-                                <img src={pin.image ? `${APP_ENV.IMAGES_800_URL}${pin.image}` : undefined} className="w-full rounded-xl object-cover" />
+                                <PinCard pin={pin} />
                             </div>
                         ))}
                     </div>

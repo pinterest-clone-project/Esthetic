@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Pin;
+﻿using Domain.Entities.Board;
+using Domain.Entities.Pin;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,4 +40,21 @@ public class PinRepository(AppDbContext db) : BaseRepository<PinEntity>(db), IPi
             .Where(p => p.CreatorId == userId && !p.IsDeleted)
             .OrderByDescending(p => p.CreatedAt)
             .ToListAsync(ct);
+
+    public async Task<List<PinEntity>> GetSavedByUserIdAsync(Guid userId, CancellationToken ct = default)
+    {
+        var savedPinIds = await _db.Set<BoardPinEntity>()
+            .Where(bp => bp.Board.OwnerId == userId && !bp.IsDeleted)
+            .Select(bp => bp.PinId)
+            .Distinct()
+            .ToListAsync(ct);
+
+        return await _db.Pins
+            .Include(p => p.PinTags).ThenInclude(pt => pt.Tag)
+            .Include(p => p.Likes)
+            .Include(p => p.Category)
+            .Where(p => savedPinIds.Contains(p.Id) && !p.IsDeleted)
+            .OrderByDescending(p => p.CreatedAt)
+            .ToListAsync(ct);
+    }
 }

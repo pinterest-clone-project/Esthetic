@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useGetByIdQuery } from "@/services/userService.ts";
 import { useGetFollowStatsQuery } from "@/services/userService.ts";
 import { useGetPinsByUserQuery } from "@/services/pinService.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
 import { useFollowMutation, useUnfollowMutation } from "@/services/followService.ts";
+import { useGetPublicBoardsByUserQuery } from "@/services/moodboardService.ts";
 import PinCard from "@/components/ui/PinCard.tsx";
 import BackButton from "@/components/ui/BackButton.tsx";
 import { APP_ENV } from "@/constants/env";
@@ -15,10 +17,12 @@ const UserPage = () => {
     const { data: user, isLoading: userLoading } = useGetByIdQuery(id!);
     const { data: stats } = useGetFollowStatsQuery(id!);
     const { data: pins, isLoading: pinsLoading } = useGetPinsByUserQuery(id!);
+    const { data: boards } = useGetPublicBoardsByUserQuery(id!);
     const { data: me } = useGetMeQuery();
 
     const [follow] = useFollowMutation();
     const [unfollow] = useUnfollowMutation();
+    const [activeTab, setActiveTab] = useState<"auras" | "moodboards">("auras");
 
     const isMe = me?.id === id;
 
@@ -47,9 +51,7 @@ const UserPage = () => {
         <div className="w-full min-h-full bg-white dark:bg-black px-6 py-8">
             <BackButton />
 
-            {/* Profile header */}
             <div className="flex flex-col items-center gap-4 max-w-2xl mx-auto mb-12 text-center">
-                {/* Avatar */}
                 <div className="w-24 h-24 rounded-full overflow-hidden bg-white/10 shrink-0">
                     {user.image ? (
                         <img
@@ -64,7 +66,6 @@ const UserPage = () => {
                     )}
                 </div>
 
-                {/* Name */}
                 <div className="flex flex-col gap-1">
                     <h1 className="text-black dark:text-white text-xl font-semibold">
                         {user.firstName && user.lastName
@@ -76,12 +77,10 @@ const UserPage = () => {
                     )}
                 </div>
 
-                {/* Bio */}
                 {user.bio && (
                     <p className="text-gray-400 text-sm leading-relaxed max-w-md">{user.bio}</p>
                 )}
 
-                {/* Stats */}
                 <div className="flex items-center gap-8">
                     <div className="flex flex-col items-center gap-0.5">
                         <span className="text-black dark:text-white text-sm font-semibold">
@@ -103,7 +102,6 @@ const UserPage = () => {
                     </div>
                 </div>
 
-                {/* Actions */}
                 {!isMe && (
                     <div className="flex items-center gap-2">
                         <button
@@ -129,32 +127,82 @@ const UserPage = () => {
                 )}
             </div>
 
-            {/* Pins divider */}
-            <div className="flex items-center gap-4 mb-6 max-w-4xl mx-auto">
-                <div className="flex-1 h-px bg-white/5" />
-                <span className="text-gray-600 text-xs tracking-widest uppercase">Auras</span>
-                <div className="flex-1 h-px bg-white/5" />
+            {/* Tabs */}
+            <div className="flex items-center justify-center gap-6 mb-8">
+                {(["auras", "moodboards"] as const).map((tab) => (
+                    <button
+                        key={tab}
+                        onClick={() => setActiveTab(tab)}
+                        className={`text-sm capitalize transition-colors duration-150 ${
+                            activeTab === tab
+                                ? "text-[#4ade80] border-b border-[#4ade80] pb-0.5"
+                                : "text-gray-500 hover:text-gray-300"
+                        }`}
+                    >
+                        {tab}
+                    </button>
+                ))}
             </div>
 
-            {/* Pins grid */}
-            {pinsLoading && (
-                <div className="flex justify-center py-12">
-                    <div className="w-6 h-6 rounded-full border-2 border-white/20 border-t-[#4ade80] animate-spin" />
-                </div>
+            {activeTab === "auras" && (
+                <>
+                    {pinsLoading && (
+                        <div className="flex justify-center py-12">
+                            <div className="w-6 h-6 rounded-full border-2 border-white/20 border-t-[#4ade80] animate-spin" />
+                        </div>
+                    )}
+                    {!pinsLoading && !pins?.length && (
+                        <div className="flex justify-center py-12">
+                            <p className="text-gray-500 text-sm">No auras yet.</p>
+                        </div>
+                    )}
+                    {!pinsLoading && !!pins?.length && (
+                        <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3">
+                            {pins.map(p => (
+                                <PinCard key={p.id} pin={p} />
+                            ))}
+                        </div>
+                    )}
+                </>
             )}
 
-            {!pinsLoading && !pins?.length && (
-                <div className="flex justify-center py-12">
-                    <p className="text-gray-500 text-sm">No auras yet.</p>
-                </div>
-            )}
-
-            {!pinsLoading && !!pins?.length && (
-                <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3">
-                    {pins.map(p => (
-                        <PinCard key={p.id} pin={p} />
-                    ))}
-                </div>
+            {activeTab === "moodboards" && (
+                <>
+                    {!boards?.items?.length ? (
+                        <div className="flex justify-center py-12">
+                            <p className="text-gray-500 text-sm">No moodboards yet.</p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                            {boards.items.map((mb) => (
+                                <button
+                                    key={mb.id}
+                                    onClick={() => navigate(`/moodboard/preview/${mb.id}`)}
+                                    className="text-left group"
+                                >
+                                    <div className="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-[#D1D1D1] dark:bg-[#2a2a2a] transition-transform duration-300 group-hover:scale-[1.02] group-hover:shadow-xl">
+                                        {mb.coverImageUrl ? (
+                                            <img
+                                                src={`${APP_ENV.IMAGES_1200_URL}${mb.coverImageUrl}`}
+                                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-gray-500">
+                                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                                    <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                                                    <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+                                                </svg>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <p className="text-black dark:text-white text-sm mt-2 truncate group-hover:text-[#4ade80] transition-colors duration-200">
+                                        {mb.title}
+                                    </p>
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </>
             )}
         </div>
     );

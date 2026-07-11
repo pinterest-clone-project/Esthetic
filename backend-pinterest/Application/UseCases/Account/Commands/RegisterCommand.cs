@@ -18,6 +18,9 @@ public record RegisterCommand : IRequest<TokenDTO>, ITransactionalCommand
     public string? PhoneNumber { get; set; } = string.Empty;
     public DateTime BirthDate { get; set; }
     public Gender? Gender { get; set; } = null;
+    public string? Country { get; set; } = string.Empty;
+    public string? Language { get; set; } = string.Empty;
+    public IList<Guid>? CategoryIds { get; set; } = null;
     [FromForm]
     public IFormFile? ImageFile { get; set; } = null;
 }

@@ -74,6 +74,14 @@ public class PinsController(IMediator mediator) : ControllerBase
         return Ok(pins);
     }
 
+    [HttpGet("saved")]
+    [Authorize]
+    public async Task<IActionResult> GetSaved()
+    {
+        var pins = await mediator.Send(new GetSavedPinsQuery(CurrentUserId));
+        return Ok(pins);
+    }
+
     [HttpPost("{pinId:guid}/save")]
     [Authorize]
     public async Task<IActionResult> Save([FromRoute] Guid pinId, [FromBody] SavePinCommand command)

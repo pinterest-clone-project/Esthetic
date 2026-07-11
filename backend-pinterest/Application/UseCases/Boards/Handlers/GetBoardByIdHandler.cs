@@ -16,10 +16,11 @@ public class GetBoardByIdHandler(
     public async Task<BoardDetailsDTO> Handle(GetBoardByIdQuery request, CancellationToken cancellationToken)
     {
         var board = await boardRepository.GetQueryable()
-            .Include(b => b.BoardPins).ThenInclude(bp => bp.Pin)
-            .FirstOrDefaultAsync(b => b.Id == request.Id, cancellationToken)
-            ?? throw new NotFoundException(ValidationMessages.NotFound(ValidationMessages.Board));
+        .Include(b => b.BoardPins).ThenInclude(bp => bp.Pin).ThenInclude(p => p.Likes)
+        .AsSplitQuery()
+        .FirstOrDefaultAsync(b => b.Id == request.Id, cancellationToken)
+        ?? throw new NotFoundException(ValidationMessages.NotFound(ValidationMessages.Board));
 
-        return boardMapper.ToDetailsDto(board);
+        return boardMapper.ToDetailsDto(board, request.CurrentUserId);
     }
 }

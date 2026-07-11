@@ -2,6 +2,7 @@ import { api } from "@/services/api.ts";
 import {serialize} from "object-to-formdata";
 import type { IPagedResult } from "@/types/IPagedResult.ts";
 import type { ISearchBoardsParams } from "@/types/board/requests/ISearchBoardsParams.ts";
+import type {IPinSummaryResponse} from "@/types/pin/responses/IPinSummaryResponse.ts";
 
 export interface Moodboard {
     id: string;
@@ -15,7 +16,7 @@ export interface CreateMoodboardRequest {
     title: string;
     description?: string;
     isPrivate: boolean;
-    coverImageFile?: File;
+    pinIds?: string[];
 }
 
 export interface MoodboardPage {
@@ -37,7 +38,7 @@ export interface MoodboardDetail {
     createdAt: string;
     updatedAt: string | null;
     pinsCount: number;
-    previewImageUrls: string[];
+    previewPins: IPinSummaryResponse[];
 }
 
 export interface MoodboardAdmin {
@@ -75,7 +76,7 @@ export const moodboardService = api.injectEndpoints({
             query: (body) => ({
                 url: "Boards/create",
                 method: "POST",
-                body: serialize(body, { indices: true, booleansAsIntegers: false }),
+                body,
             }),
             invalidatesTags: ["MyMoodboards"],
         }),
@@ -91,6 +92,9 @@ export const moodboardService = api.injectEndpoints({
             }),
             invalidatesTags: ["MyMoodboards", "AllMoodboards"],
         }),
+        getPublicBoardsByUser: builder.query<MoodboardPage, string>({
+            query: (userId) => ({ url: `Boards/byUser/${userId}`, method: "GET" }),
+        }),
     }),
 });
 
@@ -100,4 +104,5 @@ export const {
     useGetMoodboardByIdQuery,
     useSearchMoodboardsQuery,
     useUpdateMoodboardMutation,
+    useGetPublicBoardsByUserQuery,
 } = moodboardService;

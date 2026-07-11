@@ -9,10 +9,12 @@ import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm.tsx";
 import ResetPasswordForm from "@/components/auth/ResetPasswordForm.tsx";
 import {useAppDispatch, useAppSelector} from "@/store";
 import userIcon from "../../../src/assets/icons/user_icon.svg";
+import bellIcon from "@/assets/icons/bell_icon.svg";
 import {clearUser} from "@/store/slices/authSlice.ts";
 import {APP_ENV} from "@/constants/env";
 import {Link, useNavigate} from "react-router";
 import { useLogoutMutation } from "@/services/accountService";
+import { useGetNotificationsQuery } from "@/services/notificationService";
 import {api} from "@/services/api.ts";
 import {selectIsAdmin} from "@/store/selectors/authSelectors.ts";
 import NotificationBell from "@/components/header/NotificationBell.tsx";
@@ -33,6 +35,8 @@ const Header: React.FC = () => {
     const navigate = useNavigate();
 
     const [logout] = useLogoutMutation();
+    const { data: notifications = [] } = useGetNotificationsQuery(undefined, { skip: !user });
+    const unreadCount = notifications.filter((n) => !n.isRead).length;
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -101,6 +105,31 @@ const Header: React.FC = () => {
                                 onClick={() => setActiveModal("login")}>
                             Log in
                         </Button>
+                    </div>
+                )}
+
+                {user && (
+                    <div className="flex md:hidden items-center gap-2 shrink-0">
+                        <Link to="/notifications">
+                            <div className="relative flex items-center justify-center w-11 h-11">
+                                <img src={bellIcon} className="w-[30px] h-[30px] opacity-70" />
+                                {unreadCount > 0 && (
+                                    <span className="absolute top-0 right-0 min-w-[18px] h-[18px] px-1 rounded-full bg-btn-primary text-[10px] font-bold text-black flex items-center justify-center">
+                                        {unreadCount > 9 ? "9+" : unreadCount}
+                                    </span>
+                                )}
+                            </div>
+                        </Link>
+                        <Link to={"/user/" + user.id}>
+                            <div className={`w-9 h-9 rounded-full overflow-hidden flex items-center justify-center
+                                ${user.image ? "" : "bg-[var(--color-btn-primary)]"}`}>
+                                {user.image ? (
+                                    <img src={`${APP_ENV.IMAGES_100_URL}${user.image}`} className="w-full h-full object-cover" />
+                                ) : (
+                                    <img src={userIcon} className="w-5 h-6 object-contain" />
+                                )}
+                            </div>
+                        </Link>
                     </div>
                 )}
 

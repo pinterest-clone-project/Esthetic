@@ -1,4 +1,5 @@
 using Application.Interfaces;
+using Domain.Entities;
 using Domain.Entities.Board;
 using Domain.Entities.BoardSection;
 using Domain.Entities.Category;
@@ -20,6 +21,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Reflection;
+using System.Reflection.Emit;
 
 namespace Infrastructure.Data;
 
@@ -47,6 +49,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     public DbSet<TagEntity> Tags { get; set; }
     public DbSet<NotificationEntity> Notifications { get; set; }
     public DbSet<UserPinInteraction> UserPinInteractions { get; set; }
+    public DbSet<UserCategory> UserCategories { get; set; }
 
     public IDbContextTransaction? CurrentTransaction => Database.CurrentTransaction;
 
@@ -80,6 +83,26 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
         }
 
         builder.Entity<UserPinInteraction>().HasIndex(x => new { x.UserId, x.PinId }).IsUnique();
+
+        builder.Entity<UserCategory>(entity =>
+        {
+            entity.HasKey(uc => new { uc.UserId, uc.CategoryId });
+
+            entity.HasOne(uc => uc.User)
+                .WithMany(u => u.UserCategories)
+                .HasForeignKey(uc => uc.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(uc => uc.Category)
+                .WithMany(c => c.UserCategories)
+                .HasForeignKey(uc => uc.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<BoardPinEntity>()
+        .HasIndex(bp => new { bp.BoardId, bp.PinId })
+        .IsUnique()
+        .HasFilter("\"IsDeleted\" = false");
 
     }
 }

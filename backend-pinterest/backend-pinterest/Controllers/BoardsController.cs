@@ -20,8 +20,7 @@ public class BoardsController(IMediator mediator) : ControllerBase
         ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized));
 
     [HttpPost("create")]
-    [Consumes("multipart/form-data")]
-    public async Task<IActionResult> Create([FromForm] CreateBoardCommand command)
+    public async Task<IActionResult> Create([FromBody] CreateBoardCommand command)
     {
         var commandWithOwner = command with { OwnerId = CurrentUserId };
         var result = await mediator.Send(commandWithOwner);
@@ -31,7 +30,7 @@ public class BoardsController(IMediator mediator) : ControllerBase
     [HttpGet("getById/{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var result = await mediator.Send(new GetBoardByIdQuery(id));
+        var result = await mediator.Send(new GetBoardByIdQuery(id, CurrentUserId));
         return Ok(result);
     }
 
@@ -40,6 +39,19 @@ public class BoardsController(IMediator mediator) : ControllerBase
     {
         var queryWithOwner = query with { OwnerId = CurrentUserId };
         var result = await mediator.Send(queryWithOwner);
+        return Ok(result);
+    }
+
+    [HttpGet("byUser/{userId:guid}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetPublicBoardsByUser(Guid userId, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    {
+        var result = await mediator.Send(new GetPublicBoardsByUserQuery
+        {
+            UserId = userId,
+            Page = page,
+            PageSize = pageSize
+        });
         return Ok(result);
     }
 

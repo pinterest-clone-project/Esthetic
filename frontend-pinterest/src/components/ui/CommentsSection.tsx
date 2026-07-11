@@ -3,6 +3,7 @@ import { useGetCommentsQuery, useCreateCommentMutation, useUpdateCommentMutation
 import { useGetMeQuery } from "../../services/accountService.ts";
 import { useCommentRealtime } from "../../hooks/useCommentRealtime.ts";
 import { APP_ENV } from "@/constants/env";
+import {useNavigate} from "react-router";
 
 interface CommentsSectionProps {
     pinId: string;
@@ -14,6 +15,8 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
     const [updateComment, { isLoading: isUpdating }] = useUpdateCommentMutation();
     const [deleteComment] = useDeleteCommentMutation();
     const { data: me } = useGetMeQuery();
+
+    const navigate = useNavigate();
 
     useCommentRealtime({ pinId });
 
@@ -90,12 +93,12 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
         return (
             <div key={comment.id} className={`flex gap-2.5 items-start group ${isReply ? 'ml-9 mt-2' : ''}`}>
                 {/* Avatar */}
-                <div className="w-7 h-7 rounded-full bg-white/10 shrink-0 overflow-hidden mt-0.5">
+                <div onClick={() => navigate(`/user/${comment.userId}`)} className="w-7 h-7 rounded-full bg-white/10 shrink-0 overflow-hidden mt-0.5 hover:pointer">
                     {comment.userImage ? (
                         <img
                             src={`${APP_ENV.IMAGES_100_URL}${comment.userImage}`}
                             alt={comment.username}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover cursor-pointer"
                         />
                     ) : (
                         <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-400 font-medium bg-white/5">
@@ -106,9 +109,9 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
 
                 <div className="flex-1 min-w-0">
                     <div className="flex items-baseline gap-2">
-                        <span className="text-black dark:text-white text-xs font-medium">
+                        <button onClick={() => navigate(`/user/${comment.userId}`)} className="text-black dark:text-white text-xs font-medium">
                             {comment.username ?? "User"}
-                        </span>
+                        </button>
                         <span className="text-gray-500 text-[10px]">
                             {new Date(comment.createdAt).toLocaleDateString("en-GB", {
                                 day: "numeric", month: "short"
