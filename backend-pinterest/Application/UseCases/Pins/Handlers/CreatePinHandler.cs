@@ -1,8 +1,10 @@
+using Application.Common;
 using Application.Interfaces;
 using Application.Mappers;
 using Application.Models.DTO.Pin;
 using Application.UseCases.Pins.Commands;
 using Domain.Entities.PinTag;
+using Domain.Events;
 using Domain.Interfaces;
 using MediatR;
 
@@ -11,7 +13,9 @@ namespace Application.UseCases.Pins.Handlers;
 public class CreatePinHandler(
     IPinRepository repository,
     PinMapper pinMapper,
-    IImageService imageService) : IRequestHandler<CreatePinCommand, PinDTO>
+    IImageService imageService, 
+    IUserRepository userRepository,
+    IMediator mediator) : IRequestHandler<CreatePinCommand, PinDTO> 
 {
     public async Task<PinDTO> Handle(CreatePinCommand request, CancellationToken cancellationToken)
     {
@@ -28,7 +32,21 @@ public class CreatePinHandler(
                 .ToList();
 
         var created = await repository.AddAsync(entity, cancellationToken);
+
+        var creator = await userRepository.GetByIdAsync(created.CreatorId, cancellationToken);
+
+        await mediator.Publish(new DomainEventNotification<PinCreatedEvent>(
+            new PinCreatedEvent(
+                created.CreatorId,
+                created.Id,
+                creator!.UserName!,
+                creator.Image,
+                created.Title!
+            )),
+        cancellationToken);
+
         var withDetails = await repository.GetByIdWithDetailsAsync(created.Id, cancellationToken);
+
         return pinMapper.ToDto(withDetails);
     }
 }

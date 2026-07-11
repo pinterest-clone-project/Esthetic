@@ -1,5 +1,6 @@
 ﻿using Domain.Entities.Follow;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data.Repositories;
 
@@ -15,6 +16,13 @@ public class FollowRepository(AppDbContext context) : BaseRepository<FollowEntit
         });
 
         await context.SaveChangesAsync();
+    }
+
+    public async Task<List<Guid>> GetFollowerIdsAsync(Guid userId, CancellationToken ct)
+    {
+        var ids = await context.Follows.Where(f => f.FolloweeId == userId)
+             .Select(f => f.FollowerId).ToListAsync(ct);
+        return ids;
     }
 
     public Task UnfollowAsync(Guid followerId, Guid followeeId, CancellationToken ct = default)
