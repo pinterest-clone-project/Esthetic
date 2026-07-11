@@ -1,6 +1,6 @@
 export interface INotification {
     id: string;
-    type: 0 | 1 | 2; // 0=Follow, 1=Like, 2=Comment
+    type: 0 | 1 | 2 | 3; // 0=Follow, 1=Like, 2=Comment, 3=NewPin
     message: string;
     isRead: boolean;
     createdAt: string;

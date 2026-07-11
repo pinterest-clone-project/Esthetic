@@ -6,13 +6,14 @@ import { APP_ENV } from "@/constants/env";
 import { useEffect, useState } from "react";
 import userIcon from "@/assets/icons/user_icon.svg";
 
-type Filter = "all" | 0 | 1 | 2;
+type Filter = "all" | 0 | 1 | 2 | 3;
 
 const FILTERS: { label: string; value: Filter; color: string }[] = [
     { label: "All",      value: "all", color: "#A1A1A1" },
     { label: "Follows",  value: 0,     color: "#1DB954" },
     { label: "Likes",    value: 1,     color: "#e11d48" },
     { label: "Comments", value: 2,     color: "#f59e0b" },
+    { label: "Pins",     value: 3,     color: "#8b5cf6" },
 ];
 
 const NotificationsPage = () => {
@@ -49,6 +50,7 @@ const NotificationsPage = () => {
             case 0: return "#1DB954";
             case 1: return "#e11d48";
             case 2: return "#f59e0b";
+            case 3: return "#8b5cf6";
             default: return "#A1A1A1";
         }
     };
@@ -102,6 +104,12 @@ const NotificationsPage = () => {
                         {n.type === 2 && (
                             <svg width="8" height="8" viewBox="0 0 24 24" fill="black" stroke="none">
                                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        )}
+
+                        {n.type === 3 && (
+                            <svg width="8" height="8" viewBox="0 0 24 24" fill="black" stroke="none">
+                                <path d="M12 2L3 7v10l9 5 9-5V7l-9-5z"/>
                             </svg>
                         )}
                     </div>

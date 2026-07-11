@@ -6,4 +6,5 @@ public interface IFollowRepository : IBaseRepository<FollowEntity>
 {
     Task FollowAsync(Guid followerId, Guid followeeId, CancellationToken ct = default);
     Task UnfollowAsync(Guid followerId, Guid followeeId, CancellationToken ct = default);
+    Task<List<Guid>> GetFollowerIdsAsync(Guid userId, CancellationToken ct);
 }

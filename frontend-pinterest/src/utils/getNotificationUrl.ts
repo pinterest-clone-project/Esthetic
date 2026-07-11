@@ -6,6 +6,7 @@ export const getNotificationUrl = (n: INotification): string | null => {
             return n.actorId ? `/user/${n.actorId}` : null;
         case 1:
         case 2:
+        case 3:
             return n.targetId ? `/aura/preview/${n.targetId}` : null;
         default:
             return null;
