@@ -99,18 +99,33 @@ const UserPage = () => {
                         </span>
                         <span className="text-gray-500 text-xs">Auras</span>
                     </div>
-                    <button onClick={() => setFollowModal("followers")} className="flex flex-col items-center gap-0.5 hover:opacity-70 transition-opacity">
-                        <span className="text-black dark:text-white text-sm font-semibold">
-                            {stats?.followersCount ?? 0}
-                        </span>
-                        <span className="text-gray-500 text-xs">Followers</span>
-                    </button>
-                    <button onClick={() => setFollowModal("following")} className="flex flex-col items-center gap-0.5 hover:opacity-70 transition-opacity">
-                        <span className="text-black dark:text-white text-sm font-semibold">
-                            {stats?.followingCount ?? 0}
-                        </span>
-                        <span className="text-gray-500 text-xs">Following</span>
-                    </button>
+                    {(isMe || !user.isPrivate || stats?.isFollowedByMe) ? (
+                        <>
+                            <button onClick={() => setFollowModal("followers")} className="flex flex-col items-center gap-0.5 hover:opacity-70 transition-opacity">
+                                <span className="text-black dark:text-white text-sm font-semibold">
+                                    {stats?.followersCount ?? 0}
+                                </span>
+                                <span className="text-gray-500 text-xs">Followers</span>
+                            </button>
+                            <button onClick={() => setFollowModal("following")} className="flex flex-col items-center gap-0.5 hover:opacity-70 transition-opacity">
+                                <span className="text-black dark:text-white text-sm font-semibold">
+                                    {stats?.followingCount ?? 0}
+                                </span>
+                                <span className="text-gray-500 text-xs">Following</span>
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <div className="flex flex-col items-center gap-0.5">
+                                <span className="text-black dark:text-white text-sm font-semibold">{stats?.followersCount ?? 0}</span>
+                                <span className="text-gray-500 text-xs">Followers</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-0.5">
+                                <span className="text-black dark:text-white text-sm font-semibold">{stats?.followingCount ?? 0}</span>
+                                <span className="text-gray-500 text-xs">Following</span>
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 {!isMe && (

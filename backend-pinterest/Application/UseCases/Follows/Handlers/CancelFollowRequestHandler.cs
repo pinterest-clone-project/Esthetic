@@ -6,7 +6,8 @@ using MediatR;
 namespace Application.UseCases.Follows.Handlers;
 
 public class CancelFollowRequestHandler(
-    IFollowRequestRepository followRequestRepository)
+    IFollowRequestRepository followRequestRepository,
+    INotificationRepository notificationRepository)
     : IRequestHandler<CancelFollowRequestCommand, Unit>
 {
     public async Task<Unit> Handle(CancelFollowRequestCommand request, CancellationToken ct)
@@ -15,6 +16,7 @@ public class CancelFollowRequestHandler(
             ?? throw new NotFoundException("Запит на підписку не знайдено");
 
         await followRequestRepository.DeleteAsync(followRequest, ct);
+        await notificationRepository.DeleteFollowRequestNotificationAsync(request.Id, request.TargetId, ct);
 
         return Unit.Value;
     }
