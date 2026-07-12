@@ -38,6 +38,12 @@ export const userService = api.injectEndpoints({
             query: (id) => ({ url: `Users/${id}/follow-stats`, method: 'GET' }),
             providesTags: (_res, _err, id) => [{ type: 'FollowStats', id }],
         }),
+        getFollowers: builder.query<IUser[], string>({
+            query: (id) => ({ url: `Users/${id}/followers`, method: 'GET' }),
+        }),
+        getFollowing: builder.query<IUser[], string>({
+            query: (id) => ({ url: `Users/${id}/following`, method: 'GET' }),
+        }),
     }),
 });
 
@@ -47,4 +53,6 @@ export const {
     useBlockUserMutation,
     useUnblockUserMutation,
     useGetFollowStatsQuery,
+    useGetFollowersQuery,
+    useGetFollowingQuery,
 } = userService;
