@@ -38,6 +38,9 @@ const ForgotPasswordPage   = lazy(() => import("@/pages/auth/ForgotPasswordPage.
 const ResetPasswordPage    = lazy(() => import("@/pages/auth/ResetPasswordPage.tsx"));
 const NotFoundPage         = lazy(() => import("./pages/NotFoundPage.tsx"));
 const BlockedPage = lazy(() => import("@/pages/auth/BlockedPage.tsx"));
+const AboutPage       = lazy(() => import("@/pages/static/AboutPage.tsx"));
+const ForBusinessPage = lazy(() => import("@/pages/static/ForBusinessPage.tsx"));
+const NewsPage        = lazy(() => import("@/pages/static/NewsPage.tsx"));
 
 const PageLoader = () => (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white dark:bg-[#121212]">
@@ -123,6 +126,9 @@ const App = () => {
                                     <Route path="review" element={<ReviewPage />} />
                                     <Route path="forgot-password" element={<ForgotPasswordPage />} />
                                     <Route path="reset-password" element={<ResetPasswordPage />} />
+                                    <Route path="about" element={<AboutPage />} />
+                                    <Route path="business" element={<ForBusinessPage />} />
+                                    <Route path="news" element={<NewsPage />} />
                                 </Route>
 
                                 <Route element={<PrivateRoute />}>
