@@ -5,9 +5,10 @@ interface ComboboxInputProps {
     onChange: (value: string) => void;
     options: string[];
     placeholder?: string;
+    className?: string;
 }
 
-const ComboboxInput = ({ value, onChange, options, placeholder }: ComboboxInputProps) => {
+const ComboboxInput = ({ value, onChange, options, placeholder, className }: ComboboxInputProps) => {
     const [open, setOpen] = useState(false);
     const [query, setQuery] = useState(value);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -49,7 +50,7 @@ const ComboboxInput = ({ value, onChange, options, placeholder }: ComboboxInputP
                     setOpen(true);
                 }}
                 onFocus={() => { if (query.trim()) setOpen(true); }}
-                className="w-full h-10 px-4 rounded-[5px] text-sm text-white dark:text-black outline-none border border-[var(--color-btn-primary)] transition"
+                className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none border border-[var(--color-btn-primary)] transition ${className ?? ""}`}
             />
 
             {open && filtered.length > 0 && (

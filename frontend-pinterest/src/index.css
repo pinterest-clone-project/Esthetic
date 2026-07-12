@@ -153,3 +153,11 @@ html, body {
     width: 20px;
     height: 14px;
 }
+
+.profile-phone-input .PhoneInputInput {
+    color: black;
+}
+
+.dark .profile-phone-input .PhoneInputInput {
+    color: white;
+}

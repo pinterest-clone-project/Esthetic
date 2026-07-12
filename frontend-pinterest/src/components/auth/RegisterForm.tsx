@@ -18,7 +18,9 @@ import "react-phone-number-input/style.css";
 import { getData as getCountries } from "country-list";
 import { LANGUAGES } from "@/constants/languages.ts";
 
-const COUNTRY_NAMES = getCountries().map((c) => c.name);
+const COUNTRY_NAMES = getCountries()
+    .map((c) => c.name)
+    .filter((name) => name !== "Russian Federation (the)");
 
 interface RegisterFormProps {
     onSuccess?: () => void;
@@ -425,6 +427,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                     onChange={(val) => updateField("country", val)}
                                     options={COUNTRY_NAMES}
                                     placeholder="Your country"
+                                    className="text-white dark:text-black"
                                 />
                             </div>
 
@@ -435,6 +438,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                     onChange={(val) => updateField("language", val)}
                                     options={LANGUAGES}
                                     placeholder="Your language"
+                                    className="text-white dark:text-black"
                                 />
                             </div>
 

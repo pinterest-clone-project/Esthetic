@@ -5,9 +5,10 @@ import "react-day-picker/style.css";
 interface BirthDatePickerProps {
     value: string; // YYYY-MM-DD
     onChange: (value: string) => void;
+    className?: string;
 }
 
-const BirthDatePicker = ({ value, onChange }: BirthDatePickerProps) => {
+const BirthDatePicker = ({ value, onChange, className }: BirthDatePickerProps) => {
     const [open, setOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -148,7 +149,7 @@ const BirthDatePicker = ({ value, onChange }: BirthDatePickerProps) => {
             <button
                 type="button"
                 onClick={() => setOpen((prev) => !prev)}
-                className="w-full h-10 px-4 rounded-[5px] text-sm text-left outline-none border border-[var(--color-btn-primary)] transition flex items-center justify-between text-white dark:text-black"
+                className={`w-full h-10 px-4 rounded-[5px] text-sm text-left outline-none border border-[var(--color-btn-primary)] transition flex items-center justify-between ${className ?? "text-white dark:text-black"}`}
             >
                 <span className={selected ? "" : "opacity-40"}>
                     {selected ? formatDisplay(selected) : "Select date of birth"}

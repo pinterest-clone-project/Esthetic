@@ -7,7 +7,7 @@ export const LANGUAGES = [
     "Japanese", "Kannada", "Kazakh", "Korean", "Latvian", "Lithuanian",
     "Macedonian", "Malay", "Maltese", "Marathi", "Mongolian", "Nepali",
     "Norwegian", "Persian", "Polish", "Portuguese", "Punjabi", "Romanian",
-    "Russian", "Serbian", "Slovak", "Slovenian", "Spanish", "Swahili",
+    "Serbian", "Slovak", "Slovenian", "Spanish", "Swahili",
     "Swedish", "Tamil", "Telugu", "Thai", "Turkish", "Ukrainian", "Urdu",
     "Uzbek", "Vietnamese", "Welsh",
 ];
