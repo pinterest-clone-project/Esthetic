@@ -65,7 +65,7 @@ const NotificationBell: React.FC = () => {
                         notifications.map((n) => {
                             const url = getNotificationUrl(n);
                             const isFollowRequest = n.type === 4;
-                            const accentColor = n.type === 0 ? "#1DB954" : n.type === 1 ? "#e11d48" : n.type === 4 ? "#3b82f6" : "#f59e0b";
+                            const accentColor = n.type === 0 ? "#1DB954" : n.type === 1 ? "#e11d48" : n.type === 2 ? "#f59e0b" : n.type === 3 ? "#8b5cf6" : n.type === 4 ? "#3b82f6" : "#A1A1A1";
 
                             return (
                                 <div
@@ -105,6 +105,11 @@ const NotificationBell: React.FC = () => {
                                             {n.type === 2 && (
                                                 <svg width="7" height="7" viewBox="0 0 24 24" fill="black" stroke="none">
                                                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                                </svg>
+                                            )}
+                                            {n.type === 3 && (
+                                                <svg width="7" height="7" viewBox="0 0 24 24" fill="black" stroke="none">
+                                                    <path d="M12 2L3 7v10l9 5 9-5V7l-9-5z"/>
                                                 </svg>
                                             )}
                                             {n.type === 4 && (

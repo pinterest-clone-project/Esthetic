@@ -68,6 +68,7 @@ const NotificationsPage = () => {
 
     const renderItem = (n: (typeof notifications)[0], index: number) => {
         const url = getNotificationUrl(n);
+        const isFollowRequest = n.type === 4;
         const color = getTypeAccent(n.type);
 
         return (
@@ -95,7 +96,7 @@ const NotificationsPage = () => {
                             <img src={userIcon} className="w-5 h-5 opacity-40" />
                         )}
                     </div>
-                    <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full flex items-center justify-center" style={{ background: color }}>
+                    <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full flex items-center justify-center" style={{ background: isFollowRequest ? "#3b82f6" : color }}>
                         {n.type === 0 && (
                             <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3">
                                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
@@ -114,10 +115,15 @@ const NotificationsPage = () => {
                                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                             </svg>
                         )}
-
                         {n.type === 3 && (
                             <svg width="8" height="8" viewBox="0 0 24 24" fill="black" stroke="none">
                                 <path d="M12 2L3 7v10l9 5 9-5V7l-9-5z"/>
+                            </svg>
+                        )}
+                        {n.type === 4 && (
+                            <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
+                                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                             </svg>
                         )}
                     </div>
@@ -173,7 +179,7 @@ const NotificationsPage = () => {
                             <button
                                 key={String(f.value)}
                                 onClick={() => setActiveFilter(f.value)}
-                                className="flex shrink-0 items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-150 border"
+                                className="relative flex shrink-0 items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-150 border"
                                 style={{
                                     background: isActive ? f.color : "transparent",
                                     color: isActive ? (f.value === "all" ? "#fff" : "#000") : "#A1A1A1",
