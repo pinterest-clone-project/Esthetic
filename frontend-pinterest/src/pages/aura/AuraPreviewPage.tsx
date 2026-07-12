@@ -28,6 +28,7 @@ const AuraPreviewPage = () => {
 
     const [saveModalOpen, setSaveModalOpen] = useState(false);
     const [reportModalOpen, setReportModalOpen] = useState(false);
+    const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
     useEffect(() => {
         if (pin) {
@@ -54,9 +55,14 @@ const AuraPreviewPage = () => {
         }
     };
 
-    const handleDelete = async () => {
+    const handleDelete = () => {
+        setConfirmDeleteOpen(true);
+    };
+
+    const confirmDelete = async () => {
         if (!pin) return;
         await deletePin(pin.id);
+        setConfirmDeleteOpen(false);
         navigate(-1);
     };
 
@@ -287,6 +293,34 @@ const AuraPreviewPage = () => {
                     userId={pin.creatorId}
                     onClose={() => setReportModalOpen(false)}
                 />
+            )}
+            {confirmDeleteOpen && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+                    onClick={() => setConfirmDeleteOpen(false)}
+                >
+                    <div
+                        className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 w-72 shadow-2xl"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <p className="text-white text-sm font-medium mb-1">Delete this pin?</p>
+                        <p className="text-gray-400 text-xs mb-5">This action cannot be undone.</p>
+                        <div className="flex gap-2">
+                            <button
+                                className="flex-1 py-2 rounded-xl text-xs text-gray-300 bg-white/10 hover:bg-white/15 transition-colors"
+                                onClick={() => setConfirmDeleteOpen(false)}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="flex-1 py-2 rounded-xl text-xs text-white bg-red-500 hover:bg-red-600 transition-colors"
+                                onClick={confirmDelete}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );
