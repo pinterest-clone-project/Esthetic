@@ -10,6 +10,7 @@ interface BirthDatePickerProps {
 
 const BirthDatePicker = ({ value, onChange, className }: BirthDatePickerProps) => {
     const [open, setOpen] = useState(false);
+    const [openUpward, setOpenUpward] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const selected = value ? new Date(value + "T00:00:00") : undefined;
@@ -148,7 +149,13 @@ const BirthDatePicker = ({ value, onChange, className }: BirthDatePickerProps) =
 
             <button
                 type="button"
-                onClick={() => setOpen((prev) => !prev)}
+                onClick={() => {
+                    if (!open && containerRef.current) {
+                        const rect = containerRef.current.getBoundingClientRect();
+                        setOpenUpward(window.innerHeight - rect.bottom < 320);
+                    }
+                    setOpen((prev) => !prev);
+                }}
                 className={`w-full h-10 px-4 rounded-[5px] text-sm text-left outline-none border border-[var(--color-btn-primary)] transition flex items-center justify-between ${className ?? "text-white dark:text-black"}`}
             >
                 <span className={selected ? "" : "opacity-40"}>
@@ -164,8 +171,9 @@ const BirthDatePicker = ({ value, onChange, className }: BirthDatePickerProps) =
 
             {/* Calendar popover */}
             {open && (
-                <div className="absolute z-50 mt-2 left-0 rounded-xl border border-[var(--color-btn-primary)] shadow-2xl p-2 w-full
-                    bg-[#1a1a1a] dark:bg-white text-white dark:text-black">
+                <div className={`absolute z-50 left-0 rounded-xl border border-[var(--color-btn-primary)] shadow-2xl p-2 w-full
+                    bg-[#1a1a1a] dark:bg-white text-white dark:text-black
+                    ${openUpward ? "bottom-full mb-2" : "top-full mt-2"}`}>
                     <DayPicker
                         mode="single"
                         selected={selected}

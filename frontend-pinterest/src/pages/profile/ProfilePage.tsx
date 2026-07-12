@@ -162,9 +162,9 @@ const onSubmit = async (formValues: FormValues) => {
 
     try {
         await editProfile(patch as Record<string, unknown>).unwrap();
-        showToast("Профіль успішно оновлено", "success");
+        showToast("Profile updated successfully", "success");
     } catch {
-        showToast("Не вдалося оновити профіль", "error");
+        showToast("Failed to update profile", "error");
     }
 };
 
