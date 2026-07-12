@@ -1,4 +1,5 @@
 ﻿using Domain.Entities.Notification;
+using Domain.Enums;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,4 +33,17 @@ public class NotificationRepository(AppDbContext db) : INotificationRepository
         db.Notifications
             .Where(n => n.Id == notificationId)
             .ExecuteUpdateAsync(s => s.SetProperty(n => n.IsRead, true), ct);
+
+    public async Task DeleteFollowRequestNotificationAsync(Guid actorId, Guid userId, CancellationToken ct = default)
+    {
+        var notification = await db.Notifications
+            .FirstOrDefaultAsync(n => n.ActorId == actorId
+                                   && n.UserId == userId
+                                   && n.Type == NotificationType.FollowRequest, ct);
+        if (notification != null)
+        {
+            db.Notifications.Remove(notification);
+            await db.SaveChangesAsync(ct);
+        }
+    }
 }

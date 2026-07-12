@@ -3,26 +3,34 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-    --color-btn-primary: #1DB954;
+    /* Brand colors */
+    --color-btn-primary:   #1DB954;
     --color-btn-secondary: #A1A1A1;
-    --color-btn-dark: #535353;
-    --color-btn-light: #A2A2A2;
+    --color-btn-dark:      #535353;
+    --color-btn-light:     #A2A2A2;
 
-    --font-sans: 'Inter', system-ui, sans-serif;
-    --font-size-sm: 14px;
-    --font-size-xs: 12px;
-
+    /* Text colors */
     --color-button-text-color: #000000;
-    --color-text-muted: #A1A1A1;
-    --color-text-dark: #000000;
-    --color-text-light: #FFFFFF;
+    --color-text-muted:        #A1A1A1;
+    --color-text-dark:         #000000;
+    --color-text-light:        #FFFFFF;
+
+    /* Typography */
+    --font-sans:     'Inter', system-ui, sans-serif;
+    --font-size-sm:  14px;
+    --font-size-xs:  12px;
 }
 
+
+/* ============================================================
+   BASE — global element defaults
+   ============================================================ */
 @layer base {
     body {
         font-family: var(--font-sans);
     }
 
+    /* Pointer cursors */
     button:not(:disabled),
     [role="button"]:not([aria-disabled="true"]),
     a[href],
@@ -44,6 +52,9 @@
 }
 
 
+/* ============================================================
+   COMPONENTS — reusable class-based styles
+   ============================================================ */
 @layer components {
     .btn-text {
         font-weight: 400;
@@ -55,12 +66,11 @@
 }
 
 
-@keyframes pulse {
-    0%, 100% { opacity: 0.35; }
-    50% { opacity: 0.7; }
-}
-
+/* ============================================================
+   UTILITIES — small helpers & overrides
+   ============================================================ */
 @layer utilities {
+    /* Date picker icon color fix per theme */
     .date-picker::-webkit-calendar-picker-indicator {
         filter: invert(1);
     }
@@ -71,11 +81,35 @@
 }
 
 
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes pulse {
+    0%, 100% { opacity: 0.35; }
+    50%       { opacity: 0.7; }
+}
 
+/* Modal / step slide-in */
+@keyframes stepFadeIn {
+    0%   { opacity: 0; transform: translateX(12px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+.step-animate {
+    animation: stepFadeIn 0.3s ease-out forwards;
+}
+
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+
+/* Prevent horizontal overflow globally */
 html, body {
     overflow-x: hidden;
 }
 
+/* Fully hidden scrollbar (used on specific containers) */
 .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -83,6 +117,11 @@ html, body {
 
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
+}
+
+/* Main content scrollbar (thin, themed) */
+.main-scroll {
+    overflow-x: hidden;
 }
 
 .main-scroll::-webkit-scrollbar {
@@ -100,4 +139,76 @@ html, body {
 
 .dark .main-scroll::-webkit-scrollbar-thumb {
     background: #2a2a2a;
+}
+
+.main-scroll::-webkit-scrollbar-thumb:hover,
+.dark .main-scroll::-webkit-scrollbar-thumb:hover {
+    background: #1DB954;
+}
+
+.main-scroll::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+
+/* ============================================================
+   PHONE INPUT (react-phone-number-input)
+   ============================================================ */
+.phone-input {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    border: 1px solid var(--color-btn-primary);
+    border-radius: 5px;
+    padding: 0 12px;
+    gap: 8px;
+}
+
+.phone-input .PhoneInputCountry {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.phone-input .PhoneInputCountrySelect {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 13px;
+    cursor: pointer;
+    color: inherit;
+}
+
+.phone-input .PhoneInputInput {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    width: 100%;
+    color: white;
+}
+
+.dark .phone-input .PhoneInputInput {
+    color: black;
+}
+
+.phone-input .PhoneInputCountrySelectArrow {
+    opacity: 0.5;
+    width: 8px;
+    height: 8px;
+}
+
+.phone-input .PhoneInputCountryIcon {
+    width: 20px;
+    height: 14px;
+}
+
+/* Profile page variant — respects light/dark theme */
+.profile-phone-input .PhoneInputInput {
+    color: black;
+}
+
+.dark .profile-phone-input .PhoneInputInput {
+    color: white;
 }

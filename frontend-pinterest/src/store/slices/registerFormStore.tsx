@@ -16,6 +16,7 @@ export interface FormData {
     language: string;
     categoryIds: string[];
     imageFile: File | null;
+    isPrivate: boolean;
 }
 
 const initialFormData: FormData = {
@@ -32,6 +33,7 @@ const initialFormData: FormData = {
     language: "",
     categoryIds: [],
     imageFile: null,
+    isPrivate: false,
 };
 
 interface RegisterFormState {

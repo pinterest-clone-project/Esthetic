@@ -136,15 +136,15 @@ const Header: React.FC = () => {
                 <nav className="hidden md:flex items-center gap-5 shrink-0">
                     {!user && (
                         <div className="hidden lg:flex items-center gap-5">
-                            <a className="text-black dark:text-white hover:text-green-400 cursor-pointer transition font-normal text-sm leading-5 tracking-[-0.5px]">
+                            <Link to="/about" className="text-black dark:text-white hover:text-[#1DB954] cursor-pointer transition font-normal text-sm leading-5 tracking-[-0.5px]">
                                 About Us
-                            </a>
-                            <a className="text-black dark:text-white text-sm hover:text-green-400 cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
+                            </Link>
+                            <Link to="/business" className="text-black dark:text-white text-sm hover:text-[#1DB954] cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
                                 For Business
-                            </a>
-                            <a className="text-black dark:text-white text-sm hover:text-green-400 cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
+                            </Link>
+                            <Link to="/news" className="text-black dark:text-white text-sm hover:text-[#1DB954] cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
                                 News
-                            </a>
+                            </Link>
                         </div>
                     )}
 

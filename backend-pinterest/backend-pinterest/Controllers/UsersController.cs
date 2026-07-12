@@ -87,5 +87,21 @@ public class UsersController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(new GetUserFollowStatsQuery(id, CurrentUserId));
         return Ok(result);
     }
+
+    [HttpGet("{id:guid}/followers")]
+    public async Task<IActionResult> GetFollowers([FromRoute] Guid id)
+    {
+        var result = await mediator.Send(new GetUserFollowersQuery(id));
+        return Ok(result);
+    }
+
+    [HttpGet("{id:guid}/following")]
+    public async Task<IActionResult> GetFollowing([FromRoute] Guid id)
+    {
+        var result = await mediator.Send(new GetUserFollowingQuery(id));
+        return Ok(result);
+    }
+
+
 }
 public record AdminBlockUserRequest(string Reason);
