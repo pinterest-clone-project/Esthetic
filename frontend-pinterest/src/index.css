@@ -71,7 +71,7 @@
 }
 
 
-
+/* Scroll */
 html, body {
     overflow-x: hidden;
 }
@@ -100,4 +100,56 @@ html, body {
 
 .dark .main-scroll::-webkit-scrollbar-thumb {
     background: #2a2a2a;
+}
+
+
+/* react-phone-number-input */
+.phone-input {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    border: 1px solid var(--color-btn-primary);
+    border-radius: 5px;
+    padding: 0 12px;
+    gap: 8px;
+}
+
+.phone-input .PhoneInputCountry {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.phone-input .PhoneInputCountrySelect {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 13px;
+    cursor: pointer;
+    color: inherit;
+}
+
+.phone-input .PhoneInputInput {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    width: 100%;
+    color: white;
+}
+
+.dark .phone-input .PhoneInputInput {
+    color: black;
+}
+
+.phone-input .PhoneInputCountrySelectArrow {
+    opacity: 0.5;
+    width: 8px;
+    height: 8px;
+}
+
+.phone-input .PhoneInputCountryIcon {
+    width: 20px;
+    height: 14px;
 }

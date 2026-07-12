@@ -12,6 +12,13 @@ import {useGetAllCategoriesQuery} from "@/services/categoryService.ts";
 import { useRegisterFormStore, type FormData } from "@/store/slices/registerFormStore.tsx";
 import {APP_ENV} from "@/constants/env";
 import BirthDatePicker from "@/components/ui/BirthDatePicker.tsx";
+import ComboboxInput from "@/components/ui/ComboboxInput.tsx";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import { getData as getCountries } from "country-list";
+import { LANGUAGES } from "@/constants/languages.ts";
+
+const COUNTRY_NAMES = getCountries().map((c) => c.name);
 
 interface RegisterFormProps {
     onSuccess?: () => void;
@@ -64,15 +71,30 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
     const { data: categories } = useGetAllCategoriesQuery();
 
+    const [imageError, setImageError] = useState<string | null>(null);
+
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
+
+        const unsupported = ["image/heic", "image/heif", "image/avif", "image/tiff"];
+        const ext = file.name.split(".").pop()?.toLowerCase();
+        if (unsupported.includes(file.type) || ext === "heic" || ext === "heif") {
+            setImageError("HEIC/HEIF format is not supported. Please use JPG, PNG or WebP.");
+            e.target.value = "";
+            return;
+        }
+
+        setImageError(null);
         setCropperSrc(URL.createObjectURL(file));
         e.target.value = "";
     };
 
 
+    const [registerError, setRegisterError] = useState<string | null>(null);
+
     const handleSubmit = async () => {
+        setRegisterError(null);
         try {
             const account = await register({
                 UserName: formData.username,
@@ -96,8 +118,9 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 onSuccess?.();
                 reset();
             }, 2000);
-        } catch (err) {
-            console.error("Register failed", err);
+        } catch (err: unknown) {
+            const detail = (err as { data?: { detail?: string } })?.data?.detail;
+            setRegisterError(detail ?? "Something went wrong. Please try again.");
         }
     };
 
@@ -269,26 +292,27 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                         <p className="text-sm text-white dark:text-black mt-1 mb-5 text-center">What's your name?</p>
 
                         <div className="space-y-3">
-                            <div>
-                                <label className="block text-sm text-white dark:text-black mb-1">First name</label>
-                                <input
-                                    type="text"
-                                    placeholder="John"
-                                    value={formData.firstName}
-                                    onChange={update("firstName")}
-                                    className={`w-full h-10 px-4 rounded-[5px] text-sm text-white dark:text-black outline-none border-[var(--color-btn-primary)] transition border`}
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-white dark:text-black text-sm text-black mb-1">Last name</label>
-                                <input
-                                    type="text"
-                                    placeholder="Doe"
-                                    value={formData.lastName}
-                                    onChange={update("lastName")}
-                                    className={`w-full h-10 px-4 rounded-[5px] text-white dark:text-black text-sm outline-none border-[var(--color-btn-primary)] transition border`}
-                                />
+                            <div className="flex gap-3">
+                                <div className="flex-1">
+                                    <label className="block text-sm text-white dark:text-black mb-1">First name</label>
+                                    <input
+                                        type="text"
+                                        placeholder="John"
+                                        value={formData.firstName}
+                                        onChange={update("firstName")}
+                                        className={`w-full h-10 px-4 rounded-[5px] text-sm text-white dark:text-black outline-none border-[var(--color-btn-primary)] transition border`}
+                                    />
+                                </div>
+                                <div className="flex-1">
+                                    <label className="block text-white dark:text-black text-sm mb-1">Last name</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Doe"
+                                        value={formData.lastName}
+                                        onChange={update("lastName")}
+                                        className={`w-full h-10 px-4 rounded-[5px] text-white dark:text-black text-sm outline-none border-[var(--color-btn-primary)] transition border`}
+                                    />
+                                </div>
                             </div>
 
                             <div>
@@ -356,6 +380,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 variant="secondary"
                                 fullWidth
                                 radius={5}
+                                style={{ backgroundColor: "#535353" }}
                                 onClick={() => {
                                     updateField("gender", "Female");
                                     setStep(4);
@@ -364,18 +389,13 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 Female
                             </Button>
 
-                            <Button
+                            <button
                                 type="button"
-                                variant="secondary"
-                                fullWidth
-                                radius={5}
-                                onClick={() => {
-                                    updateField("gender", "Other");
-                                    setStep(4);
-                                }}
+                                onClick={() => { updateField("gender", "Other"); setStep(4); }}
+                                className="w-full text-center text-xs text-[#A1A1A1] hover:text-white dark:hover:text-black transition"
                             >
                                 Other
-                            </Button>
+                            </button>
 
                             <button
                                 type="button"
@@ -400,23 +420,21 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                         <div className="space-y-3">
                             <div>
                                 <label className="block text-sm text-white dark:text-black mb-1">Country</label>
-                                <input
-                                    type="text"
-                                    placeholder="Your country"
+                                <ComboboxInput
                                     value={formData.country}
-                                    onChange={update("country")}
-                                    className="w-full h-10 px-4 rounded-[5px] text-sm text-white dark:text-black outline-none border-[var(--color-btn-primary)] transition border"
+                                    onChange={(val) => updateField("country", val)}
+                                    options={COUNTRY_NAMES}
+                                    placeholder="Your country"
                                 />
                             </div>
 
                             <div>
                                 <label className="block text-sm text-white dark:text-black mb-1">Language</label>
-                                <input
-                                    type="text"
-                                    placeholder="Your language"
+                                <ComboboxInput
                                     value={formData.language}
-                                    onChange={update("language")}
-                                    className="w-full h-10 px-4 rounded-[5px] text-sm text-white dark:text-black outline-none border-[var(--color-btn-primary)] transition border"
+                                    onChange={(val) => updateField("language", val)}
+                                    options={LANGUAGES}
+                                    placeholder="Your language"
                                 />
                             </div>
 
@@ -472,6 +490,9 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                     <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
                                 </label>
                                 <p className="text-xs text-white dark:text-black text-[#A1A1A1] mt-2">Upload photo (optional)</p>
+                                {imageError && (
+                                    <p className="text-xs text-red-400 mt-1 text-center">{imageError}</p>
+                                )}
                             </div>
 
                             <div>
@@ -489,12 +510,12 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
                             <div>
                                 <label className="block text-sm text-white dark:text-black mb-1">Phone number</label>
-                                <input
-                                    type="tel"
-                                    placeholder="+380 xx xxx xx xx"
+                                <PhoneInput
+                                    international
+                                    defaultCountry="UA"
                                     value={formData.phoneNumber}
-                                    onChange={update("phoneNumber")}
-                                    className="w-full h-10 px-4 rounded-[5px] text-white dark:text-black text-sm outline-none transition border border-[var(--color-btn-primary)]"
+                                    onChange={(val) => updateField("phoneNumber", val ?? "")}
+                                    className="phone-input"
                                 />
                             </div>
 
@@ -568,6 +589,10 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 );
                             })}
                         </div>
+
+                        {registerError && (
+                            <p className="text-red-400 text-sm text-center mt-4">{registerError}</p>
+                        )}
 
                         <Button
                             type="button"
