@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "@/store/index.ts";
 import { useNavigate } from "react-router";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import type { IPinSummaryResponse } from "@/types/pin/responses/IPinSummaryResponse.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
 import { useDeletePinMutation, useUnsavePinMutation } from "@/services/pinService.ts";
 import { useLikeMutation, useUnlikeMutation } from "@/services/likeService.ts";
-import { api } from "@/services/api.ts";
+import { moodboardService } from "@/services/moodboardService.ts";
 
 import { APP_ENV } from "@/constants/env";
 import SaveModal from "./SaveModal.tsx";
@@ -26,7 +26,7 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const { data: me } = useGetMeQuery();
     const [deletePin] = useDeletePinMutation();
     const [unsavePin] = useUnsavePinMutation();
@@ -87,7 +87,7 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
         if (!boardId) return;
 
         const patch = dispatch(
-            api.util.updateQueryData("getMoodboardById", boardId, (draft) => {
+            moodboardService.util.updateQueryData("getMoodboardById", boardId, (draft) => {
                 draft.previewPins = draft.previewPins.filter((p) => p.id !== pin.id);
             })
         );

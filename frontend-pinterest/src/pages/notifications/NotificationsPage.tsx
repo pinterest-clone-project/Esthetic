@@ -161,7 +161,6 @@ const NotificationsPage = () => {
             `}</style>
 
             <div className="px-4 py-6 text-black dark:text-white max-w-2xl mx-auto">
-
                 <div className="flex items-center justify-between mb-5">
                     <h1 className="text-2xl font-bold tracking-tight">Notifications</h1>
                     {unread.length > 0 && (
