@@ -90,7 +90,7 @@ const ResetPasswordForm = ({ email: initialEmail = "", onSuccess, onBack }: Rese
     }
 
     return (
-        <div className="flex flex-col items-center">
+        <div className="step-animate flex flex-col items-center px-4 sm:px-16">
             <img src={logo} className="w-11 h-11 mb-3" alt="" />
 
             <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px]">

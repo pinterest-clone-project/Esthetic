@@ -150,19 +150,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
         <>
         <div className="flex flex-col items-center px-4 sm:px-16">
 
-            <style>
-                {`
-                    @keyframes stepFadeIn {
-                        0%   { opacity: 0; transform: translateX(12px); }
-                        100% { opacity: 1; transform: translateX(0); }
-                    }
-                    .step-animate {
-                        animation: stepFadeIn 0.3s ease-out forwards;
-                    }
-                `}
-            </style>
-
-            <div className="w-11 h-11 rounded-full flex items-center justify-center mb-3">
+<div className="w-11 h-11 rounded-full flex items-center justify-center mb-3">
                 <img src={logo} className="w-11 h-11" />
             </div>
 
