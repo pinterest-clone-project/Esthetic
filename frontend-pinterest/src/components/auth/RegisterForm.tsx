@@ -11,6 +11,7 @@ import {StepIndicator} from "@/components/ui/StepIndicator.tsx";
 import {useGetAllCategoriesQuery} from "@/services/categoryService.ts";
 import { useRegisterFormStore, type FormData } from "@/store/slices/registerFormStore.tsx";
 import {APP_ENV} from "@/constants/env";
+import BirthDatePicker from "@/components/ui/BirthDatePicker.tsx";
 
 interface RegisterFormProps {
     onSuccess?: () => void;
@@ -87,6 +88,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 Language: formData.language || undefined,
                 CategoryIds: formData.categoryIds,
                 ImageFile: formData.imageFile || undefined,
+                IsPrivate: formData.isPrivate,
             }).unwrap();
             dispatch(setUser(account));
             setStep(7);
@@ -218,12 +220,9 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
                             <div>
                                 <label className="block text-sm text-white dark:text-black mb-1">Date of birth</label>
-                                <input
-                                    type="date"
+                                <BirthDatePicker
                                     value={formData.birthDate}
-                                    onChange={update("birthDate")}
-                                    max={new Date().toISOString().split("T")[0]}
-                                    className={`date-picker w-full h-10 px-4 rounded-[5px] text-white dark:text-black text-sm outline-none border-[var(--color-btn-primary)] transition border`}
+                                    onChange={(val) => updateField("birthDate", val)}
                                 />
                             </div>
 
@@ -498,6 +497,16 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                     className="w-full h-10 px-4 rounded-[5px] text-white dark:text-black text-sm outline-none transition border border-[var(--color-btn-primary)]"
                                 />
                             </div>
+
+                            <label className="flex items-center gap-3 cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    checked={formData.isPrivate}
+                                    onChange={(e) => updateField("isPrivate", e.target.checked)}
+                                    className="accent-[#1DB954] w-4 h-4"
+                                />
+                                <span className="text-sm text-white dark:text-[#A1A1A1]">Private account</span>
+                            </label>
 
                             <Button
                                 type="button"

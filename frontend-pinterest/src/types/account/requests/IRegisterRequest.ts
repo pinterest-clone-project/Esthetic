@@ -12,4 +12,5 @@ export interface IRegisterRequest {
     Language?: string;
     CategoryIds?: string[];
     ImageFile?: File | null;
+    IsPrivate?: boolean;
 }

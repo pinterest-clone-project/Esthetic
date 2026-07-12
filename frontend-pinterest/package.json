@@ -27,6 +27,7 @@
     "object-to-formdata": "^4.5.1",
     "react": "^19.2.4",
     "react-chartjs-2": "^5.3.1",
+    "react-day-picker": "^10.0.1",
     "react-dom": "^19.2.4",
     "react-easy-crop": "^6.0.2",
     "react-hook-form": "^7.77.0",
