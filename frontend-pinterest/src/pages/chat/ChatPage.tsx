@@ -45,6 +45,7 @@ const ChatView = ({ chat, onBack }: { chat: IChat; onBack: () => void }) => {
         setText("");
     };
 
+    const navigate = useNavigate();
     const avatarLetter = chat.otherUser.username?.[0]?.toUpperCase() ?? "?";
 
     return (
@@ -58,13 +59,18 @@ const ChatView = ({ chat, onBack }: { chat: IChat; onBack: () => void }) => {
                         <path d="M15 18l-6-6 6-6"/>
                     </svg>
                 </button>
-                <div className="w-9 h-9 rounded-full bg-[#2a2a2a] overflow-hidden shrink-0 flex items-center justify-center">
-                    {chat.otherUser.image
-                        ? <img src={`${APP_ENV.IMAGES_100_URL}${chat.otherUser.image}`} className="w-full h-full object-cover" alt={chat.otherUser.username} />
-                        : <span className="text-white text-sm font-medium">{avatarLetter}</span>
-                    }
-                </div>
-                <span className="text-black dark:text-white font-medium text-sm">{chat.otherUser.username}</span>
+                <button
+                    onClick={() => navigate(`/user/${chat.otherUser.id}`)}
+                    className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+                >
+                    <div className="w-9 h-9 rounded-full bg-[#2a2a2a] overflow-hidden shrink-0 flex items-center justify-center">
+                        {chat.otherUser.image
+                            ? <img src={`${APP_ENV.IMAGES_100_URL}${chat.otherUser.image}`} className="w-full h-full object-cover" alt={chat.otherUser.username} />
+                            : <span className="text-white text-sm font-medium">{avatarLetter}</span>
+                        }
+                    </div>
+                    <span className="text-black dark:text-white font-medium text-sm">{chat.otherUser.username}</span>
+                </button>
             </div>
 
 

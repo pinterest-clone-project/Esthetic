@@ -5,5 +5,6 @@ public enum NotificationType
     Follow,
     Like,
     Comment,
-    NewPin
+    NewPin,
+    FollowRequest
 }

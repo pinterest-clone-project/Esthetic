@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAppDispatch } from "@/store/index.ts";
 import { useNavigate } from "react-router";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import type { IPinSummaryResponse } from "@/types/pin/responses/IPinSummaryResponse.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
 import { useDeletePinMutation, useUnsavePinMutation } from "@/services/pinService.ts";
 import { useLikeMutation, useUnlikeMutation } from "@/services/likeService.ts";
+import { moodboardService } from "@/services/moodboardService.ts";
 
 import { APP_ENV } from "@/constants/env";
 import SaveModal from "./SaveModal.tsx";
@@ -21,8 +23,10 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
     const [hovered, setHovered] = useState(false);
     const [saveModalOpen, setSaveModalOpen] = useState(false);
     const [showEditMenu, setShowEditMenu] = useState(false);
+    const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const { data: me } = useGetMeQuery();
     const [deletePin] = useDeletePinMutation();
     const [unsavePin] = useUnsavePinMutation();
@@ -31,12 +35,23 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
     const { showToast } = useToast();
 
     const isOwner = !!me && me.id === pin.creatorId;
-    const liked = pin.isLikedByMe ?? false;
-    const likesCount = pin.likesCount;
+    const [liked, setLiked] = useState(pin.isLikedByMe ?? false);
+    const [likesCount, setLikesCount] = useState(pin.likesCount);
 
-    const handleDelete = async (e: React.MouseEvent) => {
+    useEffect(() => {
+        setLiked(pin.isLikedByMe ?? false);
+        setLikesCount(pin.likesCount);
+    }, [pin.isLikedByMe, pin.likesCount]);
+
+    const handleDelete = (e: React.MouseEvent) => {
         e.stopPropagation();
+        setShowEditMenu(false);
+        setConfirmDeleteOpen(true);
+    };
+
+    const confirmDelete = async () => {
         await deletePin(pin.id);
+        setConfirmDeleteOpen(false);
     };
 
     const handleEdit = (e: React.MouseEvent) => {
@@ -47,19 +62,41 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
     const handleLike = async (e: React.MouseEvent) => {
         e.stopPropagation();
         if (liked) {
-            await unlike(pin.id);
+            setLiked(false);
+            setLikesCount(c => c - 1);
+            try {
+                await unlike(pin.id).unwrap();
+            } catch {
+                setLiked(true);
+                setLikesCount(c => c + 1);
+            }
         } else {
-            await like(pin.id);
+            setLiked(true);
+            setLikesCount(c => c + 1);
+            try {
+                await like(pin.id).unwrap();
+            } catch {
+                setLiked(false);
+                setLikesCount(c => c - 1);
+            }
         }
     };
 
     const handleUnsave = async (e: React.MouseEvent) => {
         e.stopPropagation();
         if (!boardId) return;
+
+        const patch = dispatch(
+            moodboardService.util.updateQueryData("getMoodboardById", boardId, (draft) => {
+                draft.previewPins = draft.previewPins.filter((p) => p.id !== pin.id);
+            })
+        );
+        showToast("Removed from board", "success");
+
         try {
             await unsavePin({ pinId: pin.id, boardId }).unwrap();
-            showToast("Removed from board", "success");
         } catch {
+            patch.undo();
             showToast("Something went wrong", "error");
         }
     };
@@ -162,6 +199,35 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
             {saveModalOpen && (
                 <div onClick={(e) => e.stopPropagation()}>
                     <SaveModal pinId={pin.id} onClose={() => setSaveModalOpen(false)} />
+                </div>
+            )}
+
+            {confirmDeleteOpen && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+                    onClick={(e) => { e.stopPropagation(); setConfirmDeleteOpen(false); }}
+                >
+                    <div
+                        className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 w-72 shadow-2xl"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <p className="text-white text-sm font-medium mb-1">Delete this pin?</p>
+                        <p className="text-gray-400 text-xs mb-5">This action cannot be undone.</p>
+                        <div className="flex gap-2">
+                            <button
+                                className="flex-1 py-2 rounded-xl text-xs text-gray-300 bg-white/10 hover:bg-white/15 transition-colors"
+                                onClick={() => setConfirmDeleteOpen(false)}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="flex-1 py-2 rounded-xl text-xs text-white bg-red-500 hover:bg-red-600 transition-colors"
+                                onClick={confirmDelete}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

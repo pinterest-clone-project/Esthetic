@@ -34,6 +34,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     }
     public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
     public DbSet<FollowEntity> Follows { get; set; }
+    public DbSet<FollowRequestEntity> FollowRequests { get; set; }
     public DbSet<PinEntity> Pins { get; set; }
     public DbSet<CategoryEntity> Categories { get; set; }
     public DbSet<PinTagEntity> PinTags { get; set; }

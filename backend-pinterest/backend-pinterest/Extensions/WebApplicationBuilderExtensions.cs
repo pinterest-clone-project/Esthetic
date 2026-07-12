@@ -220,6 +220,7 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<ITagRepository, TagRepository>();
         services.AddScoped<IFollowRepository, FollowRepository>();
+        services.AddScoped<IFollowRequestRepository, FollowRequestRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<ILikeRepository, LikeRepository>();
         services.AddScoped<ICommentRepository, CommentRepository>();
