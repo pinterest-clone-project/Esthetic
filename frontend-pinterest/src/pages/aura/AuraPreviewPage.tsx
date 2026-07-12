@@ -4,7 +4,6 @@ import {useGetPinByIdQuery, useGetAllPinsQuery, useDeletePinMutation} from "@/se
 import {useGetMeQuery} from "@/services/accountService.ts";
 import {useLikeMutation, useUnlikeMutation} from "@/services/likeService.ts";
 import PinCard from "@/components/ui/PinCard.tsx";
-import BackButton from "@/components/ui/BackButton.tsx";
 import {APP_ENV} from "@/constants/env";
 import SaveModal from "@/components/ui/SaveModal.tsx";
 import CommentsSection from "@/components/ui/CommentsSection.tsx";
@@ -80,8 +79,6 @@ const AuraPreviewPage = () => {
 
     return (
         <div className="w-full min-h-full bg-white dark:bg-[#000000] px-3 py-4 md:px-6 md:py-8">
-
-            <BackButton/>
 
             {/* Pin detail */}
             <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start max-w-4xl mx-auto mb-16">

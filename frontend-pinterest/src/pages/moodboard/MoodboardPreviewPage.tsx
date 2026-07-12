@@ -2,7 +2,6 @@ import { useGetMoodboardByIdQuery } from "@/services/moodboardService.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
 import { useParams } from "react-router";
 import { APP_ENV } from "@/constants/env";
-import BackButton from "@/components/ui/BackButton.tsx";
 import PinCard from "@/components/ui/PinCard.tsx";
 
 const MoodboardPreviewPage: React.FC = () => {
@@ -35,8 +34,6 @@ const MoodboardPreviewPage: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-b from-white/60 dark:from-black/60 via-white/80 dark:via-black/70 to-white dark:to-black" />
 
                 <div className="relative px-6 pt-10 pb-8 flex flex-col sm:flex-row items-center sm:items-end gap-6">
-                    <BackButton className="absolute top-4 left-6" />
-
                     <div className="w-40 h-40 sm:w-52 sm:h-52 rounded-2xl overflow-hidden shadow-2xl shrink-0 mt-8 sm:mt-0">
                         {board.coverImageUrl ? (
                             <img

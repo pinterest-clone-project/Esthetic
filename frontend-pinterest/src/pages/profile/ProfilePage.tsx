@@ -64,6 +64,7 @@ const ProfilePage = () => {
     };
     const [isEditingInterests, setIsEditingInterests] = useState(false);
     const [cropperSrc, setCropperSrc] = useState<string | null>(null);
+    const [avatarError, setAvatarError] = useState<string | null>(null);
 
     const {
         register,
@@ -172,8 +173,9 @@ if (isLoading) return <p>Завантаження...</p>;
     return (
         <>
         <div className="flex justify-center py-4 sm:py-8 px-3 sm:px-6">
-            <div className="flex flex-col md:flex-row gap-6 w-full max-w-5xl">
-            {/* Sidebar */}
+            <div className="flex flex-col w-full max-w-5xl">
+            <div className="flex flex-col md:flex-row gap-6 w-full">
+
 <aside className="md:w-[280px] md:self-start">
     <div className="border border-[#A1A1A1] dark:border-[#333] rounded-2xl p-6 flex flex-col items-center gap-4 text-black dark:text-white">
 
@@ -190,11 +192,23 @@ if (isLoading) return <p>Завантаження...</p>;
                 <input type="file" accept="image/*" className="hidden" onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (!file) return;
+                    const ext = file.name.split(".").pop()?.toLowerCase();
+                    const unsupported = ["image/heic", "image/heif", "image/avif", "image/tiff"];
+                    if (unsupported.includes(file.type) || ext === "heic" || ext === "heif") {
+                        setAvatarError("HEIC/HEIF format is not supported. Please use JPG, PNG or WebP.");
+                        e.target.value = "";
+                        return;
+                    }
+                    setAvatarError(null);
                     setCropperSrc(URL.createObjectURL(file));
                     e.target.value = "";
                 }} />
             </label>
         </div>
+
+        {avatarError && (
+            <p className="text-xs text-red-400 text-center -mt-2">{avatarError}</p>
+        )}
 
         {/* Name */}
         <div className="text-center">
@@ -232,6 +246,93 @@ if (isLoading) return <p>Завантаження...</p>;
                 </div>
             )}
         </div>
+
+        {/* Interests */}
+        {selectedCategoryIds.length > 0 && (
+            <div className="w-full border-t border-[#333] pt-4">
+                <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs text-[#A1A1A1]">Interests</span>
+                    <button
+                        type="button"
+                        onClick={() => setIsEditingInterests((prev) => !prev)}
+                        className="text-xs text-[#1DB954] hover:underline"
+                    >
+                        {isEditingInterests ? "Done" : "Edit"}
+                    </button>
+                </div>
+                <div className="grid grid-cols-3 gap-2 w-full">
+                    {(isEditingInterests ? categories : categories?.filter((c) => selectedCategoryIds.includes(c.id)))
+                        ?.map((category) => {
+                            const isSelected = selectedCategoryIds.includes(category.id);
+                            return (
+                                <button
+                                    key={category.id}
+                                    type="button"
+                                    onClick={() => toggleCategory(category.id)}
+                                    className="flex flex-col items-center gap-1"
+                                >
+                                    <div className={`relative w-full aspect-square rounded-[10px] overflow-hidden border-2 transition ${
+                                        isSelected ? "border-[#1DB954]" : "border-transparent"
+                                    }`}>
+                                        <img src={`${APP_ENV.IMAGES_1200_URL}${category.image}`} className="w-full h-full object-cover" />
+                                        {isEditingInterests && isSelected && (
+                                            <div className="absolute top-1 right-1 w-3.5 h-3.5 rounded-full bg-[#1DB954] flex items-center justify-center">
+                                                <svg width="7" height="5" viewBox="0 0 8 6" fill="none">
+                                                    <path d="M1 3L3 5L7 1" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                                </svg>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <span className="text-[9px] text-[#A1A1A1] text-center leading-tight">{category.name}</span>
+                                </button>
+                            );
+                        })}
+                </div>
+                {isEditingInterests && (
+                    <p className="text-[10px] text-[#A1A1A1] mt-2 text-center">Click to toggle interests</p>
+                )}
+            </div>
+        )}
+
+        {selectedCategoryIds.length === 0 && (
+            <div className="w-full border-t border-[#333] pt-4">
+                <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs text-[#A1A1A1]">Interests</span>
+                    <button
+                        type="button"
+                        onClick={() => setIsEditingInterests(true)}
+                        className="text-xs text-[#1DB954] hover:underline"
+                    >
+                        Add
+                    </button>
+                </div>
+                {isEditingInterests && (
+                    <div className="grid grid-cols-3 gap-2 w-full">
+                        {categories?.map((category) => {
+                            const isSelected = selectedCategoryIds.includes(category.id);
+                            return (
+                                <button
+                                    key={category.id}
+                                    type="button"
+                                    onClick={() => toggleCategory(category.id)}
+                                    className="flex flex-col items-center gap-1"
+                                >
+                                    <div className={`relative w-full aspect-square rounded-[10px] overflow-hidden border-2 transition ${
+                                        isSelected ? "border-[#1DB954]" : "border-transparent"
+                                    }`}>
+                                        <img src={`${APP_ENV.IMAGES_1200_URL}${category.image}`} className="w-full h-full object-cover" />
+                                    </div>
+                                    <span className="text-[9px] text-[#A1A1A1] text-center leading-tight">{category.name}</span>
+                                </button>
+                            );
+                        })}
+                    </div>
+                )}
+                {!isEditingInterests && (
+                    <p className="text-sm text-[#A1A1A1]">No interests selected yet.</p>
+                )}
+            </div>
+        )}
     </div>
 </aside>
             <form onSubmit={handleSubmit(onSubmit)} className="flex-1 text-black dark:text-white">
@@ -349,59 +450,6 @@ if (isLoading) return <p>Завантаження...</p>;
                     </div>
                 </div>
 
-                <div className="mb-6">
-                    <div className="flex items-center justify-between mb-2">
-                        <label className="text-xs text-[#A1A1A1]">Interests</label>
-                        <button
-                            type="button"
-                            onClick={() => setIsEditingInterests((prev) => !prev)}
-                            className="text-xs text-[#1DB954] hover:underline"
-                        >
-                            {isEditingInterests ? "Done" : "Edit"}
-                        </button>
-                    </div>
-
-                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
-                        {(isEditingInterests
-                                ? categories
-                                : categories?.filter((category) => selectedCategoryIds.includes(category.id))
-                        )?.map((category) => {
-                            const isSelected = selectedCategoryIds.includes(category.id);
-                            return (
-                                <button
-                                    key={category.id}
-                                    type="button"
-                                    onClick={() => toggleCategory(category.id)}
-                                    className="flex flex-col items-center gap-1.5"
-                                >
-                                    <div
-                                        className={`relative w-full aspect-square rounded-[14px] overflow-hidden border-2 transition ${
-                                            isSelected ? "border-[#1DB954]" : "border-transparent"
-                                        }`}
-                                    >
-                                        <img
-                                            src={`${APP_ENV.IMAGES_1200_URL}${category.image}`}
-                                            className="w-full h-full object-cover"
-                                        />
-                                        {isEditingInterests && isSelected && (
-                                            <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#1DB954] flex items-center justify-center">
-                                                <svg width="8" height="6" viewBox="0 0 8 6" fill="none">
-                                                    <path d="M1 3L3 5L7 1" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                                </svg>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <span className="text-[10px] text-[#A1A1A1] text-center">{category.name}</span>
-                                </button>
-                            );
-                        })}
-                    </div>
-
-                    {!isEditingInterests && selectedCategoryIds.length === 0 && (
-                        <p className="text-sm text-[#A1A1A1] mt-2">You haven't selected any interests yet.</p>
-                    )}
-                </div>
-
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     <label className="flex items-center gap-3 cursor-pointer">
                         <input {...register("isPrivate")} type="checkbox" className="accent-[#1DB954] w-4 h-4" />
@@ -430,6 +478,7 @@ if (isLoading) return <p>Завантаження...</p>;
                     Logout
                 </button>
             </form>
+            </div>
             </div>
         </div>
 

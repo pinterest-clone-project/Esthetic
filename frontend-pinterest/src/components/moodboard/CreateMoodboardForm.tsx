@@ -96,7 +96,7 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
                             }`}
                         >
                             <span
-                                className={`absolute top-0.5 left-0.5 w-5 h-5 bg-black dark:bg-white rounded-full transition-transform ${
+                                className={`absolute top-0.5 left-0.5 w-5 h-5 bg-black rounded-full transition-transform ${
                                     isPrivate ? "translate-x-5" : ""
                                 }`}
                             />

@@ -7,7 +7,6 @@ import { useGetMeQuery } from "@/services/accountService.ts";
 import { useFollowMutation, useUnfollowMutation, useSendFollowRequestMutation, useCancelFollowRequestMutation } from "@/services/followService.ts";
 import { useGetPublicBoardsByUserQuery } from "@/services/moodboardService.ts";
 import PinCard from "@/components/ui/PinCard.tsx";
-import BackButton from "@/components/ui/BackButton.tsx";
 import { APP_ENV } from "@/constants/env";
 
 const UserPage = () => {
@@ -57,7 +56,6 @@ const UserPage = () => {
 
     return (
         <div className="w-full min-h-full bg-white dark:bg-black px-6 py-8">
-            <BackButton />
 
             <div className="flex flex-col items-center gap-4 max-w-2xl mx-auto mb-12 text-center">
                 <div className="w-24 h-24 rounded-full overflow-hidden bg-white/10 shrink-0">
