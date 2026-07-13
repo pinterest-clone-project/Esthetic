@@ -57,4 +57,31 @@ public class PinRepository(AppDbContext db) : BaseRepository<PinEntity>(db), IPi
             .OrderByDescending(p => p.CreatedAt)
             .ToListAsync(ct);
     }
+
+    public async Task<List<PinEntity>> GetDeletedByUserAsync(Guid userId, CancellationToken ct = default)
+        => await _db.Pins
+            .Where(p => p.CreatorId == userId && p.IsDeleted)
+            .OrderByDescending(p => p.DeletedAt)
+            .ToListAsync(ct);
+
+    public async Task RestoreAsync(Guid id, CancellationToken ct = default)
+    {
+        var pin = await _db.Pins.FindAsync([id], ct);
+        if (pin == null || !pin.IsDeleted) return;
+        pin.IsDeleted = false;
+        pin.DeletedAt = null;
+        pin.UpdatedAt = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
+        await _db.SaveChangesAsync(ct);
+    }
+
+    public async Task HardDeleteExpiredAsync(CancellationToken ct = default)
+    {
+        var cutoff = DateTime.UtcNow.AddDays(-30);
+        var expired = await _db.Pins
+            .Where(p => p.IsDeleted && p.DeletedAt != null && p.DeletedAt < cutoff)
+            .ToListAsync(ct);
+        if (expired.Count == 0) return;
+        _db.Pins.RemoveRange(expired);
+        await _db.SaveChangesAsync(ct);
+    }
 }

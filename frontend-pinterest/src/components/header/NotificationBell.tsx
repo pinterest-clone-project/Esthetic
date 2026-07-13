@@ -12,7 +12,8 @@ const NotificationBell: React.FC = () => {
     const ref = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
 
-    const { data: notifications = [] } = useGetNotificationsQuery();
+    const { data: notificationsData } = useGetNotificationsQuery({});
+    const notifications = notificationsData?.items ?? [];
     const [markAllAsRead] = useMarkAllAsReadMutation();
     const [acceptRequest] = useAcceptFollowRequestMutation();
     const [declineRequest] = useDeclineFollowRequestMutation();
@@ -55,7 +56,7 @@ const NotificationBell: React.FC = () => {
 
             {open && (
                 <div className="absolute right-0 top-12 w-80 max-h-[420px] overflow-y-auto bg-white dark:bg-[#1a1a1a] rounded-[10px] shadow-2xl z-50 border border-[#A1A1A1] dark:border-[#535353]">
-                    <div className="px-4 py-3 border-b border-[#A1A1A1] dark:border-[#535353] sticky top-0 bg-white dark:bg-[#1a1a1a]">
+                    <div className="px-4 py-3 border-b border-[#A1A1A1] dark:border-[#535353] sticky top-0 z-10 bg-white dark:bg-[#1a1a1a]">
                         <p className="text-black dark:text-white text-sm font-medium">Сповіщення</p>
                     </div>
 

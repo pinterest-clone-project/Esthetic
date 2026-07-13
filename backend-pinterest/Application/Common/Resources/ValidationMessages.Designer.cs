@@ -122,6 +122,24 @@ namespace Application.Common.Resources {
                 return ResourceManager.GetString("EmailAlreadyExists", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to This username is already taken.
+        /// </summary>
+        internal static string UserNameAlreadyTaken {
+            get {
+                return ResourceManager.GetString("UserNameAlreadyTaken", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Username can only contain letters, numbers and underscores.
+        /// </summary>
+        internal static string UserNameFormat {
+            get {
+                return ResourceManager.GetString("UserNameFormat", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Invalid email format.

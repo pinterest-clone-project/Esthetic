@@ -48,7 +48,7 @@ const ReviewPage = () => {
                             </div>
 
                             <p className="text-[#A1A1A1] text-sm leading-relaxed mb-6">
-                                Welcome back, <span className="text-white font-medium">{me?.firstName ?? me?.username ?? "Admin"}</span>. You are signed in with administrator privileges.
+                                Welcome back, <span className="text-white font-medium">{me?.firstName ?? me?.userName ?? "Admin"}</span>. You are signed in with administrator privileges.
                             </p>
 
                             <div className="flex items-center gap-2">

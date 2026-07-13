@@ -190,12 +190,12 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
                                 {me.image ? (
                                     <img
                                         src={`${APP_ENV.IMAGES_100_URL}${me.image}`}
-                                        alt={me.username}
+                                        alt={me.userName}
                                         className="w-full h-full object-cover"
                                     />
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center text-[8px] text-gray-400 font-medium">
-                                        {me.username?.[0]?.toUpperCase()}
+                                        {me.userName?.[0]?.toUpperCase()}
                                     </div>
                                 )}
                             </div>
@@ -257,12 +257,12 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
                         {me.image ? (
                             <img
                                 src={`${APP_ENV.IMAGES_100_URL}${me.image}`}
-                                alt={me.username}
+                                alt={me.userName}
                                 className="w-full h-full object-cover"
                             />
                         ) : (
                             <div className="w-full h-full flex items-center justify-center text-[10px] text-gray-400 font-medium">
-                                {me.username?.[0]?.toUpperCase()}
+                                {me.userName?.[0]?.toUpperCase()}
                             </div>
                         )}
                     </div>

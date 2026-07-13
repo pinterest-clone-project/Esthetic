@@ -1,10 +1,15 @@
 import {api} from "@/services/api.ts";
 import type { INotification } from "@/types/notification/INotification";
+import type { IPagedResult } from "@/types/IPagedResult";
 
 export const notificationService = api.injectEndpoints({
     endpoints: (builder) => ({
-        getNotifications: builder.query<INotification[], void>({
-            query: () => "Notifications",
+        getNotifications: builder.query<IPagedResult<INotification>, { page?: number; pageSize?: number }>({
+            query: (arg) => ({
+                url: "Notifications",
+                method: "GET",
+                params: { page: arg?.page ?? 1, pageSize: arg?.pageSize ?? 5 },
+            }),
             providesTags: ["Notification"],
         }),
         markAllAsRead: builder.mutation<void, void>({

@@ -33,6 +33,7 @@ const AdminDashboard       = lazy(() => import("@/pages/admin/AdminDashboard.tsx
 const AdminUsersPage       = lazy(() => import("@/pages/admin/AdminUsersPage.tsx"));
 const ChatPage             = lazy(() => import("@/pages/chat/ChatPage.tsx"));
 const SettingsPage         = lazy(() => import("@/pages/settings/SettingsPage.tsx"));
+const DeletedAurasPage     = lazy(() => import("@/pages/aura/DeletedAurasPage.tsx"));
 const NotificationsPage    = lazy(() => import("@/pages/notifications/NotificationsPage.tsx"));
 const ForgotPasswordPage   = lazy(() => import("@/pages/auth/ForgotPasswordPage.tsx"));
 const ResetPasswordPage    = lazy(() => import("@/pages/auth/ResetPasswordPage.tsx"));
@@ -154,6 +155,7 @@ const App = () => {
 
                                     <Route path="/chat" element={<ChatPage />} />
                                     <Route path="/settings" element={<SettingsPage />} />
+                                    <Route path="/deleted-auras" element={<DeletedAurasPage />} />
                                     <Route path="/notifications" element={<NotificationsPage />} />
                                 </Route>
                             </Route>

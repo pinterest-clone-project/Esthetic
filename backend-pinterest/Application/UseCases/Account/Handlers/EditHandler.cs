@@ -24,8 +24,16 @@ public class EditHandler(
             throw new NotFoundException(ValidationMessages.UserNotFound);
         }
 
+        if (request.UserName.HasValue && !request.UserName.IsCleared)
+        {
+            var taken = await accountRepository.IsUserNameTakenAsync(request.UserName.Value!, user.Id, cancellationToken);
+            if (taken)
+                throw new ConflictException(ValidationMessages.UserNameAlreadyTaken);
+        }
+
         user.FirstName = request.FirstName.Apply(user.FirstName);
         user.LastName = request.LastName.Apply(user.LastName);
+        user.UserName = request.UserName.Apply(user.UserName);
         user.Email = request.Email.Apply(user.Email);
         user.Bio = request.Bio.Apply(user.Bio);
         user.PhoneNumber = request.PhoneNumber.Apply(user.PhoneNumber);

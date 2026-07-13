@@ -211,8 +211,19 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
                         className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 w-72 shadow-2xl"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <p className="text-white text-sm font-medium mb-1">Delete this pin?</p>
-                        <p className="text-gray-400 text-xs mb-5">This action cannot be undone.</p>
+                        <p className="text-white text-sm font-medium mb-1">Delete this aura?</p>
+                        <p className="text-gray-400 text-xs mb-3">It will be moved to Recently deleted and permanently removed after 30 days.</p>
+                        <button
+                            onClick={(e) => { e.stopPropagation(); setConfirmDeleteOpen(false); navigate("/deleted-auras"); }}
+                            className="flex items-center gap-1.5 text-[11px] text-[#4ade80] hover:underline mb-4"
+                        >
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                            </svg>
+                            View Recently deleted
+                        </button>
                         <div className="flex gap-2">
                             <button
                                 className="flex-1 py-2 rounded-xl text-xs text-gray-300 bg-white/10 hover:bg-white/15 transition-colors"

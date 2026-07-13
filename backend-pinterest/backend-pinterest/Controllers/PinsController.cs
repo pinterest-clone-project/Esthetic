@@ -115,4 +115,20 @@ public class PinsController(IMediator mediator) : ControllerBase
         var pins = await mediator.Send(new GetUserPinsQuery(userId, currentUserId));
         return Ok(pins);
     }
+
+    [HttpGet("deleted")]
+    [Authorize]
+    public async Task<IActionResult> GetDeleted()
+    {
+        var pins = await mediator.Send(new GetDeletedPinsQuery(CurrentUserId));
+        return Ok(pins);
+    }
+
+    [HttpPost("restore/{id:guid}")]
+    [Authorize]
+    public async Task<IActionResult> Restore(Guid id)
+    {
+        await mediator.Send(new RestorePinCommand(id, CurrentUserId));
+        return NoContent();
+    }
 }
