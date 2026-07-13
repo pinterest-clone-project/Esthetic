@@ -106,6 +106,7 @@ const Sidebar = () => {
         { skip: debouncedSearch.trim().length < 2 }
     );
     const {data: me} = useGetMeQuery();
+    const filteredSearchItems = searchResult?.items.filter((u) => u.id !== me?.id) ?? [];
     const [getOrCreateChat] = useGetOrCreateChatMutation();
 
     useEffect(() => {
@@ -196,7 +197,7 @@ const Sidebar = () => {
                 <div className="mt-3 px-3 flex flex-col gap-1 max-h-[400px] overflow-y-auto">
                     {debouncedSearch.trim().length >= 1 ? (
                         <>
-                            {searchResult?.items.map((user) => (
+                            {filteredSearchItems.map((user) => (
                                 <button
                                     key={user.id}
                                     onClick={() => handleSelectUser(user.id)}
@@ -208,13 +209,13 @@ const Sidebar = () => {
                                     <span className="text-black dark:text-white text-sm">{user.userName}</span>
                                 </button>
                             ))}
-                            {searchResult?.items.length === 0 && (
-                                <p className="text-[#A1A1A1] text-xs px-2">Користувачів не знайдено</p>
+                            {filteredSearchItems.length === 0 && (
+                                <p className="text-[#A1A1A1] text-xs px-2">No users found</p>
                             )}
                         </>
                     ) : (
                         <>
-                            <p className="text-[#A1A1A1] text-xs px-2 mb-1">Ваші чати</p>
+                            <p className="text-[#A1A1A1] text-xs px-2 mb-1">Your chats</p>
                             {chats.map((chat) => (
                                 <button
                                     key={chat.id}

@@ -126,11 +126,13 @@ const ChatPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
 
+    const currentUserId = useAppSelector((s) => s.auth.user?.id);
     const { data: chats = [] } = useGetChatsQuery();
     const { data: searchResult } = useSearchUsersQuery(
         { search: debouncedSearch, pageSize: 10 },
         { skip: debouncedSearch.trim().length < 2 }
     );
+    const filteredSearchItems = searchResult?.items.filter((u) => u.id !== currentUserId) ?? [];
     const [getOrCreateChat] = useGetOrCreateChatMutation();
 
     useEffect(() => {
@@ -180,7 +182,7 @@ const ChatPage = () => {
             <div className="flex flex-col gap-1 px-2">
                 {debouncedSearch.trim().length >= 2 ? (
                     <>
-                        {searchResult?.items.map((user) => (
+                        {filteredSearchItems.map((user) => (
                             <button
                                 key={user.id}
                                 onClick={() => handleSelectUser(user.id)}
@@ -192,7 +194,7 @@ const ChatPage = () => {
                                 <span className="text-black dark:text-white text-sm">{user.userName}</span>
                             </button>
                         ))}
-                        {searchResult?.items.length === 0 && (
+                        {filteredSearchItems.length === 0 && (
                             <p className="text-[#A1A1A1] text-sm px-3">No users found</p>
                         )}
                     </>
