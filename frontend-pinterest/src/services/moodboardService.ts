@@ -95,6 +95,13 @@ export const moodboardService = api.injectEndpoints({
         getPublicBoardsByUser: builder.query<MoodboardPage, string>({
             query: (userId) => ({ url: `Boards/byUser/${userId}`, method: "GET" }),
         }),
+        deleteMoodboard: builder.mutation<void, string>({
+            query: (id) => ({
+                url: `Boards/delete/${id}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: ["MyMoodboards", "AllMoodboards"],
+        }),
     }),
 });
 
@@ -105,4 +112,5 @@ export const {
     useSearchMoodboardsQuery,
     useUpdateMoodboardMutation,
     useGetPublicBoardsByUserQuery,
+    useDeleteMoodboardMutation,
 } = moodboardService;

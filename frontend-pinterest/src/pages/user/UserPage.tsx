@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router";
-import { useGetByIdQuery } from "@/services/userService.ts";
-import { useGetFollowStatsQuery } from "@/services/userService.ts";
+import { useGetByIdQuery, useGetFollowStatsQuery, useGetFollowersQuery, useGetFollowingQuery } from "@/services/userService.ts";
 import { useGetPinsByUserQuery } from "@/services/pinService.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
-import { useFollowMutation, useUnfollowMutation } from "@/services/followService.ts";
+import { useFollowMutation, useUnfollowMutation, useSendFollowRequestMutation, useCancelFollowRequestMutation } from "@/services/followService.ts";
 import { useGetPublicBoardsByUserQuery } from "@/services/moodboardService.ts";
 import PinCard from "@/components/ui/PinCard.tsx";
-import BackButton from "@/components/ui/BackButton.tsx";
 import { APP_ENV } from "@/constants/env";
+import type { IUser } from "@/types/user/IUser.ts";
 
 const UserPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -22,7 +21,13 @@ const UserPage = () => {
 
     const [follow] = useFollowMutation();
     const [unfollow] = useUnfollowMutation();
+    const [sendFollowRequest] = useSendFollowRequestMutation();
+    const [cancelFollowRequest] = useCancelFollowRequestMutation();
     const [activeTab, setActiveTab] = useState<"auras" | "moodboards">("auras");
+    const [followModal, setFollowModal] = useState<"followers" | "following" | null>(null);
+
+    const { data: followers } = useGetFollowersQuery(id!, { skip: followModal !== "followers" });
+    const { data: following } = useGetFollowingQuery(id!, { skip: followModal !== "following" });
 
     const isMe = me?.id === id;
 
@@ -30,6 +35,12 @@ const UserPage = () => {
         if (!id) return;
         if (stats?.isFollowedByMe) {
             await unfollow(id);
+        } else if (user?.isPrivate) {
+            if (stats?.isRequestedByMe) {
+                await cancelFollowRequest(id);
+            } else {
+                await sendFollowRequest(id);
+            }
         } else {
             await follow(id);
         }
@@ -48,8 +59,8 @@ const UserPage = () => {
     );
 
     return (
+        <>
         <div className="w-full min-h-full bg-white dark:bg-black px-6 py-8">
-            <BackButton />
 
             <div className="flex flex-col items-center gap-4 max-w-2xl mx-auto mb-12 text-center">
                 <div className="w-24 h-24 rounded-full overflow-hidden bg-white/10 shrink-0">
@@ -88,18 +99,33 @@ const UserPage = () => {
                         </span>
                         <span className="text-gray-500 text-xs">Auras</span>
                     </div>
-                    <div className="flex flex-col items-center gap-0.5">
-                        <span className="text-black dark:text-white text-sm font-semibold">
-                            {stats?.followersCount ?? 0}
-                        </span>
-                        <span className="text-gray-500 text-xs">Followers</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-0.5">
-                        <span className="text-black dark:text-white text-sm font-semibold">
-                            {stats?.followingCount ?? 0}
-                        </span>
-                        <span className="text-gray-500 text-xs">Following</span>
-                    </div>
+                    {(isMe || !user.isPrivate || stats?.isFollowedByMe) ? (
+                        <>
+                            <button onClick={() => setFollowModal("followers")} className="flex flex-col items-center gap-0.5 hover:opacity-70 transition-opacity">
+                                <span className="text-black dark:text-white text-sm font-semibold">
+                                    {stats?.followersCount ?? 0}
+                                </span>
+                                <span className="text-gray-500 text-xs">Followers</span>
+                            </button>
+                            <button onClick={() => setFollowModal("following")} className="flex flex-col items-center gap-0.5 hover:opacity-70 transition-opacity">
+                                <span className="text-black dark:text-white text-sm font-semibold">
+                                    {stats?.followingCount ?? 0}
+                                </span>
+                                <span className="text-gray-500 text-xs">Following</span>
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <div className="flex flex-col items-center gap-0.5">
+                                <span className="text-black dark:text-white text-sm font-semibold">{stats?.followersCount ?? 0}</span>
+                                <span className="text-gray-500 text-xs">Followers</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-0.5">
+                                <span className="text-black dark:text-white text-sm font-semibold">{stats?.followingCount ?? 0}</span>
+                                <span className="text-gray-500 text-xs">Following</span>
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 {!isMe && (
@@ -108,11 +134,13 @@ const UserPage = () => {
                             onClick={handleFollowToggle}
                             className={`px-5 py-2 rounded-xl text-sm font-semibold transition-colors
                                 ${stats?.isFollowedByMe
-                                    ? "bg-white/10 hover:bg-white/20 text-white border border-white/10"
-                                    : "bg-[#4ade80] hover:bg-[#22c55e] text-black"
+                                    ? "bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20 text-black dark:text-white border border-black/10 dark:border-white/10"
+                                    : stats?.isRequestedByMe
+                                        ? "bg-black/5 dark:bg-white/5 text-black/50 dark:text-white/50 border border-black/10 dark:border-white/10 hover:border-red-400 hover:text-red-400"
+                                        : "bg-[#4ade80] hover:bg-[#22c55e] text-black"
                                 }`}
                         >
-                            {stats?.isFollowedByMe ? "Following" : "Follow"}
+                            {stats?.isFollowedByMe ? "Following" : stats?.isRequestedByMe ? "Requested" : "Follow"}
                         </button>
                     </div>
                 )}
@@ -127,7 +155,21 @@ const UserPage = () => {
                 )}
             </div>
 
-            {/* Tabs */}
+            {user.isPrivate && !isMe && !stats?.isFollowedByMe && (
+                <div className="flex flex-col items-center gap-3 py-16 text-center">
+                    <div className="w-14 h-14 rounded-full bg-white/5 dark:bg-white/5 flex items-center justify-center">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-400">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                    </div>
+                    <p className="text-black dark:text-white text-sm font-medium">This account is private</p>
+                    <p className="text-gray-500 text-xs max-w-xs">Follow this account to see their auras and moodboards</p>
+                </div>
+            )}
+
+            {(!user.isPrivate || isMe || stats?.isFollowedByMe) && (
+            <>
             <div className="flex items-center justify-center gap-6 mb-8">
                 {(["auras", "moodboards"] as const).map((tab) => (
                     <button
@@ -204,7 +246,69 @@ const UserPage = () => {
                     )}
                 </>
             )}
+            </>
+            )}
         </div>
+
+        {followModal && (
+            <div
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+                onClick={() => setFollowModal(null)}
+            >
+                <div
+                    className="bg-white dark:bg-[#1a1a1a] border border-black/10 dark:border-white/10 rounded-2xl w-80 max-h-[70vh] flex flex-col shadow-2xl"
+                    onClick={e => e.stopPropagation()}
+                >
+                    <div className="flex items-center justify-between px-5 py-4 border-b border-black/5 dark:border-white/5">
+                        <h3 className="text-black dark:text-white text-sm font-semibold capitalize">{followModal}</h3>
+                        <button onClick={() => setFollowModal(null)} className="text-gray-400 hover:text-black dark:hover:text-white transition-colors">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div className="overflow-y-auto flex-1 px-3 py-2">
+                        {(() => {
+                            const list = followModal === "followers" ? followers : following;
+                            if (!list) return (
+                                <div className="flex justify-center py-8">
+                                    <div className="w-5 h-5 rounded-full border-2 border-white/20 border-t-[#4ade80] animate-spin" />
+                                </div>
+                            );
+                            if (!list.length) return (
+                                <p className="text-gray-500 text-xs text-center py-8">No users yet</p>
+                            );
+                            return list.map((u: IUser) => (
+                                <button
+                                    key={u.id}
+                                    onClick={() => { navigate(`/user/${u.id}`); setFollowModal(null); }}
+                                    className="flex items-center gap-3 w-full px-2 py-2.5 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                                >
+                                    <div className="w-9 h-9 rounded-full overflow-hidden bg-white/10 shrink-0">
+                                        {u.image ? (
+                                            <img src={`${APP_ENV.IMAGES_100_URL}${u.image}`} alt="" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-sm text-gray-400 bg-black/10 dark:bg-white/5">
+                                                {u.userName?.[0]?.toUpperCase() ?? "?"}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="text-left min-w-0">
+                                        <p className="text-black dark:text-white text-xs font-medium truncate">
+                                            {u.firstName && u.lastName ? `${u.firstName} ${u.lastName}` : u.userName}
+                                        </p>
+                                        {u.userName && (
+                                            <p className="text-gray-500 text-[11px] truncate">@{u.userName}</p>
+                                        )}
+                                    </div>
+                                </button>
+                            ));
+                        })()}
+                    </div>
+                </div>
+            </div>
+        )}
+</>
     );
 };
 

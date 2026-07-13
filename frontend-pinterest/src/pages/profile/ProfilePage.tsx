@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
@@ -15,6 +15,16 @@ import {api} from "@/services/api.ts";
 import {useNavigate} from "react-router";
 import { useGetAllCategoriesQuery } from "@/services/categoryService.ts";
 import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
+import BirthDatePicker from "@/components/ui/BirthDatePicker.tsx";
+import ComboboxInput from "@/components/ui/ComboboxInput.tsx";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import { getData as getCountries } from "country-list";
+import { LANGUAGES } from "@/constants/languages.ts";
+
+const COUNTRY_NAMES = getCountries()
+    .map((c) => c.name)
+    .filter((name) => name !== "Russian Federation (the)");
 
 
 const schema = z.object({
@@ -54,6 +64,7 @@ const ProfilePage = () => {
     };
     const [isEditingInterests, setIsEditingInterests] = useState(false);
     const [cropperSrc, setCropperSrc] = useState<string | null>(null);
+    const [avatarError, setAvatarError] = useState<string | null>(null);
 
     const {
         register,
@@ -62,6 +73,7 @@ const ProfilePage = () => {
         setValue,
         setError,
         watch,
+        control,
         formState: { errors },
     } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
@@ -150,9 +162,9 @@ const onSubmit = async (formValues: FormValues) => {
 
     try {
         await editProfile(patch as Record<string, unknown>).unwrap();
-        showToast("Профіль успішно оновлено", "success");
+        showToast("Profile updated successfully", "success");
     } catch {
-        showToast("Не вдалося оновити профіль", "error");
+        showToast("Failed to update profile", "error");
     }
 };
 
@@ -161,8 +173,9 @@ if (isLoading) return <p>Завантаження...</p>;
     return (
         <>
         <div className="flex justify-center py-4 sm:py-8 px-3 sm:px-6">
-            <div className="flex flex-col md:flex-row gap-6 w-full max-w-5xl">
-            {/* Sidebar */}
+            <div className="flex flex-col w-full max-w-5xl">
+            <div className="flex flex-col md:flex-row gap-6 w-full">
+
 <aside className="md:w-[280px] md:self-start">
     <div className="border border-[#A1A1A1] dark:border-[#333] rounded-2xl p-6 flex flex-col items-center gap-4 text-black dark:text-white">
 
@@ -179,11 +192,23 @@ if (isLoading) return <p>Завантаження...</p>;
                 <input type="file" accept="image/*" className="hidden" onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (!file) return;
+                    const ext = file.name.split(".").pop()?.toLowerCase();
+                    const unsupported = ["image/heic", "image/heif", "image/avif", "image/tiff"];
+                    if (unsupported.includes(file.type) || ext === "heic" || ext === "heif") {
+                        setAvatarError("HEIC/HEIF format is not supported. Please use JPG, PNG or WebP.");
+                        e.target.value = "";
+                        return;
+                    }
+                    setAvatarError(null);
                     setCropperSrc(URL.createObjectURL(file));
                     e.target.value = "";
                 }} />
             </label>
         </div>
+
+        {avatarError && (
+            <p className="text-xs text-red-400 text-center -mt-2">{avatarError}</p>
+        )}
 
         {/* Name */}
         <div className="text-center">
@@ -221,6 +246,93 @@ if (isLoading) return <p>Завантаження...</p>;
                 </div>
             )}
         </div>
+
+        {/* Interests */}
+        {selectedCategoryIds.length > 0 && (
+            <div className="w-full border-t border-[#333] pt-4">
+                <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs text-[#A1A1A1]">Interests</span>
+                    <button
+                        type="button"
+                        onClick={() => setIsEditingInterests((prev) => !prev)}
+                        className="text-xs text-[#1DB954] hover:underline"
+                    >
+                        {isEditingInterests ? "Done" : "Edit"}
+                    </button>
+                </div>
+                <div className="grid grid-cols-3 gap-2 w-full">
+                    {(isEditingInterests ? categories : categories?.filter((c) => selectedCategoryIds.includes(c.id)))
+                        ?.map((category) => {
+                            const isSelected = selectedCategoryIds.includes(category.id);
+                            return (
+                                <button
+                                    key={category.id}
+                                    type="button"
+                                    onClick={() => toggleCategory(category.id)}
+                                    className="flex flex-col items-center gap-1"
+                                >
+                                    <div className={`relative w-full aspect-square rounded-[10px] overflow-hidden border-2 transition ${
+                                        isSelected ? "border-[#1DB954]" : "border-transparent"
+                                    }`}>
+                                        <img src={`${APP_ENV.IMAGES_1200_URL}${category.image}`} className="w-full h-full object-cover" />
+                                        {isEditingInterests && isSelected && (
+                                            <div className="absolute top-1 right-1 w-3.5 h-3.5 rounded-full bg-[#1DB954] flex items-center justify-center">
+                                                <svg width="7" height="5" viewBox="0 0 8 6" fill="none">
+                                                    <path d="M1 3L3 5L7 1" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                                </svg>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <span className="text-[9px] text-[#A1A1A1] text-center leading-tight">{category.name}</span>
+                                </button>
+                            );
+                        })}
+                </div>
+                {isEditingInterests && (
+                    <p className="text-[10px] text-[#A1A1A1] mt-2 text-center">Click to toggle interests</p>
+                )}
+            </div>
+        )}
+
+        {selectedCategoryIds.length === 0 && (
+            <div className="w-full border-t border-[#333] pt-4">
+                <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs text-[#A1A1A1]">Interests</span>
+                    <button
+                        type="button"
+                        onClick={() => setIsEditingInterests(true)}
+                        className="text-xs text-[#1DB954] hover:underline"
+                    >
+                        Add
+                    </button>
+                </div>
+                {isEditingInterests && (
+                    <div className="grid grid-cols-3 gap-2 w-full">
+                        {categories?.map((category) => {
+                            const isSelected = selectedCategoryIds.includes(category.id);
+                            return (
+                                <button
+                                    key={category.id}
+                                    type="button"
+                                    onClick={() => toggleCategory(category.id)}
+                                    className="flex flex-col items-center gap-1"
+                                >
+                                    <div className={`relative w-full aspect-square rounded-[10px] overflow-hidden border-2 transition ${
+                                        isSelected ? "border-[#1DB954]" : "border-transparent"
+                                    }`}>
+                                        <img src={`${APP_ENV.IMAGES_1200_URL}${category.image}`} className="w-full h-full object-cover" />
+                                    </div>
+                                    <span className="text-[9px] text-[#A1A1A1] text-center leading-tight">{category.name}</span>
+                                </button>
+                            );
+                        })}
+                    </div>
+                )}
+                {!isEditingInterests && (
+                    <p className="text-sm text-[#A1A1A1]">No interests selected yet.</p>
+                )}
+            </div>
+        )}
     </div>
 </aside>
             <form onSubmit={handleSubmit(onSubmit)} className="flex-1 text-black dark:text-white">
@@ -260,21 +372,54 @@ if (isLoading) return <p>Завантаження...</p>;
                     </div>
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">Phone</label>
-                        <input {...register("phoneNumber")} placeholder="+380..."
-                               className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
+                        <Controller
+                            name="phoneNumber"
+                            control={control}
+                            render={({ field }) => (
+                                <PhoneInput
+                                    international
+                                    defaultCountry="UA"
+                                    value={field.value ?? ""}
+                                    onChange={(val) => field.onChange(val ?? "")}
+                                    className="phone-input profile-phone-input !border-[#A1A1A1] dark:!border-[#333] !rounded-xl !px-4 !h-[50px]"
+                                />
+                            )}
+                        />
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">Country</label>
-                        <input {...register("country")} placeholder="Ukraine"
-                               className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
+                        <Controller
+                            name="country"
+                            control={control}
+                            render={({ field }) => (
+                                <ComboboxInput
+                                    value={field.value ?? ""}
+                                    onChange={field.onChange}
+                                    options={COUNTRY_NAMES}
+                                    placeholder="Ukraine"
+                                    className="text-black dark:text-white !border-[#A1A1A1] dark:!border-[#333] !rounded-xl !h-auto !px-4 !py-3 !text-base"
+                                />
+                            )}
+                        />
                     </div>
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">Language</label>
-                        <input {...register("language")} placeholder="Ukrainian"
-                               className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
+                        <Controller
+                            name="language"
+                            control={control}
+                            render={({ field }) => (
+                                <ComboboxInput
+                                    value={field.value ?? ""}
+                                    onChange={field.onChange}
+                                    options={LANGUAGES}
+                                    placeholder="Ukrainian"
+                                    className="text-black dark:text-white !border-[#A1A1A1] dark:!border-[#333] !rounded-xl !h-auto !px-4 !py-3 !text-base"
+                                />
+                            )}
+                        />
                     </div>
                 </div>
 
@@ -282,7 +427,7 @@ if (isLoading) return <p>Завантаження...</p>;
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">Gender</label>
                         <select {...register("gender", { valueAsNumber: true })}
-                                className="w-full bg-[#D1D1D1] dark:bg-[#1a1a1a] border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white text-sm focus:outline-none focus:border-[#1DB954] transition">
+                                className="w-full bg-white dark:bg-[#1a1a1a] border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white text-base focus:outline-none focus:border-[#1DB954] transition">
                             <option value="">— Gender —</option>
                             <option value={0}>Female</option>
                             <option value={1}>Male</option>
@@ -291,62 +436,18 @@ if (isLoading) return <p>Завантаження...</p>;
                     </div>
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">Birth date</label>
-                        <input {...register("birthDate")} type="date"
-                               className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white text-base focus:outline-none focus:border-[#1DB954] transition" />
+                        <Controller
+                            name="birthDate"
+                            control={control}
+                            render={({ field }) => (
+                                <BirthDatePicker
+                                    value={field.value ?? ""}
+                                    onChange={field.onChange}
+                                    className="text-black dark:text-white border-[#A1A1A1] dark:border-[#333] rounded-xl h-[50px]"
+                                />
+                            )}
+                        />
                     </div>
-                </div>
-
-                <div className="mb-6">
-                    <div className="flex items-center justify-between mb-2">
-                        <label className="text-xs text-[#A1A1A1]">Interests</label>
-                        <button
-                            type="button"
-                            onClick={() => setIsEditingInterests((prev) => !prev)}
-                            className="text-xs text-[#1DB954] hover:underline"
-                        >
-                            {isEditingInterests ? "Done" : "Edit"}
-                        </button>
-                    </div>
-
-                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
-                        {(isEditingInterests
-                                ? categories
-                                : categories?.filter((category) => selectedCategoryIds.includes(category.id))
-                        )?.map((category) => {
-                            const isSelected = selectedCategoryIds.includes(category.id);
-                            return (
-                                <button
-                                    key={category.id}
-                                    type="button"
-                                    onClick={() => toggleCategory(category.id)}
-                                    className="flex flex-col items-center gap-1.5"
-                                >
-                                    <div
-                                        className={`relative w-full aspect-square rounded-[14px] overflow-hidden border-2 transition ${
-                                            isSelected ? "border-[#1DB954]" : "border-transparent"
-                                        }`}
-                                    >
-                                        <img
-                                            src={`${APP_ENV.IMAGES_1200_URL}${category.image}`}
-                                            className="w-full h-full object-cover"
-                                        />
-                                        {isEditingInterests && isSelected && (
-                                            <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#1DB954] flex items-center justify-center">
-                                                <svg width="8" height="6" viewBox="0 0 8 6" fill="none">
-                                                    <path d="M1 3L3 5L7 1" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                                </svg>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <span className="text-[10px] text-[#A1A1A1] text-center">{category.name}</span>
-                                </button>
-                            );
-                        })}
-                    </div>
-
-                    {!isEditingInterests && selectedCategoryIds.length === 0 && (
-                        <p className="text-sm text-[#A1A1A1] mt-2">You haven't selected any interests yet.</p>
-                    )}
                 </div>
 
                 <div className="flex flex-wrap items-center justify-between gap-3">
@@ -377,6 +478,7 @@ if (isLoading) return <p>Завантаження...</p>;
                     Logout
                 </button>
             </form>
+            </div>
             </div>
         </div>
 

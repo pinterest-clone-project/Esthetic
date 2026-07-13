@@ -2,6 +2,7 @@ import type {IChat} from "@/types/chat/IChat.ts";
 import {useAppSelector} from "@/store";
 import {useGetChatsQuery, useGetMessagesQuery, useMarkChatAsReadMutation, useSendMessageMutation} from "@/services/chatService.ts";
 import {useEffect, useRef, useState} from "react";
+import {useNavigate} from "react-router";
 import Modal from "@/components/ui/Modal.tsx";
 import {APP_ENV} from "@/constants/env";
 
@@ -44,18 +45,24 @@ const ChatWindow = ({ chat, onClose }: ChatWindowProps) => {
         setText("");
     };
 
+    const navigate = useNavigate();
     const avatarLetter = chat.otherUser.username?.[0]?.toUpperCase() ?? "?";
 
     return (
         <Modal isOpen onClose={onClose} variant="sidebar" width={300} disableInnerScroll>
             <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10 shrink-0">
-                <div className="w-8 h-8 rounded-full bg-[#2a2a2a] overflow-hidden shrink-0 flex items-center justify-center">
-                    {chat.otherUser.image
-                        ? <img src={`${APP_ENV.IMAGES_100_URL}${chat.otherUser.image}`} className="w-full h-full object-cover" />
-                        : <span className="text-white text-xs font-medium">{avatarLetter}</span>
-                    }
-                </div>
-                <span className="text-black dark:text-white text-sm font-medium flex-1">{chat.otherUser.username}</span>
+                <button
+                    onClick={() => navigate(`/user/${chat.otherUser.id}`)}
+                    className="flex items-center gap-3 flex-1 hover:opacity-80 transition-opacity min-w-0"
+                >
+                    <div className="w-8 h-8 rounded-full bg-[#2a2a2a] overflow-hidden shrink-0 flex items-center justify-center">
+                        {chat.otherUser.image
+                            ? <img src={`${APP_ENV.IMAGES_100_URL}${chat.otherUser.image}`} className="w-full h-full object-cover" />
+                            : <span className="text-white text-xs font-medium">{avatarLetter}</span>
+                        }
+                    </div>
+                    <span className="text-black dark:text-white text-sm font-medium truncate">{chat.otherUser.username}</span>
+                </button>
                 <button
                     onClick={onClose}
                     className="w-7 h-7 flex items-center justify-center rounded-full bg-[#D1D1D1] dark:bg-[#2a2a2a] hover:bg-[#3a3a3a] transition-colors"

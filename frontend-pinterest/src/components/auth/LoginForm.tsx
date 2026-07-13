@@ -39,13 +39,14 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
 
 
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center px-4 sm:px-16">
 
             <div className="w-11 h-11 rounded-full flex items-center justify-center mb-3">
                 <img src={logo} className="w-11 h-11" />
             </div>
 
 
+            <div className="step-animate w-full flex flex-col items-center">
             <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px]">Welcome in Esthetic</h2>
             <p className="text-sm text-white dark:text-black mb-5">Where style begins</p>
 
@@ -119,6 +120,7 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
                 By continuing, you agree to the Esthetic Terms of Service and
                 acknowledge that you have read our Privacy Policy. Notice.
             </p>
+            </div>
         </div>
     );
 };

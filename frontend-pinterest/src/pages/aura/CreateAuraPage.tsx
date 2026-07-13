@@ -5,7 +5,6 @@ import { useGetAllTagsQuery } from "@/services/tagService.ts";
 import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
 import {APP_ENV} from "@/constants/env";
 import { useNavigate } from "react-router";
-import BackButton from "@/components/ui/BackButton.tsx";
 
 const CreateAuraPage = () => {
     const navigate = useNavigate();
@@ -124,7 +123,6 @@ const CreateAuraPage = () => {
 
             <div className="flex items-center justify-between mb-8 w-full max-w-[580px]">
                 <div className="flex items-center gap-3">
-                    <BackButton className="mb-0" />
                     <h1 className="text-black dark:text-white text-sm font-medium tracking-wide">Create Aura</h1>
                 </div>
                 <button

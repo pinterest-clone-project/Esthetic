@@ -8,6 +8,8 @@ export const getNotificationUrl = (n: INotification): string | null => {
         case 2:
         case 3:
             return n.targetId ? `/aura/preview/${n.targetId}` : null;
+        case 4:
+            return `/notifications`;
         default:
             return null;
     }

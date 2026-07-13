@@ -21,6 +21,9 @@ public class GetBoardByIdHandler(
         .FirstOrDefaultAsync(b => b.Id == request.Id, cancellationToken)
         ?? throw new NotFoundException(ValidationMessages.NotFound(ValidationMessages.Board));
 
+        if (board.IsPrivate && board.OwnerId != request.CurrentUserId)
+            throw new NotFoundException(ValidationMessages.NotFound(ValidationMessages.Board));
+
         return boardMapper.ToDetailsDto(board, request.CurrentUserId);
     }
 }

@@ -37,4 +37,6 @@ public class UserEntity : IdentityUser<Guid>, IEntity
     public virtual ICollection<UserBlockEntity>? BlockedUsers { get; set; }
     public virtual ICollection<UserBlockEntity>? BlockedByUsers { get; set; }
     public virtual ICollection<UserCategory>? UserCategories { get; set; }
+    public virtual ICollection<FollowRequestEntity>? SentFollowRequests { get; set; }
+    public virtual ICollection<FollowRequestEntity>? ReceivedFollowRequests { get; set; }
 }

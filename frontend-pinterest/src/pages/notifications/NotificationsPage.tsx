@@ -1,24 +1,29 @@
 import { useNavigate } from "react-router";
 import { useGetNotificationsQuery, useMarkAllAsReadMutation } from "@/services/notificationService.ts";
+import { useGetFollowRequestsQuery, useAcceptFollowRequestMutation, useDeclineFollowRequestMutation } from "@/services/followService.ts";
 import { getNotificationUrl } from "@/utils/getNotificationUrl.ts";
 import { formatTimeLabel } from "@/utils/formatTimeLabel.ts";
 import { APP_ENV } from "@/constants/env";
 import { useEffect, useState } from "react";
 import userIcon from "@/assets/icons/user_icon.svg";
 
-type Filter = "all" | 0 | 1 | 2 | 3;
+type Filter = "all" | 0 | 1 | 2 | 3 | "requests";
 
 const FILTERS: { label: string; value: Filter; color: string }[] = [
-    { label: "All",      value: "all", color: "#A1A1A1" },
-    { label: "Follows",  value: 0,     color: "#1DB954" },
-    { label: "Likes",    value: 1,     color: "#e11d48" },
-    { label: "Comments", value: 2,     color: "#f59e0b" },
-    { label: "Pins",     value: 3,     color: "#8b5cf6" },
+    { label: "All",      value: "all",      color: "#A1A1A1" },
+    { label: "Follows",  value: 0,          color: "#1DB954" },
+    { label: "Likes",    value: 1,          color: "#e11d48" },
+    { label: "Comments", value: 2,          color: "#f59e0b" },
+    { label: "Pins",     value: 3,          color: "#8b5cf6" },
+    { label: "Requests", value: "requests", color: "#3b82f6" },
 ];
 
 const NotificationsPage = () => {
     const navigate = useNavigate();
     const { data: notifications = [], isLoading } = useGetNotificationsQuery();
+    const { data: followRequests = [] } = useGetFollowRequestsQuery();
+    const [acceptRequest] = useAcceptFollowRequestMutation();
+    const [declineRequest] = useDeclineFollowRequestMutation();
     const [markAllAsRead] = useMarkAllAsReadMutation();
     const [activeFilter, setActiveFilter] = useState<Filter>("all");
 
@@ -28,7 +33,7 @@ const NotificationsPage = () => {
         if (unread.length > 0) markAllAsRead();
     }, []);
 
-    const filtered = activeFilter === "all"
+    const filtered = activeFilter === "all" || activeFilter === "requests"
         ? notifications
         : notifications.filter((n) => n.type === activeFilter);
 
@@ -55,11 +60,15 @@ const NotificationsPage = () => {
         }
     };
 
-    const countOf = (type: Filter) =>
-        type === "all" ? notifications.length : notifications.filter((n) => n.type === type).length;
+    const countOf = (type: Filter) => {
+        if (type === "all") return notifications.length;
+        if (type === "requests") return followRequests.length;
+        return notifications.filter((n) => n.type === type).length;
+    };
 
     const renderItem = (n: (typeof notifications)[0], index: number) => {
         const url = getNotificationUrl(n);
+        const isFollowRequest = n.type === 4;
         const color = getTypeAccent(n.type);
 
         return (
@@ -87,7 +96,7 @@ const NotificationsPage = () => {
                             <img src={userIcon} className="w-5 h-5 opacity-40" />
                         )}
                     </div>
-                    <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full flex items-center justify-center" style={{ background: color }}>
+                    <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full flex items-center justify-center" style={{ background: isFollowRequest ? "#3b82f6" : color }}>
                         {n.type === 0 && (
                             <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3">
                                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
@@ -106,10 +115,15 @@ const NotificationsPage = () => {
                                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                             </svg>
                         )}
-
                         {n.type === 3 && (
                             <svg width="8" height="8" viewBox="0 0 24 24" fill="black" stroke="none">
                                 <path d="M12 2L3 7v10l9 5 9-5V7l-9-5z"/>
+                            </svg>
+                        )}
+                        {n.type === 4 && (
+                            <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
+                                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                             </svg>
                         )}
                     </div>
@@ -147,7 +161,6 @@ const NotificationsPage = () => {
             `}</style>
 
             <div className="px-4 py-6 text-black dark:text-white max-w-2xl mx-auto">
-
                 <div className="flex items-center justify-between mb-5">
                     <h1 className="text-2xl font-bold tracking-tight">Notifications</h1>
                     {unread.length > 0 && (
@@ -165,7 +178,7 @@ const NotificationsPage = () => {
                             <button
                                 key={String(f.value)}
                                 onClick={() => setActiveFilter(f.value)}
-                                className="flex shrink-0 items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-150 border"
+                                className="relative flex shrink-0 items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-150 border"
                                 style={{
                                     background: isActive ? f.color : "transparent",
                                     color: isActive ? (f.value === "all" ? "#fff" : "#000") : "#A1A1A1",
@@ -189,7 +202,59 @@ const NotificationsPage = () => {
                     })}
                 </div>
 
-                {isLoading ? (
+                {activeFilter === "requests" ? (
+                    followRequests.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center py-24 gap-4">
+                            <div className="w-16 h-16 rounded-2xl bg-[#f5f5f5] dark:bg-[#1a1a1a] flex items-center justify-center">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#A1A1A1" strokeWidth="1.5">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <line x1="19" y1="8" x2="19" y2="14"/>
+                                    <line x1="22" y1="11" x2="16" y2="11"/>
+                                </svg>
+                            </div>
+                            <div className="text-center">
+                                <p className="text-sm font-medium">No follow requests</p>
+                                <p className="text-xs text-[#A1A1A1] mt-1">When someone requests to follow you, it will appear here</p>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col gap-2">
+                            {followRequests.map((req) => (
+                                <div key={req.senderId} className="flex items-center gap-3 p-4 rounded-2xl border border-[#e8e8e8] dark:border-[#222] bg-white dark:bg-[#111]">
+                                    <button onClick={() => navigate(`/user/${req.senderId}`)} className="shrink-0">
+                                        <div className="w-10 h-10 rounded-full overflow-hidden bg-[#e8e8e8] dark:bg-[#2a2a2a] flex items-center justify-center">
+                                            {req.senderImage
+                                                ? <img src={`${APP_ENV.IMAGES_100_URL}${req.senderImage}`} className="w-full h-full object-cover" />
+                                                : <img src={userIcon} className="w-5 h-5 opacity-40" />
+                                            }
+                                        </div>
+                                    </button>
+                                    <div className="flex-1 min-w-0">
+                                        <button onClick={() => navigate(`/user/${req.senderId}`)} className="text-sm font-semibold text-black dark:text-white hover:underline text-left">
+                                            {req.senderUsername}
+                                        </button>
+                                        <p className="text-xs text-[#A1A1A1]">{formatTimeLabel(req.createdAt)}</p>
+                                    </div>
+                                    <div className="flex items-center gap-2 shrink-0">
+                                        <button
+                                            onClick={() => acceptRequest(req.senderId)}
+                                            className="px-3 py-1.5 rounded-lg bg-[#1DB954] hover:bg-[#1aa34a] text-black text-xs font-semibold transition-colors"
+                                        >
+                                            Accept
+                                        </button>
+                                        <button
+                                            onClick={() => declineRequest(req.senderId)}
+                                            className="px-3 py-1.5 rounded-lg bg-[#f5f5f5] dark:bg-[#2a2a2a] hover:bg-[#e8e8e8] dark:hover:bg-[#333] text-black dark:text-white text-xs font-semibold transition-colors"
+                                        >
+                                            Decline
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )
+                ) : isLoading ? (
                     <div className="flex items-center justify-center py-24">
                         <div className="w-7 h-7 rounded-full border-2 border-black/10 dark:border-white/10 border-t-[#1DB954] animate-spin" />
                     </div>

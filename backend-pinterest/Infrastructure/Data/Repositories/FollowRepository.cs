@@ -24,6 +24,15 @@ public class FollowRepository(AppDbContext context) : BaseRepository<FollowEntit
              .Select(f => f.FollowerId).ToListAsync(ct);
         return ids;
     }
+                                                                    
+    public async Task<List<Guid>> GetFollowingIdsAsync(Guid userId, CancellationToken ct)
+    {
+        return await context.Follows
+           .Where(f => f.FollowerId == userId)
+           .Select(f => f.FolloweeId)
+           .ToListAsync(ct);
+    }
+
 
     public Task UnfollowAsync(Guid followerId, Guid followeeId, CancellationToken ct = default)
     {

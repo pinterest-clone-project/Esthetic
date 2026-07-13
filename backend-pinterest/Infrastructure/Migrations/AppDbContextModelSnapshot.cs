@@ -295,6 +295,35 @@ namespace Infrastructure.Migrations
                     b.ToTable("Follows");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Follow.FollowRequestEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ReceiverId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SenderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId", "ReceiverId")
+                        .IsUnique()
+                        .HasFilter("\"Status\" = 0");
+
+                    b.ToTable("FollowRequests", (string)null);
+                });
+
             modelBuilder.Entity("Domain.Entities.Identity.RefreshTokenEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -937,6 +966,25 @@ namespace Infrastructure.Migrations
                     b.Navigation("Follower");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Follow.FollowRequestEntity", b =>
+                {
+                    b.HasOne("Domain.Entities.Identity.UserEntity", "Receiver")
+                        .WithMany("ReceivedFollowRequests")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Identity.UserEntity", "Sender")
+                        .WithMany("SentFollowRequests")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
+                });
+
             modelBuilder.Entity("Domain.Entities.Identity.UserLoginEntity", b =>
                 {
                     b.HasOne("Domain.Entities.Identity.UserEntity", "User")
@@ -1197,7 +1245,11 @@ namespace Infrastructure.Migrations
 
                     b.Navigation("Likes");
 
+                    b.Navigation("ReceivedFollowRequests");
+
                     b.Navigation("ReceivedReports");
+
+                    b.Navigation("SentFollowRequests");
 
                     b.Navigation("SentReports");
 
