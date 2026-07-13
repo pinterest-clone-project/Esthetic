@@ -30,7 +30,7 @@ const COUNTRY_NAMES = getCountries()
 const schema = z.object({
     firstName:   z.string().min(1, "Імʼя обовʼязкове").max(50).or(z.literal("")).optional(),
     lastName:    z.string().min(1, "Прізвище обовʼязкове").max(50).or(z.literal("")).optional(),
-    userName:    z.string().min(3, "Мінімум 3 символи").max(30, "Максимум 30 символів").regex(/^[a-zA-Z0-9_]+$/, "Лише латинські літери, цифри та _").or(z.literal("")).optional(),
+    userName:    z.string().min(3, "Мінімум 3 символи").max(20, "Максимум 20 символів").regex(/^[a-zA-Z0-9_]+$/, "Лише латинські літери, цифри та _").or(z.literal("")).optional(),
     email:       z.string().email("Невірний формат email").or(z.literal("")).optional(),
     bio:         z.string().max(500, "Максимум 500 символів").or(z.literal("")).optional(),
     phoneNumber: z
@@ -215,18 +215,18 @@ if (isLoading) return <p>Завантаження...</p>;
         )}
 
         {/* Name */}
-        <div className="text-center">
-            <p className="font-bold text-lg leading-tight">
+        <div className="text-center w-full">
+            <p className="font-bold text-lg leading-tight break-words whitespace-normal">
                 {[watchedFirstName, watchedLastName].filter(Boolean).join(" ") || "Your Name"}
             </p>
             {watchedUserName && (
-                <p className="text-[#A1A1A1] text-sm mt-0.5">@{watchedUserName}</p>
+                <p className="text-[#A1A1A1] text-sm mt-0.5 break-all">@{watchedUserName}</p>
             )}
         </div>
 
         {/* Bio preview */}
         {watchedBio && (
-            <p className="text-sm text-[#A1A1A1] text-center line-clamp-2">{watchedBio}</p>
+            <p className="text-sm text-[#A1A1A1] text-center line-clamp-2 break-words whitespace-normal">{watchedBio}</p>
         )}
 
         {/* Stats */}
