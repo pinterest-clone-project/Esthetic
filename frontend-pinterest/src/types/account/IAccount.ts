@@ -4,7 +4,7 @@ export interface IAccount {
     firstName: string;
     lastName: string;
     image: string;
-    username: string;
+    userName: string;
     phoneNumber: string;
     bio: string;
     isPrivate: boolean;

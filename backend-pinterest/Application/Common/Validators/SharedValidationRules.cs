@@ -35,6 +35,16 @@ public static class SharedValidationRules
             .MaximumLength(FieldLengths.NameMax)
             .WithMessage(ValidationMessages.MaxLength(fieldName, FieldLengths.NameMax));
 
+    public static IRuleBuilderOptions<T, string?> UserNameRules<T>(this IRuleBuilder<T, string?> rule) =>
+        rule
+            .IsRequired(ValidationMessages.FieldUsername)
+            .MinimumLength(FieldLengths.UserNameMin)
+            .WithMessage(ValidationMessages.MinLength(ValidationMessages.FieldUsername, FieldLengths.UserNameMin))
+            .MaximumLength(FieldLengths.UserNameMax)
+            .WithMessage(ValidationMessages.MaxLength(ValidationMessages.FieldUsername, FieldLengths.UserNameMax))
+            .Matches(@"^[a-zA-Z0-9_]+$")
+            .WithMessage(ValidationMessages.UserNameFormat);
+
     public static IRuleBuilderOptions<T, string?> BioRules<T>(this IRuleBuilder<T, string?> rule) =>
         rule
             .MaximumLength(FieldLengths.BioMax)

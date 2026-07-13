@@ -15,6 +15,7 @@ public record EditCommand : IRequest<string>, ITransactionalCommand
     public Guid Id { get; init; }
     public Optional<string> FirstName { get; init; }
     public Optional<string> LastName { get; init; }
+    public Optional<string> UserName { get; init; }
     public Optional<string> Email { get; init; }
     public Optional<string> Bio { get; init; }
     public Optional<string> PhoneNumber { get; init; }

@@ -43,6 +43,20 @@ public class EditValidator : AbstractValidator<EditCommand>
                     ctx.AddFailure(ValidationMessages.MaxLength(ValidationMessages.FieldEmail, FieldLengths.EmailMax));
             });
 
+        RuleFor(x => x.UserName)
+            .Custom((optional, ctx) =>
+            {
+                if (!optional.HasValue || optional.IsCleared) return;
+                if (string.IsNullOrWhiteSpace(optional.Value))
+                    ctx.AddFailure(ValidationMessages.Required(ValidationMessages.FieldUsername));
+                else if (optional.Value!.Length < FieldLengths.UserNameMin)
+                    ctx.AddFailure(ValidationMessages.MinLength(ValidationMessages.FieldUsername, FieldLengths.UserNameMin));
+                else if (optional.Value!.Length > FieldLengths.UserNameMax)
+                    ctx.AddFailure(ValidationMessages.MaxLength(ValidationMessages.FieldUsername, FieldLengths.UserNameMax));
+                else if (!Regex.IsMatch(optional.Value!, @"^[a-zA-Z0-9_]+$"))
+                    ctx.AddFailure(ValidationMessages.UserNameFormat);
+            });
+
         RuleFor(x => x.Bio)
             .Custom((optional, ctx) =>
             {
