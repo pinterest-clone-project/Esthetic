@@ -5,4 +5,5 @@ export interface IPinSummaryResponse {
     likesCount: number;
     isLikedByMe: boolean;
     creatorId: string;
+    deletedAt?: string | null;
 }
