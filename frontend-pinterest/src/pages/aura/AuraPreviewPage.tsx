@@ -36,7 +36,7 @@ const AuraPreviewPage = () => {
     }, [pin?.id]);
 
     useEffect(() => {
-        window.scrollTo({top: 0, behavior: "instant"});
+        document.querySelector("main")?.scrollTo({ top: 0, behavior: "instant" });
     }, [id]);
 
     const isOwner = me?.id === pin?.creatorId;

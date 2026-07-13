@@ -5,6 +5,7 @@ import { getNotificationUrl } from "@/utils/getNotificationUrl.ts";
 import { formatTimeLabel } from "@/utils/formatTimeLabel.ts";
 import { APP_ENV } from "@/constants/env";
 import { useEffect, useState } from "react";
+import Pagination from "@/components/common/Pagination.tsx";
 import userIcon from "@/assets/icons/user_icon.svg";
 
 type Filter = "all" | 0 | 1 | 2 | 3 | "requests";
@@ -20,12 +21,17 @@ const FILTERS: { label: string; value: Filter; color: string }[] = [
 
 const NotificationsPage = () => {
     const navigate = useNavigate();
-    const { data: notifications = [], isLoading } = useGetNotificationsQuery();
+    const [page, setPage] = useState(1);
+    const { data: notificationsData, isLoading } = useGetNotificationsQuery({ page });
+    const notifications = notificationsData?.items ?? [];
+    const totalPages = notificationsData?.totalPages ?? 1;
+
     const { data: followRequests = [] } = useGetFollowRequestsQuery();
     const [acceptRequest] = useAcceptFollowRequestMutation();
     const [declineRequest] = useDeclineFollowRequestMutation();
     const [markAllAsRead] = useMarkAllAsReadMutation();
     const [activeFilter, setActiveFilter] = useState<Filter>("all");
+
 
     const unread = notifications.filter((n) => !n.isRead);
 
@@ -177,7 +183,7 @@ const NotificationsPage = () => {
                         return (
                             <button
                                 key={String(f.value)}
-                                onClick={() => setActiveFilter(f.value)}
+                                onClick={() => { setActiveFilter(f.value); }}
                                 className="relative flex shrink-0 items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-150 border"
                                 style={{
                                     background: isActive ? f.color : "transparent",
@@ -292,6 +298,15 @@ const NotificationsPage = () => {
                             </section>
                         )}
                     </div>
+                )}
+
+                {notificationsData && activeFilter !== "requests" && (
+                    <Pagination
+                        page={notificationsData.page}
+                        totalPages={totalPages}
+                        totalCount={notificationsData.totalCount}
+                        onPageChange={setPage}
+                    />
                 )}
             </div>
         </>
