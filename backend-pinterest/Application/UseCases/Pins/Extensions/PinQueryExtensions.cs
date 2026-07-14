@@ -9,18 +9,25 @@ public static class PinQueryExtensions
 {
     public static IQueryable<PinEntity> ApplyFilters(
         this IQueryable<PinEntity> query,
-        SearchPinsQuery filter)
+        SearchPinsQuery request)
     {
-        if (!string.IsNullOrWhiteSpace(filter.Search))
+        if (!string.IsNullOrWhiteSpace(request.Search))
         {
-            var search = filter.Search.ToLower();
+            var s = request.Search.ToLower();
             query = query.Where(p =>
-                (p.Title != null && p.Title.ToLower().Contains(search)) ||
-                (p.Description != null && p.Description.ToLower().Contains(search)) ||
-                (p.SourceUrl != null && p.SourceUrl.ToLower().Contains(search)) ||
-                (p.Category != null && p.Category.Name.ToLower().Contains(search)) ||
-                (p.PinTags != null && p.PinTags.Any(pt => pt.Tag.Name.ToLower().Contains(search))));
+                (p.Title != null && p.Title.ToLower().Contains(s)) ||
+                (p.Description != null && p.Description.ToLower().Contains(s)) ||
+                (p.Category != null && p.Category.Name.ToLower().Contains(s)) ||
+                p.PinTags!.Any(pt => pt.Tag.Name.ToLower().Contains(s)) ||
+                (p.Creator != null && p.Creator.UserName != null && p.Creator.UserName.ToLower().Contains(s))
+            );
         }
+
+        if (request.CategoryId.HasValue)
+            query = query.Where(p => p.CategoryId == request.CategoryId);
+
+        if (request.TagIds != null && request.TagIds.Count > 0)
+            query = query.Where(p => p.PinTags!.Any(pt => request.TagIds.Contains(pt.TagId)));
 
         return query;
     }

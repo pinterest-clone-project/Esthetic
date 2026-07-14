@@ -22,6 +22,7 @@ import AdminBoardsPage from "@/pages/admin/AdminBoardsPage.tsx";
 
 const FirstPage            = lazy(() => import("@/pages/home/FirstPage.tsx"));
 const ReviewPage           = lazy(() => import("@/pages/home/ReviewPage.tsx"));
+const SearchPage           = lazy(() => import("@/pages/aura/SearchPage.tsx"));
 const CreateAuraPage       = lazy(() => import("./pages/aura/CreateAuraPage.tsx"));
 const EditAuraPage         = lazy(() => import("./pages/aura/EditAuraPage.tsx"));
 const AuraPreviewPage      = lazy(() => import("./pages/aura/AuraPreviewPage.tsx"));
@@ -139,6 +140,7 @@ const App = () => {
                                         <Route path=":id" element={<UserPage />} />
                                     </Route>
                                     <Route path="aura">
+                                        <Route path="search" element={<SearchPage />} />
                                         <Route path="create" element={<CreateAuraPage />} />
                                         <Route path="edit/:id" element={<EditAuraPage />} />
                                         <Route path="preview/:id" element={<AuraPreviewPage />} />

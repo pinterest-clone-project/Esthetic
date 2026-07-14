@@ -20,7 +20,7 @@ export const pinService = api.injectEndpoints({
             }),
             providesTags: ["AllPins"],
         }),
-        searchPins: builder.query<IPagedResult<IPinResponse>, ISearchPinsParams>({
+        searchPins: builder.query<IPagedResult<IPinSummaryResponse>, ISearchPinsParams>({
             query: (params) => ({ url: 'Pins/search', method: 'GET', params }),
             providesTags: ['AllPins'],
         }),

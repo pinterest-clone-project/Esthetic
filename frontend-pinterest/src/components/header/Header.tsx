@@ -10,11 +10,14 @@ import ResetPasswordForm from "@/components/auth/ResetPasswordForm.tsx";
 import {useAppDispatch, useAppSelector} from "@/store";
 import userIcon from "../../../src/assets/icons/user_icon.svg";
 import bellIcon from "@/assets/icons/bell_icon.svg";
+import filterIconDark from "@/assets/icons/filter_icon_dark.svg";
+import filterIconLight from "@/assets/icons/filter_icon_light.svg";
 import {clearUser} from "@/store/slices/authSlice.ts";
 import {APP_ENV} from "@/constants/env";
 import {Link, useNavigate} from "react-router";
 import { useLogoutMutation } from "@/services/accountService";
 import { useGetNotificationsQuery } from "@/services/notificationService";
+import { useSearchPinsQuery } from "@/services/pinService";
 import {api} from "@/services/api.ts";
 import {selectIsAdmin} from "@/store/selectors/authSelectors.ts";
 import NotificationBell from "@/components/header/NotificationBell.tsx";
@@ -37,6 +40,8 @@ const Header: React.FC = () => {
     const [logout] = useLogoutMutation();
     const { data: notificationsData } = useGetNotificationsQuery({}, { skip: !user });
     const unreadCount = (notificationsData?.items ?? []).filter((n) => !n.isRead).length;
+
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -61,6 +66,14 @@ const Header: React.FC = () => {
             navigate("/");
         }
     };
+
+    const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter" && searchQuery.trim()) {
+            navigate(`/aura/search?q=${encodeURIComponent(searchQuery.trim())}`);
+            setSearchQuery("");
+        }
+    };
+
 
     return (
         <header className="sticky top-0 z-50 w-full bg-white dark:bg-black py-3">
@@ -91,7 +104,16 @@ const Header: React.FC = () => {
                             className="bg-transparent text-sm outline-none placeholder:text-black dark:placeholder:text-white dark:placeholder:opacity-50 px-3 w-full"
                             type="text"
                             placeholder="Search"
+                            value={searchQuery}
+                            onChange={e => setSearchQuery(e.target.value)}
+                            onKeyDown={handleSearch}
                         />
+
+                        <Link to="/aura/search">
+                            <div className="relative flex items-center justify-center w-11 h-11">
+                                <img src={theme=== "dark" ? filterIconDark : filterIconLight} className="w-[30px] h-[30px] opacity-70" />
+                            </div>
+                        </Link>
                     </div>
                 </div>
 
