@@ -35,8 +35,8 @@ const Header: React.FC = () => {
     const navigate = useNavigate();
 
     const [logout] = useLogoutMutation();
-    const { data: notifications = [] } = useGetNotificationsQuery(undefined, { skip: !user });
-    const unreadCount = notifications.filter((n) => !n.isRead).length;
+    const { data: notificationsData } = useGetNotificationsQuery({}, { skip: !user });
+    const unreadCount = (notificationsData?.items ?? []).filter((n) => !n.isRead).length;
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {

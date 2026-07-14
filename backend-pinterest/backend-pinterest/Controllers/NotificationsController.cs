@@ -20,8 +20,8 @@ public class NotificationsController(IMediator mediator) : ControllerBase
         ?? throw new UnauthorizedException(ValidationMessages.ErrorUnauthorized));
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
-        => Ok(await mediator.Send(new GetNotificationsQuery(CurrentUserId)));
+    public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 5)
+        => Ok(await mediator.Send(new GetNotificationsQuery(CurrentUserId, page, pageSize)));
 
     [HttpPost("read")]
     public async Task<IActionResult> MarkAllAsRead()

@@ -59,7 +59,9 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
     const isStep2Valid =
         formData.firstName.trim().length > 0 &&
         formData.lastName.trim().length > 0 &&
-        formData.username.trim().length >= 3;
+        formData.username.trim().length >= 3 &&
+        formData.username.trim().length <= 20 &&
+        /^[a-zA-Z0-9_]+$/.test(formData.username.trim());
 
     const isStep4Valid =
         formData.country.trim().length > 0 && formData.language.trim().length > 0;
@@ -317,7 +319,18 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                         className={`w-full h-10 pl-7 pr-4 rounded-[5px] text-white dark:text-black text-sm outline-none border-[var(--color-btn-primary)] transition border`}
                                     />
                                 </div>
-                                <p className="text-xs text-[#A1A1A1] mt-1">Minimum 3 characters</p>
+                                {formData.username.length > 0 && formData.username.length < 3 && (
+                                    <p className="text-xs text-red-400 mt-1">Minimum 3 characters</p>
+                                )}
+                                {formData.username.length > 20 && (
+                                    <p className="text-xs text-red-400 mt-1">Maximum 20 characters</p>
+                                )}
+                                {formData.username.length >= 3 && formData.username.length <= 20 && !/^[a-zA-Z0-9_]+$/.test(formData.username) && (
+                                    <p className="text-xs text-red-400 mt-1">Only letters, numbers and _ allowed</p>
+                                )}
+                                {(!formData.username || (formData.username.length >= 3 && formData.username.length <= 20 && /^[a-zA-Z0-9_]+$/.test(formData.username))) && (
+                                    <p className="text-xs text-[#A1A1A1] mt-1">3–20 characters, letters, numbers and _ only</p>
+                                )}
                             </div>
 
                             <Button

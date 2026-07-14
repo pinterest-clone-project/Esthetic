@@ -205,10 +205,26 @@ html, body {
 }
 
 /* Profile page variant — respects light/dark theme */
+.profile-phone-input {
+    background: transparent;
+}
+
 .profile-phone-input .PhoneInputInput {
+    color: black;
+    background: transparent;
+}
+
+.profile-phone-input .PhoneInputCountrySelect {
+    background: white;
     color: black;
 }
 
 .dark .profile-phone-input .PhoneInputInput {
+    color: white;
+    background: transparent;
+}
+
+.dark .profile-phone-input .PhoneInputCountrySelect {
+    background: #1a1a1a;
     color: white;
 }

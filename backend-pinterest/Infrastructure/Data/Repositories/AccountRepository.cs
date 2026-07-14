@@ -20,4 +20,10 @@ public class AccountRepository : BaseRepository<UserEntity>, IAccountRepository
         return await _db.Users
             .FirstOrDefaultAsync(u => u.Email == email && !u.IsDeleted, ct);
     }
+
+    public async Task<bool> IsUserNameTakenAsync(string userName, Guid excludeUserId, CancellationToken ct = default)
+    {
+        return await _db.Users
+            .AnyAsync(u => u.UserName == userName && u.Id != excludeUserId && !u.IsDeleted, ct);
+    }
 }

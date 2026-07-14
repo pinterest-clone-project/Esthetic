@@ -25,6 +25,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class, IEntity
         if (entity == null) return;
 
         entity.IsDeleted = true;
+        entity.DeletedAt = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
         entity.UpdatedAt = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
         _db.Set<T>().Update(entity);
 

@@ -243,6 +243,12 @@
   <data name="EmailAlreadyExists" xml:space="preserve">
     <value>Користувач з такою електронною поштою вже зареєстрований</value>
   </data>
+  <data name="UserNameAlreadyTaken" xml:space="preserve">
+    <value>Цей нікнейм вже зайнятий</value>
+  </data>
+  <data name="UserNameFormat" xml:space="preserve">
+    <value>Нікнейм може містити лише літери, цифри та підкреслення</value>
+  </data>
   <data name="GoogleLinkFailed" xml:space="preserve">
     <value>Не вдалося зв'язати акаунт Google з існуючим профілем</value>
   </data>

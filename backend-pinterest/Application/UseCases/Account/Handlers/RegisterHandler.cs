@@ -23,6 +23,10 @@ public class RegisterHandler(
 {
     public async Task<TokenDTO> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
+        var existingByUserName = await userManager.FindByNameAsync(request.UserName);
+        if (existingByUserName != null)
+            throw new BadRequestException(ValidationMessages.UserNameAlreadyTaken);
+
         var existingUser = await userManager.FindByEmailAsync(request.Email);
 
         if (existingUser != null)

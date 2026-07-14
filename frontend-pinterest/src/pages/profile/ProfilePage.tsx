@@ -30,6 +30,7 @@ const COUNTRY_NAMES = getCountries()
 const schema = z.object({
     firstName:   z.string().min(1, "Імʼя обовʼязкове").max(50).or(z.literal("")).optional(),
     lastName:    z.string().min(1, "Прізвище обовʼязкове").max(50).or(z.literal("")).optional(),
+    userName:    z.string().min(3, "Мінімум 3 символи").max(20, "Максимум 20 символів").regex(/^[a-zA-Z0-9_]+$/, "Лише латинські літери, цифри та _").or(z.literal("")).optional(),
     email:       z.string().email("Невірний формат email").or(z.literal("")).optional(),
     bio:         z.string().max(500, "Максимум 500 символів").or(z.literal("")).optional(),
     phoneNumber: z
@@ -81,6 +82,7 @@ const ProfilePage = () => {
     const selectedCategoryIds = watch("categoryIds") ?? [];
     const watchedFirstName = watch("firstName") ?? me?.firstName ?? "";
     const watchedLastName = watch("lastName") ?? me?.lastName ?? "";
+    const watchedUserName = watch("userName") ?? me?.userName ?? "";
     const watchedBio = watch("bio") ?? me?.bio ?? "";
     const watchedImageFile = watch("imageFile");
 
@@ -115,6 +117,7 @@ const ProfilePage = () => {
         reset({
             firstName:   me.firstName   ?? "",
             lastName:    me.lastName    ?? "",
+            userName:    me.userName    ?? "",
             email:       me.email       ?? "",
             bio:         me.bio         ?? "",
             phoneNumber: me.phoneNumber ?? "",
@@ -139,6 +142,7 @@ const onSubmit = async (formValues: FormValues) => {
 
     compareStr("firstName",   me?.firstName);
     compareStr("lastName",    me?.lastName);
+    compareStr("userName",    me?.userName);
     compareStr("email",       me?.email);
     compareStr("bio",         me?.bio);
     compareStr("phoneNumber", me?.phoneNumber);
@@ -211,18 +215,18 @@ if (isLoading) return <p>Завантаження...</p>;
         )}
 
         {/* Name */}
-        <div className="text-center">
-            <p className="font-bold text-lg leading-tight">
+        <div className="text-center w-full">
+            <p className="font-bold text-lg leading-tight break-words whitespace-normal">
                 {[watchedFirstName, watchedLastName].filter(Boolean).join(" ") || "Your Name"}
             </p>
-            {me?.username && (
-                <p className="text-[#A1A1A1] text-sm mt-0.5">@{me.username}</p>
+            {watchedUserName && (
+                <p className="text-[#A1A1A1] text-sm mt-0.5 break-all">@{watchedUserName}</p>
             )}
         </div>
 
         {/* Bio preview */}
         {watchedBio && (
-            <p className="text-sm text-[#A1A1A1] text-center line-clamp-2">{watchedBio}</p>
+            <p className="text-sm text-[#A1A1A1] text-center line-clamp-2 break-words whitespace-normal">{watchedBio}</p>
         )}
 
         {/* Stats */}
@@ -358,6 +362,16 @@ if (isLoading) return <p>Завантаження...</p>;
                 </div>
 
                 <div className="mb-4">
+                    <label className="text-xs text-[#A1A1A1] mb-1.5 block">Username</label>
+                    <div className="relative">
+                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#A1A1A1] text-base select-none">@</span>
+                        <input {...register("userName")} placeholder="your_username"
+                               className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl pl-8 pr-4 py-3 text-black dark:text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
+                    </div>
+                    {errors.userName && <span className="text-red-400 text-xs mt-1 block">{errors.userName.message}</span>}
+                </div>
+
+                <div className="mb-4">
                     <label className="text-xs text-[#A1A1A1] mb-1.5 block">About you</label>
                     <textarea {...register("bio")} placeholder="Tell something about yourself..." rows={3}
                               className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] resize-none transition" />
@@ -467,8 +481,21 @@ if (isLoading) return <p>Завантаження...</p>;
 
                 <button
                     type="button"
+                    onClick={() => navigate("/deleted-auras")}
+                    className="md:hidden mt-4 w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-gray-300 dark:border-white/10 text-gray-500 dark:text-gray-400 text-sm font-medium hover:border-gray-400 transition"
+                >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                        <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                    </svg>
+                    Recently deleted
+                </button>
+
+                <button
+                    type="button"
                     onClick={handleLogout}
-                    className="md:hidden mt-6 w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-red-500 text-red-500 text-sm font-medium hover:bg-red-500/10 transition"
+                    className="md:hidden mt-3 w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-red-500 text-red-500 text-sm font-medium hover:bg-red-500/10 transition"
                 >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>

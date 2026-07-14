@@ -20,9 +20,10 @@ export const useNotificationRealtime = () => {
 
             getChatConnection().on("ReceiveNotification", (notification: INotification) => {
                 dispatch(
-                    notificationService.util.updateQueryData("getNotifications", undefined, (draft) => {
-                        if (!draft.some((n) => n.id === notification.id)) {
-                            draft.unshift(notification);
+                    notificationService.util.updateQueryData("getNotifications", {}, (draft) => {
+                        if (!draft.items.some((n: INotification) => n.id === notification.id)) {
+                            draft.items.unshift(notification);
+                            draft.totalCount += 1;
                         }
                     })
                 );

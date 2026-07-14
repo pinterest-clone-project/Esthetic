@@ -17,6 +17,7 @@ public class UserEntity : IdentityUser<Guid>, IEntity
     public Gender? Gender { get; set; } = null;
     public string? Image { get; set; } = null;
     public bool IsDeleted { get; set; } = false;
+    public DateTime? DeletedAt { get; set; }
     public bool IsPrivate { get; set; } = false;
     public bool IsBlocked { get; set; } = false;
     public string? BlockReason { get; set; } = null;

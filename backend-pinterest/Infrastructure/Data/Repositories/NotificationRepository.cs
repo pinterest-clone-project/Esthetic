@@ -21,6 +21,22 @@ public class NotificationRepository(AppDbContext db) : INotificationRepository
             .Take(50)
             .ToListAsync(ct);
 
+    public async Task<(List<NotificationEntity> Items, int TotalCount)> GetPagedByUserIdAsync(
+        Guid userId, int page, int pageSize, CancellationToken ct = default)
+    {
+        var query = db.Notifications
+            .Where(n => n.UserId == userId)
+            .OrderByDescending(n => n.CreatedAt);
+
+        var total = await query.CountAsync(ct);
+        var items = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(ct);
+
+        return (items, total);
+    }
+
     public Task<int> GetUnreadCountAsync(Guid userId, CancellationToken ct = default) =>
         db.Notifications.CountAsync(n => n.UserId == userId && !n.IsRead, ct);
 
