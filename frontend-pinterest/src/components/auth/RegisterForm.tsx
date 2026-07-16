@@ -153,7 +153,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
         <div className="flex flex-col items-center px-4 sm:px-16">
 
 <div className="w-11 h-11 rounded-full flex items-center justify-center mb-3">
-                <img src={logo} className="w-11 h-11" />
+                <img src={logo} className="w-11 h-11" alt="Esthetic logo" />
             </div>
 
             {step > 1 && <StepIndicator step={step} totalSteps={7} />}
@@ -479,7 +479,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 <label className="cursor-pointer group relative">
                                     <div className="w-20 h-20 rounded-full border-2 border-dashed border-[var(--color-btn-primary)] group-hover:border-[var(--color-btn-primary)] transition flex items-center justify-center overflow-hidden">
                                         {imagePreview ? (
-                                            <img src={imagePreview} className="w-full h-full object-cover" />
+                                            <img src={imagePreview} className="w-full h-full object-cover" alt="Profile preview" />
                                         ) : (
                                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A1A1A1" strokeWidth="1.5">
                                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>

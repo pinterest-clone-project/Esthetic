@@ -278,7 +278,7 @@ if (isLoading) return <p>Завантаження...</p>;
                                     <div className={`relative w-full aspect-square rounded-[10px] overflow-hidden border-2 transition ${
                                         isSelected ? "border-[#1DB954]" : "border-transparent"
                                     }`}>
-                                        <img src={`${APP_ENV.IMAGES_1200_URL}${category.image}`} className="w-full h-full object-cover" />
+                                        <img src={`${APP_ENV.IMAGES_1200_URL}${category.image}`} className="w-full h-full object-cover" alt={category.name} />
                                         {isEditingInterests && isSelected && (
                                             <div className="absolute top-1 right-1 w-3.5 h-3.5 rounded-full bg-[#1DB954] flex items-center justify-center">
                                                 <svg width="7" height="5" viewBox="0 0 8 6" fill="none">
@@ -324,7 +324,7 @@ if (isLoading) return <p>Завантаження...</p>;
                                     <div className={`relative w-full aspect-square rounded-[10px] overflow-hidden border-2 transition ${
                                         isSelected ? "border-[#1DB954]" : "border-transparent"
                                     }`}>
-                                        <img src={`${APP_ENV.IMAGES_1200_URL}${category.image}`} className="w-full h-full object-cover" />
+                                        <img src={`${APP_ENV.IMAGES_1200_URL}${category.image}`} className="w-full h-full object-cover" alt={category.name} />
                                     </div>
                                     <span className="text-[9px] text-[#A1A1A1] text-center leading-tight">{category.name}</span>
                                 </button>

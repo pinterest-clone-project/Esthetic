@@ -94,12 +94,12 @@ const NotificationsPage = () => {
                     <div className="absolute left-0 top-3 bottom-3 w-[3px] rounded-full" style={{ background: color }} />
                 )}
 
-                <div className="relative shrink-0 mt-0.5" onClick={(e) => goToActor(e, n.actorId)}>
+                <button type="button" className="relative shrink-0 mt-0.5 cursor-pointer" onClick={(e) => goToActor(e, n.actorId)}>
                     <div className="w-10 h-10 rounded-full overflow-hidden bg-[#e8e8e8] dark:bg-[#2a2a2a] flex items-center justify-center ring-2 ring-transparent group-hover:ring-[#1DB954]/30 transition-all duration-200">
                         {n.actorImage ? (
-                            <img src={`${APP_ENV.IMAGES_100_URL}${n.actorImage}`} className="w-full h-full object-cover" />
+                            <img src={`${APP_ENV.IMAGES_100_URL}${n.actorImage}`} className="w-full h-full object-cover" alt="" />
                         ) : (
-                            <img src={userIcon} className="w-5 h-5 opacity-40" />
+                            <img src={userIcon} className="w-5 h-5 opacity-40" alt="" />
                         )}
                     </div>
                     <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full flex items-center justify-center" style={{ background: isFollowRequest ? "#3b82f6" : color }}>
@@ -133,7 +133,7 @@ const NotificationsPage = () => {
                             </svg>
                         )}
                     </div>
-                </div>
+                </button>
 
                 <div className="flex-1 min-w-0">
                     <div className="flex items-baseline gap-1.5 flex-wrap">
@@ -176,7 +176,9 @@ const NotificationsPage = () => {
                     )}
                 </div>
 
-                <div className="flex gap-2 mb-6 overflow-x-auto pb-1 scrollbar-none">
+                <div className="relative mb-6">
+                    <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+
                     {FILTERS.map((f) => {
                         const count = countOf(f.value);
                         const isActive = activeFilter === f.value;
@@ -206,6 +208,8 @@ const NotificationsPage = () => {
                             </button>
                         );
                     })}
+                    </div>
+                    <div className="absolute right-0 top-0 bottom-1 w-8 bg-gradient-to-l from-white dark:from-black to-transparent pointer-events-none" />
                 </div>
 
                 {activeFilter === "requests" ? (
@@ -231,8 +235,8 @@ const NotificationsPage = () => {
                                     <button onClick={() => navigate(`/user/${req.senderId}`)} className="shrink-0">
                                         <div className="w-10 h-10 rounded-full overflow-hidden bg-[#e8e8e8] dark:bg-[#2a2a2a] flex items-center justify-center">
                                             {req.senderImage
-                                                ? <img src={`${APP_ENV.IMAGES_100_URL}${req.senderImage}`} className="w-full h-full object-cover" />
-                                                : <img src={userIcon} className="w-5 h-5 opacity-40" />
+                                                ? <img src={`${APP_ENV.IMAGES_100_URL}${req.senderImage}`} className="w-full h-full object-cover" alt="" />
+                                                : <img src={userIcon} className="w-5 h-5 opacity-40" alt="" />
                                             }
                                         </div>
                                     </button>

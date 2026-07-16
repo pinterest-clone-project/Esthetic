@@ -32,3 +32,6 @@ dist-ssr
 docs/superpowers/
 
 
+
+# Claude skills
+.claude/
