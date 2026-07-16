@@ -97,9 +97,9 @@ const NotificationsPage = () => {
                 <div className="relative shrink-0 mt-0.5" onClick={(e) => goToActor(e, n.actorId)}>
                     <div className="w-10 h-10 rounded-full overflow-hidden bg-[#e8e8e8] dark:bg-[#2a2a2a] flex items-center justify-center ring-2 ring-transparent group-hover:ring-[#1DB954]/30 transition-all duration-200">
                         {n.actorImage ? (
-                            <img src={`${APP_ENV.IMAGES_100_URL}${n.actorImage}`} className="w-full h-full object-cover" />
+                            <img src={`${APP_ENV.IMAGES_100_URL}${n.actorImage}`} className="w-full h-full object-cover" alt="" />
                         ) : (
-                            <img src={userIcon} className="w-5 h-5 opacity-40" />
+                            <img src={userIcon} className="w-5 h-5 opacity-40" alt="" />
                         )}
                     </div>
                     <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full flex items-center justify-center" style={{ background: isFollowRequest ? "#3b82f6" : color }}>
@@ -231,8 +231,8 @@ const NotificationsPage = () => {
                                     <button onClick={() => navigate(`/user/${req.senderId}`)} className="shrink-0">
                                         <div className="w-10 h-10 rounded-full overflow-hidden bg-[#e8e8e8] dark:bg-[#2a2a2a] flex items-center justify-center">
                                             {req.senderImage
-                                                ? <img src={`${APP_ENV.IMAGES_100_URL}${req.senderImage}`} className="w-full h-full object-cover" />
-                                                : <img src={userIcon} className="w-5 h-5 opacity-40" />
+                                                ? <img src={`${APP_ENV.IMAGES_100_URL}${req.senderImage}`} className="w-full h-full object-cover" alt="" />
+                                                : <img src={userIcon} className="w-5 h-5 opacity-40" alt="" />
                                             }
                                         </div>
                                     </button>

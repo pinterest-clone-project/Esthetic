@@ -72,7 +72,7 @@ const BottomNav = () => {
                                     onClick={() => { setCreateOpen(false); navigate("/aura/create"); }}
                                     className="flex items-center gap-3 w-full px-4 py-3 text-sm text-black dark:text-white hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a] transition-colors"
                                 >
-                                    <img src={auraIcon} className="w-5 h-5 object-contain" style={{ filter: defaultFilter }} />
+                                    <img src={auraIcon} className="w-5 h-5 object-contain" style={{ filter: defaultFilter }} alt="" />
                                     Aura
                                 </button>
                                 <div className="h-px bg-[#A2A2A2] dark:bg-[#535353]" />
@@ -80,7 +80,7 @@ const BottomNav = () => {
                                     onClick={() => { setCreateOpen(false); navigate("/collections/moodboard"); }}
                                     className="flex items-center gap-3 w-full px-4 py-3 text-sm text-black dark:text-white hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a] transition-colors"
                                 >
-                                    <img src={collectionIcon} className="w-5 h-5 object-contain" style={{ filter: defaultFilter }} />
+                                    <img src={collectionIcon} className="w-5 h-5 object-contain" style={{ filter: defaultFilter }} alt="" />
                                     Moodboard
                                 </button>
                             </div>

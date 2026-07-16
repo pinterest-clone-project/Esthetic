@@ -36,8 +36,8 @@ const SettingsPage = () => {
                 >
                     <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 bg-[var(--color-btn-primary)] flex items-center justify-center">
                         {user.image
-                            ? <img src={`${APP_ENV.IMAGES_100_URL}${user.image}`} className="w-full h-full object-cover" />
-                            : <img src={profileIcon} style={{ filter: whiteFilter }} className="w-6 h-6" />
+                            ? <img src={`${APP_ENV.IMAGES_100_URL}${user.image}`} className="w-full h-full object-cover" alt="Your profile" />
+                            : <img src={profileIcon} style={{ filter: whiteFilter }} className="w-6 h-6" alt="" />
                         }
                     </div>
                     <div className="text-left flex-1">
@@ -53,7 +53,7 @@ const SettingsPage = () => {
             <div className="flex items-center justify-between w-full px-4 py-4 rounded-2xl bg-[#f5f5f5] dark:bg-[#1a1a1a]">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] flex items-center justify-center shrink-0">
-                        <img src={themeIcon} style={{ filter: whiteFilter }} className="w-5 h-5" />
+                        <img src={themeIcon} style={{ filter: whiteFilter }} className="w-5 h-5" alt="" />
                     </div>
                     <div>
                         <p className="text-sm font-medium">Theme</p>

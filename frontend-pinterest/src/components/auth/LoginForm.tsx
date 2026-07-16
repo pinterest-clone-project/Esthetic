@@ -42,7 +42,7 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
         <div className="flex flex-col items-center px-4 sm:px-16">
 
             <div className="w-11 h-11 rounded-full flex items-center justify-center mb-3">
-                <img src={logo} className="w-11 h-11" />
+                <img src={logo} className="w-11 h-11" alt="Esthetic logo" />
             </div>
 
 

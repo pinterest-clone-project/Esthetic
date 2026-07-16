@@ -204,7 +204,7 @@ const Sidebar = () => {
                                     className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-[#D1D1D1] dark:hover:bg-[#2a2a2a] transition-colors"
                                 >
                                     <div className="w-9 h-9 rounded-full bg-[#D1D1D1] dark:bg-[#a2a2a2] overflow-hidden shrink-0">
-                                        {user.image && <img src={`${APP_ENV.IMAGES_100_URL}${user.image}`} className="w-full h-full object-cover" />}
+                                        {user.image && <img src={`${APP_ENV.IMAGES_100_URL}${user.image}`} className="w-full h-full object-cover" alt={user.userName ?? ""} />}
                                     </div>
                                     <span className="text-black dark:text-white text-sm">{user.userName}</span>
                                 </button>
@@ -223,7 +223,7 @@ const Sidebar = () => {
                                     className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors"
                                 >
                                     <div className="w-9 h-9 rounded-full bg-white dark:bg-[#2a2a2a] overflow-hidden shrink-0">
-                                        {chat.otherUser.image && <img src={`${APP_ENV.IMAGES_100_URL}${chat.otherUser.image}`} className="w-full h-full object-cover" />}
+                                        {chat.otherUser.image && <img src={`${APP_ENV.IMAGES_100_URL}${chat.otherUser.image}`} className="w-full h-full object-cover" alt={chat.otherUser.username} />}
                                     </div>
                                     <div className="text-left flex-1 overflow-hidden">
                                         <p className="text-black dark:text-white text-sm">{chat.otherUser.username}</p>
@@ -249,7 +249,7 @@ const Sidebar = () => {
                     className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group "
                 >
                     <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1] flex items-center justify-center transition-colors shrink-0">
-                        <img src={profileIcon} style={{ filter: whiteFilter }} className="w-5 h-5" />
+                        <img src={profileIcon} style={{ filter: whiteFilter }} className="w-5 h-5" alt="" />
                     </div>
                     <div className="text-left">
                         <p className="text-black dark:text-white text-sm font-medium">Profile</p>
@@ -260,7 +260,7 @@ const Sidebar = () => {
                 <div className="flex items-center justify-between w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1] flex items-center justify-center transition-colors shrink-0">
-                            <img src={themeIcon} style={{ filter: whiteFilter }} className="w-5 h-5" />
+                            <img src={themeIcon} style={{ filter: whiteFilter }} className="w-5 h-5" alt="" />
                         </div>
                         <div className="text-left">
                             <p className="text-black dark:text-white text-sm font-medium">Theme</p>
@@ -311,7 +311,7 @@ const Sidebar = () => {
                     className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group"
                 >
                     <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1]  flex items-center justify-center transition-colors shrink-0">
-                        <img src={collectionIcon} style={{ filter: whiteFilter }} className="w-5 h-5" />
+                        <img src={collectionIcon} style={{ filter: whiteFilter }} className="w-5 h-5" alt="" />
                     </div>
                     <div className="text-left">
                         <p className="text-black dark:text-white text-sm font-medium">Moodboard</p>
@@ -324,7 +324,7 @@ const Sidebar = () => {
                     className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group"
                 >
                     <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1]  flex items-center justify-center transition-colors shrink-0">
-                        <img src={auraIcon} style={{ filter: whiteFilter }} className="w-5 h-5" />
+                        <img src={auraIcon} style={{ filter: whiteFilter }} className="w-5 h-5" alt="" />
                     </div>
                     <div className="text-left">
                         <p className="text-black dark:text-white text-sm font-medium">Aura</p>

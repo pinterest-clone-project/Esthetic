@@ -112,7 +112,7 @@ const Header: React.FC = () => {
                     <div className="flex md:hidden items-center gap-2 shrink-0">
                         <Link to="/notifications">
                             <div className="relative flex items-center justify-center w-11 h-11">
-                                <img src={bellIcon} className="w-[30px] h-[30px] opacity-70" />
+                                <img src={bellIcon} className="w-[30px] h-[30px] opacity-70" alt="Notifications" />
                                 {unreadCount > 0 && (
                                     <span className="absolute top-0 right-0 min-w-[18px] h-[18px] px-1 rounded-full bg-btn-primary text-[10px] font-bold text-black flex items-center justify-center">
                                         {unreadCount > 9 ? "9+" : unreadCount}
@@ -124,9 +124,9 @@ const Header: React.FC = () => {
                             <div className={`w-9 h-9 rounded-full overflow-hidden flex items-center justify-center
                                 ${user.image ? "" : "bg-[var(--color-btn-primary)]"}`}>
                                 {user.image ? (
-                                    <img src={`${APP_ENV.IMAGES_100_URL}${user.image}`} className="w-full h-full object-cover" />
+                                    <img src={`${APP_ENV.IMAGES_100_URL}${user.image}`} className="w-full h-full object-cover" alt="Your profile" />
                                 ) : (
-                                    <img src={userIcon} className="w-5 h-6 object-contain" />
+                                    <img src={userIcon} className="w-5 h-6 object-contain" alt="" />
                                 )}
                             </div>
                         </Link>
@@ -162,9 +162,10 @@ const Header: React.FC = () => {
                                                 <img
                                                     src={`${APP_ENV.IMAGES_100_URL}${user.image}`}
                                                     className="w-full h-full object-cover rounded-full"
+                                                    alt="Your profile"
                                                 />
                                             ) : (
-                                                <img src={userIcon} className="w-5 h-6 object-contain" />
+                                                <img src={userIcon} className="w-5 h-6 object-contain" alt="" />
                                             )}
                                         </div>
                                     </Link>
