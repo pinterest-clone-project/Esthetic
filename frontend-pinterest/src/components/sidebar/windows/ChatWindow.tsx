@@ -57,7 +57,7 @@ const ChatWindow = ({ chat, onClose }: ChatWindowProps) => {
                 >
                     <div className="w-8 h-8 rounded-full bg-[#2a2a2a] overflow-hidden shrink-0 flex items-center justify-center">
                         {chat.otherUser.image
-                            ? <img src={`${APP_ENV.IMAGES_100_URL}${chat.otherUser.image}`} className="w-full h-full object-cover" />
+                            ? <img src={`${APP_ENV.IMAGES_100_URL}${chat.otherUser.image}`} className="w-full h-full object-cover" alt={chat.otherUser.username} />
                             : <span className="text-white text-xs font-medium">{avatarLetter}</span>
                         }
                     </div>

@@ -112,9 +112,9 @@ const CollectionsPage = () => {
                 ) : (
                     <div className="flex flex-col items-center justify-center mt-16 gap-6">
                         <div className="relative w-[280px] h-[200px] sm:w-[320px] sm:h-[240px]">
-                            <img src={im1} className="absolute top-[35px] left-0 w-[120px] h-[130px] sm:w-[140px] sm:h-[150px] object-cover rounded-xl" />
-                            <img src={im2} className="absolute top-0 left-[80px] w-[130px] h-[140px] sm:w-[150px] sm:h-[160px] object-cover rounded-xl" />
-                            <img src={im3} className="absolute top-[60px] left-[160px] w-[120px] h-[140px] sm:w-[140px] sm:h-[160px] object-cover rounded-xl" />
+                            <img src={im1} className="absolute top-[35px] left-0 w-[120px] h-[130px] sm:w-[140px] sm:h-[150px] object-cover rounded-xl" alt="" />
+                            <img src={im2} className="absolute top-0 left-[80px] w-[130px] h-[140px] sm:w-[150px] sm:h-[160px] object-cover rounded-xl" alt="" />
+                            <img src={im3} className="absolute top-[60px] left-[160px] w-[120px] h-[140px] sm:w-[140px] sm:h-[160px] object-cover rounded-xl" alt="" />
                         </div>
                         <div className="text-center mt-4">
                             <h2 className="text-2xl font-medium mb-3">Combine your ideas</h2>

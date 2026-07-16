@@ -46,7 +46,7 @@ const NotificationBell: React.FC = () => {
         <div className="relative" ref={ref}>
 
             <button onClick={handleToggle} className="relative flex items-center justify-center w-11 h-11 text-[#A1A1A1] hover:text-white cursor-pointer transition">
-                <img src={bellIcon} className="w-[30px] h-[30px] opacity-70 hover:opacity-100" />
+                <img src={bellIcon} className="w-[30px] h-[30px] opacity-70 hover:opacity-100" alt="Notifications" />
                 {unreadCount > 0 && (
                     <span className="absolute top-0 right-0 min-w-[18px] h-[18px] px-1 rounded-full bg-btn-primary text-[10px] font-bold text-black flex items-center justify-center">
                         {unreadCount > 9 ? "9+" : unreadCount}
@@ -77,13 +77,14 @@ const NotificationBell: React.FC = () => {
                                         ${!n.isRead ? "bg-white/[0.03]" : ""}
                                     `}
                                 >
-                                    <div
+                                    <button
+                                        type="button"
                                         className="relative shrink-0 cursor-pointer"
                                         onClick={(e) => { e.stopPropagation(); if (n.actorId) { navigate(`/user/${n.actorId}`); setOpen(false); } }}
                                     >
                                         <div className="w-8 h-8 rounded-full bg-[#2a2a2a] overflow-hidden">
                                             {n.actorImage && (
-                                                <img src={`${APP_ENV.IMAGES_100_URL}${n.actorImage}`} className="w-full h-full object-cover" />
+                                                <img src={`${APP_ENV.IMAGES_100_URL}${n.actorImage}`} className="w-full h-full object-cover" alt="" />
                                             )}
                                         </div>
                                         <div
@@ -120,7 +121,7 @@ const NotificationBell: React.FC = () => {
                                                 </svg>
                                             )}
                                         </div>
-                                    </div>
+                                    </button>
                                     <div className="min-w-0 flex-1">
                                         {n.actorUsername && (
                                             <span

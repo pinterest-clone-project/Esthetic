@@ -44,9 +44,9 @@ const FirstPage = () => {
 
                 {/* Mobile: 3 images in a row */}
                 <div className="flex md:hidden gap-2 w-full px-4">
-                    <img src={im1} className="w-0 flex-1 object-cover rounded-[12px]" style={{height: "48vw"}} />
-                    <img src={im2} className="w-0 flex-1 object-cover rounded-[12px] self-start" style={{height: "54vw"}} />
-                    <img src={im3} className="w-0 flex-1 object-cover rounded-[12px]" style={{height: "48vw"}} />
+                    <img src={im1} className="w-0 flex-1 object-cover rounded-[12px]" style={{height: "48vw"}} alt="" />
+                    <img src={im2} className="w-0 flex-1 object-cover rounded-[12px] self-start" style={{height: "54vw"}} alt="" />
+                    <img src={im3} className="w-0 flex-1 object-cover rounded-[12px]" style={{height: "48vw"}} alt="" />
                 </div>
 
                 <div className="hidden relative lg:block md:block w-full max-w-[1400px]">
@@ -54,26 +54,31 @@ const FirstPage = () => {
                     <img
                         src={im1}
                         className="absolute left-[10%] w-[140px] lg:w-[200px] h-[290px] lg:h-[350px] object-cover rounded-[15px]"
+                        alt=""
                     />
 
                     <img
                         src={im2}
                         className="absolute left-[28%] w-[140px] lg:w-[200px] h-[340px] lg:h-[400px] object-cover rounded-[15px]"
+                        alt=""
                     />
 
                     <img
                         src={im3}
                         className="absolute top-[40px] left-[44%] w-[140px] lg:w-[200px] h-[340px] lg:h-[400px] object-cover rounded-[15px]"
+                        alt=""
                     />
 
                     <img
                         src={im5}
                         className="absolute left-[76%] w-[140px] lg:w-[200px] h-[340px] lg:h-[400px] object-cover rounded-[15px]"
+                        alt=""
                     />
 
                     <img
                         src={im4}
                         className="absolute top-[80px] left-[63%] w-[140px] lg:w-[200px] h-[310px] lg:h-[370px] object-cover rounded-[15px]"
+                        alt=""
                     />
 
                 </div>
@@ -106,18 +111,18 @@ const FirstPage = () => {
 
                     {/* Mobile images */}
                     <div className="flex lg:hidden gap-2 w-full px-4">
-                        <img src={im6} className="w-0 flex-1 object-cover rounded-[12px]" style={{height: "48vw"}} />
-                        <img src={im7} className="w-0 flex-1 object-cover rounded-[12px] self-start" style={{height: "54vw"}} />
-                        <img src={im8} className="w-0 flex-1 object-cover rounded-[12px]" style={{height: "48vw"}} />
+                        <img src={im6} className="w-0 flex-1 object-cover rounded-[12px]" style={{height: "48vw"}} alt="" />
+                        <img src={im7} className="w-0 flex-1 object-cover rounded-[12px] self-start" style={{height: "54vw"}} alt="" />
+                        <img src={im8} className="w-0 flex-1 object-cover rounded-[12px]" style={{height: "48vw"}} alt="" />
                     </div>
 
                     <section className="hidden lg:flex justify-center">
                         <div className="relative w-full max-w-[700px] h-[500px]">
 
-                            <img src={im6} className="absolute top-[4%] left-[23%] w-[150px] h-[150px] object-cover rounded-[15px]" />
-                            <img src={im7} className="absolute left-[55%] w-[300px] h-[300px] object-cover rounded-[15px]" />
-                            <img src={im8} className="absolute top-[55%] left-[65%] w-[200px] h-[200px] object-cover rounded-[15px]" />
-                            <img src={im5} className="absolute top-18 left-[40%] w-[300px] h-[400px] object-cover rounded-[15px]" />
+                            <img src={im6} className="absolute top-[4%] left-[23%] w-[150px] h-[150px] object-cover rounded-[15px]" alt="" />
+                            <img src={im7} className="absolute left-[55%] w-[300px] h-[300px] object-cover rounded-[15px]" alt="" />
+                            <img src={im8} className="absolute top-[55%] left-[65%] w-[200px] h-[200px] object-cover rounded-[15px]" alt="" />
+                            <img src={im5} className="absolute top-18 left-[40%] w-[300px] h-[400px] object-cover rounded-[15px]" alt="" />
                         </div>
                     </section>
 

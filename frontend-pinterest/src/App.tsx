@@ -46,7 +46,7 @@ const NewsPage        = lazy(() => import("@/pages/static/NewsPage.tsx"));
 
 const PageLoader = () => (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white dark:bg-[#121212]">
-        <img src={logo} className="w-[80px] h-[80px] animate-pulse" />
+        <img src={logo} className="w-[80px] h-[80px] animate-pulse" alt="Esthetic logo" />
     </div>
 );
 

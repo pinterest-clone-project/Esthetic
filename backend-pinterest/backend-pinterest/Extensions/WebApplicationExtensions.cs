@@ -31,7 +31,15 @@ public static class WebApplicationExtensions
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(path),
-                RequestPath = $"/{dir}"
+                RequestPath = $"/{dir}",
+                OnPrepareResponse = ctx =>
+                {
+                    var origin = ctx.Context.Request.Headers.Origin.ToString();
+                    if (origin == "http://localhost:5173" || origin == "https://max.itstep.click")
+                    {
+                        ctx.Context.Response.Headers["Access-Control-Allow-Origin"] = origin;
+                    }
+                }
             });
         }
         #endregion

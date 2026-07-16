@@ -129,7 +129,7 @@ const PinReportGroupCard = ({group}: { group: IPinReportGroup }) => {
             >
                 <div className="w-14 h-14 rounded-xl bg-white/5 overflow-hidden shrink-0">
                     {group.pinImage && (
-                        <img src={`${APP_ENV.IMAGES_100_URL}${group.pinImage}`} className="w-full h-full object-cover"/>
+                        <img src={`${APP_ENV.IMAGES_100_URL}${group.pinImage}`} className="w-full h-full object-cover" alt="" />
                     )}
                 </div>
 

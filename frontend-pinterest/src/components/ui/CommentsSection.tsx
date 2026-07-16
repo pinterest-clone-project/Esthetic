@@ -93,7 +93,7 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
         return (
             <div key={comment.id} className={`flex gap-2.5 items-start group ${isReply ? 'ml-9 mt-2' : ''}`}>
                 {/* Avatar */}
-                <div onClick={() => navigate(`/user/${comment.userId}`)} className="w-7 h-7 rounded-full bg-white/10 shrink-0 overflow-hidden mt-0.5 hover:pointer">
+                <button type="button" onClick={() => navigate(`/user/${comment.userId}`)} className="w-7 h-7 rounded-full bg-white/10 shrink-0 overflow-hidden mt-0.5 cursor-pointer">
                     {comment.userImage ? (
                         <img
                             src={`${APP_ENV.IMAGES_100_URL}${comment.userImage}`}
@@ -105,7 +105,7 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
                             {comment.username?.[0]?.toUpperCase() ?? "?"}
                         </div>
                     )}
-                </div>
+                </button>
 
                 <div className="flex-1 min-w-0">
                     <div className="flex items-baseline gap-2">
