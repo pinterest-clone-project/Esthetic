@@ -26,7 +26,7 @@ const Layout = () => {
     const showBack = BACK_BUTTON_ROUTES.some((r) => r.test(pathname));
 
     return (
-        <div className="flex flex-col h-screen overflow-hidden bg-white dark:bg-black">
+        <div className="flex flex-col h-[100dvh] overflow-hidden bg-white dark:bg-black">
             <TopProgressBar />
             <Header />
             <div className="flex flex-1 max-w-[1505px] mx-auto w-full min-h-0">

@@ -176,7 +176,9 @@ const NotificationsPage = () => {
                     )}
                 </div>
 
-                <div className="flex gap-2 mb-6 overflow-x-auto pb-1 scrollbar-none">
+                <div className="relative mb-6">
+                    <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+
                     {FILTERS.map((f) => {
                         const count = countOf(f.value);
                         const isActive = activeFilter === f.value;
@@ -206,6 +208,8 @@ const NotificationsPage = () => {
                             </button>
                         );
                     })}
+                    </div>
+                    <div className="absolute right-0 top-0 bottom-1 w-8 bg-gradient-to-l from-white dark:from-black to-transparent pointer-events-none" />
                 </div>
 
                 {activeFilter === "requests" ? (
