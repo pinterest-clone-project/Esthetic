@@ -35,6 +35,3 @@ docs/superpowers/
 
 # Claude skills
 .claude/
-
-# GitHub workflows (auto-generated)
-.github/workflows/react-doctor.yml
