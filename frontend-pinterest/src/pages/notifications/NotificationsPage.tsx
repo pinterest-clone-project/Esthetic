@@ -94,7 +94,7 @@ const NotificationsPage = () => {
                     <div className="absolute left-0 top-3 bottom-3 w-[3px] rounded-full" style={{ background: color }} />
                 )}
 
-                <div className="relative shrink-0 mt-0.5" onClick={(e) => goToActor(e, n.actorId)}>
+                <button type="button" className="relative shrink-0 mt-0.5 cursor-pointer" onClick={(e) => goToActor(e, n.actorId)}>
                     <div className="w-10 h-10 rounded-full overflow-hidden bg-[#e8e8e8] dark:bg-[#2a2a2a] flex items-center justify-center ring-2 ring-transparent group-hover:ring-[#1DB954]/30 transition-all duration-200">
                         {n.actorImage ? (
                             <img src={`${APP_ENV.IMAGES_100_URL}${n.actorImage}`} className="w-full h-full object-cover" alt="" />
@@ -133,7 +133,7 @@ const NotificationsPage = () => {
                             </svg>
                         )}
                     </div>
-                </div>
+                </button>
 
                 <div className="flex-1 min-w-0">
                     <div className="flex items-baseline gap-1.5 flex-wrap">

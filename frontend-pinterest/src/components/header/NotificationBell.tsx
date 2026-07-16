@@ -77,7 +77,8 @@ const NotificationBell: React.FC = () => {
                                         ${!n.isRead ? "bg-white/[0.03]" : ""}
                                     `}
                                 >
-                                    <div
+                                    <button
+                                        type="button"
                                         className="relative shrink-0 cursor-pointer"
                                         onClick={(e) => { e.stopPropagation(); if (n.actorId) { navigate(`/user/${n.actorId}`); setOpen(false); } }}
                                     >
@@ -120,7 +121,7 @@ const NotificationBell: React.FC = () => {
                                                 </svg>
                                             )}
                                         </div>
-                                    </div>
+                                    </button>
                                     <div className="min-w-0 flex-1">
                                         {n.actorUsername && (
                                             <span
