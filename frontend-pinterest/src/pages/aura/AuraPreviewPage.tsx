@@ -54,6 +54,19 @@ const AuraPreviewPage = () => {
         }
     };
 
+    const handleDownload = async () => {
+        if (!pin?.image) return;
+        const url = `${APP_ENV.IMAGES_1200_URL}${pin.image}`;
+        const fileName = (pin.title ?? "aura").replace(/\s+/g, "-").toLowerCase();
+        const blob = await fetch(url).then(r => r.blob());
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = blobUrl;
+        a.download = fileName;
+        a.click();
+        URL.revokeObjectURL(blobUrl);
+    };
+
     const handleDelete = () => {
         setConfirmDeleteOpen(true);
     };
@@ -102,13 +115,15 @@ const AuraPreviewPage = () => {
                                 onClick={handleLike}
                                 className="flex items-center gap-1.5 text-xs transition-colors group"
                             >
-                                <span
-                                    className={`transition-colors ${liked ? 'text-[#4ade80]' : 'text-gray-500 group-hover:text-[#4ade80]'}`}>♥</span>
-                                <span
-                                    className={`transition-colors ${liked ? 'text-white' : 'text-gray-500'}`}>{displayLikesCount}</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill={liked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-colors ${liked ? 'text-[#4ade80]' : 'text-gray-500 group-hover:text-[#4ade80]'}`}>
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                </svg>
+                                <span className={`transition-colors ${liked ? 'text-white' : 'text-gray-500'}`}>{displayLikesCount}</span>
                             </button>
                             <span className="flex items-center gap-1.5 text-gray-500 text-xs">
-                                <span className="text-[#4ade80]">💬</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#4ade80]">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                </svg>
                                 {pin.commentsCount}
                             </span>
                         </div>
@@ -124,6 +139,19 @@ const AuraPreviewPage = () => {
                                     <polyline points="7 3 7 8 15 8"/>
                                 </svg>
                                 Save
+                            </button>
+
+                            {/* Download — secondary */}
+                            <button
+                                onClick={handleDownload}
+                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/5 dark:hover:bg-white/10 hover:bg-black/5 border dark:border-white/10 dark:hover:border-white/20 border-black/10 hover:border-black/20 dark:text-gray-300 text-gray-700 dark:hover:text-white text-black text-xs font-medium transition-all duration-150"
+                            >
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                Download
                             </button>
 
                             {/* Share — secondary */}

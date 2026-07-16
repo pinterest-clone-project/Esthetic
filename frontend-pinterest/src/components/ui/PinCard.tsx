@@ -101,6 +101,20 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
         }
     };
 
+    const handleDownload = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!pin.image) return;
+        const url = `${APP_ENV.IMAGES_800_URL}${pin.image}`;
+        const fileName = (pin.title ?? "aura").replace(/\s+/g, "-").toLowerCase();
+        const blob = await fetch(url).then(r => r.blob());
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = blobUrl;
+        a.download = fileName;
+        a.click();
+        URL.revokeObjectURL(blobUrl);
+    };
+
     const handleShare = (e: React.MouseEvent) => {
         e.stopPropagation();
         navigator.clipboard.writeText(
@@ -136,7 +150,9 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
                     onClick={handleLike}
                     className="flex items-center gap-1 bg-black/50 hover:bg-black/70 rounded-full px-2 py-1 transition-colors cursor-pointer"
                 >
-                    <span className={`text-xs transition-colors ${liked ? 'text-[#4ade80]' : 'text-white/70'}`}>♥</span>
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill={liked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-colors ${liked ? 'text-[#4ade80]' : 'text-white/70'}`}>
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
                     <span className="text-white text-[10px]">{likesCount}</span>
                 </button>
             </div>
@@ -186,8 +202,19 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
                 )}
             </div>
 
-            {/* Bottom-right: Share */}
-            <div className={`absolute bottom-2 right-2 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
+            {/* Bottom-right: Download + Share */}
+            <div className={`absolute bottom-2 right-2 flex items-center gap-1.5 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
+                <button
+                    onClick={handleDownload}
+                    className="flex items-center justify-center w-7 h-7 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors"
+                    title="Download"
+                >
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                </button>
                 <button
                     onClick={handleShare}
                     className="flex items-center justify-center w-7 h-7 bg-black/50 hover:bg-black/70 text-[#4ade80] rounded-full transition-colors"
