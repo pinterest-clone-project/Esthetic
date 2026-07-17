@@ -17,10 +17,10 @@ const SORT_OPTIONS = [
 const SearchPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const q = searchParams.get("q") ?? "";
+    const categoryId = searchParams.get("categoryId") ?? "";
+    const tagIds = searchParams.getAll("tagId");
+    const sortIdx = Math.min(Number(searchParams.get("sort") ?? 0), SORT_OPTIONS.length - 1);
 
-    const [categoryId, setCategoryId] = useState<string>("");
-    const [tagIds, setTagIds] = useState<string[]>([]);
-    const [sortIdx, setSortIdx] = useState(0);
     const [tagQuery, setTagQuery] = useState("");
     const [tagFocused, setTagFocused] = useState(false);
     const [categoryOpen, setCategoryOpen] = useState(false);
@@ -40,6 +40,27 @@ const SearchPage = () => {
         sortDirection: sort.sortDirection as any,
         pageSize: 40,
     }, { skip: !q && !categoryId && tagIds.length === 0 });
+
+    const updateParams = (updates: Record<string, string | string[] | null>) => {
+        setSearchParams(prev => {
+            const next = new URLSearchParams(prev);
+            for (const [key, value] of Object.entries(updates)) {
+                next.delete(key);
+                if (value === null) continue;
+                if (Array.isArray(value)) {
+                    value.forEach(v => next.append(key, v));
+                } else if (value) {
+                    next.set(key, value);
+                }
+            }
+            return next;
+        });
+    };
+
+    const setCategoryId = (id: string) => updateParams({ categoryId: id || null });
+    const setSortIdx = (idx: number) => updateParams({ sort: idx === 0 ? null : String(idx) });
+    const addTag = (id: string) => updateParams({ tagId: [...tagIds, id] });
+    const removeTag = (id: string) => updateParams({ tagId: tagIds.filter(t => t !== id) });
 
     const selectedTags = useMemo(
         () => tags?.filter(t => tagIds.includes(t.id)) ?? [],
@@ -83,7 +104,7 @@ const SearchPage = () => {
                     <div className="flex items-center gap-2">
                         <span className="text-black dark:text-white text-sm font-semibold">"{q}"</span>
                         <button
-                            onClick={() => setSearchParams({})}
+                            onClick={() => updateParams({ q: null })}
                             className="text-gray-400 hover:text-black dark:hover:text-white text-xs transition-colors"
                         >✕</button>
                     </div>
@@ -154,7 +175,7 @@ const SearchPage = () => {
                             {tagSuggestions.map(tag => (
                                 <button
                                     key={tag.id}
-                                    onClick={() => { setTagIds(p => [...p, tag.id]); setTagQuery(""); }}
+                                    onClick={() => { addTag(tag.id); setTagQuery(""); }}
                                     className="w-full text-left px-3 py-2 text-xs text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
                                 >
                                     #{tag.name}
@@ -168,7 +189,7 @@ const SearchPage = () => {
                 {selectedTags.map(tag => (
                     <span key={tag.id} className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#4ade80] text-black text-xs font-medium">
                         #{tag.name}
-                        <button onClick={() => setTagIds(p => p.filter(id => id !== tag.id))} className="hover:opacity-60 transition-opacity">✕</button>
+                        <button onClick={() => removeTag(tag.id)} className="hover:opacity-60 transition-opacity">✕</button>
                     </span>
                 ))}
 
