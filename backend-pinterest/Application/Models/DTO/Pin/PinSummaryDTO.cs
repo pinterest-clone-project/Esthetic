@@ -9,4 +9,7 @@ public class PinSummaryDTO
     public bool IsLikedByMe { get; set; }
     public Guid CreatorId { get; set; }
     public DateTime? DeletedAt { get; set; }
+    public string? CategoryName { get; set; }
+    public int CommentsCount { get; set; }
+    public int TagsCount { get; set; }
 }

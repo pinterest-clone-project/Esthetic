@@ -1,10 +1,10 @@
 import { Pencil } from "lucide-react";
 import { APP_ENV } from "@/constants/env";
-import type { IPinResponse } from "@/types/pin/responses/IPinResponses.ts";
+import type { IPinSummaryResponse } from "@/types/pin/responses/IPinSummaryResponse.ts";
 
 interface PinRowProps {
-    pin: IPinResponse;
-    onEdit: (pin: IPinResponse) => void;
+    pin: IPinSummaryResponse;
+    onEdit: (id: string) => void;
 }
 
 const PinRow = ({ pin, onEdit }: PinRowProps) => (
@@ -27,12 +27,12 @@ const PinRow = ({ pin, onEdit }: PinRowProps) => (
                 <div className="flex items-center gap-2 text-xs text-white/30 mt-0.5">
                     <span>{pin.likesCount} лайків</span>
                     <span>{pin.commentsCount} коментарів</span>
-                    <span>{pin.tags.length} тегів</span>
+                    <span>{pin.tagsCount} тегів</span>
                 </div>
             </div>
         </div>
         <button
-            onClick={() => onEdit(pin)}
+            onClick={() => onEdit(pin.id)}
             className="p-2 rounded-xl bg-white/8 text-white/60 hover:bg-white/15 hover:text-white transition-colors shrink-0"
             aria-label="Редагувати пін"
         >

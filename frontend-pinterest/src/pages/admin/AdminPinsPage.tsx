@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { useAdminPinsFilters } from "@/hooks/useAdminPinsFilters.ts";
-import { useSearchPinsQuery } from "@/services/pinService.ts";
+import { useSearchPinsQuery, useGetPinByIdQuery } from "@/services/pinService.ts";
 import PinsFilters from "@/components/admin/pins/PinsFilters.tsx";
 import PinRow from "@/components/admin/pins/PinRow.tsx";
 import PinFormModal from "@/components/admin/pins/PinFormModal.tsx";
 import Pagination from "@/components/common/Pagination.tsx";
-import type { IPinResponse } from "@/types/pin/responses/IPinResponses.ts";
 
 const AdminPinsPage = () => {
     const {
@@ -22,7 +21,9 @@ const AdminPinsPage = () => {
         pageSize,
     });
 
-    const [editingPin, setEditingPin] = useState<IPinResponse | null>(null);
+    const [editingPinId, setEditingPinId] = useState<string | null>(null);
+    const { currentData: editingPin } = useGetPinByIdQuery(editingPinId!, { skip: !editingPinId });
+
     const isLoadingState = isLoading || (isFetching && !data);
     const totalPages = data?.totalPages ?? 1;
 
@@ -54,7 +55,7 @@ const AdminPinsPage = () => {
                         : data?.items.length === 0
                             ? <p className="text-sm text-white/40 text-center py-10">Пінів не знайдено</p>
                             : data?.items.map((pin) => (
-                                <PinRow key={pin.id} pin={pin} onEdit={setEditingPin} />
+                                <PinRow key={pin.id} pin={pin} onEdit={setEditingPinId} />
                             ))}
                 </div>
 
@@ -63,8 +64,8 @@ const AdminPinsPage = () => {
                 )}
             </div>
 
-            {editingPin && (
-                <PinFormModal pin={editingPin} onClose={() => setEditingPin(null)} />
+            {editingPinId && editingPin && (
+                <PinFormModal key={editingPinId} pin={editingPin} onClose={() => setEditingPinId(null)} />
             )}
         </SkeletonTheme>
     );

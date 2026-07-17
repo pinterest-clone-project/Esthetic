@@ -6,4 +6,7 @@ export interface IPinSummaryResponse {
     isLikedByMe: boolean;
     creatorId: string;
     deletedAt?: string | null;
+    categoryName: string | null;
+    commentsCount: number;
+    tagsCount: number;
 }

@@ -17,6 +17,18 @@ const rawBaseQuery = fetchBaseQuery({
         headers.set("Accept-Language", "en");
         return headers;
     },
+    paramsSerializer: (params) => {
+        const search = new URLSearchParams();
+        for (const [key, value] of Object.entries(params)) {
+            if (value === undefined || value === null) continue;
+            if (Array.isArray(value)) {
+                value.forEach(v => search.append(key, String(v)));
+            } else {
+                search.append(key, String(value));
+            }
+        }
+        return search.toString();
+    },
 });
 
 export const createBaseQuery = (
