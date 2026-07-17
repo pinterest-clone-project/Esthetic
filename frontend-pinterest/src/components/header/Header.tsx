@@ -17,7 +17,6 @@ import {APP_ENV} from "@/constants/env";
 import {Link, useNavigate} from "react-router";
 import { useLogoutMutation } from "@/services/accountService";
 import { useGetNotificationsQuery } from "@/services/notificationService";
-import { useSearchPinsQuery } from "@/services/pinService";
 import {api} from "@/services/api.ts";
 import {selectIsAdmin} from "@/store/selectors/authSelectors.ts";
 import NotificationBell from "@/components/header/NotificationBell.tsx";

@@ -30,6 +30,9 @@ public partial class PinMapper
 
     [MapperIgnoreTarget(nameof(PinSummaryDTO.LikesCount))]
     [MapperIgnoreTarget(nameof(PinSummaryDTO.IsLikedByMe))]
+    [MapperIgnoreTarget(nameof(PinSummaryDTO.CategoryName))]
+    [MapperIgnoreTarget(nameof(PinSummaryDTO.CommentsCount))]
+    [MapperIgnoreTarget(nameof(PinSummaryDTO.TagsCount))]
     private partial PinSummaryDTO ToSummaryDtoInternal(PinEntity src);
 
     public PinDTO ToDto(PinEntity src, Guid? currentUserId = null)
@@ -54,6 +57,9 @@ public partial class PinMapper
         dto.LikesCount = src.Likes?.Count ?? 0;
         dto.IsLikedByMe = currentUserId.HasValue
             && (src.Likes?.Any(l => l.UserId == currentUserId.Value) ?? false);
+        dto.CategoryName = src.Category?.Name;
+        dto.CommentsCount = src.Comments?.Count ?? 0;
+        dto.TagsCount = src.PinTags?.Count ?? 0;
         return dto;
     }
     

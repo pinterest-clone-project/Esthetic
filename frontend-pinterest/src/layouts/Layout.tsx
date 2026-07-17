@@ -17,7 +17,7 @@ const BACK_BUTTON_ROUTES = [
     /^\/moodboard\/preview\/.+$/,
     /^\/moodboard\/edit\/.+$/,
     /^\/deleted-auras$/,
-
+    /^\/aura\/search$/,
 ];
 
 const Layout = () => {

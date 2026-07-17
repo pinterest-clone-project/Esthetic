@@ -22,6 +22,7 @@ public class SearchPinsHandler(
             .Include(p => p.Category)
             .Include(p => p.Creator)
             .Include(p => p.Likes)
+            .Include(p => p.Comments)
             .ApplyFilters(request)
             .ApplySorting(request);
 
