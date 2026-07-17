@@ -5,6 +5,7 @@ import { useGetAllCategoriesQuery } from "@/services/categoryService.ts";
 import { useGetAllTagsQuery } from "@/services/tagService.ts";
 import PinCard from "@/components/ui/PinCard.tsx";
 import { APP_ENV } from "@/constants/env";
+import { Search, SearchX } from "lucide-react";
 
 const SORT_OPTIONS = [
     { label: "Newest", sortBy: "CreatedAt", sortDirection: "Desc" },
@@ -206,7 +207,7 @@ const SearchPage = () => {
             {/* Empty prompt */}
             {showResults && !isLoading && (
                 <div className="flex flex-col items-center justify-center py-24 gap-3">
-                    <span className="text-4xl">🔍</span>
+                    <Search size={40} className="text-gray-300 dark:text-white/20" />
                     <p className="text-gray-400 text-sm">Search for auras, tags, or categories</p>
                 </div>
             )}
@@ -214,7 +215,7 @@ const SearchPage = () => {
             {/* No results */}
             {isEmpty && !showResults && (
                 <div className="flex flex-col items-center justify-center py-24 gap-3">
-                    <span className="text-4xl">😶</span>
+                    <SearchX size={40} className="text-gray-300 dark:text-white/20" />
                     <p className="text-gray-400 text-sm">No auras found</p>
                 </div>
             )}
