@@ -26,10 +26,10 @@ public class PinsController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("search")]
-    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> Search([FromQuery] SearchPinsQuery query)
     {
-        var result = await mediator.Send(query);
+        var currentUserId = Guid.TryParse(User.FindFirstValue(JwtClaims.Id), out var id) ? id : Guid.Empty;
+        var result = await mediator.Send(query with { CurrentUserId = currentUserId });
         return Ok(result);
     }
 
