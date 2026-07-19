@@ -1,0 +1,41 @@
+{
+  "create": {
+    "title": "Create board",
+    "submit": "Create"
+  },
+  "edit": {
+    "title": "Edit board"
+  },
+  "delete": {
+    "title": "Delete board",
+    "confirm": "Delete this board?"
+  },
+  "fields": {
+    "title": "Board title",
+    "description": "Description",
+    "descriptionOptional": "Description (optional)"
+  },
+  "placeholders": {
+    "title": "Board title",
+    "description": "What's this board about?",
+    "search": "Search by board name or description...",
+    "moodboardName": "Moodboard name"
+  },
+  "toast": {
+    "created": "Board created",
+    "updated": "Board updated",
+    "deleted": "Board deleted",
+    "nameRequired": "Board name is required"
+  },
+  "empty": {
+    "noBoards": "No boards yet",
+    "noMoodboards": "No moodboards yet",
+    "noPins": "No pins on this board yet"
+  },
+  "moodboard": {
+    "create": "Create moodboard",
+    "edit": "Edit moodboard",
+    "regenerate": "Regenerate collage",
+    "noMoodboards": "No moodboards yet"
+  }
+}

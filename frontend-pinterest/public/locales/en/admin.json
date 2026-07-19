@@ -1,0 +1,52 @@
+{
+  "title": "Admin panel",
+  "dashboard": "Dashboard",
+  "sections": {
+    "pins": "Pins",
+    "boards": "Boards",
+    "categories": "Categories",
+    "tags": "Tags",
+    "users": "Users"
+  },
+  "pins": {
+    "edit": "Edit pin",
+    "delete": "Delete pin",
+    "search": "Search by name, description, source, category or tag..."
+  },
+  "boards": {
+    "edit": "Edit board",
+    "search": "Search by board name or description..."
+  },
+  "categories": {
+    "new": "New category",
+    "edit": "Edit category",
+    "delete": "Delete category?",
+    "name": "Category name",
+    "search": "Search by name or slug...",
+    "imageMissing": "Please select an image for the category"
+  },
+  "tags": {
+    "new": "New tag",
+    "edit": "Edit tag",
+    "delete": "Delete tag?",
+    "name": "Tag name",
+    "search": "Search by tag name..."
+  },
+  "users": {
+    "search": "Search by name or email...",
+    "block": "Block",
+    "unblock": "Unblock",
+    "blockReason": "Block reason..."
+  },
+  "toast": {
+    "categoryCreated": "Category created",
+    "categoryUpdated": "Category updated",
+    "categoryDeleted": "Category deleted",
+    "tagCreated": "Tag created",
+    "tagUpdated": "Tag updated",
+    "tagDeleted": "Tag deleted",
+    "pinUpdated": "Pin updated",
+    "pinDeleted": "Pin deleted",
+    "boardUpdated": "Board updated"
+  }
+}

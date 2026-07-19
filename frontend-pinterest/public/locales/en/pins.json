@@ -1,0 +1,58 @@
+{
+  "create": {
+    "title": "Create pin",
+    "submit": "Publish"
+  },
+  "edit": {
+    "title": "Edit pin"
+  },
+  "delete": {
+    "title": "Delete pin",
+    "confirm": "Are you sure you want to delete this pin?"
+  },
+  "fields": {
+    "title": "Title",
+    "description": "Description",
+    "sourceLink": "Source link",
+    "tags": "Tags",
+    "board": "Board"
+  },
+  "placeholders": {
+    "title": "Add a title",
+    "description": "Add a description",
+    "sourceLink": "Where is this from?",
+    "imageLink": "Direct link to image",
+    "newImageLink": "Direct link to new image",
+    "searchPins": "Search by name, description, source, category or tag...",
+    "searchTags": "Search tags...",
+    "addTag": "Add tag",
+    "addDetails": "Add details",
+    "addDetailsOptional": "Add details (optional)"
+  },
+  "toast": {
+    "created": "Pin created",
+    "updated": "Pin updated",
+    "deleted": "Pin deleted",
+    "saved": "Saved to board",
+    "removed": "Removed from board",
+    "imageMissing": "Please select an image for the pin"
+  },
+  "empty": {
+    "noPins": "No pins yet",
+    "noResults": "No pins found"
+  },
+  "aura": {
+    "create": "Create Aura",
+    "edit": "Edit Aura",
+    "delete": "Delete this aura?",
+    "name": "Aura name",
+    "description": "Aura description",
+    "placeholderName": "Aura name",
+    "placeholderDescription": "Describe your aura...",
+    "noAuras": "No auras yet",
+    "noAurasFound": "No auras found",
+    "copyLink": "Link to aura copied!",
+    "restored": "Aura restored successfully",
+    "restoreFailed": "Failed to restore aura"
+  }
+}

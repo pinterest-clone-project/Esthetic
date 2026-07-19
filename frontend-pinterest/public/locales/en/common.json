@@ -1,0 +1,89 @@
+{
+  "actions": {
+    "save": "Save",
+    "delete": "Delete",
+    "create": "Create",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "back": "Back",
+    "logout": "Logout",
+    "continue": "Continue",
+    "search": "Search",
+    "add": "Add",
+    "confirm": "Confirm",
+    "close": "Close",
+    "copy": "Copy",
+    "share": "Share",
+    "download": "Download",
+    "upload": "Upload",
+    "send": "Send",
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+    "block": "Block",
+    "restore": "Restore",
+    "report": "Report"
+  },
+  "nav": {
+    "home": "Home",
+    "search": "Search",
+    "messages": "Messages",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "admin": "Admin panel",
+    "logout": "Logout"
+  },
+  "placeholders": {
+    "search": "Search...",
+    "message": "Message",
+    "addComment": "Add a comment...",
+    "addDetails": "Add details",
+    "addDetailsOptional": "Add details (optional)",
+    "whereFrom": "Where is this from?",
+    "imageLink": "Direct link to image",
+    "newImageLink": "Direct link to new image",
+    "searchByNickname": "Search by nickname",
+    "searchTags": "Search tags...",
+    "tags": "Tags...",
+    "addTag": "Add tag",
+    "blockReason": "Block reason..."
+  },
+  "labels": {
+    "name": "Name",
+    "description": "Description",
+    "descriptionOptional": "Description (optional)",
+    "sourceLink": "Source link",
+    "tags": "Tags",
+    "language": "Language",
+    "country": "Country"
+  },
+  "empty": {
+    "noResults": "Nothing found",
+    "noComments": "No comments yet",
+    "noUsers": "No users found",
+    "noPins": "No pins yet",
+    "noBoards": "No boards yet",
+    "noAuras": "No auras yet",
+    "noAurasFound": "No auras found",
+    "noMoodboards": "No moodboards yet",
+    "noNotifications": "No notifications"
+  },
+  "toast": {
+    "linkCopied": "Link copied!",
+    "auraCopied": "Link to aura copied!",
+    "auraRestored": "Aura restored successfully",
+    "auraRestoreFailed": "Failed to restore aura",
+    "savedToBoard": "Saved to board",
+    "removedFromBoard": "Removed from board",
+    "somethingWentWrong": "Something went wrong",
+    "success": "Success"
+  },
+  "brand": {
+    "name": "Esthetic",
+    "news": "Esthetic News",
+    "business": "Esthetic for Business"
+  },
+  "confirm": {
+    "deleteAura": "Delete this aura?",
+    "deleteBoard": "Delete this board?"
+  }
+}
