@@ -3,6 +3,7 @@ import searchIconDark from "../../assets/icons/search-vector-dark.svg";
 import searchIconLight from "../../assets/icons/search-vector-light.svg";
 import Button from "@/components/button/Button.tsx";
 import {useEffect, useRef, useState} from "react";
+import { useTranslation } from "react-i18next";
 import LoginForm from "@/components/auth/LoginForm.tsx";
 import RegisterForm from "@/components/auth/RegisterForm.tsx";
 import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm.tsx";
@@ -22,6 +23,7 @@ import {selectIsAdmin} from "@/store/selectors/authSelectors.ts";
 import NotificationBell from "@/components/header/NotificationBell.tsx";
 import {useTheme} from "@/context/ThemeContext.tsx";
 import Modal from "@/components/ui/Modal.tsx";
+import LanguageSwitcher from "@/components/header/LanguageSwitcher.tsx";
 
 type ModalType = "login" | "signup" | "forgot-password" | "reset-password" | null;
 
@@ -40,6 +42,7 @@ const Header: React.FC = () => {
     const { data: notificationsData } = useGetNotificationsQuery({}, { skip: !user });
     const unreadCount = (notificationsData?.items ?? []).filter((n) => !n.isRead).length;
 
+    const { t } = useTranslation('common');
     const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
@@ -102,7 +105,7 @@ const Header: React.FC = () => {
                         <input
                             className="bg-transparent text-sm outline-none placeholder:text-black dark:placeholder:text-white dark:placeholder:opacity-50 px-3 w-full"
                             type="text"
-                            placeholder="Search"
+                            placeholder={t('placeholders.search')}
                             value={searchQuery}
                             onChange={e => setSearchQuery(e.target.value)}
                             onKeyDown={handleSearch}
@@ -120,11 +123,11 @@ const Header: React.FC = () => {
                     <div className="flex md:hidden items-center gap-2 shrink-0">
                         <Button variant="primary" size="sm" radius={4} className="!w-auto px-3"
                                 onClick={() => setActiveModal("signup")}>
-                            Sign Up
+                            {t('actions.signUp', 'Sign Up')}
                         </Button>
                         <Button variant={theme === "dark" ? "dark" : "light"} size="sm" radius={4} className="!w-auto px-3"
                                 onClick={() => setActiveModal("login")}>
-                            Log in
+                            {t('actions.logIn', 'Log in')}
                         </Button>
                     </div>
                 )}
@@ -133,7 +136,7 @@ const Header: React.FC = () => {
                     <div className="flex md:hidden items-center gap-2 shrink-0">
                         <Link to="/notifications">
                             <div className="relative flex items-center justify-center w-11 h-11">
-                                <img src={bellIcon} className="w-[30px] h-[30px] opacity-70" alt="Notifications" />
+                                <img src={bellIcon} className="w-[30px] h-[30px] opacity-70" alt={t('nav.notifications')} />
                                 {unreadCount > 0 && (
                                     <span className="absolute top-0 right-0 min-w-[18px] h-[18px] px-1 rounded-full bg-btn-primary text-[10px] font-bold text-black flex items-center justify-center">
                                         {unreadCount > 9 ? "9+" : unreadCount}
@@ -155,16 +158,17 @@ const Header: React.FC = () => {
                 )}
 
                 <nav className="hidden md:flex items-center gap-5 shrink-0">
+                    <LanguageSwitcher />
                     {!user && (
                         <div className="hidden lg:flex items-center gap-5">
                             <Link to="/about" className="text-black dark:text-white hover:text-[#1DB954] cursor-pointer transition font-normal text-sm leading-5 tracking-[-0.5px]">
-                                About Us
+                                {t('nav.about', 'About Us')}
                             </Link>
                             <Link to="/business" className="text-black dark:text-white text-sm hover:text-[#1DB954] cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
-                                For Business
+                                {t('nav.business', 'For Business')}
                             </Link>
                             <Link to="/news" className="text-black dark:text-white text-sm hover:text-[#1DB954] cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
-                                News
+                                {t('nav.news', 'News')}
                             </Link>
                         </div>
                     )}
@@ -217,7 +221,7 @@ const Header: React.FC = () => {
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                                                     <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z"/>
                                                 </svg>
-                                                Адмін панель
+                                                {t('nav.admin')}
                                             </button>
                                         )}
 
@@ -230,7 +234,7 @@ const Header: React.FC = () => {
                                                 <polyline points="16 17 21 12 16 7"/>
                                                 <line x1="21" y1="12" x2="9" y2="12"/>
                                             </svg>
-                                            Logout
+                                            {t('nav.logout')}
                                         </button>
                                     </div>
                                 )}
@@ -241,11 +245,11 @@ const Header: React.FC = () => {
                         <>
                             <Button variant="primary" size="md" radius={10} style={{ width: 100, height: 50 }}
                                     onClick={() => setActiveModal("signup")}>
-                                Sign Up
+                                {t('actions.signUp', 'Sign Up')}
                             </Button>
                             <Button variant={theme === "dark" ? "dark" : "light"} size="md" radius={10} style={{ width: 100, height: 50 }}
                                     onClick={() => setActiveModal("login")}>
-                                Log in
+                                {t('actions.logIn', 'Log in')}
                             </Button>
                         </>
                     )}

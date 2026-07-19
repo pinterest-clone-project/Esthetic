@@ -21,7 +21,9 @@
     "unfollow": "Unfollow",
     "block": "Block",
     "restore": "Restore",
-    "report": "Report"
+    "report": "Report",
+    "signUp": "Sign Up",
+    "logIn": "Log in"
   },
   "nav": {
     "home": "Home",
@@ -30,7 +32,10 @@
     "notifications": "Notifications",
     "settings": "Settings",
     "admin": "Admin panel",
-    "logout": "Logout"
+    "logout": "Logout",
+    "about": "About Us",
+    "business": "For Business",
+    "news": "News"
   },
   "placeholders": {
     "search": "Search...",
@@ -76,6 +81,20 @@
     "removedFromBoard": "Removed from board",
     "somethingWentWrong": "Something went wrong",
     "success": "Success"
+  },
+  "firstPage": {
+    "hero": "Explore new ideas & inspirations",
+    "heroSub": "Discover and save your favourites from around the web",
+    "categories": {
+      "conceptArt": "Concept Art",
+      "photography": "Photography",
+      "nature": "Nature",
+      "wallpapers": "Wallpapers"
+    },
+    "seeHowItWorks": "See how it works",
+    "findYourIdeas": "Find your Ideas",
+    "findDescription": "What else would you like to try? Type in a search term for a topic you're interested in, like \"Nature,\" and browse the results",
+    "review": "Review"
   },
   "brand": {
     "name": "Esthetic",

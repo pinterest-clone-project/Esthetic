@@ -10,8 +10,10 @@ import {useAppSelector} from "@/store";
 import Modal from "@/components/ui/Modal.tsx";
 import RegisterForm from "@/components/auth/RegisterForm.tsx";
 import {useState} from "react";
+import { useTranslation } from "react-i18next";
 
 const FirstPage = () => {
+    const { t } = useTranslation('common');
     const user = useAppSelector((state) => state.auth.user);
     const [activeModal, setActiveModal] = useState<"signup" | null>(null);
 
@@ -22,18 +24,23 @@ const FirstPage = () => {
 
             <section className={"flex-col flex items-center pt-8"}>
                 <div className={"lg:text-[64px] text-4xl font-bold top-32 leading-[45px] tracking-normal text-center text-black dark:text-white "}>
-                    Explore new ideas & inspirations</div>
+                    {t('firstPage.hero')}</div>
                 <div className={"lg:text-[24px] text-sm top-32 lg:leading-[45px] leading-[20px] lg:pt-6 pt-3 tracking-normal text-center max-w-[1011px] text-[#A1A1A1A1] "}>
-                    Discover and save your favourites from around the web</div>
+                    {t('firstPage.heroSub')}</div>
 
                 <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 mt-8">
-                    {["Concept Art", "Photography", "Nature", "Wallpapers"].map(
-                        (category) => (
+                    {([
+                        ['conceptArt', t('firstPage.categories.conceptArt')],
+                        ['photography', t('firstPage.categories.photography')],
+                        ['nature', t('firstPage.categories.nature')],
+                        ['wallpapers', t('firstPage.categories.wallpapers')],
+                    ] as [string, string][]).map(([key, label]) =>
+                        ([key, label]) => (
                             <button
-                                key={category}
+                                key={key}
                                 className="bg-[#A2A2A2] dark:bg-[#535353] lg:text-sm text-[11px] px-8 py-2 rounded-[5px] lg:min-w-[200px] md:min-w-[190px] min-w-[130px] lg:min-h-[35px] min-h-[27px] text-black dark:text-white hover:bg-[#666] cursor-pointer"
                             >
-                                {category}
+                                {label}
                             </button>
                         )
                     )}
@@ -86,8 +93,8 @@ const FirstPage = () => {
 
             {!user && (
             <section className="relative w-screen ml-[calc(50%-50vw)] mt-auto md:mt-0">
-                <a href={"#see-how-it-works"} className="w-full h-[50px] md:h-[70px] bg-btn-primary text-white dark:text-black font-medium text-base md:text-2xl flex items-center justify-center gap-2 ">
-                    See how it works
+                <a href={"#see-how-it-works"} className="w-full h-[50px] md:h-[70px] bg-btn-primary text-white dark:text-black font-medium text-base md:text-2xl flex items-center justify-center gap-2 whitespace-nowrap">
+                    {t('firstPage.seeHowItWorks')}
                     <svg
                         width="20"
                         height="20"
@@ -128,20 +135,18 @@ const FirstPage = () => {
 
                     <section className={"flex flex-col items-center text-black dark:text-white"}>
                         <div className={"font-bold leading-[45px] mt-16 tracking-[-0.5px] lg:text-[64px] text-4xl"}>
-                            Find your Ideas
+                            {t('firstPage.findYourIdeas')}
                         </div>
 
                         <p className={"leading-[45px] max-w-[493px] mt-16 text-center tracking-[-0.5px] lg:text-[32px] text-xl text-black dark:text-white"}>
-                            What else would you like to try?
-                            Type in a search term for a topic you're interested in, like "Nature,"
-                            and browse the results
+                            {t('firstPage.findDescription')}
                         </p>
 
                         <button
                             onClick={() => setActiveModal("signup")}
                             className={"w-[200px] h-[50px] rounded-[10px] mt-16 text-center text-[20px] bg-btn-primary hover:bg-btn-dark text-white dark:text-black"}
                         >
-                            Review
+                            {t('firstPage.review')}
                         </button>
                     </section>
 
