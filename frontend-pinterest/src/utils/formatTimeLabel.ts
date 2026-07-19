@@ -4,9 +4,9 @@ export const formatTimeLabel = (iso: string): string => {
     const hours = Math.floor(diff / 3600000);
     const days = Math.floor(diff / 86400000);
 
-    if (mins < 1) return "щойно";
-    if (mins < 60) return `${mins} хв тому`;
-    if (hours < 24) return `${hours} год тому`;
-    if (days === 1) return "вчора";
-    return new Date(iso).toLocaleDateString("uk-UA", { day: "2-digit", month: "short" });
+    if (mins < 1) return "just now";
+    if (mins < 60) return `${mins} min ago`;
+    if (hours < 24) return `${hours} h ago`;
+    if (days === 1) return "yesterday";
+    return new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
 };

@@ -1,0 +1,108 @@
+{
+  "actions": {
+    "save": "Зберегти",
+    "delete": "Видалити",
+    "create": "Створити",
+    "cancel": "Скасувати",
+    "edit": "Редагувати",
+    "back": "Назад",
+    "logout": "Вихід",
+    "continue": "Продовжити",
+    "search": "Пошук",
+    "add": "Додати",
+    "confirm": "Підтвердити",
+    "close": "Закрити",
+    "copy": "Копіювати",
+    "share": "Поділитись",
+    "download": "Завантажити",
+    "upload": "Завантажити",
+    "send": "Надіслати",
+    "follow": "Стежити",
+    "unfollow": "Відписатись",
+    "block": "Заблокувати",
+    "restore": "Відновити",
+    "report": "Поскаржитись",
+    "signUp": "Реєстрація",
+    "logIn": "Вхід"
+  },
+  "nav": {
+    "home": "Головна",
+    "search": "Пошук",
+    "messages": "Повідомлення",
+    "notifications": "Сповіщення",
+    "settings": "Налаштування",
+    "admin": "Адмін-панель",
+    "logout": "Вихід",
+    "about": "Про нас",
+    "business": "Для бізнесу",
+    "news": "Новини"
+  },
+  "placeholders": {
+    "search": "Пошук...",
+    "message": "Повідомлення",
+    "addComment": "Додати коментар...",
+    "addDetails": "Додати деталі",
+    "addDetailsOptional": "Додати деталі (необов'язково)",
+    "whereFrom": "Звідки це?",
+    "imageLink": "Пряме посилання на зображення",
+    "newImageLink": "Пряме посилання на нове зображення",
+    "searchByNickname": "Пошук за нікнеймом",
+    "searchTags": "Пошук тегів...",
+    "tags": "Теги...",
+    "addTag": "Додати тег",
+    "blockReason": "Причина блокування..."
+  },
+  "labels": {
+    "name": "Назва",
+    "description": "Опис",
+    "descriptionOptional": "Опис (необов'язково)",
+    "sourceLink": "Посилання на джерело",
+    "tags": "Теги",
+    "language": "Мова",
+    "country": "Країна"
+  },
+  "empty": {
+    "noResults": "Нічого не знайдено",
+    "noComments": "Коментарів ще немає",
+    "noUsers": "Користувачів не знайдено",
+    "noPins": "Піни відсутні",
+    "noBoards": "Дошки відсутні",
+    "noAuras": "Аури відсутні",
+    "noAurasFound": "Аури не знайдено",
+    "noMoodboards": "Мудборди відсутні",
+    "noNotifications": "Сповіщень немає"
+  },
+  "toast": {
+    "linkCopied": "Посилання скопійовано!",
+    "auraCopied": "Посилання на ауру скопійовано!",
+    "auraRestored": "Ауру успішно відновлено",
+    "auraRestoreFailed": "Не вдалось відновити ауру",
+    "savedToBoard": "Збережено на дошку",
+    "removedFromBoard": "Видалено з дошки",
+    "somethingWentWrong": "Щось пішло не так",
+    "success": "Успішно"
+  },
+  "firstPage": {
+    "hero": "Відкривай нові ідеї та натхнення",
+    "heroSub": "Знаходь і зберігай улюблене з усього інтернету",
+    "categories": {
+      "conceptArt": "Концепт Арт",
+      "photography": "Фотографія",
+      "nature": "Природа",
+      "wallpapers": "Шпалери"
+    },
+    "seeHowItWorks": "Дивись як це працює",
+    "findYourIdeas": "Знаходь свої ідеї",
+    "findDescription": "Що ще хочеш спробувати? Введи пошуковий запит на тему яка тебе цікавить, наприклад «Природа», і переглянь результати",
+    "review": "Переглянути"
+  },
+  "brand": {
+    "name": "Esthetic",
+    "news": "Esthetic Новини",
+    "business": "Esthetic для бізнесу"
+  },
+  "confirm": {
+    "deleteAura": "Видалити цю ауру?",
+    "deleteBoard": "Видалити цю дошку?"
+  }
+}

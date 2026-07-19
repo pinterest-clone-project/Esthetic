@@ -4,7 +4,7 @@ import { useGetByIdQuery, useGetFollowStatsQuery, useGetFollowersQuery, useGetFo
 import { useGetPinsByUserQuery } from "@/services/pinService.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
 import { useFollowMutation, useUnfollowMutation, useSendFollowRequestMutation, useCancelFollowRequestMutation } from "@/services/followService.ts";
-import { useGetPublicBoardsByUserQuery } from "@/services/moodboardService.ts";
+import { useGetPublicBoardsByUserQuery, useGetMyMoodboardsQuery } from "@/services/moodboardService.ts";
 import PinCard from "@/components/ui/PinCard.tsx";
 import { APP_ENV } from "@/constants/env";
 import type { IUser } from "@/types/user/IUser.ts";
@@ -16,8 +16,12 @@ const UserPage = () => {
     const { data: user, isLoading: userLoading } = useGetByIdQuery(id!);
     const { data: stats } = useGetFollowStatsQuery(id!);
     const { data: pins, isLoading: pinsLoading } = useGetPinsByUserQuery(id!);
-    const { data: boards } = useGetPublicBoardsByUserQuery(id!);
     const { data: me } = useGetMeQuery();
+    const isMe = me?.id === id;
+
+    const { data: publicBoards } = useGetPublicBoardsByUserQuery(id!, { skip: isMe });
+    const { data: myBoards } = useGetMyMoodboardsQuery(undefined, { skip: !isMe });
+    const boards = isMe ? myBoards : publicBoards;
 
     const [follow] = useFollowMutation();
     const [unfollow] = useUnfollowMutation();
@@ -28,8 +32,6 @@ const UserPage = () => {
 
     const { data: followers } = useGetFollowersQuery(id!, { skip: followModal !== "followers" });
     const { data: following } = useGetFollowingQuery(id!, { skip: followModal !== "following" });
-
-    const isMe = me?.id === id;
 
     const handleFollowToggle = async () => {
         if (!id) return;

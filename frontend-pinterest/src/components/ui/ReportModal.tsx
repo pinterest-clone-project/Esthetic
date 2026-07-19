@@ -40,7 +40,7 @@ const ReportModal = ({ pinId, userId, onClose }: ReportModalProps) => {
             }).unwrap();
             setSubmitted(true);
         } catch {
-            setError("Не вдалося надіслати скаргу. Спробуйте ще раз.");
+            setError("Failed to submit report. Please try again.");
         }
     };
 
@@ -56,20 +56,20 @@ const ReportModal = ({ pinId, userId, onClose }: ReportModalProps) => {
                 {submitted ? (
                     <div className="flex flex-col items-center gap-3 py-4 text-center">
                         <span className="text-[#4ade80] text-2xl">✓</span>
-                        <p className="text-white text-sm font-medium">Дякуємо за скаргу</p>
-                        <p className="text-gray-500 text-xs">Наша команда розгляне її найближчим часом.</p>
+                        <p className="text-white text-sm font-medium">Thank you for your report</p>
+                        <p className="text-gray-500 text-xs">Our team will review it shortly.</p>
                         <button
                             onClick={onClose}
                             className="mt-2 text-xs text-gray-400 hover:text-white border border-white/10 hover:border-white/30 px-4 py-1.5 rounded-lg transition-colors"
                         >
-                            Закрити
+                            Close
                         </button>
                     </div>
                 ) : (
                     <>
                         <div className="flex items-center justify-between mb-4">
                             <h2 className="text-white text-sm font-semibold">
-                                Скарга на {pinId ? "пін" : "користувача"}
+                                Report {pinId ? "pin" : "user"}
                             </h2>
                             <button
                                 onClick={onClose}
@@ -98,7 +98,7 @@ const ReportModal = ({ pinId, userId, onClose }: ReportModalProps) => {
                         <textarea
                             value={details}
                             onChange={(e) => setDetails(e.target.value)}
-                            placeholder="Додати деталі (необов'язково)"
+                            placeholder="Add details (optional)"
                             rows={3}
                             maxLength={500}
                             className="w-full resize-none bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder:text-gray-600 focus:outline-none focus:border-[#4ade80]/50 mb-2"
@@ -111,14 +111,14 @@ const ReportModal = ({ pinId, userId, onClose }: ReportModalProps) => {
                                 onClick={onClose}
                                 className="text-xs text-gray-400 hover:text-white border border-white/10 hover:border-white/30 px-3 py-1.5 rounded-lg transition-colors"
                             >
-                                Скасувати
+                                Cancel
                             </button>
                             <button
                                 onClick={handleSubmit}
                                 disabled={!selectedReason || isLoading}
                                 className="text-xs text-black bg-[#4ade80] hover:bg-[#22c55e] disabled:opacity-40 disabled:cursor-not-allowed px-4 py-1.5 rounded-lg font-medium transition-colors"
                             >
-                                {isLoading ? "Надсилання..." : "Надіслати скаргу"}
+                                {isLoading ? "Submitting..." : "Submit report"}
                             </button>
                         </div>
                     </>

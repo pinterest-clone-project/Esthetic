@@ -57,11 +57,11 @@ const NotificationBell: React.FC = () => {
             {open && (
                 <div className="absolute right-0 top-12 w-80 max-h-[420px] overflow-y-auto bg-white dark:bg-[#1a1a1a] rounded-[10px] shadow-2xl z-50 border border-[#A1A1A1] dark:border-[#535353]">
                     <div className="px-4 py-3 border-b border-[#A1A1A1] dark:border-[#535353] sticky top-0 z-10 bg-white dark:bg-[#1a1a1a]">
-                        <p className="text-black dark:text-white text-sm font-medium">Сповіщення</p>
+                        <p className="text-black dark:text-white text-sm font-medium">Notifications</p>
                     </div>
 
                     {notifications.length === 0 ? (
-                        <p className="text-white/30 text-sm text-center py-10">Поки що порожньо</p>
+                        <p className="text-black/30 dark:text-white/30 text-sm text-center py-10">Nothing here yet</p>
                     ) : (
                         notifications.map((n) => {
                             const url = getNotificationUrl(n);
@@ -73,8 +73,8 @@ const NotificationBell: React.FC = () => {
                                     key={n.id}
                                     onClick={() => !isFollowRequest && handleNotificationClick(n)}
                                     className={`w-full px-4 py-3 flex items-start gap-3 transition
-                                        ${!isFollowRequest && url ? "cursor-pointer hover:bg-[#A1A1A1] dark:hover:bg-[#535353]" : "cursor-default"}
-                                        ${!n.isRead ? "bg-white/[0.03]" : ""}
+                                        ${!isFollowRequest && url ? "cursor-pointer hover:bg-gray-100 dark:hover:bg-[#535353]" : "cursor-default"}
+                                        ${!n.isRead ? "bg-black/[0.03] dark:bg-white/[0.03]" : ""}
                                     `}
                                 >
                                     <button
@@ -82,7 +82,7 @@ const NotificationBell: React.FC = () => {
                                         className="relative shrink-0 cursor-pointer"
                                         onClick={(e) => { e.stopPropagation(); if (n.actorId) { navigate(`/user/${n.actorId}`); setOpen(false); } }}
                                     >
-                                        <div className="w-8 h-8 rounded-full bg-[#2a2a2a] overflow-hidden">
+                                        <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-[#2a2a2a] overflow-hidden">
                                             {n.actorImage && (
                                                 <img src={`${APP_ENV.IMAGES_100_URL}${n.actorImage}`} className="w-full h-full object-cover" alt="" />
                                             )}
@@ -132,7 +132,7 @@ const NotificationBell: React.FC = () => {
                                             </span>
                                         )}
                                         <p className="text-black dark:text-white text-sm leading-snug">{n.message}</p>
-                                        <p className="text-black dark:text-[#A1A1A1] text-xs mt-0.5">
+                                        <p className="text-gray-400 text-xs mt-0.5">
                                             {formatTimeLabel(n.createdAt)}
                                         </p>
                                         {isFollowRequest && n.actorId && (
@@ -145,7 +145,7 @@ const NotificationBell: React.FC = () => {
                                                 </button>
                                                 <button
                                                     onClick={() => { declineRequest(n.actorId!); }}
-                                                    className="px-3 py-1 rounded-lg bg-[#2a2a2a] hover:bg-[#333] text-white text-[11px] font-semibold transition-colors"
+                                                    className="px-3 py-1 rounded-lg bg-gray-200 dark:bg-[#2a2a2a] hover:bg-gray-300 dark:hover:bg-[#333] text-black dark:text-white text-[11px] font-semibold transition-colors"
                                                 >
                                                     Decline
                                                 </button>
@@ -163,7 +163,7 @@ const NotificationBell: React.FC = () => {
 
                     <button
                         onClick={() => { setOpen(false); navigate("/notifications"); }}
-                        className="w-full px-4 py-3 text-center text-sm text-green-700 dark:text-btn-primary cursor-pointer hover:bg-[#A1A1A1] dark:hover:bg-[#535353] transition border-t border-[#A1A1A1] dark:border-[#535353] sticky bottom-0 bg-white dark:bg-[#1a1a1a]"
+                        className="w-full px-4 py-3 text-center text-sm text-green-700 dark:text-btn-primary cursor-pointer hover:bg-gray-100 dark:hover:bg-[#535353] transition border-t border-gray-200 dark:border-[#535353] sticky bottom-0 bg-white dark:bg-[#1a1a1a]"
                     >
                         See all
                     </button>

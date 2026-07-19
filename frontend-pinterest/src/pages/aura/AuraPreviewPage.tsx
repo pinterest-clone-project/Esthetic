@@ -127,7 +127,7 @@ const AuraPreviewPage = () => {
                                 {pin.commentsCount}
                             </span>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                             {/* Save — primary */}
                             <button
                                 onClick={() => setSaveModalOpen(true)}
@@ -176,7 +176,7 @@ const AuraPreviewPage = () => {
                                 <>
                                     <button
                                         onClick={() => navigate(`/aura/edit/${pin.id}`)}
-                                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-gray-300 hover:text-white text-xs font-medium transition-all duration-150"
+                                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/5 dark:hover:bg-white/10 hover:bg-black/5 border dark:border-white/10 dark:hover:border-white/20 border-black/10 hover:border-black/20 dark:text-gray-300 text-gray-700 dark:hover:text-white text-black text-xs font-medium transition-all duration-150"
                                     >
                                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>

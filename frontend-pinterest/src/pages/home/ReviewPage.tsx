@@ -34,7 +34,7 @@ const ReviewPage = () => {
         <div className="w-full min-h-full bg-white dark:bg-black px-2 py-4 sm:px-6 sm:py-6">
 
             {isAdmin && !bannerDismissed && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm">
                     <div className="bg-[#0f0f0f] border border-white/10 rounded-2xl w-full max-w-sm mx-4 overflow-hidden shadow-2xl">
                         <div className="h-[3px] bg-[#1DB954]" />
                         <div className="px-7 py-6">
