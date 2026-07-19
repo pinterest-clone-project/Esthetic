@@ -21,10 +21,16 @@ import {APP_ENV} from "@/constants/env";
 import {useTheme} from "@/context/ThemeContext.tsx";
 import Modal from "@/components/ui/Modal.tsx";
 import ThemeToggle from "@/components/ui/ThemeToggle.tsx";
+import { useTranslation } from "react-i18next";
 
 const navItems = [
-    { path: "/", icon: homeIcon, label: "Main" },
-    { path: "/collections/aura", icon: collectionIcon, label: "Collections" },
+    { path: "/", icon: homeIcon, labelKey: "sidebar.main" },
+    { path: "/collections/aura", icon: collectionIcon, labelKey: "sidebar.collections" },
+];
+
+const modalItems = [
+    { modal: 'create' as ModalType, icon: addIcon, labelKey: "sidebar.create" },
+    { modal: 'friends' as ModalType, icon: profileIcon, labelKey: "sidebar.addFriends" },
 ];
 
 const greenFilter =
@@ -33,11 +39,6 @@ const whiteFilter = "brightness(0)";
 const darkFilter = "brightness(0)  invert(1)";
 
 type ModalType = 'friends' | 'settings' | 'create' | null;
-
-const modalItems = [
-    { modal: 'create' as ModalType, icon: addIcon, label: "Create" },
-    { modal: 'friends' as ModalType, icon: profileIcon, label: "Add friends" },
-];
 
 interface SidebarButtonProps {
     icon: string;
@@ -68,6 +69,7 @@ const SidebarButton = ({ icon, label, active, onClick, extraImgClass = "", child
 
 
 const Sidebar = () => {
+    const { t } = useTranslation('common');
     const navigate = useNavigate();
     const location = useLocation();
     const [activeModal, setActiveModal] = useState<ModalType>(null);
@@ -131,23 +133,23 @@ const Sidebar = () => {
         <>
             <aside className="w-16 bg-white dark:bg-black hidden md:flex flex-col items-center py-6 z-40 shrink-0">
                 <nav className="flex flex-col items-center gap-5 flex-1">
-                    {navItems.map(({ path, icon, label }) => (
+                    {navItems.map(({ path, icon, labelKey }) => (
                         <SidebarButton
                             key={path}
                             icon={icon}
-                            label={label}
+                            label={t(labelKey)}
                             active={isActive(path) && activeModal === null}
                             onClick={() => { navigate(path); closeModal(); }}
                             isDark={theme === "dark"}
                         />
                     ))}
 
-                    {modalItems.map(({ modal, icon, label }) =>
+                    {modalItems.map(({ modal, icon, labelKey }) =>
                             modal === 'friends' ? (
                                 <SidebarButton
                                     key={modal}
                                     icon={icon}
-                                    label={label}
+                                    label={t(labelKey)}
                                     active={activeModal === modal}
                                     onClick={() => setActiveModal(modal)}
                                     isDark={theme === "dark"}
@@ -162,7 +164,7 @@ const Sidebar = () => {
                                 <SidebarButton
                                     key={modal}
                                     icon={icon}
-                                    label={label}
+                                    label={t(labelKey)}
                                     active={activeModal === modal}
                                     onClick={() => setActiveModal(modal)}
                                     isDark={theme === "dark"}
@@ -173,7 +175,7 @@ const Sidebar = () => {
 
                 <SidebarButton
                     icon={settingsIcon}
-                    label="Settings"
+                    label={t('sidebar.settings')}
                     active={activeModal === 'settings'}
                     onClick={() => setActiveModal('settings')}
                     isDark={theme === "dark"}
@@ -181,7 +183,7 @@ const Sidebar = () => {
                 />
             </aside>
 
-            <Modal isOpen={activeModal === 'friends'} onClose={closeModal} variant="sidebar" title="Messages" width={300}>
+            <Modal isOpen={activeModal === 'friends'} onClose={closeModal} variant="sidebar" title={t('sidebar.messages')} width={300}>
                 <div className="flex items-center gap-2 bg-[#D1D1D1] dark:bg-[#2a2a2a] rounded-lg px-3 py-2 mx-3">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={theme === "dark" ? "#A1A1A1" : "#535353"} strokeWidth="2">
                         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
@@ -190,7 +192,7 @@ const Sidebar = () => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="bg-transparent text-sm text-black dark:text-white outline-none w-full placeholder:text-black-1/2 dark:placeholder:text-[#A1A1A1]"
-                        placeholder="Search by nickname"
+                        placeholder={t('placeholders.searchByNickname')}
                     />
                 </div>
 
@@ -210,12 +212,12 @@ const Sidebar = () => {
                                 </button>
                             ))}
                             {filteredSearchItems.length === 0 && (
-                                <p className="text-[#A1A1A1] text-xs px-2">No users found</p>
+                                <p className="text-[#A1A1A1] text-xs px-2">{t('sidebar.noUsersFound')}</p>
                             )}
                         </>
                     ) : (
                         <>
-                            <p className="text-[#A1A1A1] text-xs px-2 mb-1">Your chats</p>
+                            <p className="text-[#A1A1A1] text-xs px-2 mb-1">{t('sidebar.yourChats')}</p>
                             {chats.map((chat) => (
                                 <button
                                     key={chat.id}
@@ -243,7 +245,7 @@ const Sidebar = () => {
                 </div>
             </Modal>
 
-            <Modal isOpen={activeModal === 'settings'} onClose={closeModal} variant="sidebar" title="Settings" width={300}>
+            <Modal isOpen={activeModal === 'settings'} onClose={closeModal} variant="sidebar" title={t('sidebar.settings')} width={300}>
                 <button
                     onClick={() => { navigate('/user/'+ me?.id); closeModal(); }}
                     className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group "
@@ -252,8 +254,8 @@ const Sidebar = () => {
                         <img src={profileIcon} style={{ filter: whiteFilter }} className="w-5 h-5" alt="" />
                     </div>
                     <div className="text-left">
-                        <p className="text-black dark:text-white text-sm font-medium">Profile</p>
-                        <p className="text-black dark:text-[#A1A1A1] text-xs">View and edit your profile</p>
+                        <p className="text-black dark:text-white text-sm font-medium">{t('sidebar.profile')}</p>
+                        <p className="text-black dark:text-[#A1A1A1] text-xs">{t('sidebar.viewEditProfile')}</p>
                     </div>
                 </button>
 
@@ -263,8 +265,8 @@ const Sidebar = () => {
                             <img src={themeIcon} style={{ filter: whiteFilter }} className="w-5 h-5" alt="" />
                         </div>
                         <div className="text-left">
-                            <p className="text-black dark:text-white text-sm font-medium">Theme</p>
-                            <p className="text-black dark:text-[#A1A1A1] text-xs">Light / Dark mode switch</p>
+                            <p className="text-black dark:text-white text-sm font-medium">{t('sidebar.theme')}</p>
+                            <p className="text-black dark:text-[#A1A1A1] text-xs">{t('sidebar.themeDesc')}</p>
                         </div>
                     </div>
                     <ThemeToggle />
@@ -282,8 +284,8 @@ const Sidebar = () => {
                         </svg>
                     </div>
                     <div className="text-left">
-                        <p className="text-black dark:text-white text-sm font-medium">Recently deleted</p>
-                        <p className="text-black dark:text-[#A1A1A1] text-xs">Auras deleted in the last 30 days</p>
+                        <p className="text-black dark:text-white text-sm font-medium">{t('sidebar.recentlyDeleted')}</p>
+                        <p className="text-black dark:text-[#A1A1A1] text-xs">{t('sidebar.recentlyDeletedDesc')}</p>
                     </div>
                 </button>
 
@@ -299,13 +301,13 @@ const Sidebar = () => {
                         </svg>
                     </div>
                     <div className="text-left">
-                        <p className="text-red-700 dark:text-red-400 text-sm font-medium">Logout</p>
-                        <p className="text-black dark:text-[#A1A1A1] text-xs">Sign out of your account</p>
+                        <p className="text-red-700 dark:text-red-400 text-sm font-medium">{t('sidebar.logout')}</p>
+                        <p className="text-black dark:text-[#A1A1A1] text-xs">{t('sidebar.logoutDesc')}</p>
                     </div>
                 </button>
             </Modal>
 
-            <Modal isOpen={activeModal === 'create'} onClose={closeModal} variant="sidebar" title="Create" width={300}>
+            <Modal isOpen={activeModal === 'create'} onClose={closeModal} variant="sidebar" title={t('sidebar.create')} width={300}>
                 <button
                     onClick={() => { navigate('/collections/moodboard'); closeModal(); }}
                     className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group"
@@ -314,8 +316,8 @@ const Sidebar = () => {
                         <img src={collectionIcon} style={{ filter: whiteFilter }} className="w-5 h-5" alt="" />
                     </div>
                     <div className="text-left">
-                        <p className="text-black dark:text-white text-sm font-medium">Moodboard</p>
-                        <p className="text-black dark:text-[#A1A1A1] text-xs">Organize your ideas</p>
+                        <p className="text-black dark:text-white text-sm font-medium">{t('sidebar.moodboard')}</p>
+                        <p className="text-black dark:text-[#A1A1A1] text-xs">{t('sidebar.moodboardDesc')}</p>
                     </div>
                 </button>
 
@@ -327,8 +329,8 @@ const Sidebar = () => {
                         <img src={auraIcon} style={{ filter: whiteFilter }} className="w-5 h-5" alt="" />
                     </div>
                     <div className="text-left">
-                        <p className="text-black dark:text-white text-sm font-medium">Aura</p>
-                        <p className="text-black dark:text-[#A1A1A1] text-xs">Share your aesthetic</p>
+                        <p className="text-black dark:text-white text-sm font-medium">{t('sidebar.aura')}</p>
+                        <p className="text-black dark:text-[#A1A1A1] text-xs">{t('sidebar.auraDesc')}</p>
                     </div>
                 </button>
             </Modal>

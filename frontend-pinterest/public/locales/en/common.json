@@ -23,7 +23,8 @@
     "restore": "Restore",
     "report": "Report",
     "signUp": "Sign Up",
-    "logIn": "Log in"
+    "logIn": "Log in",
+    "continue": "Continue"
   },
   "nav": {
     "home": "Home",
@@ -81,6 +82,28 @@
     "removedFromBoard": "Removed from board",
     "somethingWentWrong": "Something went wrong",
     "success": "Success"
+  },
+  "sidebar": {
+    "main": "Main",
+    "collections": "Collections",
+    "create": "Create",
+    "addFriends": "Add friends",
+    "settings": "Settings",
+    "messages": "Messages",
+    "yourChats": "Your chats",
+    "noUsersFound": "No users found",
+    "profile": "Profile",
+    "viewEditProfile": "View and edit your profile",
+    "theme": "Theme",
+    "themeDesc": "Light / Dark mode switch",
+    "recentlyDeleted": "Recently deleted",
+    "recentlyDeletedDesc": "Auras deleted in the last 30 days",
+    "logout": "Logout",
+    "logoutDesc": "Sign out of your account",
+    "moodboard": "Moodboard",
+    "moodboardDesc": "Organize your ideas",
+    "aura": "Aura",
+    "auraDesc": "Share your aesthetic"
   },
   "firstPage": {
     "hero": "Explore new ideas & inspirations",

@@ -82,6 +82,28 @@
     "somethingWentWrong": "Щось пішло не так",
     "success": "Успішно"
   },
+  "sidebar": {
+    "main": "Головна",
+    "collections": "Колекції",
+    "create": "Створити",
+    "addFriends": "Додати друзів",
+    "settings": "Налаштування",
+    "messages": "Повідомлення",
+    "yourChats": "Ваші чати",
+    "noUsersFound": "Користувачів не знайдено",
+    "profile": "Профіль",
+    "viewEditProfile": "Переглянути та редагувати профіль",
+    "theme": "Тема",
+    "themeDesc": "Перемикач світлий / темний",
+    "recentlyDeleted": "Нещодавно видалені",
+    "recentlyDeletedDesc": "Аури видалені за останні 30 днів",
+    "logout": "Вихід",
+    "logoutDesc": "Вийти з акаунту",
+    "moodboard": "Мудборд",
+    "moodboardDesc": "Організуй свої ідеї",
+    "aura": "Аура",
+    "auraDesc": "Поділись своєю естетикою"
+  },
   "firstPage": {
     "hero": "Відкривай нові ідеї та натхнення",
     "heroSub": "Знаходь і зберігай улюблене з усього інтернету",
