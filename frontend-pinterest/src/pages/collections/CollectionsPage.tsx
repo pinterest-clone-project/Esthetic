@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import im1 from "@/assets/defaults/def-9.jpg";
 import im2 from "@/assets/defaults/def-10.jpg";
 import im3 from "@/assets/defaults/def-11.jpg";
@@ -12,10 +13,16 @@ import PinCard from "@/components/ui/PinCard.tsx";
 
 type CollectionTab = "Aura" | "Moodboard" | "Esthetic AI";
 
-const tabs: CollectionTab[] = ["Aura", "Moodboard", "Esthetic AI"];
-
 const CollectionsPage = () => {
+    const { t } = useTranslation('common');
     const navigate = useNavigate();
+
+    const tabs: CollectionTab[] = ["Aura", "Moodboard", "Esthetic AI"];
+    const tabLabels: Record<CollectionTab, string> = {
+        "Aura": t('collections.tabAura'),
+        "Moodboard": t('collections.tabMoodboard'),
+        "Esthetic AI": t('collections.tabAI'),
+    };
     const [showCreateMoodboard, setShowCreateMoodboard] = useState(false);
     const { data: myPins } = useGetMyPinsQuery();
     const { data: Pins } = useGetAllPinsQuery();
@@ -42,7 +49,7 @@ const CollectionsPage = () => {
         <div className="min-h-screen mt-4 sm:mt-11 text-black dark:text-white px-4 sm:px-8 py-6 sm:py-10">
             <div className="flex flex-col items-center mb-6 gap-3">
                 <div className="relative flex items-center justify-center w-full">
-                    <h1 className="text-2xl sm:text-4xl">Your collection</h1>
+                    <h1 className="text-2xl sm:text-4xl">{t('collections.title')}</h1>
                     <button
                         onClick={() => {
                             if (activeTab === "Moodboard") setShowCreateMoodboard(true);
@@ -50,7 +57,7 @@ const CollectionsPage = () => {
                         }}
                         className="hidden md:block absolute right-0 px-5 py-2 rounded-lg bg-[#A2A2A2] dark:bg-[#535353] text-black dark:text-white text-sm hover:bg-[#D1D1D1] dark:hover:bg-[#A2A2A2] transition-colors duration-150"
                     >
-                        Create
+                        {t('collections.create')}
                     </button>
                 </div>
                 <div className="flex items-center justify-center w-full">
@@ -65,7 +72,7 @@ const CollectionsPage = () => {
                                     : "text-black dark:text-white/50 hover:text-[#A2A2A2] dark:hover:text-white/80"
                             }`}
                         >
-                            {tab}
+                            {tabLabels[tab]}
                         </button>
                     ))}
                     </div>
@@ -76,7 +83,7 @@ const CollectionsPage = () => {
             {activeTab === "Aura" &&
                 (hasAuras ? (
                     <div className="mt-8">
-                        <h2 className="text-lg mb-3">Your created Auras</h2>
+                        <h2 className="text-lg mb-3">{t('collections.yourCreatedAuras')}</h2>
                         <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3 mt-4">
                             {myPins!.map((pin) => (
                                 <div key={pin.id} className="break-inside-avoid mb-3">
@@ -89,12 +96,12 @@ const CollectionsPage = () => {
                                 className="relative w-full aspect-[3/4] rounded-xl overflow-hidden hover:opacity-90 transition-opacity break-inside-avoid mb-3 bg-[#2a2a2a]"
                             >
                             <span className="absolute inset-0 flex items-center justify-center text-white text-lg font-medium">
-                                Create
+                                {t('collections.create')}
                             </span>
                             </button>
                         </div>
 
-                        <h2 className="text-lg mt-8 mb-3">Your saved Auras</h2>
+                        <h2 className="text-lg mt-8 mb-3">{t('collections.yourSavedAuras')}</h2>
                         {savedPins && savedPins.length > 0 ? (
                             <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3 mt-4">
                                 {savedPins.map((pin) => (
@@ -105,7 +112,7 @@ const CollectionsPage = () => {
                             </div>
                         ) : (
                             <p className="text-[#A1A1A1] dark:text-white/30 text-sm text-center py-8 border border-black/10 dark:border-white/10 rounded-xl">
-                                You haven't saved any Auras yet
+                                {t('collections.noSavedAuras')}
                             </p>
                         )}
                     </div>
@@ -117,24 +124,23 @@ const CollectionsPage = () => {
                             <img src={im3} className="absolute top-[60px] left-[160px] w-[120px] h-[140px] sm:w-[140px] sm:h-[160px] object-cover rounded-xl" alt="" />
                         </div>
                         <div className="text-center mt-4">
-                            <h2 className="text-2xl font-medium mb-3">Combine your ideas</h2>
+                            <h2 className="text-2xl font-medium mb-3">{t('collections.combineIdeas')}</h2>
                             <p className="text-[#A1A1A1] dark:text-white/40 text-sm max-w-[340px] leading-relaxed">
-                                Aura pins are small aesthetic pieces inspired visuals and trends. They capture moods,
-                                colors, and vibes, letting you express your personal aesthetic in a simple, stylish way.
+                                {t('collections.auraDesc')}
                             </p>
                         </div>
                         <button
                             onClick={() => navigate("/aura/create")}
                             className="px-6 py-2 rounded-lg border border-black/20 dark:border-white/20 text-black dark:text-white text-sm hover:bg-[#D1D1D1] dark:hover:bg-[#1a1a1a] transition-colors duration-150"
                         >
-                            Create Aura
+                            {t('collections.createAura')}
                         </button>
                     </div>
                 ))}
 
             {activeTab === "Moodboard" && (
                 <div className="mt-8">
-                    <h2 className="text-lg mb-3">Your Moodboard</h2>
+                    <h2 className="text-lg mb-3">{t('collections.yourMoodboard')}</h2>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-10">
                         {moodboards?.items?.map((mb) => (
                             <button
@@ -169,12 +175,12 @@ const CollectionsPage = () => {
                                 <div className="bg-[#A9A9A9] dark:bg-[#454444]" />
                             </div>
                             <span className="absolute inset-0 flex items-center justify-center text-black dark:text-white text-lg font-medium">
-                                Create
+                                {t('collections.create')}
                             </span>
                         </button>
                     </div>
 
-                    <h2 className="text-lg">Random Ideas</h2>
+                    <h2 className="text-lg">{t('collections.randomIdeas')}</h2>
                     <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-6 gap-3">
                         {Pins?.map((pin) => (
                             <div key={pin.id} className="break-inside-avoid mb-3">
@@ -186,7 +192,7 @@ const CollectionsPage = () => {
             )}
 
             {activeTab === "Esthetic AI" && (
-                <div className="flex justify-center mt-16 text-white/40 text-sm">Coming soon</div>
+                <div className="flex justify-center mt-16 text-white/40 text-sm">{t('collections.comingSoon')}</div>
             )}
 
             <Modal

@@ -36,6 +36,21 @@
     "create": "Create moodboard",
     "edit": "Edit moodboard",
     "regenerate": "Regenerate collage",
-    "noMoodboards": "No moodboards yet"
+    "noMoodboards": "No moodboards yet",
+    "createTitle": "Create your Moodboard",
+    "creating": "Creating moodboard...",
+    "namePlaceholder": "Name your Moodboard",
+    "hideTitle": "Hide Moodboard",
+    "hideDesc": "Only you can see this Board",
+    "next": "Next",
+    "addDetails": "Add details",
+    "descPlaceholder": "What's this board about?",
+    "chooseAura": "Choose Aura",
+    "suggestedPins": "Suggested pins for you",
+    "showAll": "Show all ({{count}})",
+    "showLess": "Show less",
+    "nothingToShow": "Nothing to show here",
+    "saving": "Saving...",
+    "save": "Save"
   }
 }

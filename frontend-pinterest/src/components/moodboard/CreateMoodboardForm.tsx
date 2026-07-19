@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useCreateMoodboardMutation } from "@/services/moodboardService.ts";
 import {useGetMyPinsQuery} from "@/services/pinService.ts";
 import { APP_ENV } from "@/constants/env";
@@ -10,6 +11,7 @@ interface CreateMoodboardFormProps {
 }
 
 const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) => {
+    const { t } = useTranslation('boards');
     const [step, setStep] = useState<1 | 2 | 3>(1);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -65,33 +67,33 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
             {isLoading && (
                 <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-black/80 dark:bg-white/80 rounded-[20px]">
                     <div className="w-8 h-8 rounded-full border-2 border-white/20 dark:border-black/20 border-t-[#1DB954] animate-spin" />
-                    <p className="text-white dark:text-black text-sm font-medium">Creating moodboard...</p>
+                    <p className="text-white dark:text-black text-sm font-medium">{t('moodboard.creating')}</p>
                 </div>
             )}
             {step === 1 && (
                 <>
                     <h2 className="text-center text-white dark:text-black text-lg font-semibold mb-5">
-                        Create your Moodboard
+                        {t('moodboard.createTitle')}
                     </h2>
 
                     <div className="flex justify-center mb-6">
                         <img src={collectionIcon} alt="" width={64} height={64} />
                     </div>
 
-                    <label className="block text-sm text-white dark:text-black mb-1">Moodboard name</label>
+                    <label className="block text-sm text-white dark:text-black mb-1">{t('placeholders.moodboardName')}</label>
                     <input
                         type="text"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        placeholder="Name your Moodboard"
+                        placeholder={t('moodboard.namePlaceholder')}
                         className="w-full border border-btn-primary rounded-lg px-3 py-2 text-sm text-white dark:text-black outline-none focus:ring-1 focus:ring-btn-primary mb-5"
                     />
 
                     <div className="flex items-start justify-between mb-6">
                         <div>
-                            <p className="text-sm text-white dark:text-black font-medium">Hide Moodboard</p>
+                            <p className="text-sm text-white dark:text-black font-medium">{t('moodboard.hideTitle')}</p>
                             <p className="text-xs text-gray-400 max-w-[200px]">
-                                Only you can see this Board
+                                {t('moodboard.hideDesc')}
                             </p>
                         </div>
                         <button
@@ -119,7 +121,7 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
                                     : "bg-[#A1A1A1] text-white dark:text-black"
                             }`}
                         >
-                            Next
+                            {t('moodboard.next')}
                         </button>
                     </div>
                 </>
@@ -134,14 +136,14 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
                         >
                             ←
                         </button>
-                        <h2 className="text-white dark:text-black text-lg font-semibold">Add details</h2>
+                        <h2 className="text-white dark:text-black text-lg font-semibold">{t('moodboard.addDetails')}</h2>
                     </div>
 
-                    <label className="block text-sm text-white dark:text-black mb-1">Description</label>
+                    <label className="block text-sm text-white dark:text-black mb-1">{t('fields.description')}</label>
                     <textarea
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        placeholder="What's this board about?"
+                        placeholder={t('moodboard.descPlaceholder')}
                         rows={4}
                         className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-white dark:text-black outline-none focus:ring-1 focus:ring-[#1DB954] mb-6 resize-none"
                     />
@@ -151,7 +153,7 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
                             onClick={() => setStep(3)}
                             className="px-5 py-2 rounded-lg bg-[#1DB954] text-white dark:text-black text-sm font-medium hover:bg-[#1aa34a] transition-colors"
                         >
-                            Next
+                            {t('moodboard.next')}
                         </button>
                     </div>
                 </>
@@ -160,11 +162,11 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
             {step === 3 && (
                 <>
                     <h2 className="text-center text-white dark:text-black text-lg font-semibold mb-5">
-                        Choose Aura
+                        {t('moodboard.chooseAura')}
                     </h2>
 
                     {!showAll && (
-                        <p className="text-xs text-gray-400 mb-3 text-center">Suggested pins for you</p>
+                        <p className="text-xs text-gray-400 mb-3 text-center">{t('moodboard.suggestedPins')}</p>
                     )}
 
                     {pinsToShow.length > 0 ? (
@@ -198,7 +200,7 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
                                     onClick={() => setShowAll(true)}
                                     className="w-full text-xs text-gray-400 hover:text-white transition-colors py-2 mb-3"
                                 >
-                                    Show all ({allPins.length})
+                                    {t('moodboard.showAll', { count: allPins.length })}
                                 </button>
                             )}
                             {showAll && (
@@ -206,12 +208,12 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
                                     onClick={() => setShowAll(false)}
                                     className="w-full text-xs text-gray-400 hover:text-white transition-colors py-2 mb-3"
                                 >
-                                    Show less
+                                    {t('moodboard.showLess')}
                                 </button>
                             )}
                         </>
                     ) : (
-                        <p className="text-sm text-gray-400 mb-6">Nothing to show here</p>
+                        <p className="text-sm text-gray-400 mb-6">{t('moodboard.nothingToShow')}</p>
                     )}
 
                     <div className="flex justify-center">
@@ -220,7 +222,7 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
                             disabled={isLoading}
                             className="px-8 py-2 rounded-lg bg-[#1DB954] text-black text-sm font-medium hover:bg-[#1aa34a] transition-colors disabled:opacity-50"
                         >
-                            {isLoading ? "Saving..." : "Save"}
+                            {isLoading ? t('moodboard.saving') : t('moodboard.save')}
                         </button>
                     </div>
                 </>

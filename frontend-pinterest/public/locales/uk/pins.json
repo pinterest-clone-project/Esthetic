@@ -1,10 +1,14 @@
 {
   "create": {
-    "title": "Створити пін",
-    "submit": "Опублікувати"
+    "title": "Створити ауру",
+    "submit": "Створити",
+    "creating": "Створення..."
   },
   "edit": {
-    "title": "Редагувати пін"
+    "title": "Редагувати ауру",
+    "submit": "Зберегти",
+    "saving": "Збереження...",
+    "notFound": "Ауру не знайдено."
   },
   "delete": {
     "title": "Видалити пін",
@@ -14,12 +18,16 @@
     "title": "Назва",
     "description": "Опис",
     "sourceLink": "Посилання на джерело",
+    "imageUrl": "URL зображення",
     "tags": "Теги",
+    "category": "Категорія",
     "board": "Дошка"
   },
   "placeholders": {
     "title": "Додати назву",
+    "auraName": "Назва аури",
     "description": "Додати опис",
+    "auraDescription": "Опишіть вашу ауру...",
     "sourceLink": "Звідки це?",
     "imageLink": "Пряме посилання на зображення",
     "newImageLink": "Пряме посилання на нове зображення",
@@ -27,7 +35,16 @@
     "searchTags": "Пошук тегів...",
     "addTag": "Додати тег",
     "addDetails": "Додати деталі",
-    "addDetailsOptional": "Додати деталі (необов'язково)"
+    "addDetailsOptional": "Додати деталі (необов'язково)",
+    "chooseCategory": "Обрати категорію"
+  },
+  "categoryActions": {
+    "clearSelection": "Очистити вибір",
+    "noMatchingTags": "Теги не знайдено"
+  },
+  "imageActions": {
+    "uploadImage": "Завантажити зображення",
+    "preview": "Прев'ю"
   },
   "toast": {
     "created": "Пін створено",
@@ -40,6 +57,23 @@
   "empty": {
     "noPins": "Піни відсутні",
     "noResults": "Піни не знайдено"
+  },
+  "preview": {
+    "notFound": "Ауру не знайдено.",
+    "save": "Зберегти",
+    "download": "Завантажити",
+    "share": "Поділитись",
+    "edit": "Редагувати",
+    "delete": "Видалити",
+    "report": "Поскаржитись",
+    "category": "Категорія",
+    "moreAuras": "Більше аур",
+    "viewProfile": "Переглянути профіль",
+    "linkCopied": "Посилання скопійовано",
+    "deleteConfirmTitle": "Видалити цю ауру?",
+    "deleteConfirmDesc": "Вона буде переміщена до нещодавно видалених і назавжди видалена через 30 днів.",
+    "viewRecentlyDeleted": "Переглянути нещодавно видалені",
+    "cancel": "Скасувати"
   },
   "aura": {
     "create": "Створити ауру",

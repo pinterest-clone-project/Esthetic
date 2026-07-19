@@ -83,6 +83,22 @@
     "somethingWentWrong": "Something went wrong",
     "success": "Success"
   },
+  "collections": {
+    "title": "Your collection",
+    "create": "Create",
+    "tabAura": "Aura",
+    "tabMoodboard": "Moodboard",
+    "tabAI": "Esthetic AI",
+    "yourCreatedAuras": "Your created Auras",
+    "yourSavedAuras": "Your saved Auras",
+    "noSavedAuras": "You haven't saved any Auras yet",
+    "combineIdeas": "Combine your ideas",
+    "auraDesc": "Aura pins are small aesthetic pieces inspired visuals and trends. They capture moods, colors, and vibes, letting you express your personal aesthetic in a simple, stylish way.",
+    "createAura": "Create Aura",
+    "yourMoodboard": "Your Moodboard",
+    "randomIdeas": "Random Ideas",
+    "comingSoon": "Coming soon"
+  },
   "sidebar": {
     "main": "Main",
     "collections": "Collections",

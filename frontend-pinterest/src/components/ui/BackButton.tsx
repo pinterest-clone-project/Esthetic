@@ -1,4 +1,5 @@
 import {useNavigate} from "react-router";
+import { useTranslation } from "react-i18next";
 
 interface BackButtonProps {
     to?: string;
@@ -6,8 +7,10 @@ interface BackButtonProps {
     className?: string;
 }
 
-const BackButton: React.FC<BackButtonProps> = ({ to, label = "Back", className = "mb-8"  }) => {
+const BackButton: React.FC<BackButtonProps> = ({ to, label, className = "mb-8"  }) => {
+    const { t } = useTranslation('common');
     const navigate = useNavigate();
+    const resolvedLabel = label ?? t('actions.back');
 
     return (
         <button
@@ -17,7 +20,7 @@ const BackButton: React.FC<BackButtonProps> = ({ to, label = "Back", className =
             <svg className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            {label}
+            {resolvedLabel}
         </button>
     );
 };
