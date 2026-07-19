@@ -27,6 +27,7 @@ const SearchPage = () => {
     const [tagQuery, setTagQuery] = useState("");
     const [tagFocused, setTagFocused] = useState(false);
     const [categoryOpen, setCategoryOpen] = useState(false);
+    const [filtersOpen, setFiltersOpen] = useState(false);
     const tagBoxRef = useRef<HTMLDivElement>(null);
     const categoryBoxRef = useRef<HTMLDivElement>(null);
 
@@ -119,11 +120,28 @@ const SearchPage = () => {
                 )}
             </div>
 
-            {/* Filters */}
-            <div className="max-w-7xl mx-auto px-6 mb-6">
+
+            <div className="md:hidden max-w-7xl mx-auto px-6 mb-4">
+                <button
+                    onClick={() => setFiltersOpen(true)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all
+                        bg-gray-100 dark:bg-white/8 text-gray-600 dark:text-white/70 border-gray-200 dark:border-white/10"
+                >
+                    <SlidersHorizontal size={13} />
+                    Filters
+                    {(categoryId || tagIds.length > 0 || sortIdx !== 0) && (
+                        <span className="w-4 h-4 rounded-full bg-[#4ade80] text-black text-[10px] font-bold flex items-center justify-center">
+                            {[categoryId ? 1 : 0, tagIds.length, sortIdx !== 0 ? 1 : 0].reduce((a, b) => a + b, 0)}
+                        </span>
+                    )}
+                </button>
+            </div>
+
+
+            <div className="hidden md:block max-w-7xl mx-auto px-6 mb-6">
                 <div className="flex flex-wrap items-center gap-2">
 
-                    {/* Category picker */}
+
                     <div className="relative" ref={categoryBoxRef}>
                         <button
                             onClick={() => setCategoryOpen(p => !p)}
@@ -171,7 +189,7 @@ const SearchPage = () => {
                         )}
                     </div>
 
-                    {/* Tag picker */}
+
                     <div className="relative" ref={tagBoxRef}>
                         <input
                             type="text"
@@ -196,7 +214,7 @@ const SearchPage = () => {
                         )}
                     </div>
 
-                    {/* Selected tags */}
+
                     {selectedTags.map(tag => (
                         <span key={tag.id} className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#4ade80] text-black text-xs font-medium">
                             #{tag.name}
@@ -206,7 +224,7 @@ const SearchPage = () => {
                         </span>
                     ))}
 
-                    {/* Clear all */}
+
                     {hasFilters && (
                         <button
                             onClick={() => setSearchParams({})}
@@ -216,7 +234,7 @@ const SearchPage = () => {
                         </button>
                     )}
 
-                    {/* Sort */}
+
                     <div className="relative ml-auto">
                         <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none">
                             {SORT_OPTIONS.map((opt, i) => {
@@ -241,14 +259,130 @@ const SearchPage = () => {
                 </div>
             </div>
 
-            {/* Loading */}
+
+            {filtersOpen && (
+                <div className="fixed inset-0 z-50 flex flex-col justify-end md:hidden">
+                    <div className="absolute inset-0 bg-black/50" onClick={() => setFiltersOpen(false)} />
+                    <div className="relative bg-white dark:bg-[#111] rounded-t-2xl flex flex-col max-h-[85dvh]">
+                    <div className="px-5 pt-2 pb-4 flex flex-col gap-4 overflow-y-auto flex-1">
+                        {/* Handle */}
+                        <div className="w-10 h-1 rounded-full bg-gray-300 dark:bg-white/20 mx-auto" />
+
+                        <div className="flex items-center justify-between">
+                            <span className="text-sm font-semibold text-black dark:text-white">Filters</span>
+                            {(categoryId || tagIds.length > 0 || sortIdx !== 0) && (
+                                <button
+                                    onClick={() => { setSearchParams({}); }}
+                                    className="text-xs text-gray-400 hover:text-black dark:hover:text-white transition-colors"
+                                >
+                                    Clear all
+                                </button>
+                            )}
+                        </div>
+
+
+                        <div className="flex flex-col gap-2">
+                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Category</span>
+                            <div className="flex flex-wrap gap-2">
+                                {categories?.map(cat => (
+                                    <button
+                                        key={cat.id}
+                                        onClick={() => setCategoryId(cat.id === categoryId ? "" : cat.id)}
+                                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all
+                                            ${cat.id === categoryId
+                                                ? "bg-[#4ade80] text-black border-[#4ade80]"
+                                                : "bg-gray-100 dark:bg-white/8 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-white/10"
+                                            }`}
+                                    >
+                                        {cat.image && <img src={`${APP_ENV.IMAGES_100_URL}${cat.image}`} alt="" className="w-4 h-4 rounded-full object-cover" />}
+                                        {cat.name}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+
+                        <div className="flex flex-col gap-2">
+                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Tags</span>
+                            <input
+                                type="text"
+                                value={tagQuery}
+                                onChange={e => setTagQuery(e.target.value)}
+                                placeholder="Search tags..."
+                                className="w-full h-9 px-3 rounded-xl text-xs border bg-gray-100 dark:bg-white/8 text-black dark:text-white placeholder-gray-400 border-gray-200 dark:border-white/10 outline-none focus:border-[#4ade80] transition-all"
+                            />
+                            {tagSuggestions.length > 0 && (
+                                <div className="flex flex-wrap gap-2">
+                                    {tagSuggestions.map(tag => (
+                                        <button
+                                            key={tag.id}
+                                            onClick={() => { addTag(tag.id); setTagQuery(""); }}
+                                            className="px-3 py-1.5 rounded-full text-xs border bg-gray-100 dark:bg-white/8 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-white/10"
+                                        >
+                                            #{tag.name}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                            {selectedTags.length > 0 && (
+                                <div className="flex flex-wrap gap-2">
+                                    {selectedTags.map(tag => (
+                                        <span key={tag.id} className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#4ade80] text-black text-xs font-medium">
+                                            #{tag.name}
+                                            <button onClick={() => removeTag(tag.id)} className="hover:opacity-60 transition-opacity">
+                                                <X size={10} />
+                                            </button>
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+
+                        <div className="flex flex-col gap-2">
+                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Sort by</span>
+                            <div className="flex flex-wrap gap-2">
+                                {SORT_OPTIONS.map((opt, i) => {
+                                    const isActive = sortIdx === i;
+                                    return (
+                                        <button
+                                            key={i}
+                                            onClick={() => setSortIdx(i)}
+                                            className="px-3 py-1.5 rounded-full text-xs font-medium transition-all border"
+                                            style={{
+                                                background: isActive ? opt.color : "transparent",
+                                                color: isActive ? (opt.color === "#A1A1A1" ? "#fff" : "#000") : "#6b7280",
+                                                borderColor: isActive ? opt.color : "#e5e7eb",
+                                            }}
+                                        >
+                                            {opt.label}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                    </div>
+                        <div className="px-5 pb-20 pt-3 border-t border-gray-100 dark:border-white/10 shrink-0">
+                            <button
+                                onClick={() => setFiltersOpen(false)}
+                                className="w-full py-3 rounded-xl bg-[#4ade80] text-black text-sm font-semibold"
+                            >
+                                Apply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+
             {(isLoading || isFetching) && (
                 <div className="flex justify-center py-16">
                     <div className="w-7 h-7 rounded-full border-2 border-black/10 dark:border-white/10 border-t-[#4ade80] animate-spin" />
                 </div>
             )}
 
-            {/* No results */}
+
             {isEmpty && (
                 <div className="flex flex-col items-center justify-center py-24 gap-4">
                     <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-white/5 flex items-center justify-center">
@@ -261,7 +395,7 @@ const SearchPage = () => {
                 </div>
             )}
 
-            {/* Grid */}
+
             {!isLoading && !isFetching && pins.length > 0 && (
                 <div className="px-6 pb-8">
                     <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3 max-w-7xl mx-auto">
