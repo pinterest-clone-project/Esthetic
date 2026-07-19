@@ -176,8 +176,8 @@ const NotificationsPage = () => {
                     )}
                 </div>
 
-                <div className="relative mb-6">
-                    <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+                <div className="mb-6">
+                    <div className="grid grid-cols-3 sm:flex sm:flex-wrap gap-2">
 
                     {FILTERS.map((f) => {
                         const count = countOf(f.value);
@@ -186,7 +186,7 @@ const NotificationsPage = () => {
                             <button
                                 key={String(f.value)}
                                 onClick={() => { setActiveFilter(f.value); }}
-                                className="relative flex shrink-0 items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-150 border"
+                                className="relative flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-150 border"
                                 style={{
                                     background: isActive ? f.color : "transparent",
                                     color: isActive ? (f.value === "all" ? "#fff" : "#000") : "#A1A1A1",
@@ -209,7 +209,6 @@ const NotificationsPage = () => {
                         );
                     })}
                     </div>
-                    <div className="absolute right-0 top-0 bottom-1 w-8 bg-gradient-to-l from-white dark:from-black to-transparent pointer-events-none" />
                 </div>
 
                 {activeFilter === "requests" ? (
