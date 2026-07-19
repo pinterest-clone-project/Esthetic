@@ -267,14 +267,14 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
                         )}
                     </div>
 
-                    <div className="flex-1 flex gap-2">
+                    <div className="flex-1 min-w-0 flex gap-2">
                         <input
                             type="text"
                             value={text}
                             onChange={e => setText(e.target.value)}
                             placeholder="Add a comment..."
                             maxLength={500}
-                            className="flex-1 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10
+                            className="flex-1 min-w-0 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10
                                 rounded-xl px-3 h-8 text-black dark:text-white text-xs
                                 placeholder:text-gray-400 outline-none focus:border-[#4ade80] transition-colors"
                         />

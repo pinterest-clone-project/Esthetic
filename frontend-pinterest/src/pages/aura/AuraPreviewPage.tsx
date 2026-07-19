@@ -127,7 +127,7 @@ const AuraPreviewPage = () => {
                                 {pin.commentsCount}
                             </span>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                             {/* Save — primary */}
                             <button
                                 onClick={() => setSaveModalOpen(true)}

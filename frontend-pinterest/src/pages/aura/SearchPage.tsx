@@ -5,7 +5,7 @@ import { useGetAllCategoriesQuery } from "@/services/categoryService.ts";
 import { useGetAllTagsQuery } from "@/services/tagService.ts";
 import PinCard from "@/components/ui/PinCard.tsx";
 import { APP_ENV } from "@/constants/env";
-import { SearchX, ChevronDown, X } from "lucide-react";
+import { SearchX, ChevronDown, X, SlidersHorizontal } from "lucide-react";
 
 const SORT_OPTIONS = [
     { label: "Newest",         sortBy: "CreatedAt",     sortDirection: "Desc", color: "#A1A1A1" },
