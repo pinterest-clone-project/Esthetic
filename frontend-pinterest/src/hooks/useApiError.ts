@@ -3,14 +3,14 @@ import type {IApiError} from "@/types/errors/IApiError.ts";
 
 export const parseError = (error: FetchBaseQueryError): IApiError => {
     if (error.status === "FETCH_ERROR")
-        return { status: 0, title: "Немає з'єднання з сервером" };
+        return { status: 0, title: "No server connection" };
     if (error.status === "PARSING_ERROR")
-        return { status: 0, title: "Помилка парсингу відповіді" };
+        return { status: 0, title: "Response parsing error" };
 
     const data = error.data as IApiError;
     return {
         status: error.status as number,
-        title: data?.title ?? "Невідома помилка",
+        title: data?.title ?? "Unknown error",
         detail: data?.detail,
         errors: data?.errors,
     };
