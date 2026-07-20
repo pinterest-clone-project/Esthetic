@@ -69,7 +69,8 @@ public class BoardsController(IMediator mediator) : ControllerBase
         await mediator.Send(new DeleteBoardCommand
         {
             Id = id,
-            OwnerId = CurrentUserId
+            OwnerId = CurrentUserId,
+            SkipOwnerValidation = User.IsInRole(Roles.Admin)
         });
 
         return NoContent();

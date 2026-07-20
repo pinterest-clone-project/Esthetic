@@ -5,6 +5,8 @@ import { useSearchPinsQuery, useGetPinByIdQuery } from "@/services/pinService.ts
 import PinsFilters from "@/components/admin/pins/PinsFilters.tsx";
 import PinRow from "@/components/admin/pins/PinRow.tsx";
 import PinFormModal from "@/components/admin/pins/PinFormModal.tsx";
+import DeletePinModal from "@/components/admin/pins/DeletePinModal.tsx";
+import type { IPinSummaryResponse } from "@/types/pin/responses/IPinSummaryResponse.ts";
 import Pagination from "@/components/common/Pagination.tsx";
 
 const AdminPinsPage = () => {
@@ -22,6 +24,7 @@ const AdminPinsPage = () => {
     });
 
     const [editingPinId, setEditingPinId] = useState<string | null>(null);
+    const [deletingPin, setDeletingPin] = useState<IPinSummaryResponse | null>(null);
     const { currentData: editingPin } = useGetPinByIdQuery(editingPinId!, { skip: !editingPinId });
 
     const isLoadingState = isLoading || (isFetching && !data);
@@ -55,7 +58,7 @@ const AdminPinsPage = () => {
                         : data?.items.length === 0
                             ? <p className="text-sm text-white/40 text-center py-10">Пінів не знайдено</p>
                             : data?.items.map((pin) => (
-                                <PinRow key={pin.id} pin={pin} onEdit={setEditingPinId} />
+                                <PinRow key={pin.id} pin={pin} onEdit={setEditingPinId} onDelete={setDeletingPin} />
                             ))}
                 </div>
 
@@ -67,6 +70,7 @@ const AdminPinsPage = () => {
             {editingPinId && editingPin && (
                 <PinFormModal key={editingPinId} pin={editingPin} onClose={() => setEditingPinId(null)} />
             )}
+            {deletingPin && <DeletePinModal pin={deletingPin} onClose={() => setDeletingPin(null)} />}
         </SkeletonTheme>
     );
 };

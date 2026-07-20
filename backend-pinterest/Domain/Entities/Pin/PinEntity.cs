@@ -13,6 +13,7 @@ namespace Domain.Entities.Pin;
 [Table("Pins")]
 public class PinEntity : BaseEntity
 {
+    public bool DeletedByAdmin { get; set; }
     public Guid CreatorId { get; set; }
     public UserEntity Creator { get; set; } = null!;
 

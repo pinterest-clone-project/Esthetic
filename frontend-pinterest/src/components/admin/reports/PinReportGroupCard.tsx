@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ReportStatus } from "@/types/report/ReportStatus.ts";
 import { useUpdateReportStatusMutation } from "@/services/reportService.ts";
 import { useBlockUserMutation } from "@/services/userService.ts";
-import { useDeletePinMutation } from "@/services/pinService.ts";
+import { useAdminRestorePinMutation, useDeletePinMutation } from "@/services/pinService.ts";
 import ReportStatusBadge from "@/components/admin/reports/ReportStatusBadge.tsx";
 import BlockUserModal from "@/components/admin/users/BlockUserModal.tsx";
 import { APP_ENV } from "@/constants/env";
@@ -27,6 +27,9 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
     const [updateStatus] = useUpdateReportStatusMutation();
     const [blockUser, { isLoading: isBlocking }] = useBlockUserMutation();
     const [deletePin] = useDeletePinMutation();
+    const [restorePin] = useAdminRestorePinMutation();
+    const [isDeleted, setIsDeleted] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const allResolved = localReports.every((r) => r.status === ReportStatus.Resolved);
     const allDismissed = localReports.every((r) => r.status === ReportStatus.Dismissed);
@@ -97,10 +100,25 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
         setError(null);
         try {
             await deletePin(group.pinId).unwrap();
+            setIsDeleted(true);
             await setStatusForAll(ReportStatus.Resolved, (r) => r.status !== ReportStatus.Resolved);
         } catch (e) {
             console.error("Помилка видалення піна:", e);
             setError("Не вдалось видалити пін");
+        } finally {
+            setProcessing(false);
+        }
+    };
+
+    const handleRestorePin = async () => {
+        if (processing) return;
+        setProcessing(true);
+        setError(null);
+        try {
+            await restorePin(group.pinId).unwrap();
+            setIsDeleted(false);
+        } catch {
+            setError("Unable to restore the pin");
         } finally {
             setProcessing(false);
         }
@@ -249,7 +267,7 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
                                 <span>Заблокувати автора</span>
                             </button>
                             <button
-                                onClick={handleDeletePin}
+                                onClick={isDeleted ? handleRestorePin : () => setShowDeleteModal(true)}
                                 disabled={processing}
                                 className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium text-orange-400 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/20 transition-all disabled:opacity-40"
                             >
@@ -276,6 +294,7 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
                     isBlocking={isBlocking}
                 />
             )}
+            {showDeleteModal && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4"><div className="w-full max-w-sm rounded-3xl border border-white/10 bg-[#161616] p-6"><h2 className="mb-2 text-lg font-semibold">Delete pin?</h2><p className="mb-5 text-sm text-white/55">The owner will not be able to restore this pin.</p><div className="flex gap-2"><button onClick={() => setShowDeleteModal(false)} className="flex-1 rounded-2xl bg-white/10 py-2.5">Cancel</button><button onClick={() => { setShowDeleteModal(false); void handleDeletePin(); }} className="flex-1 rounded-2xl bg-red-500 py-2.5">Delete</button></div></div></div>}
         </div>
     );
 };

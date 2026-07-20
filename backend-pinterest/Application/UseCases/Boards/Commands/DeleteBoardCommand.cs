@@ -9,4 +9,6 @@ public record DeleteBoardCommand : IRequest<Unit>
 
     [BindNever]
     public Guid OwnerId { get; init; }
+    [BindNever]
+    public bool SkipOwnerValidation { get; init; }
 }

@@ -5,6 +5,7 @@ import { useSearchMoodboardsQuery, type MoodboardAdmin } from "@/services/moodbo
 import BoardsFilters from "@/components/admin/boards/BoardsFilters.tsx";
 import BoardRow from "@/components/admin/boards/BoardRow.tsx";
 import BoardFormModal from "@/components/admin/boards/BoardFormModal.tsx";
+import DeleteBoardModal from "@/components/admin/boards/DeleteBoardModal.tsx";
 import Pagination from "@/components/common/Pagination.tsx";
 
 const AdminBoardsPage = () => {
@@ -23,6 +24,8 @@ const AdminBoardsPage = () => {
     });
 
     const [editingBoard, setEditingBoard] = useState<MoodboardAdmin | null>(null);
+    const [deletingBoard, setDeletingBoard] = useState<MoodboardAdmin | null>(null);
+
     const isLoadingState = isLoading || (isFetching && !data);
     const totalPages = data?.totalPages ?? 1;
 
@@ -54,7 +57,7 @@ const AdminBoardsPage = () => {
                         : data?.items.length === 0
                             ? <p className="text-sm text-white/40 text-center py-10">Дошок не знайдено</p>
                             : data?.items.map((board) => (
-                                <BoardRow key={board.id} board={board} onEdit={setEditingBoard} />
+                                <BoardRow key={board.id} board={board} onEdit={setEditingBoard} onDelete={setDeletingBoard} />
                             ))}
                 </div>
 
@@ -65,6 +68,10 @@ const AdminBoardsPage = () => {
 
             {editingBoard && (
                 <BoardFormModal board={editingBoard} onClose={() => setEditingBoard(null)} />
+            )}
+
+            {deletingBoard && (
+                <DeleteBoardModal board={deletingBoard} onClose={() => setDeletingBoard(null)} />
             )}
         </SkeletonTheme>
     );

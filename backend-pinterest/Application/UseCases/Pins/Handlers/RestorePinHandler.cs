@@ -11,6 +11,11 @@ public class RestorePinHandler(IPinRepository repository)
 {
     public async Task<Unit> Handle(RestorePinCommand request, CancellationToken ct)
     {
+        if (request.IsAdmin)
+        {
+            await repository.RestoreAsync(request.Id, ct);
+            return Unit.Value;
+        }
         var pin = await repository.GetByIdAsync(request.Id, ct);
 
         if (pin == null)
@@ -21,6 +26,8 @@ public class RestorePinHandler(IPinRepository repository)
                 throw new NotFoundException(ValidationMessages.UserNotFound);
             if (deleted.CreatorId != request.UserId)
                 throw new ForbiddenException(ValidationMessages.ErrorForbidden);
+            if (deleted.DeletedByAdmin)
+                throw new ForbiddenException("This pin can only be restored by an administrator");
         }
 
         await repository.RestoreAsync(request.Id, ct);
