@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useGetCommentsQuery, useCreateCommentMutation, useUpdateCommentMutation, useDeleteCommentMutation } from "../../services/commentService.ts";
-import { useGetMeQuery } from "../../services/accountService.ts";
-import { useCommentRealtime } from "../../hooks/useCommentRealtime.ts";
+import { useGetMeQuery } from "@/services/accountService.ts";
+import { useCommentRealtime } from "@/hooks/useCommentRealtime.ts";
 import { APP_ENV } from "@/constants/env";
 import {useNavigate} from "react-router";
 

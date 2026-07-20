@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { getCommentConnection, startCommentConnection, joinPinGroup, leavePinGroup } from "@/utils/commentHub.ts";
+import { getCommentConnection, subscribeToPin, unsubscribeFromPin } from "@/utils/commentHub.ts";
 import type { IComment } from "@/types/comment/IComment.ts";
 import { commentService } from "@/services/commentService.ts";
 import { selectIsAuth } from "@/store/selectors/authSelectors.ts";
@@ -18,17 +18,16 @@ export const useCommentRealtime = ({ pinId, enabled = true }: UseCommentRealtime
         if (!isAuth || !enabled) return;
 
         let active = true;
+        let handlers: {
+            created: (comment: IComment) => void;
+            updated: (comment: IComment) => void;
+            deleted: (commentId: string) => void;
+        } | null = null;
 
         const setup = async () => {
-            await startCommentConnection();
-            if (!active) return;
-
             const connection = getCommentConnection();
 
-            // Join the pin-specific group
-            await joinPinGroup(pinId);
-
-            connection.on("CommentCreated", (comment: IComment) => {
+            const handleCommentCreated = (comment: IComment) => {
                 dispatch(
                     commentService.util.updateQueryData("getComments", pinId, (draft) => {
                         // If it's a reply, add it to the parent's replies
@@ -48,9 +47,9 @@ export const useCommentRealtime = ({ pinId, enabled = true }: UseCommentRealtime
                         }
                     })
                 );
-            });
+            };
 
-            connection.on("CommentUpdated", (comment: IComment) => {
+            const handleCommentUpdated = (comment: IComment) => {
                 dispatch(
                     commentService.util.updateQueryData("getComments", pinId, (draft) => {
                         // Update top-level comment
@@ -71,9 +70,9 @@ export const useCommentRealtime = ({ pinId, enabled = true }: UseCommentRealtime
                         }
                     })
                 );
-            });
+            };
 
-            connection.on("CommentDeleted", (commentId: string) => {
+            const handleCommentDeleted = (commentId: string) => {
                 dispatch(
                     commentService.util.updateQueryData("getComments", pinId, (draft) => {
                         // Remove top-level comment
@@ -94,7 +93,23 @@ export const useCommentRealtime = ({ pinId, enabled = true }: UseCommentRealtime
                         }
                     })
                 );
-            });
+            };
+
+            handlers = {
+                created: handleCommentCreated,
+                updated: handleCommentUpdated,
+                deleted: handleCommentDeleted,
+            };
+            connection.on("CommentCreated", handleCommentCreated);
+            connection.on("CommentUpdated", handleCommentUpdated);
+            connection.on("CommentDeleted", handleCommentDeleted);
+
+            await subscribeToPin(pinId);
+            if (!active) {
+                connection.off("CommentCreated", handleCommentCreated);
+                connection.off("CommentUpdated", handleCommentUpdated);
+                connection.off("CommentDeleted", handleCommentDeleted);
+            }
         };
 
         setup();
@@ -102,10 +117,12 @@ export const useCommentRealtime = ({ pinId, enabled = true }: UseCommentRealtime
         return () => {
             active = false;
             const conn = getCommentConnection();
-            conn.off("CommentCreated");
-            conn.off("CommentUpdated");
-            conn.off("CommentDeleted");
-            leavePinGroup(pinId);
+            if (handlers) {
+                conn.off("CommentCreated", handlers.created);
+                conn.off("CommentUpdated", handlers.updated);
+                conn.off("CommentDeleted", handlers.deleted);
+            }
+            void unsubscribeFromPin(pinId);
         };
     }, [isAuth, pinId, enabled, dispatch]);
 };

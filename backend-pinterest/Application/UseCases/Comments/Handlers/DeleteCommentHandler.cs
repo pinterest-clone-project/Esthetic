@@ -1,4 +1,5 @@
-﻿using Application.Common.Exceptions;
+using Application.Common.Exceptions;
+using Application.Interfaces.Notifiers;
 using Application.UseCases.Comments.Commands;
 using Domain.Interfaces;
 using MediatR;
@@ -6,7 +7,8 @@ using MediatR;
 namespace Application.UseCases.Comments.Handlers;
 
 public class DeleteCommentHandler(
-    ICommentRepository repository) : IRequestHandler<DeleteCommentCommand, Unit>
+    ICommentRepository repository,
+    ICommentNotifier commentNotifier) : IRequestHandler<DeleteCommentCommand, Unit>
 {
     public async Task<Unit> Handle(DeleteCommentCommand request, CancellationToken cancellationToken)
     {
@@ -19,6 +21,7 @@ public class DeleteCommentHandler(
         }
 
         await repository.DeleteAsync(request.CommentId, cancellationToken);
+        await commentNotifier.NotifyDeletedAsync(comment.PinId, comment.Id);
         return Unit.Value;
     }
 }

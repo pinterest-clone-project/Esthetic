@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Application.UseCases.Comments.Commands;
 
-public record UpdateCommentCommand : IRequest<CommentDTO>
+public record UpdateCommentCommand : IRequest<CommentResponseDTO>
 {
     [BindNever]
     public Guid UserId { get; init; }
