@@ -89,6 +89,31 @@
     "restored": "Aura restored successfully",
     "restoreFailed": "Failed to restore aura"
   },
+  "search": {
+    "allAuras": "All auras",
+    "results": "{{count}} result",
+    "results_plural": "{{count}} results",
+    "clearSearch": "Clear search",
+    "filters": "Filters",
+    "clearAll": "Clear all",
+    "category": "Category",
+    "tags": "Tags",
+    "tagsPlaceholder": "Tags...",
+    "searchTagsPlaceholder": "Search tags...",
+    "sortBy": "Sort by",
+    "apply": "Apply",
+    "noAurasFound": "No auras found",
+    "tryDifferent": "Try different keywords or filters",
+    "sort": {
+      "newest": "Newest",
+      "oldest": "Oldest",
+      "mostLiked": "Most liked",
+      "leastLiked": "Least liked",
+      "mostCommented": "Most commented",
+      "aToZ": "A → Z",
+      "zToA": "Z → A"
+    }
+  },
   "deleted": {
     "title": "Recently deleted",
     "subtitle": "Auras are permanently deleted after 30 days. Restore them before they're gone.",

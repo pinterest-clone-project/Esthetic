@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useCreateReportMutation } from "@/services/reportService.ts";
+import { useTranslation } from "react-i18next";
 
 interface ReportModalProps {
     pinId?: string;
@@ -7,17 +8,19 @@ interface ReportModalProps {
     onClose: () => void;
 }
 
-const REPORT_REASONS = [
-    "Spam or misleading",
-    "Nudity or sexual content",
-    "Harassment or bullying",
-    "Hate speech or symbols",
-    "Violence or dangerous content",
-    "Intellectual property violation",
-    "Other",
-];
-
 const ReportModal = ({ pinId, userId, onClose }: ReportModalProps) => {
+    const { t } = useTranslation('common');
+
+    const REPORT_REASONS = [
+        { key: "spam",        label: t('report.reasons.spam') },
+        { key: "nudity",      label: t('report.reasons.nudity') },
+        { key: "harassment",  label: t('report.reasons.harassment') },
+        { key: "hateSpeech",  label: t('report.reasons.hateSpeech') },
+        { key: "violence",    label: t('report.reasons.violence') },
+        { key: "ip",          label: t('report.reasons.ip') },
+        { key: "other",       label: t('report.reasons.other') },
+    ];
+
     const [selectedReason, setSelectedReason] = useState<string | null>(null);
     const [details, setDetails] = useState("");
     const [submitted, setSubmitted] = useState(false);
@@ -40,7 +43,7 @@ const ReportModal = ({ pinId, userId, onClose }: ReportModalProps) => {
             }).unwrap();
             setSubmitted(true);
         } catch {
-            setError("Failed to submit report. Please try again.");
+            setError(t('report.failed'));
         }
     };
 
@@ -56,20 +59,20 @@ const ReportModal = ({ pinId, userId, onClose }: ReportModalProps) => {
                 {submitted ? (
                     <div className="flex flex-col items-center gap-3 py-4 text-center">
                         <span className="text-[#4ade80] text-2xl">✓</span>
-                        <p className="text-white text-sm font-medium">Thank you for your report</p>
-                        <p className="text-gray-500 text-xs">Our team will review it shortly.</p>
+                        <p className="text-white text-sm font-medium">{t('report.thankYou')}</p>
+                        <p className="text-gray-500 text-xs">{t('report.reviewSoon')}</p>
                         <button
                             onClick={onClose}
                             className="mt-2 text-xs text-gray-400 hover:text-white border border-white/10 hover:border-white/30 px-4 py-1.5 rounded-lg transition-colors"
                         >
-                            Close
+                            {t('report.close')}
                         </button>
                     </div>
                 ) : (
                     <>
                         <div className="flex items-center justify-between mb-4">
                             <h2 className="text-white text-sm font-semibold">
-                                Report {pinId ? "pin" : "user"}
+                                {pinId ? t('report.titlePin') : t('report.titleUser')}
                             </h2>
                             <button
                                 onClick={onClose}
@@ -80,17 +83,17 @@ const ReportModal = ({ pinId, userId, onClose }: ReportModalProps) => {
                         </div>
 
                         <div className="flex flex-col gap-1.5 mb-4">
-                            {REPORT_REASONS.map((reason) => (
+                            {REPORT_REASONS.map(({ key, label }) => (
                                 <button
-                                    key={reason}
-                                    onClick={() => setSelectedReason(reason)}
+                                    key={key}
+                                    onClick={() => setSelectedReason(key)}
                                     className={`text-left text-xs px-3 py-2 rounded-lg border transition-colors ${
-                                        selectedReason === reason
+                                        selectedReason === key
                                             ? "border-[#4ade80] text-[#4ade80] bg-[#4ade80]/10"
                                             : "border-white/10 text-gray-400 hover:border-white/30 hover:text-white"
                                     }`}
                                 >
-                                    {reason}
+                                    {label}
                                 </button>
                             ))}
                         </div>
@@ -98,7 +101,7 @@ const ReportModal = ({ pinId, userId, onClose }: ReportModalProps) => {
                         <textarea
                             value={details}
                             onChange={(e) => setDetails(e.target.value)}
-                            placeholder="Add details (optional)"
+                            placeholder={t('report.detailsPlaceholder')}
                             rows={3}
                             maxLength={500}
                             className="w-full resize-none bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder:text-gray-600 focus:outline-none focus:border-[#4ade80]/50 mb-2"
@@ -111,14 +114,14 @@ const ReportModal = ({ pinId, userId, onClose }: ReportModalProps) => {
                                 onClick={onClose}
                                 className="text-xs text-gray-400 hover:text-white border border-white/10 hover:border-white/30 px-3 py-1.5 rounded-lg transition-colors"
                             >
-                                Cancel
+                                {t('report.cancel')}
                             </button>
                             <button
                                 onClick={handleSubmit}
                                 disabled={!selectedReason || isLoading}
                                 className="text-xs text-black bg-[#4ade80] hover:bg-[#22c55e] disabled:opacity-40 disabled:cursor-not-allowed px-4 py-1.5 rounded-lg font-medium transition-colors"
                             >
-                                {isLoading ? "Submitting..." : "Submit report"}
+                                {isLoading ? t('report.submitting') : t('report.submit')}
                             </button>
                         </div>
                     </>

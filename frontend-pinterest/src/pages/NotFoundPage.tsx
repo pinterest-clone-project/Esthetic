@@ -1,6 +1,8 @@
 import { Link, useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 
 const NotFoundPage = () => {
+    const { t } = useTranslation('common');
     const navigate = useNavigate();
 
     return (
@@ -24,11 +26,11 @@ const NotFoundPage = () => {
             </p>
 
             <h1 className="relative mt-1 text-[22px] font-bold tracking-[-0.5px] text-white">
-                Page not found
+                {t('notFound.title')}
             </h1>
 
             <p className="relative mt-2 max-w-[300px] text-sm leading-relaxed tracking-[-0.3px] text-text-muted">
-                This pin got lost somewhere. Head back home and find some inspiration!
+                {t('notFound.desc')}
             </p>
 
             <Link
@@ -38,12 +40,12 @@ const NotFoundPage = () => {
                 <svg className="h-4 w-4 fill-button-text-color" viewBox="0 0 24 24">
                     <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
                 </svg>
-                Go home
+                {t('notFound.goHome')}
             </Link>
 
             <div className="relative mt-7 flex w-[260px] items-center gap-2.5">
                 <hr className="flex-1 border-[#2a2a2a]" />
-                <span className="text-xs text-btn-dark">or</span>
+                <span className="text-xs text-btn-dark">{t('notFound.or')}</span>
                 <hr className="flex-1 border-[#2a2a2a]" />
             </div>
 
@@ -51,7 +53,7 @@ const NotFoundPage = () => {
                 onClick={() => navigate(-1)}
                 className="relative mt-5 text-sm text-text-muted underline transition-colors hover:text-white"
             >
-                Go back
+                {t('notFound.goBack')}
             </button>
         </div>
     );

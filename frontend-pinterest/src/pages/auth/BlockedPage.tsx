@@ -6,10 +6,12 @@ import LoginForm from "@/components/auth/LoginForm.tsx";
 import RegisterForm from "@/components/auth/RegisterForm.tsx";
 import Button from "@/components/button/Button.tsx";
 import { useTheme } from "@/context/ThemeContext.tsx";
+import { useTranslation } from "react-i18next";
 
 type ModalType = "login" | "signup" | null;
 
 const BlockedPage = () => {
+    const { t } = useTranslation('common');
     const user = useSelector(selectUser);
     const { theme } = useTheme();
     const [activeModal, setActiveModal] = useState<ModalType>(null);
@@ -33,17 +35,17 @@ const BlockedPage = () => {
             </div>
 
             <h1 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-white">
-                Your account has been blocked
+                {t('blocked.title')}
             </h1>
 
             {user?.blockReason && (
                 <p className="text-gray-600 dark:text-gray-300 mb-4 max-w-md">
-                    Reason: {user.blockReason}
+                    {t('blocked.reason', { reason: user.blockReason })}
                 </p>
             )}
 
             <p className="text-sm text-gray-400 dark:text-gray-500 mb-6">
-                If you believe this is a mistake, please contact support.
+                {t('blocked.contact')}
             </p>
 
             <div className="flex items-center gap-3">
@@ -54,7 +56,7 @@ const BlockedPage = () => {
                     style={{ width: 100, height: 50 }}
                     onClick={() => setActiveModal("signup")}
                 >
-                    Sign Up
+                    {t('actions.signUp')}
                 </Button>
                 <Button
                     variant={theme === "dark" ? "dark" : "light"}
@@ -63,7 +65,7 @@ const BlockedPage = () => {
                     style={{ width: 100, height: 50 }}
                     onClick={() => setActiveModal("login")}
                 >
-                    Log in
+                    {t('actions.logIn')}
                 </Button>
             </div>
 

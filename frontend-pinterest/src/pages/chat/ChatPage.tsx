@@ -11,12 +11,14 @@ import {
 import { useSearchUsersQuery } from "@/services/userService";
 import { APP_ENV } from "@/constants/env";
 import type { IChat } from "@/types/chat/IChat";
+import { useTranslation } from "react-i18next";
 
-const formatTime = (iso: string) =>
-    new Date(iso).toLocaleTimeString("uk-UA", { hour: "2-digit", minute: "2-digit" });
+const formatTime = (iso: string, lang: string) =>
+    new Date(iso).toLocaleTimeString(lang, { hour: "2-digit", minute: "2-digit" });
 
 
 const ChatView = ({ chat, onBack }: { chat: IChat; onBack: () => void }) => {
+    const { t, i18n } = useTranslation('common');
     const currentUserId = useAppSelector((s) => s.auth.user?.id);
     const { data: messages = [] } = useGetMessagesQuery(chat.id);
     const [sendMessage, { isLoading: isSending }] = useSendMessageMutation();
@@ -86,7 +88,7 @@ const ChatView = ({ chat, onBack }: { chat: IChat; onBack: () => void }) => {
                             }`}>
                                 <span>{m.content}</span>
                                 <span className={`text-[10px] mt-0.5 self-end ${isOwn ? "text-black/50" : "text-black/40 dark:text-white/40"}`}>
-                                    {formatTime(m.sentAt)}
+                                    {formatTime(m.sentAt, i18n.language)}
                                 </span>
                             </div>
                         </div>
@@ -101,7 +103,7 @@ const ChatView = ({ chat, onBack }: { chat: IChat; onBack: () => void }) => {
                         value={text}
                         onChange={(e) => setText(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
-                        placeholder="Message"
+                        placeholder={t('chat.messagePlaceholder')}
                         className="flex-1 bg-transparent text-sm text-black dark:text-white outline-none placeholder:text-[#888]"
                     />
                     <button
@@ -121,6 +123,7 @@ const ChatView = ({ chat, onBack }: { chat: IChat; onBack: () => void }) => {
 
 
 const ChatPage = () => {
+    const { t } = useTranslation('common');
     const navigate = useNavigate();
     const [activeChat, setActiveChat] = useState<IChat | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
@@ -165,7 +168,7 @@ const ChatPage = () => {
 
     return (
         <div className="flex flex-col pt-2">
-            <h1 className="text-black dark:text-white font-semibold text-lg px-4 mb-3">Messages</h1>
+            <h1 className="text-black dark:text-white font-semibold text-lg px-4 mb-3">{t('chat.title')}</h1>
 
             <div className="flex items-center gap-2 bg-[#D1D1D1] dark:bg-[#2a2a2a] rounded-xl px-3 py-2 mx-4 mb-3">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2">
@@ -175,7 +178,7 @@ const ChatPage = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="bg-transparent text-sm text-black dark:text-white outline-none w-full placeholder:text-[#888]"
-                    placeholder="Search by nickname"
+                    placeholder={t('chat.searchPlaceholder')}
                 />
             </div>
 
@@ -195,7 +198,7 @@ const ChatPage = () => {
                             </button>
                         ))}
                         {filteredSearchItems.length === 0 && (
-                            <p className="text-[#A1A1A1] text-sm px-3">No users found</p>
+                            <p className="text-[#A1A1A1] text-sm px-3">{t('chat.noUsersFound')}</p>
                         )}
                     </>
                 ) : (
@@ -226,7 +229,7 @@ const ChatPage = () => {
                             </button>
                         ))}
                         {chats.length === 0 && (
-                            <p className="text-[#A1A1A1] text-sm px-3">No chats yet. Search for a user to start.</p>
+                            <p className="text-[#A1A1A1] text-sm px-3">{t('chat.noChats')}</p>
                         )}
                     </>
                 )}

@@ -89,6 +89,31 @@
     "restored": "Ауру успішно відновлено",
     "restoreFailed": "Не вдалось відновити ауру"
   },
+  "search": {
+    "allAuras": "Всі аури",
+    "results": "{{count}} результат",
+    "results_plural": "{{count}} результатів",
+    "clearSearch": "Очистити пошук",
+    "filters": "Фільтри",
+    "clearAll": "Очистити все",
+    "category": "Категорія",
+    "tags": "Теги",
+    "tagsPlaceholder": "Теги...",
+    "searchTagsPlaceholder": "Пошук тегів...",
+    "sortBy": "Сортування",
+    "apply": "Застосувати",
+    "noAurasFound": "Аур не знайдено",
+    "tryDifferent": "Спробуйте інші ключові слова або фільтри",
+    "sort": {
+      "newest": "Новіші",
+      "oldest": "Старіші",
+      "mostLiked": "Найбільш вподобані",
+      "leastLiked": "Найменш вподобані",
+      "mostCommented": "Найбільш коментовані",
+      "aToZ": "А → Я",
+      "zToA": "Я → А"
+    }
+  },
   "deleted": {
     "title": "Нещодавно видалені",
     "subtitle": "Аури остаточно видаляються через 30 днів. Відновіть їх, поки не пізно.",

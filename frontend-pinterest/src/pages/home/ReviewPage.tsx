@@ -5,6 +5,7 @@ import { useAppSelector } from "@/store";
 import { selectIsAdmin } from "@/store/selectors/authSelectors.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 
 const PinCardSkeleton = ({ height }: { height: number }) => (
     <div className="break-inside-avoid mb-3 rounded-xl overflow-hidden bg-white/5 animate-pulse"
@@ -12,6 +13,7 @@ const PinCardSkeleton = ({ height }: { height: number }) => (
 );
 
 const ReviewPage = () => {
+    const { t } = useTranslation('common');
     const { data: pins, isLoading, isError } = useGetRecommendedPinsQuery();
     const isAdmin = useAppSelector(selectIsAdmin);
     const { data: me } = useGetMeQuery();
@@ -44,11 +46,11 @@ const ReviewPage = () => {
                                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                                     </svg>
                                 </div>
-                                <p className="text-white text-sm font-semibold tracking-tight">Administrator access</p>
+                                <p className="text-white text-sm font-semibold tracking-tight">{t('adminBanner.title')}</p>
                             </div>
 
                             <p className="text-[#A1A1A1] text-sm leading-relaxed mb-6">
-                                Welcome back, <span className="text-white font-medium">{me?.firstName ?? me?.userName ?? "Admin"}</span>. You are signed in with administrator privileges.
+                                {t('adminBanner.welcomePrefix')} <span className="text-white font-medium">{me?.firstName ?? me?.userName ?? "Admin"}</span>{t('adminBanner.welcomeSuffix')}
                             </p>
 
                             <div className="flex items-center gap-2">
@@ -56,13 +58,13 @@ const ReviewPage = () => {
                                     onClick={() => { navigate("/admin"); dismissBanner(); }}
                                     className="flex-1 py-2.5 rounded-xl bg-[#1DB954] hover:bg-[#1aa34a] text-black text-sm font-semibold transition-colors"
                                 >
-                                    Go to Admin Panel
+                                    {t('adminBanner.goToPanel')}
                                 </button>
                                 <button
                                     onClick={dismissBanner}
                                     className="px-4 py-2.5 rounded-xl border border-white/10 text-[#A1A1A1] hover:text-white hover:border-white/20 text-sm transition-colors"
                                 >
-                                    Dismiss
+                                    {t('adminBanner.dismiss')}
                                 </button>
                             </div>
                         </div>
@@ -72,7 +74,7 @@ const ReviewPage = () => {
 
             {isError && (
                 <div className="flex items-center justify-center h-40">
-                    <p className="text-red-400 text-sm">Failed to load pins.</p>
+                    <p className="text-red-400 text-sm">{t('adminBanner.failedToLoad')}</p>
                 </div>
             )}
 
@@ -86,7 +88,7 @@ const ReviewPage = () => {
 
             {!isLoading && !isError && pins?.length === 0 && (
                 <div className="flex items-center justify-center h-40">
-                    <p className="text-gray-500 text-sm">No pins yet.</p>
+                    <p className="text-gray-500 text-sm">{t('adminBanner.noPins')}</p>
                 </div>
             )}
         </div>

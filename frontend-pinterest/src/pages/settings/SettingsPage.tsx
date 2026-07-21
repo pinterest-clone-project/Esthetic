@@ -8,10 +8,12 @@ import { APP_ENV } from "@/constants/env";
 import ThemeToggle from "@/components/ui/ThemeToggle.tsx";
 import profileIcon from "@/assets/icons/profile_icon.svg";
 import themeIcon from "@/assets/icons/theme_mode.svg";
+import { useTranslation } from "react-i18next";
 
 const whiteFilter = "brightness(0)";
 
 const SettingsPage = () => {
+    const { t } = useTranslation('common');
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const isAdmin = useAppSelector(selectIsAdmin);
@@ -27,7 +29,7 @@ const SettingsPage = () => {
 
     return (
         <div className="flex flex-col px-4 py-6 gap-2 text-black dark:text-white">
-            <h1 className="text-xl font-bold mb-4">Settings</h1>
+            <h1 className="text-xl font-bold mb-4">{t('settings.title')}</h1>
 
             {user && (
                 <button
@@ -56,8 +58,8 @@ const SettingsPage = () => {
                         <img src={themeIcon} style={{ filter: whiteFilter }} className="w-5 h-5" alt="" />
                     </div>
                     <div>
-                        <p className="text-sm font-medium">Theme</p>
-                        <p className="text-[#A1A1A1] text-xs">Light / Dark mode</p>
+                        <p className="text-sm font-medium">{t('settings.theme')}</p>
+                        <p className="text-[#A1A1A1] text-xs">{t('settings.themeDesc')}</p>
                     </div>
                 </div>
                 <ThemeToggle />
@@ -74,8 +76,8 @@ const SettingsPage = () => {
                         </svg>
                     </div>
                     <div className="text-left flex-1">
-                        <p className="text-sm font-medium">Admin panel</p>
-                        <p className="text-[#A1A1A1] text-xs">Manage users and content</p>
+                        <p className="text-sm font-medium">{t('settings.adminPanel')}</p>
+                        <p className="text-[#A1A1A1] text-xs">{t('settings.adminPanelDesc')}</p>
                     </div>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A1A1A1" strokeWidth="2">
                         <path d="M9 18l6-6-6-6"/>
@@ -95,8 +97,8 @@ const SettingsPage = () => {
                     </svg>
                 </div>
                 <div className="text-left flex-1">
-                    <p className="text-sm font-medium">Recently deleted</p>
-                    <p className="text-[#A1A1A1] text-xs">Auras deleted in the last 30 days</p>
+                    <p className="text-sm font-medium">{t('settings.recentlyDeleted')}</p>
+                    <p className="text-[#A1A1A1] text-xs">{t('settings.recentlyDeletedDesc')}</p>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A1A1A1" strokeWidth="2">
                     <path d="M9 18l6-6-6-6"/>
@@ -115,8 +117,8 @@ const SettingsPage = () => {
                     </svg>
                 </div>
                 <div className="text-left">
-                    <p className="text-red-500 text-sm font-medium">Logout</p>
-                    <p className="text-[#A1A1A1] text-xs">Sign out of your account</p>
+                    <p className="text-red-500 text-sm font-medium">{t('settings.logout')}</p>
+                    <p className="text-[#A1A1A1] text-xs">{t('settings.logoutDesc')}</p>
                 </div>
             </button>
         </div>

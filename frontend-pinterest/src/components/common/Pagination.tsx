@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 interface PaginationProps {
     page: number;
@@ -8,6 +9,7 @@ interface PaginationProps {
 }
 
 const Pagination = ({ page, totalPages, totalCount, onPageChange }: PaginationProps) => {
+    const { t } = useTranslation('common');
     const pageItems = useMemo<(number | "...")[]>(() => {
         if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
         const items: (number | "...")[] = [1];
@@ -24,14 +26,14 @@ const Pagination = ({ page, totalPages, totalCount, onPageChange }: PaginationPr
 
     return (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4 text-xs text-white/40">
-            <span>Сторінка {page} з {totalPages} · Всього {totalCount}</span>
+            <span>{t('pagination.info', { page, totalPages, totalCount })}</span>
             <div className="flex items-center gap-1.5 flex-wrap justify-center">
                 <button
                     onClick={() => onPageChange(Math.max(1, page - 1))}
                     disabled={page <= 1}
                     className="px-3 py-1.5 rounded-xl bg-white/8 text-white/70 hover:bg-white/15 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
-                    Назад
+                    {t('pagination.prev')}
                 </button>
                 {pageItems.map((item, idx) =>
                     item === "..." ? (
@@ -53,7 +55,7 @@ const Pagination = ({ page, totalPages, totalCount, onPageChange }: PaginationPr
                     disabled={page >= totalPages}
                     className="px-3 py-1.5 rounded-xl bg-white/8 text-white/70 hover:bg-white/15 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
-                    Далі
+                    {t('pagination.next')}
                 </button>
             </div>
         </div>
