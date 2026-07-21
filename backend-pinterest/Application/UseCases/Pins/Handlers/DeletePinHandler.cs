@@ -1,3 +1,4 @@
+using Application.Common.Exceptions;
 using Application.UseCases.Pins.Commands;
 using Domain.Interfaces;
 using MediatR;
@@ -8,7 +9,14 @@ public class DeletePinHandler(IPinRepository repository)
 {
     public async Task<Unit> Handle(DeletePinCommand request, CancellationToken cancellationToken)
     {
-        await repository.DeleteAsync(request.Id, cancellationToken);
+        var pin = await repository.GetByIdAsync(request.Id, cancellationToken)
+            ?? throw new NotFoundException("Pin not found");
+        if (!request.IsAdmin && pin.CreatorId != request.UserId)
+            throw new ForbiddenException("You cannot delete this pin");
+        pin.IsDeleted = true;
+        pin.DeletedAt = DateTime.UtcNow;
+        pin.DeletedByAdmin = request.IsAdmin;
+        await repository.UpdateAsync(pin, cancellationToken);
         return Unit.Value;
     }
 }

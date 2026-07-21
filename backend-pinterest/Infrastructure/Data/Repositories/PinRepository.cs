@@ -70,6 +70,7 @@ public class PinRepository(AppDbContext db) : BaseRepository<PinEntity>(db), IPi
         if (pin == null || !pin.IsDeleted) return;
         pin.IsDeleted = false;
         pin.DeletedAt = null;
+        pin.DeletedByAdmin = false;
         pin.UpdatedAt = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
         await _db.SaveChangesAsync(ct);
     }

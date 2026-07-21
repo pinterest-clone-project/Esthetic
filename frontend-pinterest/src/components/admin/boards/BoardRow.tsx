@@ -1,13 +1,17 @@
-import { Lock, Pencil, Unlock } from "lucide-react";
+import { Lock, Pencil, Trash2, Unlock, UserRound } from "lucide-react";
+import { useNavigate } from "react-router";
 import { APP_ENV } from "@/constants/env";
 import type { MoodboardAdmin } from "@/services/moodboardService.ts";
 
 interface BoardRowProps {
     board: MoodboardAdmin;
     onEdit: (board: MoodboardAdmin) => void;
+    onDelete: (board: MoodboardAdmin) => void;
 }
 
-const BoardRow = ({ board, onEdit }: BoardRowProps) => (
+const BoardRow = ({ board, onEdit, onDelete }: BoardRowProps) => {
+    const navigate = useNavigate();
+    return (
     <div className="flex items-center justify-between gap-3 bg-white/5 border border-white/8 rounded-2xl px-4 py-3">
         <div className="flex items-center gap-3 min-w-0">
             <div className="w-12 h-12 rounded-xl overflow-hidden bg-white/8 shrink-0">
@@ -29,14 +33,14 @@ const BoardRow = ({ board, onEdit }: BoardRowProps) => (
                 </div>
             </div>
         </div>
-        <button
+        <div className="flex gap-2 shrink-0"><button onClick={() => navigate(`/user/${board.ownerId}`)} className="p-2 rounded-xl bg-white/8 text-white/60 hover:bg-white/15"><UserRound size={16} /></button><button
             onClick={() => onEdit(board)}
             className="p-2 rounded-xl bg-white/8 text-white/60 hover:bg-white/15 hover:text-white transition-colors shrink-0"
             aria-label="Редагувати дошку"
         >
             <Pencil size={16} />
-        </button>
+        </button><button onClick={() => onDelete(board)} className="p-2 rounded-xl bg-red-500/10 text-red-300 hover:bg-red-500/20"><Trash2 size={16} /></button></div>
     </div>
-);
+); };
 
 export default BoardRow;

@@ -1,13 +1,17 @@
-import { Pencil } from "lucide-react";
+import { Pencil, Trash2, UserRound } from "lucide-react";
+import { useNavigate } from "react-router";
 import { APP_ENV } from "@/constants/env";
 import type { IPinSummaryResponse } from "@/types/pin/responses/IPinSummaryResponse.ts";
 
 interface PinRowProps {
     pin: IPinSummaryResponse;
     onEdit: (id: string) => void;
+    onDelete: (pin: IPinSummaryResponse) => void;
 }
 
-const PinRow = ({ pin, onEdit }: PinRowProps) => (
+const PinRow = ({ pin, onEdit, onDelete }: PinRowProps) => {
+    const navigate = useNavigate();
+    return (
     <div className="flex items-center justify-between gap-3 bg-white/5 border border-white/8 rounded-2xl px-4 py-3">
         <div className="flex items-center gap-3 min-w-0">
             <img
@@ -31,14 +35,18 @@ const PinRow = ({ pin, onEdit }: PinRowProps) => (
                 </div>
             </div>
         </div>
-        <button
+        <div className="flex gap-2 shrink-0"><button
+            onClick={() => navigate(`/user/${pin.creatorId}`)}
+            className="p-2 rounded-xl bg-white/8 text-white/60 hover:bg-white/15 hover:text-white transition-colors"
+            aria-label="View pin creator"
+        ><UserRound size={16} /></button><button
             onClick={() => onEdit(pin.id)}
             className="p-2 rounded-xl bg-white/8 text-white/60 hover:bg-white/15 hover:text-white transition-colors shrink-0"
             aria-label="Редагувати пін"
         >
             <Pencil size={16} />
-        </button>
-    </div>
-);
+        </button><button onClick={() => onDelete(pin)} className="p-2 rounded-xl bg-red-500/10 text-red-300 hover:bg-red-500/20 transition-colors" aria-label="Delete pin"><Trash2 size={16} /></button></div>
+    </div>);
+};
 
 export default PinRow;

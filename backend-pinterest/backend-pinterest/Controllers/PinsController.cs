@@ -60,9 +60,10 @@ public class PinsController(IMediator mediator) : ControllerBase
     }
 
     [HttpDelete("delete/{id}")]
+    [Authorize]
     public async Task<IActionResult> Delete(Guid id)
     {
-        await mediator.Send(new DeletePinCommand(id));
+        await mediator.Send(new DeletePinCommand(id, CurrentUserId, User.IsInRole(Roles.Admin)));
         return NoContent();
     }
 
@@ -129,6 +130,14 @@ public class PinsController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> Restore(Guid id)
     {
         await mediator.Send(new RestorePinCommand(id, CurrentUserId));
+        return NoContent();
+    }
+
+    [HttpPost("admin/restore/{id:guid}")]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<IActionResult> AdminRestore(Guid id)
+    {
+        await mediator.Send(new RestorePinCommand(id, CurrentUserId, true));
         return NoContent();
     }
 }

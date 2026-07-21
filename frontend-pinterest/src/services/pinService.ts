@@ -90,6 +90,10 @@ export const pinService = api.injectEndpoints({
             query: (id) => ({ url: `Pins/restore/${id}`, method: 'POST' }),
             invalidatesTags: ['DeletedPins', 'MyPins', 'AllPins'],
         }),
+        adminRestorePin: builder.mutation<void, string>({
+            query: (id) => ({ url: `Pins/admin/restore/${id}`, method: 'POST' }),
+            invalidatesTags: ['DeletedPins', 'MyPins', 'AllPins'],
+        }),
     }),
 });
 
@@ -108,4 +112,5 @@ export const {
     useGetSavedPinsQuery,
     useGetDeletedPinsQuery,
     useRestorePinMutation,
+    useAdminRestorePinMutation,
 } = pinService;

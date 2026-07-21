@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Application.UseCases.Pins.Commands;
 
-public record DeletePinCommand(Guid Id) : IRequest<Unit>;
+public record DeletePinCommand(Guid Id, Guid UserId, bool IsAdmin) : IRequest<Unit>;
