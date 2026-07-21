@@ -37,29 +37,16 @@ const FirstPage = () => {
                             ['nature', t('firstPage.categories.nature')],
                             ['wallpapers', t('firstPage.categories.wallpapers')],
                         ] as [string, string][]).map(([key, label]) => (
-                        ([key, label]) => (
-                        ([key, label]) => (
-                        ([key, label]) => (
-                        ([key, label]) => (
-                        ([key, label]) => (
-                        ([key, label]) => (
+                            <a
+                                key={key}
+                                href={`/aura/search?q=${encodeURIComponent(label)}`}
+                                className="px-6 py-3 rounded-full bg-[#A2A2A2]/30 dark:bg-[#535353]/40 text-black dark:text-white text-sm font-medium hover:bg-[#1DB954] hover:text-black transition-colors whitespace-nowrap text-center"
+                            >
+                                {label}
+                            </a>
                         ))}
                     </div>
                 </section>
-                </div>
-            </section>
-                </div>
-            </section>
-                </div>
-            </section>
-                </div>
-            </section>
-                </div>
-            </section>
-                </div>
-            </section>
-                </div>
-            </section>
 
                 <section className="mt-[40px] flex justify-center md:h-[475px] lg:h-[475px]">
 
