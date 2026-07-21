@@ -1,6 +1,6 @@
-﻿using Application.Common;
+using Application.Common;
 using Application.Common.Exceptions;
-using Application.Mappers;
+using Application.Interfaces.Notifiers;
 using Application.Models.DTO.Comment;
 using Application.UseCases.Comments.Commands;
 using Domain.Entities.Comment;
@@ -15,10 +15,10 @@ public class CreateCommentCommandHandler(
     IPinRepository pinRepository,
     IUserRepository userRepository,
     IMediator mediator,
-    CommentMapper mapper)
-    : IRequestHandler<CreateCommentCommand, CommentDTO>
+    ICommentNotifier commentNotifier)
+    : IRequestHandler<CreateCommentCommand, CommentResponseDTO>
 {
-    public async Task<CommentDTO> Handle(CreateCommentCommand request, CancellationToken ct)
+    public async Task<CommentResponseDTO> Handle(CreateCommentCommand request, CancellationToken ct)
     {
         var comment = await commentRepository.AddAsync(new CommentEntity
         {
@@ -45,6 +45,19 @@ public class CreateCommentCommandHandler(
             )
         ), ct);
 
-        return mapper.ToDto(comment);
+        var response = new CommentResponseDTO
+        {
+            Id = comment.Id,
+            PinId = comment.PinId,
+            UserId = comment.UserId,
+            Text = comment.Text,
+            CreatedAt = comment.CreatedAt,
+            ParentCommentId = comment.ParentCommentId,
+            Username = commenter.UserName!,
+            UserImage = commenter.Image ?? string.Empty
+        };
+
+        await commentNotifier.NotifyCreatedAsync(comment.PinId, response);
+        return response;
     }
 }

@@ -248,6 +248,7 @@ public static class WebApplicationBuilderExtensions
 
         services.AddSingleton<IChatNotifier, SignalRChatNotifier>();
         services.AddSingleton<INotificationNotifier, SignalRNotificationNotifier>();
+        services.AddSingleton<ICommentNotifier, SignalRCommentNotifier>();
 
         services.AddHostedService<DeletedPinsCleanupService>();
         #endregion

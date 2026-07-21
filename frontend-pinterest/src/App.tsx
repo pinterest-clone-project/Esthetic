@@ -12,13 +12,8 @@ import Layout from "@/layouts/Layout.tsx";
 import AdminLayout from "@/layouts/AdminLayout.tsx";
 import PrivateRoute from "@/components/routes/PrivateRoute.tsx";
 import AdminRoute from "@/components/routes/AdminRoute.tsx";
-import {useSelector} from "react-redux";
-import {selectUser} from "@/store/selectors/authSelectors.ts";
-import AdminReportsPage from "@/pages/admin/AdminReportsPage.tsx";
-import AdminTagsPage from "@/pages/admin/AdminTagsPage.tsx";
-import AdminCategoriesPage from "@/pages/admin/AdminCategoriesPage.tsx";
-import AdminPinsPage from "@/pages/admin/AdminPinsPage.tsx";
-import AdminBoardsPage from "@/pages/admin/AdminBoardsPage.tsx";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/store/selectors/authSelectors.ts";
 
 const FirstPage            = lazy(() => import("@/pages/home/FirstPage.tsx"));
 const ReviewPage           = lazy(() => import("@/pages/home/ReviewPage.tsx"));
@@ -30,8 +25,6 @@ const ProfilePage          = lazy(() => import("@/pages/profile/ProfilePage.tsx"
 const UserPage             = lazy(() => import("@/pages/user/UserPage.tsx"));
 const CollectionsPage      = lazy(() => import("@/pages/collections/CollectionsPage.tsx"));
 const MoodboardPreviewPage = lazy(() => import("@/pages/moodboard/MoodboardPreviewPage.tsx"));
-const AdminDashboard       = lazy(() => import("@/pages/admin/AdminDashboard.tsx"));
-const AdminUsersPage       = lazy(() => import("@/pages/admin/AdminUsersPage.tsx"));
 const ChatPage             = lazy(() => import("@/pages/chat/ChatPage.tsx"));
 const SettingsPage         = lazy(() => import("@/pages/settings/SettingsPage.tsx"));
 const DeletedAurasPage     = lazy(() => import("@/pages/aura/DeletedAurasPage.tsx"));
@@ -39,10 +32,18 @@ const NotificationsPage    = lazy(() => import("@/pages/notifications/Notificati
 const ForgotPasswordPage   = lazy(() => import("@/pages/auth/ForgotPasswordPage.tsx"));
 const ResetPasswordPage    = lazy(() => import("@/pages/auth/ResetPasswordPage.tsx"));
 const NotFoundPage         = lazy(() => import("./pages/NotFoundPage.tsx"));
-const BlockedPage = lazy(() => import("@/pages/auth/BlockedPage.tsx"));
-const AboutPage       = lazy(() => import("@/pages/static/AboutPage.tsx"));
-const ForBusinessPage = lazy(() => import("@/pages/static/ForBusinessPage.tsx"));
-const NewsPage        = lazy(() => import("@/pages/static/NewsPage.tsx"));
+const BlockedPage          = lazy(() => import("@/pages/auth/BlockedPage.tsx"));
+const AboutPage            = lazy(() => import("@/pages/static/AboutPage.tsx"));
+const ForBusinessPage      = lazy(() => import("@/pages/static/ForBusinessPage.tsx"));
+const NewsPage             = lazy(() => import("@/pages/static/NewsPage.tsx"));
+
+const AdminDashboard       = lazy(() => import("@/pages/admin/AdminDashboard.tsx"));
+const AdminUsersPage       = lazy(() => import("@/pages/admin/AdminUsersPage.tsx"));
+const AdminReportsPage     = lazy(() => import("@/pages/admin/AdminReportsPage.tsx"));
+const AdminTagsPage        = lazy(() => import("@/pages/admin/AdminTagsPage.tsx"));
+const AdminCategoriesPage  = lazy(() => import("@/pages/admin/AdminCategoriesPage.tsx"));
+const AdminPinsPage        = lazy(() => import("@/pages/admin/AdminPinsPage.tsx"));
+const AdminBoardsPage      = lazy(() => import("@/pages/admin/AdminBoardsPage.tsx"));
 
 const PageLoader = () => (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white dark:bg-[#121212]">

@@ -7,6 +7,7 @@ import {
 import { APP_ENV } from "../constants/env";
 import { Mutex } from "async-mutex";
 import {clearUser} from "@/store/slices/authSlice.ts";
+import i18n from "@/i18n";
 
 const mutex = new Mutex();
 
@@ -14,7 +15,7 @@ const rawBaseQuery = fetchBaseQuery({
     baseUrl: `${APP_ENV.API_BASE_URL}/api/`,
     credentials: "include",
     prepareHeaders: (headers) => {
-        headers.set("Accept-Language", "en");
+        headers.set("Accept-Language", i18n.language || "uk");
         return headers;
     },
     paramsSerializer: (params) => {

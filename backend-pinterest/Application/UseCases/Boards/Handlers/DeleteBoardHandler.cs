@@ -14,7 +14,7 @@ public class DeleteBoardHandler(
         var board = await boardRepository.GetByIdAsync(request.Id, cancellationToken)
             ?? throw new NotFoundException(ValidationMessages.NotFound(ValidationMessages.Board));
 
-        if (board.OwnerId != request.OwnerId)
+        if (!request.SkipOwnerValidation && board.OwnerId != request.OwnerId)
             throw new UnauthorizedException(ValidationMessages.BoardDelOwnBoards);
 
         await boardRepository.DeleteAsync(request.Id, cancellationToken);
