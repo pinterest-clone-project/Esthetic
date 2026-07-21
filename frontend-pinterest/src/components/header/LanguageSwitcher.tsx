@@ -1,35 +1,24 @@
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { SUPPORTED_LANGUAGES } from "@/i18n";
-
-const LABELS: Record<typeof SUPPORTED_LANGUAGES[number], string> = {
-    uk: "UA",
-    en: "EN",
-};
 
 const LanguageSwitcher: React.FC = () => {
     const { i18n } = useTranslation();
-    const current = (i18n.language?.slice(0, 2) ?? "uk") as typeof SUPPORTED_LANGUAGES[number];
+    const isEn = i18n.language?.startsWith("en");
 
-    const toggle = (lang: typeof SUPPORTED_LANGUAGES[number]) => {
-        if (lang !== current) i18n.changeLanguage(lang);
-    };
+    const toggle = () => i18n.changeLanguage(isEn ? "uk" : "en");
 
     return (
-        <div className="flex items-center gap-0.5 bg-[#A2A2A2]/30 dark:bg-[#535353]/40 rounded-[8px] p-0.5">
-            {SUPPORTED_LANGUAGES.map((lang) => (
-                <button
-                    key={lang}
-                    onClick={() => toggle(lang)}
-                    className={`text-xs font-semibold px-2.5 py-1 rounded-[6px] transition-all duration-200 cursor-pointer
-                        ${current === lang
-                            ? "bg-white dark:bg-[#1a1a1a] text-black dark:text-white shadow-sm"
-                            : "text-black/50 dark:text-white/40 hover:text-black dark:hover:text-white"
-                        }`}
-                >
-                    {LABELS[lang]}
-                </button>
-            ))}
-        </div>
+        <button
+            onClick={toggle}
+            className="flex items-center w-[68px] h-[32px] rounded-full bg-[#A2A2A2]/30 dark:bg-[#535353]/40 p-[3px] cursor-pointer shrink-0"
+        >
+            <span className={`flex-1 h-full rounded-full flex items-center justify-center text-[11px] font-bold transition-all duration-300 ${!isEn ? "bg-[#1DB954] text-black" : "text-black/40 dark:text-white/40"}`}>
+                UA
+            </span>
+            <span className={`flex-1 h-full rounded-full flex items-center justify-center text-[11px] font-bold transition-all duration-300 ${isEn ? "bg-[#1DB954] text-black" : "text-black/40 dark:text-white/40"}`}>
+                EN
+            </span>
+        </button>
     );
 };
 

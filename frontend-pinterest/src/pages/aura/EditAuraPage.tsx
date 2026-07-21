@@ -5,8 +5,10 @@ import { useGetAllTagsQuery } from "@/services/tagService.ts";
 import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
 import { APP_ENV } from "@/constants/env";
 import { useNavigate, useParams } from "react-router";
+import { useTranslation } from "react-i18next";
 
 const EditAuraPage = () => {
+    const { t } = useTranslation('pins');
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
 
@@ -144,7 +146,7 @@ const EditAuraPage = () => {
     if (!pin) {
         return (
             <div className="w-full min-h-full flex items-center justify-center">
-                <p className="text-red-400 text-sm">Aura not found.</p>
+                <p className="text-red-400 text-sm">{t('edit.notFound')}</p>
             </div>
         );
     }
@@ -152,14 +154,14 @@ const EditAuraPage = () => {
     return (
         <div className="w-full min-h-full px-4 sm:px-10 py-8 flex flex-col items-center">
             <div className="flex items-center justify-between mb-8 w-full max-w-[580px]">
-                <h1 className="text-black dark:text-white text-sm font-medium tracking-wide">Edit Aura</h1>
+                <h1 className="text-black dark:text-white text-sm font-medium tracking-wide">{t('edit.title')}</h1>
                 <button
                     onClick={handleSubmit}
                     disabled={isLoading}
                     className="bg-[#4ade80] hover:bg-[#22c55e] disabled:opacity-40 disabled:cursor-not-allowed
                         text-black text-xs font-semibold px-5 py-2 rounded-md transition-colors"
                 >
-                    {isLoading ? "Saving..." : "Save"}
+                    {isLoading ? t('edit.saving') : t('edit.submit')}
                 </button>
             </div>
 
@@ -181,13 +183,13 @@ const EditAuraPage = () => {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                                               d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
-                                    <span className="text-gray-600 text-xs">Preview</span>
+                                    <span className="text-gray-600 text-xs">{t('imageActions.preview')}</span>
                                 </div>
                             )}
                         </div>
                         <label className="text-black dark:text-white text-xs font-medium cursor-pointer sm:text-center self-end sm:self-auto">
                             <span className="inline-block px-3 py-1.5 rounded-md border border-gray-300 dark:border-[#333] hover:border-[#1DB954] transition-colors">
-                                Upload image
+                                {t('imageActions.uploadImage')}
                             </span>
                             <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
                         </label>
@@ -195,37 +197,37 @@ const EditAuraPage = () => {
 
                     <div className="flex-1 min-w-0 flex flex-col gap-5">
                         <div className="flex flex-col gap-1.5">
-                            <label className="text-black dark:text-white text-xs font-medium">Name</label>
+                            <label className="text-black dark:text-white text-xs font-medium">{t('fields.title')}</label>
                             <input
                                 type="text"
                                 value={title}
                                 onChange={e => setTitle(e.target.value)}
-                                placeholder="Aura name"
+                                placeholder={t('placeholders.auraName')}
                                 className="w-full bg-gray-100 dark:bg-[#1e1e1e] border border-gray-200 dark:border-[#333] rounded-md px-3 h-9 text-black dark:text-white text-xs
                                     placeholder:text-gray-400 outline-none focus:border-[#1DB954] transition-colors"
                             />
                         </div>
 
                         <div className="flex flex-col gap-1.5">
-                            <label className="text-black dark:text-white text-xs font-medium">Image Url</label>
+                            <label className="text-black dark:text-white text-xs font-medium">{t('fields.imageUrl')}</label>
                             <input
                                 type="text"
                                 value={mediaUrl}
                                 onChange={e => setMediaUrl(e.target.value)}
                                 onBlur={handleMediaUrlBlur}
-                                placeholder="Direct link to new image"
+                                placeholder={t('placeholders.newImageLink')}
                                 className="w-full bg-gray-100 dark:bg-[#1e1e1e] border border-gray-200 dark:border-[#333] rounded-md px-3 h-9 text-black dark:text-white text-xs
                                 placeholder:text-gray-400 outline-none focus:border-[#1DB954] transition-colors"
                             />
                         </div>
 
                         <div className="flex flex-col gap-1.5">
-                            <label className="text-black dark:text-white text-xs font-medium">Source Url</label>
+                            <label className="text-black dark:text-white text-xs font-medium">{t('fields.sourceLink')}</label>
                             <input
                                 type="text"
                                 value={sourceUrl}
                                 onChange={e => setSourceUrl(e.target.value)}
-                                placeholder="Where is this from?"
+                                placeholder={t('placeholders.sourceLink')}
                                 className="w-full bg-gray-100 dark:bg-[#1e1e1e] border border-gray-200 dark:border-[#333] rounded-md px-3 h-9 text-black dark:text-white text-xs
                                     placeholder:text-gray-400 outline-none focus:border-[#1DB954] transition-colors"
                             />
@@ -235,7 +237,7 @@ const EditAuraPage = () => {
 
                 <div className="flex flex-col sm:flex-row gap-5 sm:gap-10 sm:items-start">
                     <div className="sm:shrink-0 sm:w-[200px] flex flex-col gap-1.5 relative" ref={categoryBoxRef}>
-                        <label className="text-black dark:text-white text-xs font-medium">Category</label>
+                        <label className="text-black dark:text-white text-xs font-medium">{t('fields.category')}</label>
                         <button
                             type="button"
                             onClick={() => setCategoryOpen(p => !p)}
@@ -248,7 +250,7 @@ const EditAuraPage = () => {
                                 {selectedCategory?.image && (
                                     <img src={`${APP_ENV.IMAGES_100_URL}${selectedCategory.image}`} alt="" className="w-5 h-5 rounded-full object-cover shrink-0" />
                                 )}
-                                {selectedCategory ? selectedCategory.name : "Choose Moodboard"}
+                                {selectedCategory ? selectedCategory.name : t('placeholders.chooseCategory')}
                             </span>
                             <svg className={`w-3.5 h-3.5 text-gray-500 shrink-0 transition-transform ${categoryOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -262,7 +264,7 @@ const EditAuraPage = () => {
                                         onClick={() => { setCategoryId(""); setCategoryOpen(false); }}
                                         className="w-full text-left px-3 py-2 text-xs text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors border-b border-gray-100 dark:border-[#333]"
                                     >
-                                        Clear selection
+                                        {t('categoryActions.clearSelection')}
                                     </button>
                                 )}
                                 {categories?.map(cat => (
@@ -291,13 +293,13 @@ const EditAuraPage = () => {
                     </div>
 
                     <div className="flex-1 min-w-0 flex flex-col gap-1.5 relative" ref={tagBoxRef}>
-                        <label className="text-black dark:text-white text-xs font-medium">Tags</label>
+                        <label className="text-black dark:text-white text-xs font-medium">{t('fields.tags')}</label>
                         <input
                             type="text"
                             value={tagQuery}
                             onChange={e => setTagQuery(e.target.value)}
                             onFocus={() => setTagFocused(true)}
-                            placeholder="Search tags..."
+                            placeholder={t('placeholders.searchTags')}
                             className="w-full bg-gray-100 dark:bg-[#1e1e1e] border border-gray-200 dark:border-[#333] rounded-md px-3 h-9 text-black dark:text-white text-xs
                                 placeholder:text-gray-400 outline-none focus:border-[#1DB954] transition-colors"
                         />
@@ -317,7 +319,7 @@ const EditAuraPage = () => {
                         )}
                         {tagFocused && tagQuery && suggestions.length === 0 && (
                             <div className="absolute top-full left-0 right-0 mt-1 z-20 bg-white dark:bg-[#1e1e1e] border border-gray-200 dark:border-[#333] rounded-md shadow-2xl px-3 py-2">
-                                <span className="text-xs text-gray-400">No matching tags</span>
+                                <span className="text-xs text-gray-400">{t('categoryActions.noMatchingTags')}</span>
                             </div>
                         )}
                         {selectedTags.length > 0 && (
@@ -343,11 +345,11 @@ const EditAuraPage = () => {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                    <label className="text-black dark:text-white text-xs font-medium">Description</label>
+                    <label className="text-black dark:text-white text-xs font-medium">{t('fields.description')}</label>
                     <textarea
                         value={description}
                         onChange={e => setDescription(e.target.value)}
-                        placeholder="Describe your aura..."
+                        placeholder={t('placeholders.auraDescription')}
                         rows={8}
                         className="bg-gray-100 dark:bg-[#1e1e1e] border border-gray-200 dark:border-[#333] rounded-md px-3 py-2.5 text-black dark:text-white text-xs
                             placeholder:text-gray-400 outline-none focus:border-[#1DB954] transition-colors resize-none"

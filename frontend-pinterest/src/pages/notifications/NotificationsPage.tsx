@@ -7,19 +7,12 @@ import { APP_ENV } from "@/constants/env";
 import { useEffect, useState } from "react";
 import Pagination from "@/components/common/Pagination.tsx";
 import userIcon from "@/assets/icons/user_icon.svg";
+import { useTranslation } from "react-i18next";
 
 type Filter = "all" | 0 | 1 | 2 | 3 | "requests";
 
-const FILTERS: { label: string; value: Filter; color: string }[] = [
-    { label: "All",      value: "all",      color: "#A1A1A1" },
-    { label: "Follows",  value: 0,          color: "#1DB954" },
-    { label: "Likes",    value: 1,          color: "#e11d48" },
-    { label: "Comments", value: 2,          color: "#f59e0b" },
-    { label: "Pins",     value: 3,          color: "#8b5cf6" },
-    { label: "Requests", value: "requests", color: "#3b82f6" },
-];
-
 const NotificationsPage = () => {
+    const { t, i18n } = useTranslation('common');
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const { data: notificationsData, isLoading } = useGetNotificationsQuery({ page });
@@ -32,6 +25,15 @@ const NotificationsPage = () => {
     const [markAllAsRead] = useMarkAllAsReadMutation();
     const [activeFilter, setActiveFilter] = useState<Filter>("all");
 
+
+    const FILTERS: { label: string; value: Filter; color: string }[] = [
+        { label: t('notifications.filters.all'),      value: "all",      color: "#A1A1A1" },
+        { label: t('notifications.filters.follows'),  value: 0,          color: "#1DB954" },
+        { label: t('notifications.filters.likes'),    value: 1,          color: "#e11d48" },
+        { label: t('notifications.filters.comments'), value: 2,          color: "#f59e0b" },
+        { label: t('notifications.filters.pins'),     value: 3,          color: "#8b5cf6" },
+        { label: t('notifications.filters.requests'), value: "requests", color: "#3b82f6" },
+    ];
 
     const unread = notifications.filter((n) => !n.isRead);
 
@@ -147,7 +149,7 @@ const NotificationsPage = () => {
                         )}
                         <span className="text-sm text-black/70 dark:text-white/60 leading-snug">{n.message}</span>
                     </div>
-                    <p className="text-xs text-[#A1A1A1] mt-1">{formatTimeLabel(n.createdAt)}</p>
+                    <p className="text-xs text-[#A1A1A1] mt-1">{formatTimeLabel(n.createdAt, t, i18n.language)}</p>
                 </div>
 
                 {!n.isRead && (
@@ -168,10 +170,10 @@ const NotificationsPage = () => {
 
             <div className="px-4 py-6 text-black dark:text-white max-w-2xl mx-auto">
                 <div className="flex items-center justify-between mb-5">
-                    <h1 className="text-2xl font-bold tracking-tight">Notifications</h1>
+                    <h1 className="text-2xl font-bold tracking-tight">{t('notifications.title')}</h1>
                     {unread.length > 0 && (
                         <span className="text-xs font-semibold px-2.5 py-1 rounded-full text-black" style={{ background: "#1DB954" }}>
-                            {unread.length} new
+                            {t('notifications.new_count', { count: unread.length })}
                         </span>
                     )}
                 </div>
@@ -223,8 +225,8 @@ const NotificationsPage = () => {
                                 </svg>
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-medium">No follow requests</p>
-                                <p className="text-xs text-[#A1A1A1] mt-1">When someone requests to follow you, it will appear here</p>
+                                <p className="text-sm font-medium">{t('notifications.noFollowRequests')}</p>
+                                <p className="text-xs text-[#A1A1A1] mt-1">{t('notifications.noFollowRequestsDesc')}</p>
                             </div>
                         </div>
                     ) : (
@@ -243,20 +245,20 @@ const NotificationsPage = () => {
                                         <button onClick={() => navigate(`/user/${req.senderId}`)} className="text-sm font-semibold text-black dark:text-white hover:underline text-left">
                                             {req.senderUsername}
                                         </button>
-                                        <p className="text-xs text-[#A1A1A1]">{formatTimeLabel(req.createdAt)}</p>
+                                        <p className="text-xs text-[#A1A1A1]">{formatTimeLabel(req.createdAt, t, i18n.language)}</p>
                                     </div>
                                     <div className="flex items-center gap-2 shrink-0">
                                         <button
                                             onClick={() => acceptRequest(req.senderId)}
                                             className="px-3 py-1.5 rounded-lg bg-[#1DB954] hover:bg-[#1aa34a] text-black text-xs font-semibold transition-colors"
                                         >
-                                            Accept
+                                            {t('notifications.accept')}
                                         </button>
                                         <button
                                             onClick={() => declineRequest(req.senderId)}
                                             className="px-3 py-1.5 rounded-lg bg-[#f5f5f5] dark:bg-[#2a2a2a] hover:bg-[#e8e8e8] dark:hover:bg-[#333] text-black dark:text-white text-xs font-semibold transition-colors"
                                         >
-                                            Decline
+                                            {t('notifications.decline')}
                                         </button>
                                     </div>
                                 </div>
@@ -276,15 +278,15 @@ const NotificationsPage = () => {
                             </svg>
                         </div>
                         <div className="text-center">
-                            <p className="text-sm font-medium">Nothing here</p>
-                            <p className="text-xs text-[#A1A1A1] mt-1">No notifications in this category</p>
+                            <p className="text-sm font-medium">{t('notifications.nothingHere')}</p>
+                            <p className="text-xs text-[#A1A1A1] mt-1">{t('notifications.nothingHereDesc')}</p>
                         </div>
                     </div>
                 ) : (
                     <div className="flex flex-col gap-6">
                         {filteredUnread.length > 0 && (
                             <section>
-                                <p className="text-[11px] font-bold uppercase tracking-widest text-[#A1A1A1] mb-3 px-1">New</p>
+                                <p className="text-[11px] font-bold uppercase tracking-widest text-[#A1A1A1] mb-3 px-1">{t('notifications.new')}</p>
                                 <div className="flex flex-col gap-2">
                                     {filteredUnread.map((n, i) => renderItem(n, i))}
                                 </div>
@@ -293,7 +295,7 @@ const NotificationsPage = () => {
                         {filteredRead.length > 0 && (
                             <section>
                                 {filteredUnread.length > 0 && (
-                                    <p className="text-[11px] font-bold uppercase tracking-widest text-[#A1A1A1] mb-3 px-1">Earlier</p>
+                                    <p className="text-[11px] font-bold uppercase tracking-widest text-[#A1A1A1] mb-3 px-1">{t('notifications.earlier')}</p>
                                 )}
                                 <div className="flex flex-col gap-2">
                                     {filteredRead.map((n, i) => renderItem(n, filteredUnread.length + i))}

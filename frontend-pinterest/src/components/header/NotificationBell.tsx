@@ -6,8 +6,10 @@ import {getNotificationUrl} from "@/utils/getNotificationUrl.ts";
 import bellIcon from "@/assets/icons/bell_icon.svg";
 import {formatTimeLabel} from "@/utils/formatTimeLabel.ts";
 import {APP_ENV} from "@/constants/env";
+import { useTranslation } from "react-i18next";
 
 const NotificationBell: React.FC = () => {
+    const { t, i18n } = useTranslation('common');
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
@@ -57,11 +59,11 @@ const NotificationBell: React.FC = () => {
             {open && (
                 <div className="absolute right-0 top-12 w-80 max-h-[420px] overflow-y-auto bg-white dark:bg-[#1a1a1a] rounded-[10px] shadow-2xl z-50 border border-[#A1A1A1] dark:border-[#535353]">
                     <div className="px-4 py-3 border-b border-[#A1A1A1] dark:border-[#535353] sticky top-0 z-10 bg-white dark:bg-[#1a1a1a]">
-                        <p className="text-black dark:text-white text-sm font-medium">Notifications</p>
+                        <p className="text-black dark:text-white text-sm font-medium">{t('notifications.title')}</p>
                     </div>
 
                     {notifications.length === 0 ? (
-                        <p className="text-black/30 dark:text-white/30 text-sm text-center py-10">Nothing here yet</p>
+                        <p className="text-black/30 dark:text-white/30 text-sm text-center py-10">{t('notifications.nothingYet')}</p>
                     ) : (
                         notifications.map((n) => {
                             const url = getNotificationUrl(n);
@@ -133,7 +135,7 @@ const NotificationBell: React.FC = () => {
                                         )}
                                         <p className="text-black dark:text-white text-sm leading-snug">{n.message}</p>
                                         <p className="text-gray-400 text-xs mt-0.5">
-                                            {formatTimeLabel(n.createdAt)}
+                                            {formatTimeLabel(n.createdAt, t, i18n.language)}
                                         </p>
                                         {isFollowRequest && n.actorId && (
                                             <div className="flex gap-2 mt-2" onClick={(e) => e.stopPropagation()}>
@@ -141,13 +143,13 @@ const NotificationBell: React.FC = () => {
                                                     onClick={() => { acceptRequest(n.actorId!); }}
                                                     className="px-3 py-1 rounded-lg bg-[#1DB954] hover:bg-[#1aa34a] text-black text-[11px] font-semibold transition-colors"
                                                 >
-                                                    Accept
+                                                    {t('notifications.accept')}
                                                 </button>
                                                 <button
                                                     onClick={() => { declineRequest(n.actorId!); }}
                                                     className="px-3 py-1 rounded-lg bg-gray-200 dark:bg-[#2a2a2a] hover:bg-gray-300 dark:hover:bg-[#333] text-black dark:text-white text-[11px] font-semibold transition-colors"
                                                 >
-                                                    Decline
+                                                    {t('notifications.decline')}
                                                 </button>
                                             </div>
                                         )}
@@ -165,7 +167,7 @@ const NotificationBell: React.FC = () => {
                         onClick={() => { setOpen(false); navigate("/notifications"); }}
                         className="w-full px-4 py-3 text-center text-sm text-green-700 dark:text-btn-primary cursor-pointer hover:bg-gray-100 dark:hover:bg-[#535353] transition border-t border-gray-200 dark:border-[#535353] sticky bottom-0 bg-white dark:bg-[#1a1a1a]"
                     >
-                        See all
+                        {t('notifications.seeAll')}
                     </button>
                 </div>
             )}

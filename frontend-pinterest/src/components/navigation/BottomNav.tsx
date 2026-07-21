@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router";
 import { useAppSelector } from "@/store";
 import { useGetChatsQuery } from "@/services/chatService";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "react-i18next";
 import homeIcon from "@/assets/icons/home_icon.svg";
 import collectionIcon from "@/assets/icons/collection_icon.svg";
 import addIcon from "@/assets/icons/add_icon.svg";
@@ -16,21 +17,22 @@ const defaultFilterLight = "brightness(0) opacity(0.4)";
 const defaultFilterDark = "brightness(0) invert(1) opacity(0.4)";
 
 interface NavItem {
-    label: string;
+    labelKey: string;
     icon: string;
     path: string;
     isCreate?: boolean;
 }
 
 const navItems: NavItem[] = [
-    { label: "Home", icon: homeIcon, path: "/" },
-    { label: "Chat", icon: profileIcon, path: "/chat" },
-    { label: "Create", icon: addIcon, path: "/aura/create", isCreate: true },
-    { label: "Collections", icon: collectionIcon, path: "/collections/aura" },
-    { label: "Settings", icon: settingsIcon, path: "/settings" },
+    { labelKey: "sidebar.main", icon: homeIcon, path: "/" },
+    { labelKey: "sidebar.messages", icon: profileIcon, path: "/chat" },
+    { labelKey: "sidebar.create", icon: addIcon, path: "/aura/create", isCreate: true },
+    { labelKey: "sidebar.collections", icon: collectionIcon, path: "/collections/aura" },
+    { labelKey: "sidebar.settings", icon: settingsIcon, path: "/settings" },
 ];
 
 const BottomNav = () => {
+    const { t } = useTranslation('common');
     const location = useLocation();
     const navigate = useNavigate();
     const user = useAppSelector((state) => state.auth.user);
@@ -73,7 +75,7 @@ const BottomNav = () => {
                                     className="flex items-center gap-3 w-full px-4 py-3 text-sm text-black dark:text-white hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a] transition-colors"
                                 >
                                     <img src={auraIcon} className="w-5 h-5 object-contain" style={{ filter: defaultFilter }} alt="" />
-                                    Aura
+                                    {t('sidebar.aura')}
                                 </button>
                                 <div className="h-px bg-[#A2A2A2] dark:bg-[#535353]" />
                                 <button
@@ -81,7 +83,7 @@ const BottomNav = () => {
                                     className="flex items-center gap-3 w-full px-4 py-3 text-sm text-black dark:text-white hover:bg-[#f0f0f0] dark:hover:bg-[#2a2a2a] transition-colors"
                                 >
                                     <img src={collectionIcon} className="w-5 h-5 object-contain" style={{ filter: defaultFilter }} alt="" />
-                                    Moodboard
+                                    {t('sidebar.moodboard')}
                                 </button>
                             </div>
                         )}
@@ -89,7 +91,7 @@ const BottomNav = () => {
                             onClick={() => setCreateOpen(p => !p)}
                             className={`flex items-center justify-center w-12 h-12 rounded-full bg-[#1DB954] shadow-md active:scale-95 transition-all ${createOpen ? "rotate-45" : ""}`}
                         >
-                            <img src={item.icon} className="w-6 h-6" style={{ filter: "brightness(0)" }} alt={item.label} />
+                            <img src={item.icon} className="w-6 h-6" style={{ filter: "brightness(0)" }} alt={item.labelKey} />
                         </button>
                     </div>
                 ) : (
@@ -103,16 +105,16 @@ const BottomNav = () => {
                                 src={item.icon}
                                 className="w-6 h-6"
                                 style={{ filter: isActive(item) ? greenFilter : defaultFilter }}
-                                alt={item.label}
+                                alt={t(item.labelKey)}
                             />
-                            {item.label === "Chat" && totalUnread > 0 && (
+                            {item.labelKey === "sidebar.messages" && totalUnread > 0 && (
                                 <span className="absolute -top-2 -right-2 min-w-[16px] h-4 px-1 rounded-full bg-[#1DB954] text-black text-[9px] font-bold flex items-center justify-center leading-none">
                                     {totalUnread > 9 ? "9+" : totalUnread}
                                 </span>
                             )}
                         </div>
                         <span className={`text-[10px] ${isActive(item) ? "text-[#1DB954]" : "text-[#A2A2A2]"}`}>
-                            {item.label}
+                            {t(item.labelKey)}
                         </span>
                     </button>
                 )

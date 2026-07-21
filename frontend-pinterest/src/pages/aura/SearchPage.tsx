@@ -6,18 +6,21 @@ import { useGetAllTagsQuery } from "@/services/tagService.ts";
 import PinCard from "@/components/ui/PinCard.tsx";
 import { APP_ENV } from "@/constants/env";
 import { SearchX, ChevronDown, X, SlidersHorizontal } from "lucide-react";
-
-const SORT_OPTIONS = [
-    { label: "Newest",         sortBy: "CreatedAt",     sortDirection: "Desc", color: "#A1A1A1" },
-    { label: "Oldest",         sortBy: "CreatedAt",     sortDirection: "Asc",  color: "#A1A1A1" },
-    { label: "Most liked",     sortBy: "LikesCount",    sortDirection: "Desc", color: "#e11d48" },
-    { label: "Least liked",    sortBy: "LikesCount",    sortDirection: "Asc",  color: "#e11d48" },
-    { label: "Most commented", sortBy: "CommentsCount", sortDirection: "Desc", color: "#f59e0b" },
-    { label: "A → Z",          sortBy: "Title",         sortDirection: "Asc",  color: "#8b5cf6" },
-    { label: "Z → A",          sortBy: "Title",         sortDirection: "Desc", color: "#8b5cf6" },
-];
+import { useTranslation } from "react-i18next";
 
 const SearchPage = () => {
+    const { t } = useTranslation('pins');
+
+    const SORT_OPTIONS = [
+        { label: t('search.sort.newest'),        sortBy: "CreatedAt",     sortDirection: "Desc", color: "#A1A1A1" },
+        { label: t('search.sort.oldest'),        sortBy: "CreatedAt",     sortDirection: "Asc",  color: "#A1A1A1" },
+        { label: t('search.sort.mostLiked'),     sortBy: "LikesCount",    sortDirection: "Desc", color: "#e11d48" },
+        { label: t('search.sort.leastLiked'),    sortBy: "LikesCount",    sortDirection: "Asc",  color: "#e11d48" },
+        { label: t('search.sort.mostCommented'), sortBy: "CommentsCount", sortDirection: "Desc", color: "#f59e0b" },
+        { label: t('search.sort.aToZ'),          sortBy: "Title",         sortDirection: "Asc",  color: "#8b5cf6" },
+        { label: t('search.sort.zToA'),          sortBy: "Title",         sortDirection: "Desc", color: "#8b5cf6" },
+    ];
+
     const [searchParams, setSearchParams] = useSearchParams();
     const q = searchParams.get("q") ?? "";
     const categoryId = searchParams.get("categoryId") ?? "";
@@ -104,10 +107,12 @@ const SearchPage = () => {
             <div className="max-w-7xl mx-auto px-6 pt-8 pb-4">
                 <div className="flex items-baseline gap-3 mb-1">
                     <h1 className="text-2xl font-bold tracking-tight text-black dark:text-white">
-                        {q ? `"${q}"` : "All auras"}
+                        {q ? `"${q}"` : t('search.allAuras')}
                     </h1>
                     {data && !isLoading && (
-                        <span className="text-sm text-gray-400">{data.totalCount} result{data.totalCount !== 1 ? "s" : ""}</span>
+                        <span className="text-sm text-gray-400">
+                            {data.totalCount !== 1 ? t('search.results_plural', { count: data.totalCount }) : t('search.results', { count: data.totalCount })}
+                        </span>
                     )}
                 </div>
                 {q && (
@@ -115,7 +120,7 @@ const SearchPage = () => {
                         onClick={() => updateParams({ q: null })}
                         className="flex items-center gap-1 text-xs text-gray-400 hover:text-black dark:hover:text-white transition-colors mt-1"
                     >
-                        <X size={12} /> Clear search
+                        <X size={12} /> {t('search.clearSearch')}
                     </button>
                 )}
             </div>
@@ -128,7 +133,7 @@ const SearchPage = () => {
                         bg-gray-100 dark:bg-white/8 text-gray-600 dark:text-white/70 border-gray-200 dark:border-white/10"
                 >
                     <SlidersHorizontal size={13} />
-                    Filters
+                    {t('search.filters')}
                     {(categoryId || tagIds.length > 0 || sortIdx !== 0) && (
                         <span className="w-4 h-4 rounded-full bg-[#4ade80] text-black text-[10px] font-bold flex items-center justify-center">
                             {[categoryId ? 1 : 0, tagIds.length, sortIdx !== 0 ? 1 : 0].reduce((a, b) => a + b, 0)}
@@ -154,7 +159,7 @@ const SearchPage = () => {
                             {selectedCategory?.image && (
                                 <img src={`${APP_ENV.IMAGES_100_URL}${selectedCategory.image}`} alt="" className="w-3.5 h-3.5 rounded-full object-cover" />
                             )}
-                            {selectedCategory ? selectedCategory.name : "Category"}
+                            {selectedCategory ? selectedCategory.name : t('search.category')}
                             <ChevronDown size={12} className={`transition-transform ${categoryOpen ? "rotate-180" : ""}`} />
                         </button>
                         {categoryOpen && (
@@ -164,7 +169,7 @@ const SearchPage = () => {
                                         onClick={() => { setCategoryId(""); setCategoryOpen(false); }}
                                         className="w-full text-left px-3 py-2 text-xs text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors border-b border-gray-100 dark:border-white/5"
                                     >
-                                        Clear
+                                        {t('search.clearAll')}
                                     </button>
                                 )}
                                 {categories?.map(cat => (
@@ -196,7 +201,7 @@ const SearchPage = () => {
                             value={tagQuery}
                             onChange={e => setTagQuery(e.target.value)}
                             onFocus={() => setTagFocused(true)}
-                            placeholder="Tags..."
+                            placeholder={t('search.tagsPlaceholder')}
                             className="h-[30px] px-3 rounded-full text-xs border bg-gray-100 dark:bg-white/8 text-black dark:text-white placeholder-gray-500 dark:placeholder-white/40 border-gray-200 dark:border-white/10 outline-none focus:border-[#4ade80] focus:bg-white dark:focus:bg-white/12 transition-all w-28"
                         />
                         {tagFocused && tagSuggestions.length > 0 && (
@@ -230,7 +235,7 @@ const SearchPage = () => {
                             onClick={() => setSearchParams({})}
                             className="px-3 py-1.5 rounded-full text-xs text-gray-400 hover:text-black dark:hover:text-white border border-dashed border-gray-300 dark:border-white/15 hover:border-gray-400 dark:hover:border-white/30 transition-all"
                         >
-                            Clear all
+                            {t('search.clearAll')}
                         </button>
                     )}
 
@@ -269,20 +274,20 @@ const SearchPage = () => {
                         <div className="w-10 h-1 rounded-full bg-gray-300 dark:bg-white/20 mx-auto" />
 
                         <div className="flex items-center justify-between">
-                            <span className="text-sm font-semibold text-black dark:text-white">Filters</span>
+                            <span className="text-sm font-semibold text-black dark:text-white">{t('search.filters')}</span>
                             {(categoryId || tagIds.length > 0 || sortIdx !== 0) && (
                                 <button
                                     onClick={() => { setSearchParams({}); }}
                                     className="text-xs text-gray-400 hover:text-black dark:hover:text-white transition-colors"
                                 >
-                                    Clear all
+                                    {t('search.clearAll')}
                                 </button>
                             )}
                         </div>
 
 
                         <div className="flex flex-col gap-2">
-                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Category</span>
+                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">{t('search.category')}</span>
                             <div className="flex flex-wrap gap-2">
                                 {categories?.map(cat => (
                                     <button
@@ -303,12 +308,12 @@ const SearchPage = () => {
 
 
                         <div className="flex flex-col gap-2">
-                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Tags</span>
+                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">{t('search.tags')}</span>
                             <input
                                 type="text"
                                 value={tagQuery}
                                 onChange={e => setTagQuery(e.target.value)}
-                                placeholder="Search tags..."
+                                placeholder={t('search.searchTagsPlaceholder')}
                                 className="w-full h-9 px-3 rounded-xl text-xs border bg-gray-100 dark:bg-white/8 text-black dark:text-white placeholder-gray-400 border-gray-200 dark:border-white/10 outline-none focus:border-[#4ade80] transition-all"
                             />
                             {tagSuggestions.length > 0 && (
@@ -340,7 +345,7 @@ const SearchPage = () => {
 
 
                         <div className="flex flex-col gap-2">
-                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Sort by</span>
+                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">{t('search.sortBy')}</span>
                             <div className="flex flex-wrap gap-2">
                                 {SORT_OPTIONS.map((opt, i) => {
                                     const isActive = sortIdx === i;
@@ -368,7 +373,7 @@ const SearchPage = () => {
                                 onClick={() => setFiltersOpen(false)}
                                 className="w-full py-3 rounded-xl bg-[#4ade80] text-black text-sm font-semibold"
                             >
-                                Apply
+                                {t('search.apply')}
                             </button>
                         </div>
                     </div>
@@ -389,8 +394,8 @@ const SearchPage = () => {
                         <SearchX size={28} className="text-gray-300 dark:text-white/20" />
                     </div>
                     <div className="text-center">
-                        <p className="text-sm font-medium text-black dark:text-white">No auras found</p>
-                        <p className="text-xs text-gray-400 mt-1">Try different keywords or filters</p>
+                        <p className="text-sm font-medium text-black dark:text-white">{t('search.noAurasFound')}</p>
+                        <p className="text-xs text-gray-400 mt-1">{t('search.tryDifferent')}</p>
                     </div>
                 </div>
             )}

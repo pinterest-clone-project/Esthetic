@@ -1,10 +1,14 @@
 {
   "create": {
-    "title": "Створити пін",
-    "submit": "Опублікувати"
+    "title": "Створити ауру",
+    "submit": "Створити",
+    "creating": "Створення..."
   },
   "edit": {
-    "title": "Редагувати пін"
+    "title": "Редагувати ауру",
+    "submit": "Зберегти",
+    "saving": "Збереження...",
+    "notFound": "Ауру не знайдено."
   },
   "delete": {
     "title": "Видалити пін",
@@ -14,12 +18,16 @@
     "title": "Назва",
     "description": "Опис",
     "sourceLink": "Посилання на джерело",
+    "imageUrl": "URL зображення",
     "tags": "Теги",
+    "category": "Категорія",
     "board": "Дошка"
   },
   "placeholders": {
     "title": "Додати назву",
+    "auraName": "Назва аури",
     "description": "Додати опис",
+    "auraDescription": "Опишіть вашу ауру...",
     "sourceLink": "Звідки це?",
     "imageLink": "Пряме посилання на зображення",
     "newImageLink": "Пряме посилання на нове зображення",
@@ -27,7 +35,16 @@
     "searchTags": "Пошук тегів...",
     "addTag": "Додати тег",
     "addDetails": "Додати деталі",
-    "addDetailsOptional": "Додати деталі (необов'язково)"
+    "addDetailsOptional": "Додати деталі (необов'язково)",
+    "chooseCategory": "Обрати категорію"
+  },
+  "categoryActions": {
+    "clearSelection": "Очистити вибір",
+    "noMatchingTags": "Теги не знайдено"
+  },
+  "imageActions": {
+    "uploadImage": "Завантажити зображення",
+    "preview": "Прев'ю"
   },
   "toast": {
     "created": "Пін створено",
@@ -40,6 +57,23 @@
   "empty": {
     "noPins": "Піни відсутні",
     "noResults": "Піни не знайдено"
+  },
+  "preview": {
+    "notFound": "Ауру не знайдено.",
+    "save": "Зберегти",
+    "download": "Завантажити",
+    "share": "Поділитись",
+    "edit": "Редагувати",
+    "delete": "Видалити",
+    "report": "Поскаржитись",
+    "category": "Категорія",
+    "moreAuras": "Більше аур",
+    "viewProfile": "Переглянути профіль",
+    "linkCopied": "Посилання скопійовано",
+    "deleteConfirmTitle": "Видалити цю ауру?",
+    "deleteConfirmDesc": "Вона буде переміщена до нещодавно видалених і назавжди видалена через 30 днів.",
+    "viewRecentlyDeleted": "Переглянути нещодавно видалені",
+    "cancel": "Скасувати"
   },
   "aura": {
     "create": "Створити ауру",
@@ -54,5 +88,38 @@
     "copyLink": "Посилання на ауру скопійовано!",
     "restored": "Ауру успішно відновлено",
     "restoreFailed": "Не вдалось відновити ауру"
+  },
+  "search": {
+    "allAuras": "Всі аури",
+    "results": "{{count}} результат",
+    "results_plural": "{{count}} результатів",
+    "clearSearch": "Очистити пошук",
+    "filters": "Фільтри",
+    "clearAll": "Очистити все",
+    "category": "Категорія",
+    "tags": "Теги",
+    "tagsPlaceholder": "Теги...",
+    "searchTagsPlaceholder": "Пошук тегів...",
+    "sortBy": "Сортування",
+    "apply": "Застосувати",
+    "noAurasFound": "Аур не знайдено",
+    "tryDifferent": "Спробуйте інші ключові слова або фільтри",
+    "sort": {
+      "newest": "Новіші",
+      "oldest": "Старіші",
+      "mostLiked": "Найбільш вподобані",
+      "leastLiked": "Найменш вподобані",
+      "mostCommented": "Найбільш коментовані",
+      "aToZ": "А → Я",
+      "zToA": "Я → А"
+    }
+  },
+  "deleted": {
+    "title": "Нещодавно видалені",
+    "subtitle": "Аури остаточно видаляються через 30 днів. Відновіть їх, поки не пізно.",
+    "restore": "Відновити",
+    "daysLeft": "{{count}}д залишилось",
+    "empty": "Нещодавно видалених аур немає",
+    "emptyDesc": "Видалені аури з'являться тут і зберігатимуться 30 днів."
   }
 }

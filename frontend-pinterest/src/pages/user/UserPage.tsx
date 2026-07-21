@@ -8,8 +8,10 @@ import { useGetPublicBoardsByUserQuery, useGetMyMoodboardsQuery } from "@/servic
 import PinCard from "@/components/ui/PinCard.tsx";
 import { APP_ENV } from "@/constants/env";
 import type { IUser } from "@/types/user/IUser.ts";
+import { useTranslation } from "react-i18next";
 
 const UserPage = () => {
+    const { t } = useTranslation('common');
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
@@ -56,7 +58,7 @@ const UserPage = () => {
 
     if (!user) return (
         <div className="w-full min-h-full flex items-center justify-center bg-white dark:bg-black">
-            <p className="text-red-400 text-sm">User not found.</p>
+            <p className="text-red-400 text-sm">{t('user.notFound')}</p>
         </div>
     );
 
@@ -99,7 +101,7 @@ const UserPage = () => {
                         <span className="text-black dark:text-white text-sm font-semibold">
                             {pins?.length ?? 0}
                         </span>
-                        <span className="text-gray-500 text-xs">Auras</span>
+                        <span className="text-gray-500 text-xs">{t('user.auras')}</span>
                     </div>
                     {(isMe || !user.isPrivate || stats?.isFollowedByMe) ? (
                         <>
@@ -107,24 +109,24 @@ const UserPage = () => {
                                 <span className="text-black dark:text-white text-sm font-semibold">
                                     {stats?.followersCount ?? 0}
                                 </span>
-                                <span className="text-gray-500 text-xs">Followers</span>
+                                <span className="text-gray-500 text-xs">{t('user.followers')}</span>
                             </button>
                             <button onClick={() => setFollowModal("following")} className="flex flex-col items-center gap-0.5 hover:opacity-70 transition-opacity">
                                 <span className="text-black dark:text-white text-sm font-semibold">
                                     {stats?.followingCount ?? 0}
                                 </span>
-                                <span className="text-gray-500 text-xs">Following</span>
+                                <span className="text-gray-500 text-xs">{t('user.following')}</span>
                             </button>
                         </>
                     ) : (
                         <>
                             <div className="flex flex-col items-center gap-0.5">
                                 <span className="text-black dark:text-white text-sm font-semibold">{stats?.followersCount ?? 0}</span>
-                                <span className="text-gray-500 text-xs">Followers</span>
+                                <span className="text-gray-500 text-xs">{t('user.followers')}</span>
                             </div>
                             <div className="flex flex-col items-center gap-0.5">
                                 <span className="text-black dark:text-white text-sm font-semibold">{stats?.followingCount ?? 0}</span>
-                                <span className="text-gray-500 text-xs">Following</span>
+                                <span className="text-gray-500 text-xs">{t('user.following')}</span>
                             </div>
                         </>
                     )}
@@ -142,7 +144,7 @@ const UserPage = () => {
                                         : "bg-[#4ade80] hover:bg-[#22c55e] text-black"
                                 }`}
                         >
-                            {stats?.isFollowedByMe ? "Following" : stats?.isRequestedByMe ? "Requested" : "Follow"}
+                            {stats?.isFollowedByMe ? t('user.following_btn') : stats?.isRequestedByMe ? t('user.requested') : t('user.follow')}
                         </button>
                     </div>
                 )}
@@ -152,7 +154,7 @@ const UserPage = () => {
                         onClick={() => navigate("/profile")}
                         className="px-5 py-2 rounded-xl text-sm border border-white/10 text-gray-400 hover:text-white hover:border-white/30 transition-colors"
                     >
-                        Edit profile
+                        {t('user.editProfile')}
                     </button>
                 )}
             </div>
@@ -165,8 +167,8 @@ const UserPage = () => {
                             <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                         </svg>
                     </div>
-                    <p className="text-black dark:text-white text-sm font-medium">This account is private</p>
-                    <p className="text-gray-500 text-xs max-w-xs">Follow this account to see their auras and moodboards</p>
+                    <p className="text-black dark:text-white text-sm font-medium">{t('user.privateAccount')}</p>
+                    <p className="text-gray-500 text-xs max-w-xs">{t('user.privateAccountDesc')}</p>
                 </div>
             )}
 
@@ -183,7 +185,7 @@ const UserPage = () => {
                                 : "text-gray-500 hover:text-gray-300"
                         }`}
                     >
-                        {tab}
+                        {t(`user.tabs.${tab}`)}
                     </button>
                 ))}
             </div>
@@ -197,7 +199,7 @@ const UserPage = () => {
                     )}
                     {!pinsLoading && !pins?.length && (
                         <div className="flex justify-center py-12">
-                            <p className="text-gray-500 text-sm">No auras yet.</p>
+                            <p className="text-gray-500 text-sm">{t('user.noAuras')}</p>
                         </div>
                     )}
                     {!pinsLoading && !!pins?.length && (
@@ -214,7 +216,7 @@ const UserPage = () => {
                 <>
                     {!boards?.items?.length ? (
                         <div className="flex justify-center py-12">
-                            <p className="text-gray-500 text-sm">No moodboards yet.</p>
+                            <p className="text-gray-500 text-sm">{t('user.noMoodboards')}</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -262,7 +264,9 @@ const UserPage = () => {
                     onClick={e => e.stopPropagation()}
                 >
                     <div className="flex items-center justify-between px-5 py-4 border-b border-black/5 dark:border-white/5">
-                        <h3 className="text-black dark:text-white text-sm font-semibold capitalize">{followModal}</h3>
+                        <h3 className="text-black dark:text-white text-sm font-semibold capitalize">
+                            {followModal === "followers" ? t('user.followers') : t('user.following')}
+                        </h3>
                         <button onClick={() => setFollowModal(null)} className="text-gray-400 hover:text-black dark:hover:text-white transition-colors">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
@@ -278,7 +282,7 @@ const UserPage = () => {
                                 </div>
                             );
                             if (!list.length) return (
-                                <p className="text-gray-500 text-xs text-center py-8">No users yet</p>
+                                <p className="text-gray-500 text-xs text-center py-8">{t('user.noUsers')}</p>
                             );
                             return list.map((u: IUser) => (
                                 <button

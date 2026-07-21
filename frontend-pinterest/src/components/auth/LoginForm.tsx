@@ -4,6 +4,7 @@ import { useAppDispatch } from "@/store";
 import { setUser } from "@/store/slices/authSlice.ts";
 import Button from "@/components/button/Button.tsx";
 import logo from "@/assets/logo.png";
+import { useTranslation } from "react-i18next";
 
 
 interface LoginFormProps {
@@ -12,6 +13,7 @@ interface LoginFormProps {
 }
 
 const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
+    const { t } = useTranslation('auth');
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -47,16 +49,20 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
 
 
             <div className="step-animate w-full flex flex-col items-center">
-            <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px]">Welcome in Esthetic</h2>
-            <p className="text-sm text-white dark:text-black mb-5">Where style begins</p>
+            <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] text-center leading-tight">
+                {t('login.welcome')}
+            </h2>
+            <p className="text-sm text-[var(--color-btn-primary)] font-medium tracking-widest uppercase mt-1 mb-5 text-center">
+                {t('login.whereStyleBegins')}
+            </p>
 
             <form className="w-full space-y-3" onSubmit={handleSubmit}>
 
                 <div>
-                    <label className="block text-sm text-white dark:text-black mb-1">Your gmail</label>
+                    <label className="block text-sm text-white dark:text-black mb-1">{t('fields.email')}</label>
                     <input
                         type="email"
-                        placeholder="yourgmail@gmail.com"
+                        placeholder={t('placeholders.email')}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -64,11 +70,11 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
                     />
                 </div>
 
-                <label className="block text-sm text-white dark:text-black mb-1">Password</label>
+                <label className="block text-sm text-white dark:text-black mb-1">{t('fields.password')}</label>
                 <div className="relative">
                     <input
                         type={showPassword ? "text" : "password"}
-                        placeholder="your password"
+                        placeholder={t('placeholders.password')}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
@@ -100,25 +106,24 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
                         onClick={onForgotPassword}
                         className="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-btn-primary)] transition-colors cursor-pointer"
                     >
-                        Forgot password?
+                        {t('login.forgotPassword')}
                     </button>
                 )}
 
-                {error && <p className="text-red-500 text-xs">Невірний email або пароль</p>}
+                {error && <p className="text-red-500 text-xs">{t('login.invalidCredentials')}</p>}
 
                 <Button type="submit"
                         disabled={isLoading}
                         variant={isFormValid ? "primary" : "secondary"}
                         fullWidth
                         radius={5}>
-                    Log In
+                    {t('login.submit')}
                 </Button>
 
             </form>
 
             <p className="text-xs text-[var(--color-text-muted)] text-center mt-3 leading-5">
-                By continuing, you agree to the Esthetic Terms of Service and
-                acknowledge that you have read our Privacy Policy. Notice.
+                {t('login.terms')}
             </p>
             </div>
         </div>

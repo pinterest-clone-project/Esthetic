@@ -5,16 +5,18 @@ import {useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router";
 import Modal from "@/components/ui/Modal.tsx";
 import {APP_ENV} from "@/constants/env";
+import {useTranslation} from "react-i18next";
 
 interface ChatWindowProps {
     chat: IChat;
     onClose: () => void;
 }
 
-const formatTime = (iso: string) =>
-    new Date(iso).toLocaleTimeString("uk-UA", { hour: "2-digit", minute: "2-digit" });
+const formatTime = (iso: string, lang: string) =>
+    new Date(iso).toLocaleTimeString(lang, { hour: "2-digit", minute: "2-digit" });
 
 const ChatWindow = ({ chat, onClose }: ChatWindowProps) => {
+    const { t, i18n } = useTranslation('common');
     const currentUserId = useAppSelector((s) => s.auth.user?.id);
     const { data: messages = [] } = useGetMessagesQuery(chat.id);
     const [sendMessage, { isLoading: isSending }] = useSendMessageMutation();
@@ -90,7 +92,7 @@ const ChatWindow = ({ chat, onClose }: ChatWindowProps) => {
                             >
                                 <span>{m.content}</span>
                                 <span className={`text-[10px] mt-0.5 self-end ${isOwn ? "text-black/50" : "text-white/40"}`}>
-                                    {formatTime(m.sentAt)}
+                                    {formatTime(m.sentAt, i18n.language)}
                                 </span>
                             </div>
                         </div>
@@ -105,7 +107,7 @@ const ChatWindow = ({ chat, onClose }: ChatWindowProps) => {
                         value={text}
                         onChange={(e) => setText(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
-                        placeholder="Message"
+                        placeholder={t('chat.messagePlaceholder')}
                         className="flex-1 bg-transparent text-sm text-black dark:text-white outline-none placeholder:text-[#555]"
                     />
                     <button

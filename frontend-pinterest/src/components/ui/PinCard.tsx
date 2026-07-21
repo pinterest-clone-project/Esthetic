@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAppDispatch } from "@/store/index.ts";
 import { useNavigate } from "react-router";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
+import { useTranslation } from "react-i18next";
 import type { IPinSummaryResponse } from "@/types/pin/responses/IPinSummaryResponse.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
 import { useDeletePinMutation, useUnsavePinMutation } from "@/services/pinService.ts";
@@ -20,6 +21,7 @@ const ShareIcon = () => (
 );
 
 const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string }) => {
+    const { t } = useTranslation('common');
     const [hovered, setHovered] = useState(false);
     const [saveModalOpen, setSaveModalOpen] = useState(false);
     const [showEditMenu, setShowEditMenu] = useState(false);
@@ -91,13 +93,13 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
                 draft.previewPins = draft.previewPins.filter((p) => p.id !== pin.id);
             })
         );
-        showToast("Removed from board", "success");
+        showToast(t('toast.removedFromBoard'), "success");
 
         try {
             await unsavePin({ pinId: pin.id, boardId }).unwrap();
         } catch {
             patch.undo();
-            showToast("Something went wrong", "error");
+            showToast(t('toast.somethingWentWrong'), "error");
         }
     };
 
@@ -120,7 +122,7 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
         navigator.clipboard.writeText(
             `${window.location.origin}/aura/preview/${pin.id}`
         );
-        showToast("Link to aura copied!", "success");
+        showToast(t('toast.auraCopied'), "success");
     };
 
     return (
@@ -173,13 +175,13 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
                                     className="w-full text-left px-4 py-2.5 text-xs text-gray-300 hover:bg-white/10 hover:text-white transition-colors"
                                     onClick={handleEdit}
                                 >
-                                    Edit
+                                    {t('actions.edit')}
                                 </button>
                                 <button
                                     className="w-full text-left px-4 py-2.5 text-xs text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
                                     onClick={handleDelete}
                                 >
-                                    Delete
+                                    {t('actions.delete')}
                                 </button>
                             </div>
                         )}
@@ -190,14 +192,14 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
                         onClick={handleUnsave}
                         className="bg-red-500 hover:bg-red-600 text-white text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors"
                     >
-                        Unsave
+                        {t('actions.unsave')}
                     </button>
                 ) : (
                     <button
                         onClick={(e) => { e.stopPropagation(); setSaveModalOpen(true); }}
                         className="bg-[#4ade80] hover:bg-[#22c55e] text-black text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors"
                     >
-                        Save
+                        {t('actions.save')}
                     </button>
                 )}
             </div>
@@ -207,7 +209,7 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
                 <button
                     onClick={handleDownload}
                     className="flex items-center justify-center w-7 h-7 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors"
-                    title="Download"
+                    title={t('actions.download')}
                 >
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -238,8 +240,8 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
                         className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 w-72 shadow-2xl"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <p className="text-white text-sm font-medium mb-1">Delete this aura?</p>
-                        <p className="text-gray-400 text-xs mb-3">It will be moved to Recently deleted and permanently removed after 30 days.</p>
+                        <p className="text-white text-sm font-medium mb-1">{t('confirm.deleteAura')}</p>
+                        <p className="text-gray-400 text-xs mb-3">{t('confirm.deleteAuraDesc')}</p>
                         <button
                             onClick={(e) => { e.stopPropagation(); setConfirmDeleteOpen(false); navigate("/deleted-auras"); }}
                             className="flex items-center gap-1.5 text-[11px] text-[#4ade80] hover:underline mb-4"
@@ -249,20 +251,20 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
                                 <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
                                 <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
                             </svg>
-                            View Recently deleted
+                            {t('confirm.viewRecentlyDeleted')}
                         </button>
                         <div className="flex gap-2">
                             <button
                                 className="flex-1 py-2 rounded-xl text-xs text-gray-300 bg-white/10 hover:bg-white/15 transition-colors"
                                 onClick={() => setConfirmDeleteOpen(false)}
                             >
-                                Cancel
+                                {t('actions.cancel')}
                             </button>
                             <button
                                 className="flex-1 py-2 rounded-xl text-xs text-white bg-red-500 hover:bg-red-600 transition-colors"
                                 onClick={confirmDelete}
                             >
-                                Delete
+                                {t('actions.delete')}
                             </button>
                         </div>
                     </div>

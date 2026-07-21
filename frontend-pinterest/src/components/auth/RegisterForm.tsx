@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
 import { useGoogleLogin } from "@react-oauth/google";
 import {useGoogleLoginMutation, useRegisterMutation} from "@/services/accountService.ts";
@@ -27,6 +28,7 @@ interface RegisterFormProps {
 }
 
 const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
+    const { t } = useTranslation('auth');
     const [showPassword, setShowPassword] = useState(false);
     const [isGoogleLoading, setIsGoogleLoading] = useState(false);
     const [cropperSrc, setCropperSrc] = useState<string | null>(null);
@@ -162,17 +164,19 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
                 {step === 1 && (
                     <div className="w-full">
-                        <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] text-center">
-                            Welcome to Esthetic
+                        <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] text-center leading-tight">
+                            {t('register.welcome')}
                         </h2>
-                        <p className="text-sm text-white dark:text-black mt-1 mb-5 text-center">Where style begins</p>
+                        <p className="text-sm text-[var(--color-btn-primary)] font-medium tracking-widest uppercase mt-1 mb-5 text-center">
+                            {t('register.whereStyleBegins')}
+                        </p>
 
                         <div className="space-y-5">
                             <div>
-                                <label className="block text-sm text-white dark:text-black mb-1">Your email</label>
+                                <label className="block text-sm text-white dark:text-black mb-1">{t('fields.email')}</label>
                                 <input
                                     type="email"
-                                    placeholder="yourgmail@gmail.com"
+                                    placeholder={t('placeholders.email')}
                                     value={formData.email}
                                     onChange={update("email")}
                                     className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none text-white dark:text-black border-[var(--color-btn-primary)] transition border`}
@@ -180,11 +184,11 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                             </div>
 
                             <div>
-                                <label className="block text-sm text-white dark:text-black mb-1">Password</label>
+                                <label className="block text-sm text-white dark:text-black mb-1">{t('fields.password')}</label>
                                 <div className="relative">
                                     <input
                                         type={showPassword ? "text" : "password"}
-                                        placeholder="your password"
+                                        placeholder={t('placeholders.password')}
                                         value={formData.password}
                                         onChange={update("password")}
                                         className={`w-full h-10 px-4 pr-10 rounded-[5px] text-white dark:text-black text-sm outline-none border-[var(--color-btn-primary)] transition border`}
@@ -211,9 +215,9 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
                                 <div className="mt-2 space-y-1">
                                     {[
-                                        { label: "8 characters minimum", valid: hasMinLength },
-                                        { label: "a symbol", valid: hasSymbol },
-                                        { label: "a number", valid: hasNumber },
+                                        { label: t('register.passwordMin'), valid: hasMinLength },
+                                        { label: t('register.passwordSymbol'), valid: hasSymbol },
+                                        { label: t('register.passwordNumber'), valid: hasNumber },
                                     ].map(({ label, valid }) => (
                                         <div key={label} className="flex items-center gap-2">
                                             <div className={`w-4 h-4 rounded-full border-2 transition-colors flex items-center justify-center ${
@@ -234,7 +238,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                             </div>
 
                             <div>
-                                <label className="block text-sm text-white dark:text-black mb-1">Date of birth</label>
+                                <label className="block text-sm text-white dark:text-black mb-1">{t('fields.birthDate')}</label>
                                 <BirthDatePicker
                                     value={formData.birthDate}
                                     onChange={(val) => updateField("birthDate", val)}
@@ -249,11 +253,11 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 radius={5}
                                 onClick={() => setStep(2)}
                             >
-                                Continue
+                                {t('actions.continue', { ns: 'common' })}
                             </Button>
 
                             <div className="flex items-center justify-center">
-                                <span className="text-sm text-white dark:text-black text-[var(--color-text-dark)]">Or</span>
+                                <span className="text-sm text-white dark:text-black text-[var(--color-text-dark)]">{t('register.or')}</span>
                             </div>
 
                             <Button
@@ -265,13 +269,12 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 icon={<GoogleIcon />}
                                 onClick={() => loginWithGoogle()}
                             >
-                                {isGoogleLoading ? "Loading..." : "Continue with Google"}
+                                {isGoogleLoading ? t('register.loading') : t('register.continueWithGoogle')}
                             </Button>
                         </div>
 
                         <p className="text-xs text-[var(--color-text-muted)] text-center mt-3 leading-5">
-                            By continuing, you agree to the Esthetic Terms of Service and
-                            acknowledge that you have read our Privacy Policy.
+                            {t('register.terms')}
                         </p>
                     </div>
                 )}
@@ -279,27 +282,27 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 {step === 2 && (
                     <div className="w-full">
                         <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] text-center">
-                            Nice to meet you!
+                            {t('register.step2Title')}
                         </h2>
-                        <p className="text-sm text-white dark:text-black mt-1 mb-5 text-center">What's your name?</p>
+                        <p className="text-sm text-white dark:text-black mt-1 mb-5 text-center">{t('register.step2Sub')}</p>
 
                         <div className="space-y-3">
                             <div className="flex gap-3">
                                 <div className="flex-1">
-                                    <label className="block text-sm text-white dark:text-black mb-1">First name</label>
+                                    <label className="block text-sm text-white dark:text-black mb-1">{t('fields.firstName')}</label>
                                     <input
                                         type="text"
-                                        placeholder="John"
+                                        placeholder={t('placeholders.firstName')}
                                         value={formData.firstName}
                                         onChange={update("firstName")}
                                         className={`w-full h-10 px-4 rounded-[5px] text-sm text-white dark:text-black outline-none border-[var(--color-btn-primary)] transition border`}
                                     />
                                 </div>
                                 <div className="flex-1">
-                                    <label className="block text-white dark:text-black text-sm mb-1">Last name</label>
+                                    <label className="block text-white dark:text-black text-sm mb-1">{t('fields.lastName')}</label>
                                     <input
                                         type="text"
-                                        placeholder="Doe"
+                                        placeholder={t('placeholders.lastName')}
                                         value={formData.lastName}
                                         onChange={update("lastName")}
                                         className={`w-full h-10 px-4 rounded-[5px] text-white dark:text-black text-sm outline-none border-[var(--color-btn-primary)] transition border`}
@@ -308,28 +311,28 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                             </div>
 
                             <div>
-                                <label className="block text-sm text-white dark:text-black mb-1">Username</label>
+                                <label className="block text-sm text-white dark:text-black mb-1">{t('fields.username')}</label>
                                 <div className="relative">
                                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#A1A1A1] text-sm">@</span>
                                     <input
                                         type="text"
-                                        placeholder="john_doe"
+                                        placeholder={t('placeholders.username')}
                                         value={formData.username}
                                         onChange={update("username")}
                                         className={`w-full h-10 pl-7 pr-4 rounded-[5px] text-white dark:text-black text-sm outline-none border-[var(--color-btn-primary)] transition border`}
                                     />
                                 </div>
                                 {formData.username.length > 0 && formData.username.length < 3 && (
-                                    <p className="text-xs text-red-400 mt-1">Minimum 3 characters</p>
+                                    <p className="text-xs text-red-400 mt-1">{t('validation.usernameMin')}</p>
                                 )}
                                 {formData.username.length > 20 && (
-                                    <p className="text-xs text-red-400 mt-1">Maximum 20 characters</p>
+                                    <p className="text-xs text-red-400 mt-1">{t('validation.usernameMax')}</p>
                                 )}
                                 {formData.username.length >= 3 && formData.username.length <= 20 && !/^[a-zA-Z0-9_]+$/.test(formData.username) && (
-                                    <p className="text-xs text-red-400 mt-1">Only letters, numbers and _ allowed</p>
+                                    <p className="text-xs text-red-400 mt-1">{t('validation.usernameChars')}</p>
                                 )}
                                 {(!formData.username || (formData.username.length >= 3 && formData.username.length <= 20 && /^[a-zA-Z0-9_]+$/.test(formData.username))) && (
-                                    <p className="text-xs text-[#A1A1A1] mt-1">3–20 characters, letters, numbers and _ only</p>
+                                    <p className="text-xs text-[#A1A1A1] mt-1">{t('validation.usernameFormat')}</p>
                                 )}
                             </div>
 
@@ -341,7 +344,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 radius={5}
                                 onClick={() => setStep(3)}
                             >
-                                Continue
+                                {t('actions.continue', { ns: 'common' })}
                             </Button>
 
                             <button
@@ -349,7 +352,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 onClick={() => setStep(1)}
                                 className="w-full text-center text-sm text-[#A1A1A1] dark:hover:text-black hover:text-white transition mt-1"
                             >
-                                ← Back
+                                {t('register.back')}
                             </button>
                         </div>
                     </div>
@@ -358,10 +361,10 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 {step === 3 && (
                     <div className="w-full">
                         <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] text-center">
-                            What is your gender?
+                            {t('register.step3Title')}
                         </h2>
                         <p className="text-sm text-white dark:text-black mt-1 mb-5 text-center">
-                            This information will always be private.
+                            {t('register.step3Sub')}
                         </p>
 
                         <div className="space-y-3">
@@ -375,7 +378,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                     setStep(4);
                                 }}
                             >
-                                Male
+                                {t('register.male')}
                             </Button>
 
                             <Button
@@ -389,7 +392,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                     setStep(4);
                                 }}
                             >
-                                Female
+                                {t('register.female')}
                             </Button>
 
                             <button
@@ -397,7 +400,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 onClick={() => { updateField("gender", "Other"); setStep(4); }}
                                 className="w-full text-center text-xs text-[#A1A1A1] hover:text-white dark:hover:text-black transition"
                             >
-                                Other
+                                {t('register.other')}
                             </button>
 
                             <button
@@ -405,7 +408,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 onClick={() => setStep(2)}
                                 className="w-full text-center text-sm text-[#A1A1A1] hover:text-white dark:hover:text-black transition mt-1"
                             >
-                                ← Back
+                                {t('register.back')}
                             </button>
                         </div>
                     </div>
@@ -414,31 +417,31 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 {step === 4 && (
                     <div className="w-full">
                         <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] text-center">
-                            Where do you live and what language do you speak?
+                            {t('register.step4Title')}
                         </h2>
                         <p className="text-sm text-white dark:text-black mt-1 mb-5 text-center">
-                            This information will always be private.
+                            {t('register.step4Sub')}
                         </p>
 
                         <div className="space-y-3">
                             <div>
-                                <label className="block text-sm text-white dark:text-black mb-1">Country</label>
+                                <label className="block text-sm text-white dark:text-black mb-1">{t('fields.country')}</label>
                                 <ComboboxInput
                                     value={formData.country}
                                     onChange={(val) => updateField("country", val)}
                                     options={COUNTRY_NAMES}
-                                    placeholder="Your country"
+                                    placeholder={t('placeholders.country')}
                                     className="text-white dark:text-black"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm text-white dark:text-black mb-1">Language</label>
+                                <label className="block text-sm text-white dark:text-black mb-1">{t('fields.language')}</label>
                                 <ComboboxInput
                                     value={formData.language}
                                     onChange={(val) => updateField("language", val)}
                                     options={LANGUAGES}
-                                    placeholder="Your language"
+                                    placeholder={t('placeholders.language')}
                                     className="text-white dark:text-black"
                                 />
                             </div>
@@ -451,7 +454,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 radius={5}
                                 onClick={() => setStep(5)}
                             >
-                                Continue
+                                {t('actions.continue', { ns: 'common' })}
                             </Button>
 
                             <button
@@ -459,7 +462,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 onClick={() => setStep(3)}
                                 className="w-full text-center text-sm text-[#A1A1A1] hover:text-white dark:hover:text-black transition mt-1"
                             >
-                                ← Back
+                                {t('register.back')}
                             </button>
                         </div>
                     </div>
@@ -468,10 +471,10 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 {step === 5 && (
                     <div className="w-full">
                         <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] text-center">
-                            Almost done!
+                            {t('register.step5Title')}
                         </h2>
                         <p className="text-sm text-white dark:text-black mt-1 mb-5 text-center">
-                            Add a profile photo and tell us about yourself
+                            {t('register.step5Sub')}
                         </p>
 
                         <div className="space-y-3">
@@ -494,16 +497,16 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                     </div>
                                     <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
                                 </label>
-                                <p className="text-xs text-white dark:text-black text-[#A1A1A1] mt-2">Upload photo (optional)</p>
+                                <p className="text-xs text-white dark:text-black text-[#A1A1A1] mt-2">{t('register.uploadPhoto')}</p>
                                 {imageError && (
                                     <p className="text-xs text-red-400 mt-1 text-center">{imageError}</p>
                                 )}
                             </div>
 
                             <div>
-                                <label className="block text-sm text-white dark:text-black mb-1">Bio</label>
+                                <label className="block text-sm text-white dark:text-black mb-1">{t('fields.bio')}</label>
                                 <textarea
-                                    placeholder="Tell us about yourself..."
+                                    placeholder={t('placeholders.bio')}
                                     value={formData.bio}
                                     onChange={update("bio")}
                                     rows={3}
@@ -514,7 +517,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                             </div>
 
                             <div>
-                                <label className="block text-sm text-white dark:text-black mb-1">Phone number</label>
+                                <label className="block text-sm text-white dark:text-black mb-1">{t('fields.phoneNumber', 'Phone number')}</label>
                                 <PhoneInput
                                     international
                                     defaultCountry="UA"
@@ -531,7 +534,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                     onChange={(e) => updateField("isPrivate", e.target.checked)}
                                     className="accent-[#1DB954] w-4 h-4"
                                 />
-                                <span className="text-sm text-white dark:text-[#A1A1A1]">Private account</span>
+                                <span className="text-sm text-white dark:text-[#A1A1A1]">{t('register.privateAccount')}</span>
                             </label>
 
                             <Button
@@ -542,7 +545,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 radius={5}
                                 onClick={() => setStep(6)}
                             >
-                                Continue
+                                {t('actions.continue', { ns: 'common' })}
                             </Button>
 
                             <button
@@ -550,7 +553,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 onClick={() => setStep(4)}
                                 className="w-full text-center text-sm text-[#A1A1A1] hover:text-white dark:hover:text-black transition mt-1"
                             >
-                                ← Back
+                                {t('register.back')}
                             </button>
                         </div>
                     </div>
@@ -559,7 +562,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 {step === 6 && (
                     <div className="w-full">
                         <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] text-center">
-                            So that you would like to create
+                            {t('register.step6Title')}
                         </h2>
 
                         <div className="grid grid-cols-4 gap-3 mt-5">
@@ -609,10 +612,10 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                             className="mt-5"
                         >
                             {isLoading
-                                ? "Creating account..."
+                                ? t('register.creatingAccount')
                                 : formData.categoryIds.length >= 3
-                                    ? "Continue"
-                                    : `Select ${3 - formData.categoryIds.length} or more, to continue`}
+                                    ? t('actions.continue', { ns: 'common' })
+                                    : t('register.selectMore', { count: 3 - formData.categoryIds.length })}
                         </Button>
 
                         <button
@@ -628,7 +631,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 {step === 7 && (
                     <div className="w-full flex flex-col items-center">
                         <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px] text-center max-w-[280px]">
-                            Your account successfully created
+                            {t('register.step7Title')}
                         </h2>
                     </div>
                 )}

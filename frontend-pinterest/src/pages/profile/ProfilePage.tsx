@@ -21,6 +21,7 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { getData as getCountries } from "country-list";
 import { LANGUAGES } from "@/constants/languages.ts";
+import { useTranslation } from "react-i18next";
 
 const COUNTRY_NAMES = getCountries()
     .map((c) => c.name)
@@ -50,6 +51,7 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 const ProfilePage = () => {
+    const { t, i18n } = useTranslation('common');
     const { data: me, isLoading } = useGetMeQuery();
     const [editProfile, { isLoading: isSaving, error: rawError }] = useEditProfileMutation();
     const { showToast } = useToast();
@@ -166,13 +168,13 @@ const onSubmit = async (formValues: FormValues) => {
 
     try {
         await editProfile(patch as Record<string, unknown>).unwrap();
-        showToast("Profile updated successfully", "success");
+        showToast(t('profile.toast.updated'), "success");
     } catch {
-        showToast("Failed to update profile", "error");
+        showToast(t('profile.toast.failed'), "error");
     }
 };
 
-if (isLoading) return <p>Завантаження...</p>;
+if (isLoading) return <p>{t('actions.loading', 'Loading...')}</p>;
 
     return (
         <>
@@ -199,7 +201,7 @@ if (isLoading) return <p>Завантаження...</p>;
                     const ext = file.name.split(".").pop()?.toLowerCase();
                     const unsupported = ["image/heic", "image/heif", "image/avif", "image/tiff"];
                     if (unsupported.includes(file.type) || ext === "heic" || ext === "heif") {
-                        setAvatarError("HEIC/HEIF format is not supported. Please use JPG, PNG or WebP.");
+                        setAvatarError(t('profile.avatarError'));
                         e.target.value = "";
                         return;
                     }
@@ -217,7 +219,7 @@ if (isLoading) return <p>Завантаження...</p>;
         {/* Name */}
         <div className="text-center w-full">
             <p className="font-bold text-lg leading-tight break-words whitespace-normal">
-                {[watchedFirstName, watchedLastName].filter(Boolean).join(" ") || "Your Name"}
+                {[watchedFirstName, watchedLastName].filter(Boolean).join(" ") || t('profile.yourName')}
             </p>
             {watchedUserName && (
                 <p className="text-[#A1A1A1] text-sm mt-0.5 break-all">@{watchedUserName}</p>
@@ -234,7 +236,7 @@ if (isLoading) return <p>Завантаження...</p>;
             {me?.createdAt && (
                 <div className="flex items-center gap-2 text-sm text-[#A1A1A1]">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                    <span>Joined {new Date(me.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" })}</span>
+                    <span>{t('profile.joinedAt', { date: new Date(me.createdAt).toLocaleDateString(i18n.language, { month: "long", year: "numeric" }) })}</span>
                 </div>
             )}
             {me?.country && (
@@ -255,13 +257,13 @@ if (isLoading) return <p>Завантаження...</p>;
         {selectedCategoryIds.length > 0 && (
             <div className="w-full border-t border-[#333] pt-4">
                 <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs text-[#A1A1A1]">Interests</span>
+                    <span className="text-xs text-[#A1A1A1]">{t('profile.interests')}</span>
                     <button
                         type="button"
                         onClick={() => setIsEditingInterests((prev) => !prev)}
                         className="text-xs text-[#1DB954] hover:underline"
                     >
-                        {isEditingInterests ? "Done" : "Edit"}
+                        {isEditingInterests ? t('actions.done') : t('actions.edit')}
                     </button>
                 </div>
                 <div className="grid grid-cols-3 gap-2 w-full">
@@ -293,7 +295,7 @@ if (isLoading) return <p>Завантаження...</p>;
                         })}
                 </div>
                 {isEditingInterests && (
-                    <p className="text-[10px] text-[#A1A1A1] mt-2 text-center">Click to toggle interests</p>
+                    <p className="text-[10px] text-[#A1A1A1] mt-2 text-center">{t('profile.clickToToggle')}</p>
                 )}
             </div>
         )}
@@ -301,13 +303,13 @@ if (isLoading) return <p>Завантаження...</p>;
         {selectedCategoryIds.length === 0 && (
             <div className="w-full border-t border-[#333] pt-4">
                 <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-[#A1A1A1]">Interests</span>
+                    <span className="text-xs text-[#A1A1A1]">{t('profile.interests')}</span>
                     <button
                         type="button"
                         onClick={() => setIsEditingInterests(true)}
                         className="text-xs text-[#1DB954] hover:underline"
                     >
-                        Add
+                        {t('actions.add')}
                     </button>
                 </div>
                 {isEditingInterests && (
@@ -333,7 +335,7 @@ if (isLoading) return <p>Завантаження...</p>;
                     </div>
                 )}
                 {!isEditingInterests && (
-                    <p className="text-sm text-[#A1A1A1]">No interests selected yet.</p>
+                    <p className="text-sm text-[#A1A1A1]">{t('profile.noInterests')}</p>
                 )}
             </div>
         )}
@@ -342,50 +344,50 @@ if (isLoading) return <p>Завантаження...</p>;
             <form onSubmit={handleSubmit(onSubmit)} className="flex-1 text-black dark:text-white">
 
                 <div className="mb-6">
-                    <h1 className="text-2xl font-bold">Edit your profile</h1>
-                    <p className="text-[#A1A1A1] text-sm mt-1">Your info is visible to users who can view your profile</p>
+                    <h1 className="text-2xl font-bold">{t('profile.editTitle')}</h1>
+                    <p className="text-[#A1A1A1] text-sm mt-1">{t('profile.editSubtitle')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
-                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">First name</label>
-                        <input {...register("firstName")} placeholder="John"
+                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">{t('profile.fields.firstName')}</label>
+                        <input {...register("firstName")} placeholder={t('profile.placeholders.firstName')}
                                className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
                         {errors.firstName && <span className="text-red-400 text-xs mt-1">{errors.firstName.message}</span>}
                     </div>
                     <div>
-                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">Last name</label>
-                        <input {...register("lastName")} placeholder="Doe"
+                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">{t('profile.fields.lastName')}</label>
+                        <input {...register("lastName")} placeholder={t('profile.placeholders.lastName')}
                                className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
                         {errors.lastName && <span className="text-red-400 text-xs mt-1">{errors.lastName.message}</span>}
                     </div>
                 </div>
 
                 <div className="mb-4">
-                    <label className="text-xs text-[#A1A1A1] mb-1.5 block">Username</label>
+                    <label className="text-xs text-[#A1A1A1] mb-1.5 block">{t('profile.fields.username')}</label>
                     <div className="relative">
                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#A1A1A1] text-base select-none">@</span>
-                        <input {...register("userName")} placeholder="your_username"
+                        <input {...register("userName")} placeholder={t('profile.placeholders.username')}
                                className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl pl-8 pr-4 py-3 text-black dark:text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
                     </div>
                     {errors.userName && <span className="text-red-400 text-xs mt-1 block">{errors.userName.message}</span>}
                 </div>
 
                 <div className="mb-4">
-                    <label className="text-xs text-[#A1A1A1] mb-1.5 block">About you</label>
-                    <textarea {...register("bio")} placeholder="Tell something about yourself..." rows={3}
+                    <label className="text-xs text-[#A1A1A1] mb-1.5 block">{t('profile.fields.aboutYou')}</label>
+                    <textarea {...register("bio")} placeholder={t('profile.placeholders.bio')} rows={3}
                               className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] resize-none transition" />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
-                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">Email</label>
-                        <input {...register("email")} placeholder="john@example.com"
+                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">{t('profile.fields.email')}</label>
+                        <input {...register("email")} placeholder={t('profile.placeholders.email')}
                                className="w-full bg-transparent border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white placeholder-[#555] text-base focus:outline-none focus:border-[#1DB954] transition" />
                         {errors.email && <span className="text-red-400 text-xs mt-1">{errors.email.message}</span>}
                     </div>
                     <div>
-                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">Phone</label>
+                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">{t('profile.fields.phone')}</label>
                         <Controller
                             name="phoneNumber"
                             control={control}
@@ -404,7 +406,7 @@ if (isLoading) return <p>Завантаження...</p>;
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
-                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">Country</label>
+                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">{t('profile.fields.country')}</label>
                         <Controller
                             name="country"
                             control={control}
@@ -413,14 +415,14 @@ if (isLoading) return <p>Завантаження...</p>;
                                     value={field.value ?? ""}
                                     onChange={field.onChange}
                                     options={COUNTRY_NAMES}
-                                    placeholder="Ukraine"
+                                    placeholder={t('profile.placeholders.country')}
                                     className="text-black dark:text-white !border-[#A1A1A1] dark:!border-[#333] !rounded-xl !h-auto !px-4 !py-3 !text-base"
                                 />
                             )}
                         />
                     </div>
                     <div>
-                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">Language</label>
+                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">{t('profile.fields.language')}</label>
                         <Controller
                             name="language"
                             control={control}
@@ -429,7 +431,7 @@ if (isLoading) return <p>Завантаження...</p>;
                                     value={field.value ?? ""}
                                     onChange={field.onChange}
                                     options={LANGUAGES}
-                                    placeholder="Ukrainian"
+                                    placeholder={t('profile.placeholders.language')}
                                     className="text-black dark:text-white !border-[#A1A1A1] dark:!border-[#333] !rounded-xl !h-auto !px-4 !py-3 !text-base"
                                 />
                             )}
@@ -439,17 +441,17 @@ if (isLoading) return <p>Завантаження...</p>;
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                     <div>
-                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">Gender</label>
+                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">{t('profile.fields.gender')}</label>
                         <select {...register("gender", { valueAsNumber: true })}
                                 className="w-full bg-white dark:bg-[#1a1a1a] border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white text-base focus:outline-none focus:border-[#1DB954] transition">
-                            <option value="">— Gender —</option>
-                            <option value={0}>Female</option>
-                            <option value={1}>Male</option>
-                            <option value={2}>Other</option>
+                            <option value="">{t('profile.gender.placeholder')}</option>
+                            <option value={0}>{t('profile.gender.female')}</option>
+                            <option value={1}>{t('profile.gender.male')}</option>
+                            <option value={2}>{t('profile.gender.other')}</option>
                         </select>
                     </div>
                     <div>
-                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">Birth date</label>
+                        <label className="text-xs text-[#A1A1A1] mb-1.5 block">{t('profile.fields.birthDate')}</label>
                         <Controller
                             name="birthDate"
                             control={control}
@@ -467,11 +469,11 @@ if (isLoading) return <p>Завантаження...</p>;
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     <label className="flex items-center gap-3 cursor-pointer">
                         <input {...register("isPrivate")} type="checkbox" className="accent-[#1DB954] w-4 h-4" />
-                        <span className="text-sm text-[#A1A1A1]">Private account</span>
+                        <span className="text-sm text-[#A1A1A1]">{t('profile.private')}</span>
                     </label>
                     <button type="submit" disabled={isSaving}
                             className="px-10 py-3 rounded-xl bg-[#1DB954] text-black font-semibold text-base hover:bg-[#1aa34a] disabled:opacity-50 transition">
-                        {isSaving ? "Saving..." : "Save"}
+                        {isSaving ? t('preview.saving', { ns: 'boards' }) : t('actions.save')}
                     </button>
                 </div>
 
@@ -489,7 +491,7 @@ if (isLoading) return <p>Завантаження...</p>;
                         <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
                         <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
                     </svg>
-                    Recently deleted
+                    {t('profile.recentlyDeleted')}
                 </button>
 
                 <button
@@ -502,7 +504,7 @@ if (isLoading) return <p>Завантаження...</p>;
                         <polyline points="16 17 21 12 16 7"/>
                         <line x1="21" y1="12" x2="9" y2="12"/>
                     </svg>
-                    Logout
+                    {t('actions.logout')}
                 </button>
             </form>
             </div>

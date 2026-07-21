@@ -10,8 +10,10 @@ import CommentsSection from "@/components/ui/CommentsSection.tsx";
 import ReportModal from "@/components/ui/ReportModal.tsx";
 import {useTrackViewPinMutation} from "@/services/recommendedPinsService.ts";
 import {useToast} from "@/components/ui/Toast/UseToast.ts";
+import { useTranslation } from "react-i18next";
 
 const AuraPreviewPage = () => {
+    const { t, i18n } = useTranslation('pins');
     const {id} = useParams<{ id: string }>();
     const navigate = useNavigate();
 
@@ -86,7 +88,7 @@ const AuraPreviewPage = () => {
 
     if (isError || !pin) return (
         <div className="w-full min-h-full bg-white dark:bg-[#000000] flex items-center justify-center">
-            <p className="text-red-400 text-sm">Aura not found.</p>
+            <p className="text-red-400 text-sm">{t('preview.notFound')}</p>
         </div>
     );
 
@@ -138,7 +140,7 @@ const AuraPreviewPage = () => {
                                     <polyline points="17 21 17 13 7 13 7 21"/>
                                     <polyline points="7 3 7 8 15 8"/>
                                 </svg>
-                                Save
+                                {t('preview.save')}
                             </button>
 
                             {/* Download — secondary */}
@@ -151,7 +153,7 @@ const AuraPreviewPage = () => {
                                     <polyline points="7 10 12 15 17 10"/>
                                     <line x1="12" y1="15" x2="12" y2="3"/>
                                 </svg>
-                                Download
+                                {t('preview.download')}
                             </button>
 
                             {/* Share — secondary */}
@@ -160,7 +162,7 @@ const AuraPreviewPage = () => {
                                     navigator.clipboard.writeText(
                                         `${window.location.origin}/aura/preview/${pin.id}`
                                     );
-                                    showToast("Link copied to clipboard", "success");
+                                    showToast(t('preview.linkCopied'), "success");
                                 }}
                                 className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/5 dark:hover:bg-white/10 hover:bg-black/5 border dark:border-white/10 dark:hover:border-white/20 border-black/10 hover:border-black/20 dark:text-gray-300 text-gray-700 dark:hover:text-white text-black text-xs font-medium transition-all duration-150"
                             >
@@ -169,7 +171,7 @@ const AuraPreviewPage = () => {
                                     <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
                                     <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
                                 </svg>
-                                Share
+                                {t('preview.share')}
                             </button>
 
                             {isOwner ? (
@@ -182,7 +184,7 @@ const AuraPreviewPage = () => {
                                             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                                             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                                         </svg>
-                                        Edit
+                                        {t('preview.edit')}
                                     </button>
                                     <button
                                         onClick={handleDelete}
@@ -194,7 +196,7 @@ const AuraPreviewPage = () => {
                                             <path d="M10 11v6"/><path d="M14 11v6"/>
                                             <path d="M9 6V4h6v2"/>
                                         </svg>
-                                        Delete
+                                        {t('preview.delete')}
                                     </button>
                                 </>
                             ) : (
@@ -207,7 +209,7 @@ const AuraPreviewPage = () => {
                                         <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
                                         <line x1="4" y1="22" x2="4" y2="15"/>
                                     </svg>
-                                    Report
+                                    {t('preview.report')}
                                 </button>
                             )}
                         </div>
@@ -233,7 +235,7 @@ const AuraPreviewPage = () => {
                             )}
                         </div>
                         <span className="text-gray-400 dark:group-hover:text-white group-hover:text-black text-xs transition-colors">
-                            {pin.creatorName ?? "View profile"}
+                            {pin.creatorName ?? t('preview.viewProfile')}
                         </span>
                     </button>
 
@@ -245,7 +247,7 @@ const AuraPreviewPage = () => {
                     {/* Category */}
                     {pin.categoryName && (
                         <div className="flex items-center gap-2">
-                            <span className="text-gray-600 text-xs">Category</span>
+                            <span className="text-gray-600 text-xs">{t('preview.category')}</span>
                             <span className="text-xs text-[#4ade80] bg-[#4ade80]/10 px-2.5 py-1 rounded-full">
                                 {pin.categoryName}
                             </span>
@@ -280,7 +282,7 @@ const AuraPreviewPage = () => {
 
                     {/* Date */}
                     <p className="text-gray-700 text-xs mt-auto">
-                        {new Date(pin.createdAt).toLocaleDateString("en-GB", {
+                        {new Date(pin.createdAt).toLocaleDateString(i18n.language, {
                             day: "numeric", month: "long", year: "numeric"
                         })}
                     </p>
@@ -297,7 +299,7 @@ const AuraPreviewPage = () => {
                 <>
                     <div className="flex items-center gap-4 mb-6 max-w-4xl mx-auto">
                         <div className="flex-1 h-px bg-white/5"/>
-                        <span className="text-gray-600 text-xs tracking-widest uppercase">More Auras</span>
+                        <span className="text-gray-600 text-xs tracking-widest uppercase">{t('preview.moreAuras')}</span>
                         <div className="flex-1 h-px bg-white/5"/>
                     </div>
 
@@ -328,8 +330,8 @@ const AuraPreviewPage = () => {
                         className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 w-72 shadow-2xl"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <p className="text-white text-sm font-medium mb-1">Delete this aura?</p>
-                        <p className="text-gray-400 text-xs mb-3">It will be moved to Recently deleted and permanently removed after 30 days.</p>
+                        <p className="text-white text-sm font-medium mb-1">{t('preview.deleteConfirmTitle')}</p>
+                        <p className="text-gray-400 text-xs mb-3">{t('preview.deleteConfirmDesc')}</p>
                         <button
                             onClick={() => { setConfirmDeleteOpen(false); navigate("/deleted-auras"); }}
                             className="flex items-center gap-1.5 text-[11px] text-[#4ade80] hover:underline mb-4"
@@ -339,20 +341,20 @@ const AuraPreviewPage = () => {
                                 <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
                                 <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
                             </svg>
-                            View Recently deleted
+                            {t('preview.viewRecentlyDeleted')}
                         </button>
                         <div className="flex gap-2">
                             <button
                                 className="flex-1 py-2 rounded-xl text-xs text-gray-300 bg-white/10 hover:bg-white/15 transition-colors"
                                 onClick={() => setConfirmDeleteOpen(false)}
                             >
-                                Cancel
+                                {t('preview.cancel')}
                             </button>
                             <button
                                 className="flex-1 py-2 rounded-xl text-xs text-white bg-red-500 hover:bg-red-600 transition-colors"
                                 onClick={confirmDelete}
                             >
-                                Delete
+                                {t('preview.delete')}
                             </button>
                         </div>
                     </div>

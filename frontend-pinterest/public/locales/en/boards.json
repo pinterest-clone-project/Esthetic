@@ -32,10 +32,50 @@
     "noMoodboards": "No moodboards yet",
     "noPins": "No pins on this board yet"
   },
+  "saveModal": {
+    "title": "Choose Moodboard",
+    "done": "Done",
+    "noMoodboards": "No moodboards yet."
+  },
+  "preview": {
+    "notFound": "Board not found.",
+    "pins": "Pins",
+    "private": "Private",
+    "share": "Share",
+    "edit": "Edit",
+    "delete": "Delete",
+    "report": "Report",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "save": "Save",
+    "linkCopied": "Link copied to clipboard",
+    "boardUpdated": "Board updated",
+    "saveFailed": "Failed to save",
+    "deleteTitle": "Delete this board?",
+    "deleteDesc": "This action cannot be undone.",
+    "privateBoard": "Private board",
+    "noPins": "No pins yet",
+    "noPinsDesc": "Save pins to this board to see them here"
+  },
   "moodboard": {
     "create": "Create moodboard",
     "edit": "Edit moodboard",
     "regenerate": "Regenerate collage",
-    "noMoodboards": "No moodboards yet"
+    "noMoodboards": "No moodboards yet",
+    "createTitle": "Create your Moodboard",
+    "creating": "Creating moodboard...",
+    "namePlaceholder": "Name your Moodboard",
+    "hideTitle": "Hide Moodboard",
+    "hideDesc": "Only you can see this Board",
+    "next": "Next",
+    "addDetails": "Add details",
+    "descPlaceholder": "What's this board about?",
+    "chooseAura": "Choose Aura",
+    "suggestedPins": "Suggested pins for you",
+    "showAll": "Show all ({{count}})",
+    "showLess": "Show less",
+    "nothingToShow": "Nothing to show here",
+    "saving": "Saving...",
+    "save": "Save"
   }
 }

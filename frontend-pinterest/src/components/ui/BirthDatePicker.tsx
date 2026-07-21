@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
+import { useTranslation } from "react-i18next";
 
 interface BirthDatePickerProps {
     value: string; // YYYY-MM-DD
@@ -9,6 +10,7 @@ interface BirthDatePickerProps {
 }
 
 const BirthDatePicker = ({ value, onChange, className }: BirthDatePickerProps) => {
+    const { t, i18n } = useTranslation('common');
     const [open, setOpen] = useState(false);
     const [openUpward, setOpenUpward] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -16,7 +18,7 @@ const BirthDatePicker = ({ value, onChange, className }: BirthDatePickerProps) =
     const selected = value ? new Date(value + "T00:00:00") : undefined;
 
     const formatDisplay = (date: Date) =>
-        date.toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" });
+        date.toLocaleDateString(i18n.language, { day: "numeric", month: "long", year: "numeric" });
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -159,7 +161,7 @@ const BirthDatePicker = ({ value, onChange, className }: BirthDatePickerProps) =
                 className={`w-full h-10 px-4 rounded-[5px] text-sm text-left outline-none border border-[var(--color-btn-primary)] transition flex items-center justify-between ${className ?? "text-white dark:text-black"}`}
             >
                 <span className={selected ? "" : "opacity-40"}>
-                    {selected ? formatDisplay(selected) : "Select date of birth"}
+                    {selected ? formatDisplay(selected) : t('profile.selectBirthDate')}
                 </span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-60">
                     <rect x="3" y="4" width="18" height="18" rx="2"/>

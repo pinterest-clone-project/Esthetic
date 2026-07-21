@@ -21,9 +21,12 @@
     "unfollow": "Unfollow",
     "block": "Block",
     "restore": "Restore",
+    "unsave": "Unsave",
+    "done": "Done",
     "report": "Report",
     "signUp": "Sign Up",
-    "logIn": "Log in"
+    "logIn": "Log in",
+    "continue": "Continue"
   },
   "nav": {
     "home": "Home",
@@ -82,6 +85,44 @@
     "somethingWentWrong": "Something went wrong",
     "success": "Success"
   },
+  "collections": {
+    "title": "Your collection",
+    "create": "Create",
+    "tabAura": "Aura",
+    "tabMoodboard": "Moodboard",
+    "tabAI": "Esthetic AI",
+    "yourCreatedAuras": "Your created Auras",
+    "yourSavedAuras": "Your saved Auras",
+    "noSavedAuras": "You haven't saved any Auras yet",
+    "combineIdeas": "Combine your ideas",
+    "auraDesc": "Aura pins are small aesthetic pieces inspired visuals and trends. They capture moods, colors, and vibes, letting you express your personal aesthetic in a simple, stylish way.",
+    "createAura": "Create Aura",
+    "yourMoodboard": "Your Moodboard",
+    "randomIdeas": "Random Ideas",
+    "comingSoon": "Coming soon"
+  },
+  "sidebar": {
+    "main": "Main",
+    "collections": "Collections",
+    "create": "Create",
+    "addFriends": "Add friends",
+    "settings": "Settings",
+    "messages": "Messages",
+    "yourChats": "Your chats",
+    "noUsersFound": "No users found",
+    "profile": "Profile",
+    "viewEditProfile": "View and edit your profile",
+    "theme": "Theme",
+    "themeDesc": "Light / Dark mode switch",
+    "recentlyDeleted": "Recently deleted",
+    "recentlyDeletedDesc": "Auras deleted in the last 30 days",
+    "logout": "Logout",
+    "logoutDesc": "Sign out of your account",
+    "moodboard": "Moodboard",
+    "moodboardDesc": "Organize your ideas",
+    "aura": "Aura",
+    "auraDesc": "Share your aesthetic"
+  },
   "firstPage": {
     "hero": "Explore new ideas & inspirations",
     "heroSub": "Discover and save your favourites from around the web",
@@ -101,8 +142,166 @@
     "news": "Esthetic News",
     "business": "Esthetic for Business"
   },
+  "user": {
+    "notFound": "User not found.",
+    "auras": "Auras",
+    "followers": "Followers",
+    "following": "Following",
+    "follow": "Follow",
+    "following_btn": "Following",
+    "requested": "Requested",
+    "editProfile": "Edit profile",
+    "privateAccount": "This account is private",
+    "privateAccountDesc": "Follow this account to see their auras and moodboards",
+    "noAuras": "No auras yet.",
+    "noMoodboards": "No moodboards yet.",
+    "noUsers": "No users yet",
+    "tabs": {
+      "auras": "Auras",
+      "moodboards": "Moodboards"
+    }
+  },
+  "profile": {
+    "editTitle": "Edit your profile",
+    "editSubtitle": "Your info is visible to users who can view your profile",
+    "yourName": "Your Name",
+    "joinedAt": "Joined {{date}}",
+    "interests": "Interests",
+    "clickToToggle": "Click to toggle interests",
+    "noInterests": "No interests selected yet.",
+    "selectBirthDate": "Select date of birth",
+    "private": "Private account",
+    "avatarError": "HEIC/HEIF format is not supported. Please use JPG, PNG or WebP.",
+    "recentlyDeleted": "Recently deleted",
+    "fields": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "username": "Username",
+      "aboutYou": "About you",
+      "email": "Email",
+      "phone": "Phone",
+      "country": "Country",
+      "language": "Language",
+      "gender": "Gender",
+      "birthDate": "Birth date"
+    },
+    "placeholders": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "username": "your_username",
+      "bio": "Tell something about yourself...",
+      "email": "john@example.com",
+      "country": "Ukraine",
+      "language": "Ukrainian"
+    },
+    "gender": {
+      "placeholder": "— Gender —",
+      "female": "Female",
+      "male": "Male",
+      "other": "Other"
+    },
+    "toast": {
+      "updated": "Profile updated successfully",
+      "failed": "Failed to update profile"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "new": "New",
+    "earlier": "Earlier",
+    "nothingHere": "Nothing here",
+    "nothingHereDesc": "No notifications in this category",
+    "noFollowRequests": "No follow requests",
+    "noFollowRequestsDesc": "When someone requests to follow you, it will appear here",
+    "seeAll": "See all",
+    "nothingYet": "Nothing here yet",
+    "new_count": "{{count}} new",
+    "accept": "Accept",
+    "decline": "Decline",
+    "filters": {
+      "all": "All",
+      "follows": "Follows",
+      "likes": "Likes",
+      "comments": "Comments",
+      "pins": "Pins",
+      "requests": "Requests"
+    },
+    "time": {
+      "justNow": "just now",
+      "minAgo": "{{count}} min ago",
+      "hAgo": "{{count}} h ago",
+      "yesterday": "yesterday"
+    }
+  },
+  "chat": {
+    "title": "Messages",
+    "searchPlaceholder": "Search by nickname",
+    "messagePlaceholder": "Message",
+    "noUsersFound": "No users found",
+    "noChats": "No chats yet. Search for a user to start."
+  },
+  "pagination": {
+    "info": "Page {{page}} of {{totalPages}} · Total {{totalCount}}",
+    "prev": "Back",
+    "next": "Next"
+  },
+  "report": {
+    "titlePin": "Report pin",
+    "titleUser": "Report user",
+    "submit": "Submit report",
+    "submitting": "Submitting...",
+    "cancel": "Cancel",
+    "detailsPlaceholder": "Add details (optional)",
+    "thankYou": "Thank you for your report",
+    "reviewSoon": "Our team will review it shortly.",
+    "close": "Close",
+    "failed": "Failed to submit report. Please try again.",
+    "reasons": {
+      "spam": "Spam or misleading",
+      "nudity": "Nudity or sexual content",
+      "harassment": "Harassment or bullying",
+      "hateSpeech": "Hate speech or symbols",
+      "violence": "Violence or dangerous content",
+      "ip": "Intellectual property violation",
+      "other": "Other"
+    }
+  },
+  "adminBanner": {
+    "title": "Administrator access",
+    "welcomePrefix": "Welcome back,",
+    "welcomeSuffix": ". You are signed in with administrator privileges.",
+    "goToPanel": "Go to Admin Panel",
+    "dismiss": "Dismiss",
+    "failedToLoad": "Failed to load pins.",
+    "noPins": "No pins yet."
+  },
+  "blocked": {
+    "title": "Your account has been blocked",
+    "reason": "Reason: {{reason}}",
+    "contact": "If you believe this is a mistake, please contact support."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "desc": "This pin got lost somewhere. Head back home and find some inspiration!",
+    "goHome": "Go home",
+    "or": "or",
+    "goBack": "Go back"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "themeDesc": "Light / Dark mode",
+    "adminPanel": "Admin panel",
+    "adminPanelDesc": "Manage users and content",
+    "recentlyDeleted": "Recently deleted",
+    "recentlyDeletedDesc": "Auras deleted in the last 30 days",
+    "logout": "Logout",
+    "logoutDesc": "Sign out of your account"
+  },
   "confirm": {
     "deleteAura": "Delete this aura?",
+    "deleteAuraDesc": "It will be moved to Recently deleted and permanently removed after 30 days.",
+    "viewRecentlyDeleted": "View Recently deleted",
     "deleteBoard": "Delete this board?"
   }
 }

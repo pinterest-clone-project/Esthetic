@@ -37,12 +37,13 @@ const FirstPage = () => {
                             ['nature', t('firstPage.categories.nature')],
                             ['wallpapers', t('firstPage.categories.wallpapers')],
                         ] as [string, string][]).map(([key, label]) => (
-                            <button
+                            <a
                                 key={key}
-                                className="bg-[#A2A2A2] dark:bg-[#535353] lg:text-sm text-[11px] px-8 py-2 rounded-[5px] lg:min-w-[200px] md:min-w-[190px] min-w-[130px] lg:min-h-[35px] min-h-[27px] text-black dark:text-white hover:bg-[#666] cursor-pointer"
+                                href={`/aura/search?q=${encodeURIComponent(label)}`}
+                                className="px-6 py-3 rounded-full bg-[#A2A2A2]/30 dark:bg-[#535353]/40 text-black dark:text-white text-sm font-medium hover:bg-[#1DB954] hover:text-black transition-colors whitespace-nowrap text-center"
                             >
                                 {label}
-                            </button>
+                            </a>
                         ))}
                     </div>
                 </section>
