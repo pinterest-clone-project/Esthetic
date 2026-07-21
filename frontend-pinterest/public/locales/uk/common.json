@@ -21,6 +21,7 @@
     "unfollow": "Відписатись",
     "block": "Заблокувати",
     "restore": "Відновити",
+    "unsave": "Видалити",
     "report": "Поскаржитись",
     "signUp": "Реєстрація",
     "logIn": "Вхід"
@@ -139,8 +140,38 @@
     "news": "Esthetic Новини",
     "business": "Esthetic для бізнесу"
   },
+  "notifications": {
+    "title": "Сповіщення",
+    "new": "Нові",
+    "earlier": "Раніше",
+    "nothingHere": "Тут нічого немає",
+    "nothingHereDesc": "Немає сповіщень у цій категорії",
+    "noFollowRequests": "Запитів на підписку немає",
+    "noFollowRequestsDesc": "Коли хтось захоче підписатись на вас, це з'явиться тут",
+    "seeAll": "Переглянути всі",
+    "nothingYet": "Ще нічого немає",
+    "new_count": "{{count}} нових",
+    "accept": "Прийняти",
+    "decline": "Відхилити",
+    "filters": {
+      "all": "Всі",
+      "follows": "Підписки",
+      "likes": "Вподобання",
+      "comments": "Коментарі",
+      "pins": "Піни",
+      "requests": "Запити"
+    },
+    "time": {
+      "justNow": "щойно",
+      "minAgo": "{{count}} хв тому",
+      "hAgo": "{{count}} год тому",
+      "yesterday": "вчора"
+    }
+  },
   "confirm": {
     "deleteAura": "Видалити цю ауру?",
+    "deleteAuraDesc": "Її буде переміщено до «Нещодавно видалених» і остаточно видалено через 30 днів.",
+    "viewRecentlyDeleted": "Переглянути нещодавно видалені",
     "deleteBoard": "Видалити цю дошку?"
   }
 }

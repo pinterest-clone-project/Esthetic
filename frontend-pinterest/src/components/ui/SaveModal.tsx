@@ -4,6 +4,7 @@ import { useSavePinMutation, useUnsavePinMutation, useGetSavedBoardsQuery } from
 import Modal from "./Modal.tsx";
 import { APP_ENV } from "@/constants/env";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
+import { useTranslation } from "react-i18next";
 
 interface SaveModalProps {
     pinId: string;
@@ -12,6 +13,8 @@ interface SaveModalProps {
 
 
 const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
+    const { t } = useTranslation('boards');
+    const { t: tc } = useTranslation('common');
     const { data: moodboards, isLoading: boardsLoading } = useGetMyMoodboardsQuery();
     const { data: savedBoardIds = [], isLoading: savedLoading } = useGetSavedBoardsQuery(pinId);
     const [savePin] = useSavePinMutation();
@@ -35,9 +38,9 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
         setLocalSaved(prev => ({ ...prev, [boardId]: !currentlySaved }));
 
         if (currentlySaved) {
-            showToast("Removed from board", "success");
+            showToast(tc('toast.removedFromBoard'), "success");
         } else {
-            showToast("Saved to board", "success");
+            showToast(tc('toast.savedToBoard'), "success");
         }
 
         try {
@@ -48,7 +51,7 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
             }
         } catch {
             setLocalSaved(prev => ({ ...prev, [boardId]: currentlySaved }));
-            showToast("Something went wrong", "error");
+            showToast(tc('toast.somethingWentWrong'), "error");
         } finally {
             setPendingBoardId(null);
         }
@@ -73,7 +76,7 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
 
                     <div className="relative">
                         <h3 className="text-center text-white dark:text-black text-lg font-semibold">
-                            Choose Moodboard
+                            {t('saveModal.title')}
                         </h3>
                         <button
                             onClick={onClose}
@@ -94,7 +97,7 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
 
                     {/* Empty */}
                     {!isLoading && !moodboards?.items?.length && (
-                        <p className="text-gray-400 text-sm text-center py-8">No moodboards yet.</p>
+                        <p className="text-gray-400 text-sm text-center py-8">{t('saveModal.noMoodboards')}</p>
                     )}
 
                     {/* Grid */}
@@ -151,7 +154,7 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                         className="w-full h-10 bg-[#1DB954] hover:bg-[#1aa34a]
                         text-white dark:text-black text-sm font-medium rounded-lg transition-colors mt-1"
                     >
-                        Done
+                        {t('saveModal.done')}
                     </button>
                 </div>
             </div>

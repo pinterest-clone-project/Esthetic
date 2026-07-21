@@ -21,6 +21,7 @@
     "unfollow": "Unfollow",
     "block": "Block",
     "restore": "Restore",
+    "unsave": "Unsave",
     "report": "Report",
     "signUp": "Sign Up",
     "logIn": "Log in",
@@ -140,8 +141,38 @@
     "news": "Esthetic News",
     "business": "Esthetic for Business"
   },
+  "notifications": {
+    "title": "Notifications",
+    "new": "New",
+    "earlier": "Earlier",
+    "nothingHere": "Nothing here",
+    "nothingHereDesc": "No notifications in this category",
+    "noFollowRequests": "No follow requests",
+    "noFollowRequestsDesc": "When someone requests to follow you, it will appear here",
+    "seeAll": "See all",
+    "nothingYet": "Nothing here yet",
+    "new_count": "{{count}} new",
+    "accept": "Accept",
+    "decline": "Decline",
+    "filters": {
+      "all": "All",
+      "follows": "Follows",
+      "likes": "Likes",
+      "comments": "Comments",
+      "pins": "Pins",
+      "requests": "Requests"
+    },
+    "time": {
+      "justNow": "just now",
+      "minAgo": "{{count}} min ago",
+      "hAgo": "{{count}} h ago",
+      "yesterday": "yesterday"
+    }
+  },
   "confirm": {
     "deleteAura": "Delete this aura?",
+    "deleteAuraDesc": "It will be moved to Recently deleted and permanently removed after 30 days.",
+    "viewRecentlyDeleted": "View Recently deleted",
     "deleteBoard": "Delete this board?"
   }
 }

@@ -1,6 +1,7 @@
 import { useGetDeletedPinsQuery, useRestorePinMutation } from "@/services/pinService.ts";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import { APP_ENV } from "@/constants/env";
+import { useTranslation } from "react-i18next";
 
 const getDaysRemaining = (deletedAt: string) => {
     const deleted = new Date(deletedAt);
@@ -10,6 +11,7 @@ const getDaysRemaining = (deletedAt: string) => {
 };
 
 const DeletedAurasPage = () => {
+    const { t } = useTranslation('pins');
     const { data: pins, isLoading } = useGetDeletedPinsQuery();
     const [restorePin] = useRestorePinMutation();
     const { showToast } = useToast();
@@ -18,18 +20,18 @@ const DeletedAurasPage = () => {
         e.stopPropagation();
         try {
             await restorePin(id).unwrap();
-            showToast("Aura restored successfully", "success");
+            showToast(t('aura.restored'), "success");
         } catch {
-            showToast("Failed to restore aura", "error");
+            showToast(t('aura.restoreFailed'), "error");
         }
     };
 
     return (
         <div className="w-full min-h-full bg-white dark:bg-black px-6 py-8 max-w-5xl mx-auto">
             <div className="mb-8">
-                <h1 className="text-black dark:text-white text-2xl font-bold">Recently deleted</h1>
+                <h1 className="text-black dark:text-white text-2xl font-bold">{t('deleted.title')}</h1>
                 <p className="text-gray-500 text-sm mt-1">
-                    Auras are permanently deleted after 30 days. Restore them before they're gone.
+                    {t('deleted.subtitle')}
                 </p>
             </div>
 
@@ -49,8 +51,8 @@ const DeletedAurasPage = () => {
                             <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
                         </svg>
                     </div>
-                    <p className="text-black dark:text-white font-medium">No recently deleted auras</p>
-                    <p className="text-gray-500 text-sm max-w-xs">Auras you delete will appear here for 30 days before being permanently removed.</p>
+                    <p className="text-black dark:text-white font-medium">{t('deleted.empty')}</p>
+                    <p className="text-gray-500 text-sm max-w-xs">{t('deleted.emptyDesc')}</p>
                 </div>
             )}
 
@@ -72,7 +74,7 @@ const DeletedAurasPage = () => {
                                             onClick={(e) => handleRestore(e, pin.id)}
                                             className="w-full px-3 py-2 bg-[#4ade80] hover:bg-[#22c55e] text-black text-xs font-semibold rounded-xl transition-colors"
                                         >
-                                            Restore
+                                            {t('deleted.restore')}
                                         </button>
                                     </div>
 
@@ -83,7 +85,7 @@ const DeletedAurasPage = () => {
                                                 ? "bg-orange-400 text-black"
                                                 : "bg-black/60 text-white"
                                         }`}>
-                                        {daysLeft}d left
+                                        {t('deleted.daysLeft', { count: daysLeft })}
                                     </div>
                                 </div>
                                 {pin.title && (

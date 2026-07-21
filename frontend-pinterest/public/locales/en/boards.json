@@ -32,6 +32,31 @@
     "noMoodboards": "No moodboards yet",
     "noPins": "No pins on this board yet"
   },
+  "saveModal": {
+    "title": "Choose Moodboard",
+    "done": "Done",
+    "noMoodboards": "No moodboards yet."
+  },
+  "preview": {
+    "notFound": "Board not found.",
+    "pins": "Pins",
+    "private": "Private",
+    "share": "Share",
+    "edit": "Edit",
+    "delete": "Delete",
+    "report": "Report",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "save": "Save",
+    "linkCopied": "Link copied to clipboard",
+    "boardUpdated": "Board updated",
+    "saveFailed": "Failed to save",
+    "deleteTitle": "Delete this board?",
+    "deleteDesc": "This action cannot be undone.",
+    "privateBoard": "Private board",
+    "noPins": "No pins yet",
+    "noPinsDesc": "Save pins to this board to see them here"
+  },
   "moodboard": {
     "create": "Create moodboard",
     "edit": "Edit moodboard",

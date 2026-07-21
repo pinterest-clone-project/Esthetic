@@ -88,5 +88,13 @@
     "copyLink": "Link to aura copied!",
     "restored": "Aura restored successfully",
     "restoreFailed": "Failed to restore aura"
+  },
+  "deleted": {
+    "title": "Recently deleted",
+    "subtitle": "Auras are permanently deleted after 30 days. Restore them before they're gone.",
+    "restore": "Restore",
+    "daysLeft": "{{count}}d left",
+    "empty": "No recently deleted auras",
+    "emptyDesc": "Auras you delete will appear here for 30 days before being permanently removed."
   }
 }
