@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink, Outlet } from "react-router";
 import logo from "@/assets/logo.png";
+import LanguageSwitcher from "@/components/header/LanguageSwitcher.tsx";
 
 const navItems = [
     { to: "/admin", label: "Dashboard", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" },
@@ -35,6 +36,9 @@ const AdminLayout = () => {
                         <span className="text-sm font-medium tracking-[-0.3px] text-white/60">
                             Admin
                         </span>
+                        <div className="ml-2">
+                            <LanguageSwitcher />
+                        </div>
                     </div>
                     <button
                         className="md:hidden text-white/50 hover:text-white"
@@ -88,14 +92,17 @@ const AdminLayout = () => {
                         <img src={logo} className="w-6 h-6" alt="Logo" />
                         <span className="font-medium tracking-[-0.3px] text-sm">Dashboard</span>
                     </div>
-                    <button
-                        onClick={() => setIsMobileMenuOpen(true)}
-                        className="p-2 -mr-2 text-white/60 hover:text-white"
-                    >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <LanguageSwitcher />
+                        <button
+                            onClick={() => setIsMobileMenuOpen(true)}
+                            className="p-2 -mr-2 text-white/60 hover:text-white"
+                        >
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
                 </header>
 
                 <main className="flex-1 overflow-y-auto scrollbar-hide px-4 py-6 sm:px-8 md:px-10 md:py-8">
