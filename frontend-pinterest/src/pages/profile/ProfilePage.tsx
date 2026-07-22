@@ -481,20 +481,7 @@ if (isLoading) return <p>{t('actions.loading', 'Loading...')}</p>;
                     <p className="text-red-400 text-sm mt-4">{apiError.detail ?? apiError.title}</p>
                 )}
 
-                <button
-                    type="button"
-                    onClick={() => navigate("/deleted-auras")}
-                    className="md:hidden mt-4 w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-gray-300 dark:border-white/10 text-gray-500 dark:text-gray-400 text-sm font-medium hover:border-gray-400 transition"
-                >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                        <polyline points="3 6 5 6 21 6"/>
-                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                        <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                    </svg>
-                    {t('profile.recentlyDeleted')}
-                </button>
-
-                <button
+<button
                     type="button"
                     onClick={handleLogout}
                     className="md:hidden mt-3 w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-red-500 text-red-500 text-sm font-medium hover:bg-red-500/10 transition"

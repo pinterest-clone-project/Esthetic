@@ -266,6 +266,35 @@
       "other": "Other"
     }
   },
+  "imageCropper": {
+    "title": "Crop Image",
+    "preset": "Preset",
+    "free": "Free",
+    "zoom": "Zoom",
+    "outputSize": "Output size (px)",
+    "lockAspect": "Lock aspect",
+    "width": "Width",
+    "height": "Height",
+    "auto": "Auto",
+    "outputInfo": "Output: {{w}} × {{h}}px — aspect {{ratio}}:1",
+    "naturalSize": "Leave blank to use the natural crop size",
+    "cancel": "Cancel",
+    "processing": "Processing...",
+    "applyCrop": "Apply Crop"
+  },
+  "comments": {
+    "title": "Comments",
+    "placeholder": "Add a comment...",
+    "replyPlaceholder": "Reply to {{username}}...",
+    "post": "Post",
+    "reply": "Reply",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "signInToComment": "Sign in to comment.",
+    "noComments": "No comments yet. Be the first!"
+  },
   "adminBanner": {
     "title": "Administrator access",
     "welcomePrefix": "Welcome back,",
@@ -291,6 +320,8 @@
     "title": "Settings",
     "theme": "Theme",
     "themeDesc": "Light / Dark mode",
+    "language": "Language",
+    "languageDesc": "Ukrainian / English",
     "adminPanel": "Admin panel",
     "adminPanelDesc": "Manage users and content",
     "recentlyDeleted": "Recently deleted",

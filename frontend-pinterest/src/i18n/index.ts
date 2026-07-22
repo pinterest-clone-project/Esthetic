@@ -13,7 +13,7 @@ i18n
     .init({
         fallbackLng: 'uk',
         supportedLngs: SUPPORTED_LANGUAGES,
-        ns: ['common', 'auth', 'pins', 'boards', 'admin'],
+        ns: ['common', 'auth', 'pins', 'boards', 'admin', 'static'],
         defaultNS: 'common',
         backend: {
             loadPath: '/locales/{{lng}}/{{ns}}.json',

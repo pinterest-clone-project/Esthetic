@@ -4,6 +4,7 @@ import Button from "@/components/button/Button.tsx";
 import logo from "@/assets/logo.png";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { parseError } from "@/hooks/useApiError.ts";
+import { useTranslation } from "react-i18next";
 
 interface ForgotPasswordFormProps {
     onSuccess?: (email: string) => void;
@@ -11,6 +12,7 @@ interface ForgotPasswordFormProps {
 }
 
 const ForgotPasswordForm = ({ onSuccess, onBack }: ForgotPasswordFormProps) => {
+    const { t } = useTranslation('auth');
     const [email, setEmail] = useState("");
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -38,18 +40,18 @@ const ForgotPasswordForm = ({ onSuccess, onBack }: ForgotPasswordFormProps) => {
             </div>
 
             <h2 className="text-2xl font-bold text-white dark:text-black tracking-[-0.5px]">
-                Forgot password
+                {t('forgotPassword.title')}
             </h2>
             <p className="text-sm text-white dark:text-black mb-5 text-center max-w-[320px]">
-                Enter your email and we will send you a confirmation code
+                {t('forgotPassword.subtitle')}
             </p>
 
             <form className="w-full space-y-3" onSubmit={handleSubmit}>
                 <div>
-                    <label className="block text-sm text-white dark:text-black mb-1">Your gmail</label>
+                    <label className="block text-sm text-white dark:text-black mb-1">{t('forgotPassword.emailLabel')}</label>
                     <input
                         type="email"
-                        placeholder="yourgmail@gmail.com"
+                        placeholder={t('forgotPassword.emailPlaceholder')}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -68,7 +70,7 @@ const ForgotPasswordForm = ({ onSuccess, onBack }: ForgotPasswordFormProps) => {
                     fullWidth
                     radius={5}
                 >
-                    {isLoading ? "Sending..." : "Send code"}
+                    {isLoading ? t('forgotPassword.sending') : t('forgotPassword.sendCode')}
                 </Button>
             </form>
 
@@ -78,7 +80,7 @@ const ForgotPasswordForm = ({ onSuccess, onBack }: ForgotPasswordFormProps) => {
                     onClick={onBack}
                     className="text-xs text-[var(--color-text-muted)] mt-4 hover:text-[var(--color-btn-primary)] transition-colors cursor-pointer"
                 >
-                    Back to login
+                    {t('forgotPassword.backToLogin')}
                 </button>
             )}
         </div>
