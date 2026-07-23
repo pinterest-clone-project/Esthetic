@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import type { IUser } from "@/types/user/IUser.ts";
@@ -35,6 +36,8 @@ const UsersTable = ({
                         onBlockClick,
                         onUnblock,
                     }: UsersTableProps) => {
+    const { t } = useTranslation('admin');
+
     return (
         <SkeletonTheme baseColor="#202020" highlightColor="#333333">
             <div className="bg-[#1a1a1a] border border-white/8 rounded-2xl overflow-hidden">
@@ -46,18 +49,18 @@ const UsersTable = ({
                                 className="text-left font-medium px-4 sm:px-5 py-3 cursor-pointer select-none hover:text-white/60"
                                 onClick={() => onSortChange(sortBy === "UserName" ? (sortDirection === "Asc" ? "UserName:Desc" : "UserName:Asc") : "UserName:Asc")}
                             >
-                                Користувач{sortBy === "UserName" ? (sortDirection === "Asc" ? " ↑" : " ↓") : ""}
+                                {t('users.table.user')}{sortBy === "UserName" ? (sortDirection === "Asc" ? " ↑" : " ↓") : ""}
                             </th>
-                            <th className="text-left font-medium px-4 sm:px-5 py-3 hidden sm:table-cell">Email</th>
-                            <th className="text-left font-medium px-4 sm:px-5 py-3 hidden lg:table-cell">Ролі</th>
-                            <th className="text-left font-medium px-4 sm:px-5 py-3">Статус</th>
+                            <th className="text-left font-medium px-4 sm:px-5 py-3 hidden sm:table-cell">{t('users.table.email')}</th>
+                            <th className="text-left font-medium px-4 sm:px-5 py-3 hidden lg:table-cell">{t('users.table.roles')}</th>
+                            <th className="text-left font-medium px-4 sm:px-5 py-3">{t('users.table.status')}</th>
                             <th
                                 className="text-left font-medium px-4 sm:px-5 py-3 hidden md:table-cell cursor-pointer select-none hover:text-white/60"
                                 onClick={() => onSortChange(sortBy === "CreatedAt" ? (sortDirection === "Asc" ? "CreatedAt:Desc" : "CreatedAt:Asc") : "CreatedAt:Desc")}
                             >
-                                Дата реєстрації{sortBy === "CreatedAt" ? (sortDirection === "Asc" ? " ↑" : " ↓") : ""}
+                                {t('users.table.registered')}{sortBy === "CreatedAt" ? (sortDirection === "Asc" ? " ↑" : " ↓") : ""}
                             </th>
-                            <th className="text-right font-medium px-4 sm:px-5 py-3">Дії</th>
+                            <th className="text-right font-medium px-4 sm:px-5 py-3">{t('users.table.actions')}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -81,7 +84,7 @@ const UsersTable = ({
                         {!isLoadingState && items?.length === 0 && (
                             <tr>
                                 <td colSpan={6} className="px-4 sm:px-5 py-8 text-center text-white/30 text-sm">
-                                    Користувачів не знайдено
+                                    {t('users.table.notFound')}
                                 </td>
                             </tr>
                         )}

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ReportStatus } from "@/types/report/ReportStatus.ts";
 import { useUpdateReportStatusMutation } from "@/services/reportService.ts";
 import { useBlockUserMutation } from "@/services/userService.ts";
@@ -11,6 +12,7 @@ import type { IUser } from "@/types/user/IUser.ts";
 import { REPORT_STATUS_STYLES } from "@/constants/common";
 
 export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
+    const { t, i18n } = useTranslation('admin');
     const [expanded, setExpanded] = useState(false);
     const [processing, setProcessing] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -52,7 +54,7 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
                     .unwrap()
                     .then(() => ({ id: r.id, ok: true }))
                     .catch((e) => {
-                        console.error(`Не вдалось оновити статус репорту ${r.id}:`, e);
+                        console.error(`Failed to update report status ${r.id}:`, e);
                         return { id: r.id, ok: false };
                     })
             )
@@ -66,7 +68,7 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
 
         const failedCount = results.length - okIds.size;
         if (failedCount > 0) {
-            setError(`Не вдалось оновити статус для ${failedCount} скарг(и)`);
+            setError(t('reports.errors.updateMultiple', { count: failedCount }));
         }
     };
 
@@ -89,8 +91,8 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
             setShowBlockModal(false);
             setBlockReason("");
         } catch (e) {
-            console.error("Помилка блокування користувача:", e);
-            setError("Не вдалось заблокувати користувача");
+            console.error("Block user error:", e);
+            setError(t('reports.errors.blockUserFailed'));
         }
     };
 
@@ -103,8 +105,8 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
             setIsDeleted(true);
             await setStatusForAll(ReportStatus.Resolved, (r) => r.status !== ReportStatus.Resolved);
         } catch (e) {
-            console.error("Помилка видалення піна:", e);
-            setError("Не вдалось видалити пін");
+            console.error("Delete pin error:", e);
+            setError(t('reports.errors.deletePinFailed'));
         } finally {
             setProcessing(false);
         }
@@ -118,7 +120,7 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
             await restorePin(group.pinId).unwrap();
             setIsDeleted(false);
         } catch {
-            setError("Unable to restore the pin");
+            setError(t('reports.errors.restorePinFailed'));
         } finally {
             setProcessing(false);
         }
@@ -131,8 +133,8 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
         try {
             await setStatusForAll(ReportStatus.Dismissed, (r) => r.status !== ReportStatus.Dismissed);
         } catch (e) {
-            console.error("Помилка відхилення скарг:", e);
-            setError("Не вдалось відхилити скарги");
+            console.error("Dismiss reports error:", e);
+            setError(t('reports.errors.dismissFailed'));
         } finally {
             setProcessing(false);
         }
@@ -151,7 +153,7 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
                         <img
                             src={`${APP_ENV.IMAGES_100_URL}${group.pinImage}`}
                             className="w-full h-full object-cover"
-                            alt="Пін"
+                            alt={t('reports.pin')}
                         />
                     ) : (
                         <svg className="w-5 h-5 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -163,7 +165,7 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
                 {/* Main Info */}
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                        <span className="text-xs text-white/40 font-medium">Автор:</span>
+                        <span className="text-xs text-white/40 font-medium">{t('reports.author')}</span>
                         <span className="text-sm font-semibold text-white/90 truncate">
                             {group.pinCreatorUserName ?? "—"}
                         </span>
@@ -172,7 +174,7 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
                         <svg className="w-3.5 h-3.5 text-white/30 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <span>{new Date(group.latestReportAt).toLocaleString("uk-UA")}</span>
+                        <span>{new Date(group.latestReportAt).toLocaleString(i18n.language)}</span>
                     </div>
                 </div>
 
@@ -184,7 +186,7 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
                         <ReportStatusBadge status={ReportStatus.Dismissed} />
                     ) : (
                         <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold tracking-wide ${REPORT_STATUS_STYLES[ReportStatus.Pending]}`}>
-                            {group.reportsCount} {group.reportsCount === 1 ? 'скарга' : group.reportsCount < 5 ? 'скарги' : 'скарг'}
+                            {t('reports.reportsCount', { count: group.reportsCount })}
                         </span>
                     )}
 
@@ -220,7 +222,7 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
                                         </span>
                                         <span className="text-[11px] text-white/30">•</span>
                                         <span className="text-[11px] text-white/40">
-                                            {new Date(report.createdAt).toLocaleString("uk-UA")}
+                                            {new Date(report.createdAt).toLocaleString(i18n.language)}
                                         </span>
                                     </div>
                                     <p className="text-xs text-amber-200/80 font-medium bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-md inline-block">
@@ -242,7 +244,7 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-white/70 bg-white/5 hover:bg-white/10 hover:text-white border border-white/10 transition-all"
                         >
-                            <span>Переглянути пін</span>
+                            <span>{t('reports.viewPin')}</span>
                             <svg className="w-3.5 h-3.5 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                             </svg>
@@ -254,7 +256,7 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
                                 disabled={processing}
                                 className="px-3.5 py-1.5 rounded-xl text-xs font-medium text-white/70 bg-white/5 hover:bg-white/10 hover:text-white transition-all disabled:opacity-40 border border-white/5"
                             >
-                                Залишити
+                                {t('reports.keep')}
                             </button>
                             <button
                                 onClick={() => setShowBlockModal(true)}
@@ -264,7 +266,7 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                                 </svg>
-                                <span>Заблокувати автора</span>
+                                <span>{t('reports.blockAuthor')}</span>
                             </button>
                             <button
                                 onClick={isDeleted ? handleRestorePin : () => setShowDeleteModal(true)}
@@ -274,7 +276,7 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                 </svg>
-                                <span>Видалити пін</span>
+                                <span>{t('reports.deletePin')}</span>
                             </button>
                         </div>
                     </div>
@@ -294,7 +296,18 @@ export const PinReportGroupCard = ({ group }: { group: IPinReportGroup }) => {
                     isBlocking={isBlocking}
                 />
             )}
-            {showDeleteModal && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4"><div className="w-full max-w-sm rounded-3xl border border-white/10 bg-[#161616] p-6"><h2 className="mb-2 text-lg font-semibold">Delete pin?</h2><p className="mb-5 text-sm text-white/55">The owner will not be able to restore this pin.</p><div className="flex gap-2"><button onClick={() => setShowDeleteModal(false)} className="flex-1 rounded-2xl bg-white/10 py-2.5">Cancel</button><button onClick={() => { setShowDeleteModal(false); void handleDeletePin(); }} className="flex-1 rounded-2xl bg-red-500 py-2.5">Delete</button></div></div></div>}
+            {showDeleteModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+                    <div className="w-full max-w-sm rounded-3xl border border-white/10 bg-[#161616] p-6">
+                        <h2 className="mb-2 text-lg font-semibold">{t('reports.deleteModal.title')}</h2>
+                        <p className="mb-5 text-sm text-white/55">{t('reports.deleteModal.desc')}</p>
+                        <div className="flex gap-2">
+                            <button onClick={() => setShowDeleteModal(false)} className="flex-1 rounded-2xl bg-white/10 py-2.5">{t('reports.deleteModal.cancel')}</button>
+                            <button onClick={() => { setShowDeleteModal(false); void handleDeletePin(); }} className="flex-1 rounded-2xl bg-red-500 py-2.5">{t('reports.deleteModal.confirm')}</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

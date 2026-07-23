@@ -1,36 +1,39 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import type { ITagResponse } from "@/types/tag/responses/ITagReponse.ts";
 import { useCreateTagMutation, useUpdateTagMutation } from "@/services/tagService.ts";
-import {useToast} from "@/components/ui/Toast/UseToast.ts";
+import { useToast } from "@/components/ui/Toast/UseToast.ts";
 
-const tagSchema = z.object({
-    name: z
-        .string()
-        .min(1, "Назва тегу обов'язкова")
-        .max(50, "Назва не може перевищувати 50 символів"),
-});
-
-type TagFormValues = z.infer<typeof tagSchema>;
+type TagFormValues = {
+    name: string;
+};
 
 interface TagFormModalProps {
     tag: ITagResponse | null;
     onClose: () => void;
 }
 
-const getErrorMessage = (err: unknown): string => {
+const getApiErrorMessage = (err: unknown): string => {
     if (err && typeof err === "object" && "data" in err) {
         const data = (err as { data?: { message?: string } }).data;
         if (data?.message) return data.message;
     }
-    return "Щось пішло не так. Спробуйте ще раз.";
+    return "";
 };
 
 const TagFormModal = ({ tag, onClose }: TagFormModalProps) => {
+    const { t } = useTranslation('admin');
     const isEdit = !!tag;
     const { showToast } = useToast();
+
+    const tagSchema = useMemo(() => z.object({
+        name: z.string()
+            .min(1, t('tags.formModal.required'))
+            .max(50, t('tags.formModal.maxLength')),
+    }), [t]);
 
     const {
         register,
@@ -55,16 +58,16 @@ const TagFormModal = ({ tag, onClose }: TagFormModalProps) => {
         try {
             if (isEdit) {
                 await updateTag({ id: tag.id, name: values.name }).unwrap();
-                showToast("Тег оновлено", "success");
+                showToast(t('toast.tagUpdated'), "success");
             } else {
                 const formData = new FormData();
                 formData.append("Name", values.name);
                 await createTag(formData).unwrap();
-                showToast("Тег створено", "success");
+                showToast(t('toast.tagCreated'), "success");
             }
             onClose();
         } catch (err) {
-            showToast(getErrorMessage(err), "error");
+            showToast(getApiErrorMessage(err) || t('tags.formModal.error'), "error");
         }
     };
 
@@ -72,14 +75,14 @@ const TagFormModal = ({ tag, onClose }: TagFormModalProps) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
             <div className="w-full max-w-sm bg-[#161616] border border-white/8 rounded-3xl p-6">
                 <h2 className="text-lg font-semibold mb-4">
-                    {isEdit ? "Редагувати тег" : "Новий тег"}
+                    {isEdit ? t('tags.edit') : t('tags.new')}
                 </h2>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
                     <div>
                         <input
                             {...register("name")}
                             type="text"
-                            placeholder="Назва тегу"
+                            placeholder={t('tags.name')}
                             className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50 transition-colors"
                         />
                         {errors.name && (
@@ -93,14 +96,14 @@ const TagFormModal = ({ tag, onClose }: TagFormModalProps) => {
                             onClick={onClose}
                             className="flex-1 py-2.5 rounded-2xl bg-white/8 text-white/70 hover:bg-white/15 transition-colors"
                         >
-                            Скасувати
+                            {t('tags.formModal.cancel')}
                         </button>
                         <button
                             type="submit"
                             disabled={isSubmitting}
                             className="flex-1 py-2.5 rounded-2xl bg-btn-primary text-white disabled:opacity-50 transition-colors"
                         >
-                            {isEdit ? "Зберегти" : "Створити"}
+                            {isEdit ? t('tags.formModal.save') : t('tags.formModal.create')}
                         </button>
                     </div>
                 </form>

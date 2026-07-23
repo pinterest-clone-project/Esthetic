@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -7,34 +8,38 @@ import { toSlug } from "@/utils/slugify.ts";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import type { ICategory } from "@/types/categories/ICategory.ts";
 import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
-import {APP_ENV} from "@/constants/env";
+import { APP_ENV } from "@/constants/env";
 
-const categorySchema = z.object({
-    name: z.string().min(1, "Назва обов'язкова").max(60, "Максимум 60 символів"),
-    description: z.string().max(300, "Максимум 300 символів").optional(),
-});
-
-type CategoryFormValues = z.infer<typeof categorySchema>;
+type CategoryFormValues = {
+    name: string;
+    description?: string;
+};
 
 interface CategoryFormModalProps {
     category: ICategory | null;
     onClose: () => void;
 }
 
-const getErrorMessage = (err: unknown): string => {
+const getApiErrorMessage = (err: unknown): string => {
     if (err && typeof err === "object" && "data" in err) {
         const data = (err as { data?: { message?: string } }).data;
         if (data?.message) return data.message;
     }
-    return "Щось пішло не так. Спробуйте ще раз.";
+    return "";
 };
 
 const getCategoryImageUrl = (image: string): string => `${APP_ENV.IMAGES_200_URL}${image}`;
 
 const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
+    const { t } = useTranslation('admin');
     const isEdit = !!category;
     const { showToast } = useToast();
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const categorySchema = useMemo(() => z.object({
+        name: z.string().min(1, t('categories.formModal.required')).max(60, t('categories.formModal.maxName')),
+        description: z.string().max(300, t('categories.formModal.maxDesc')).optional(),
+    }), [t]);
 
     const {
         register,
@@ -82,7 +87,7 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
 
     const onSubmit = async (values: CategoryFormValues) => {
         if (!isEdit && !imageFile) {
-            showToast("Оберіть зображення для категорії", "error");
+            showToast(t('categories.imageMissing'), "error");
             return;
         }
 
@@ -95,7 +100,7 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
                     description: values.description ?? "",
                     ...(imageFile ? { imageFile } : {}),
                 }).unwrap();
-                showToast("Категорію оновлено", "success");
+                showToast(t('toast.categoryUpdated'), "success");
             } else {
                 await createCategory({
                     name: values.name,
@@ -103,11 +108,11 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
                     description: values.description ?? "",
                     imageFile: imageFile!,
                 }).unwrap();
-                showToast("Категорію створено", "success");
+                showToast(t('toast.categoryCreated'), "success");
             }
             onClose();
         } catch (err) {
-            showToast(getErrorMessage(err), "error");
+            showToast(getApiErrorMessage(err) || t('categories.formModal.error'), "error");
         }
     };
 
@@ -116,7 +121,7 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
                 <div className="w-full max-w-md bg-[#161616] border border-white/8 rounded-3xl p-6">
                     <h2 className="text-lg font-semibold mb-4">
-                        {isEdit ? "Редагувати категорію" : "Нова категорія"}
+                        {isEdit ? t('categories.edit') : t('categories.new')}
                     </h2>
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
 
@@ -129,7 +134,7 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
                                 {imagePreview ? (
                                     <img src={imagePreview} alt="preview" className="w-full h-full object-cover" />
                                 ) : (
-                                    <span className="text-xs text-white/40">Фото</span>
+                                    <span className="text-xs text-white/40">{t('categories.formModal.photo')}</span>
                                 )}
                             </button>
                             <input
@@ -145,7 +150,7 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
                             <input
                                 {...register("name")}
                                 type="text"
-                                placeholder="Назва категорії"
+                                placeholder={t('categories.name')}
                                 className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50 transition-colors"
                             />
                             {errors.name && <p className="text-xs text-red-400 mt-1">{errors.name.message}</p>}
@@ -153,14 +158,14 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
 
                         {slug && (
                             <p className="text-xs text-white/30 px-1">
-                                Посилання: <span className="text-white/50">/{slug}</span>
+                                {t('categories.slugLink', { slug })}
                             </p>
                         )}
 
                         <div>
                             <textarea
                                 {...register("description")}
-                                placeholder="Опис (необов'язково)"
+                                placeholder={t('categories.formModal.descPlaceholder')}
                                 rows={3}
                                 className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50 transition-colors resize-none"
                             />
@@ -175,14 +180,14 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
                                 onClick={onClose}
                                 className="flex-1 py-2.5 rounded-2xl bg-white/8 text-white/70 hover:bg-white/15 transition-colors"
                             >
-                                Скасувати
+                                {t('categories.formModal.cancel')}
                             </button>
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
                                 className="flex-1 py-2.5 rounded-2xl bg-btn-primary text-white disabled:opacity-50 transition-colors"
                             >
-                                {isEdit ? "Зберегти" : "Створити"}
+                                {isEdit ? t('categories.formModal.save') : t('categories.formModal.create')}
                             </button>
                         </div>
                     </form>
