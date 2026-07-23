@@ -1,21 +1,103 @@
 {
   "title": "Адмін-панель",
   "dashboard": "Дашборд",
+  "nav": {
+    "dashboard": "Dashboard",
+    "backToSite": "На сайт"
+  },
   "sections": {
     "pins": "Піни",
     "boards": "Дошки",
     "categories": "Категорії",
     "tags": "Теги",
-    "users": "Користувачі"
+    "users": "Користувачі",
+    "reports": "Скарги",
+    "dashboard": "Dashboard"
+  },
+  "pageSize": "{{size}} на сторінці",
+  "sort": {
+    "newestFirst": "Спочатку нові",
+    "oldestFirst": "Спочатку старі",
+    "nameAZ": "За назвою (А-Я)",
+    "nameZA": "За назвою (Я-А)",
+    "mostPins": "Найбільше пінів",
+    "leastPins": "Найменше пінів",
+    "mostLikes": "Найбільше лайків",
+    "mostComments": "Найбільше коментарів",
+    "mostReports": "Найбільше скарг",
+    "leastReports": "Найменше скарг",
+    "registeredNewest": "Дата реєстрації (нові спочатку)",
+    "registeredOldest": "Дата реєстрації (старі спочатку)",
+    "nameForward": "Ім'я (А → Я)",
+    "nameBackward": "Ім'я (Я → А)"
   },
   "pins": {
     "edit": "Редагувати пін",
     "delete": "Видалити пін",
-    "search": "Пошук за назвою, описом, джерелом, категорією чи тегом..."
+    "search": "Пошук за назвою, описом, джерелом, категорією чи тегом...",
+    "untitled": "Без назви",
+    "likesCount_one": "{{count}} лайк",
+    "likesCount_few": "{{count}} лайки",
+    "likesCount_many": "{{count}} лайків",
+    "likesCount_other": "{{count}} лайків",
+    "commentsCount_one": "{{count}} коментар",
+    "commentsCount_few": "{{count}} коментарі",
+    "commentsCount_many": "{{count}} коментарів",
+    "commentsCount_other": "{{count}} коментарів",
+    "tagsCount_one": "{{count}} тег",
+    "tagsCount_few": "{{count}} теги",
+    "tagsCount_many": "{{count}} тегів",
+    "tagsCount_other": "{{count}} тегів",
+    "viewCreator": "Переглянути автора піну",
+    "deleteModal": {
+      "title": "Видалити пін?",
+      "untitled": "Без назви",
+      "desc": "«{{name}}» буде видалено і власник не зможе відновити його.",
+      "cancel": "Скасувати",
+      "confirm": "Видалити",
+      "success": "Пін видалено",
+      "error": "Не вдалось видалити пін."
+    },
+    "formModal": {
+      "title": "Редагувати пін",
+      "changePhoto": "Змінити фото",
+      "category": "Категорія",
+      "addTag": "Додати тег",
+      "cancel": "Скасувати",
+      "save": "Зберегти",
+      "error": "Не вдалося зберегти пін. Спробуйте ще раз."
+    }
   },
   "boards": {
     "edit": "Редагувати дошку",
-    "search": "Пошук за назвою або описом дошки..."
+    "search": "Пошук за назвою або описом дошки...",
+    "untitled": "Без назви",
+    "private": "Приватна",
+    "public": "Публічна",
+    "archived": "Архівована",
+    "pinsCount_one": "{{count}} пін",
+    "pinsCount_few": "{{count}} піни",
+    "pinsCount_many": "{{count}} пінів",
+    "pinsCount_other": "{{count}} пінів",
+    "editAriaLabel": "Редагувати дошку",
+    "deleteModal": {
+      "title": "Видалити дошку?",
+      "desc": "Дошка «{{name}}» буде видалена остаточно, разом з усіма пінами в ній. Цю дію не можна скасувати.",
+      "cancel": "Скасувати",
+      "confirm": "Видалити",
+      "success": "Дошку видалено",
+      "error": "Не вдалося видалити дошку. Спробуйте ще раз."
+    },
+    "formModal": {
+      "cover": "Обкладинка",
+      "boardName": "Назва дошки",
+      "desc": "Опис",
+      "private": "Приватна дошка",
+      "cancel": "Скасувати",
+      "save": "Зберегти",
+      "required": "Назва дошки обов'язкова",
+      "error": "Не вдалося зберегти дошку. Спробуйте ще раз."
+    }
   },
   "categories": {
     "new": "Нова категорія",
@@ -23,20 +105,146 @@
     "delete": "Видалити категорію?",
     "name": "Назва категорії",
     "search": "Пошук за назвою чи slug...",
-    "imageMissing": "Оберіть зображення для категорії"
+    "imageMissing": "Оберіть зображення для категорії",
+    "pinsCount_one": "{{count}} пін",
+    "pinsCount_few": "{{count}} піни",
+    "pinsCount_many": "{{count}} пінів",
+    "pinsCount_other": "{{count}} пінів",
+    "editAriaLabel": "Редагувати категорію",
+    "deleteAriaLabel": "Видалити категорію",
+    "slugLink": "Посилання: /{{slug}}",
+    "formModal": {
+      "photo": "Фото",
+      "descPlaceholder": "Опис (необов'язково)",
+      "required": "Назва обов'язкова",
+      "maxName": "Максимум 60 символів",
+      "maxDesc": "Максимум 300 символів",
+      "error": "Щось пішло не так. Спробуйте ще раз.",
+      "cancel": "Скасувати",
+      "save": "Зберегти",
+      "create": "Створити"
+    },
+    "deleteModal": {
+      "title": "Видалити категорію?",
+      "desc": "Категорія «{{name}}» буде видалена остаточно. Цю дію не можна скасувати.",
+      "cancel": "Скасувати",
+      "confirm": "Видалити"
+    }
   },
   "tags": {
     "new": "Новий тег",
     "edit": "Редагувати тег",
     "delete": "Видалити тег?",
     "name": "Назва тегу",
-    "search": "Пошук за назвою тегу..."
+    "search": "Пошук за назвою тегу...",
+    "pinsCount_one": "{{count}} пін",
+    "pinsCount_few": "{{count}} піни",
+    "pinsCount_many": "{{count}} пінів",
+    "pinsCount_other": "{{count}} пінів",
+    "editAriaLabel": "Редагувати тег",
+    "deleteAriaLabel": "Видалити тег",
+    "formModal": {
+      "required": "Назва тегу обов'язкова",
+      "maxLength": "Назва не може перевищувати 50 символів",
+      "error": "Щось пішло не так. Спробуйте ще раз.",
+      "cancel": "Скасувати",
+      "save": "Зберегти",
+      "create": "Створити"
+    },
+    "deleteModal": {
+      "title": "Видалити тег?",
+      "desc": "Тег «{{name}}» буде видалено остаточно. Цю дію не можна скасувати.",
+      "cancel": "Скасувати",
+      "confirm": "Видалити"
+    }
   },
   "users": {
     "search": "Пошук за іменем або email...",
     "block": "Заблокувати",
     "unblock": "Розблокувати",
-    "blockReason": "Причина блокування..."
+    "blockReason": "Причина блокування...",
+    "you": "(ви)",
+    "table": {
+      "user": "Користувач",
+      "email": "Email",
+      "roles": "Ролі",
+      "status": "Статус",
+      "registered": "Дата реєстрації",
+      "actions": "Дії",
+      "notFound": "Користувачів не знайдено"
+    },
+    "status": {
+      "blocked": "Заблокований",
+      "active": "Активний"
+    },
+    "cannotBlockSelf": "Не можна заблокувати себе",
+    "cannotBlockAdmin": "Не можна заблокувати адміністратора",
+    "blockModal": {
+      "title": "Блокувати {{username}}?",
+      "subtitle": "Вкажіть причину блокування, її побачить тільки адміністрація",
+      "placeholder": "Причина блокування...",
+      "cancel": "Скасувати",
+      "confirm": "Заблокувати"
+    },
+    "reasonModal": {
+      "title": "Причина блокування",
+      "close": "Закрити"
+    },
+    "filters": {
+      "all": "Усі",
+      "active": "Активні",
+      "blocked": "Заблоковані"
+    },
+    "pagination": {
+      "info": "Сторінка {{page}} з {{totalPages}} · Всього {{totalCount}}",
+      "prev": "Назад",
+      "next": "Далі"
+    }
+  },
+  "reports": {
+    "statusFilter": {
+      "all": "Усі статуси"
+    },
+    "status": {
+      "Pending": "Очікує",
+      "Reviewed": "Розглянуто",
+      "Resolved": "Вирішено",
+      "Dismissed": "Відхилено"
+    },
+    "pin": "Пін",
+    "author": "Автор:",
+    "reportsCount_one": "{{count}} скарга",
+    "reportsCount_few": "{{count}} скарги",
+    "reportsCount_many": "{{count}} скарг",
+    "reportsCount_other": "{{count}} скарг",
+    "viewPin": "Переглянути пін",
+    "keep": "Залишити",
+    "blockAuthor": "Заблокувати автора",
+    "deletePin": "Видалити пін",
+    "deleteModal": {
+      "title": "Видалити пін?",
+      "desc": "Власник не зможе відновити цей пін.",
+      "cancel": "Скасувати",
+      "confirm": "Видалити"
+    },
+    "errors": {
+      "updateMultiple": "Не вдалось оновити статус для {{count}} скарг(и)",
+      "blockUserFailed": "Не вдалось заблокувати користувача",
+      "deletePinFailed": "Не вдалось видалити пін",
+      "restorePinFailed": "Не вдалось відновити пін",
+      "dismissFailed": "Не вдалось відхилити скарги"
+    }
+  },
+  "dashboardPage": {
+    "title": "Dashboard",
+    "stats": "Загальна статистика",
+    "users": "Користувачі",
+    "auras": "Аури",
+    "tags": "Теги",
+    "categories": "Категорії",
+    "activityTitle": "Аналітика активності",
+    "newUsers": "Нові користувачі (за тиждень)",
+    "newAuras": "Створені Аури (за тиждень)"
   },
   "toast": {
     "categoryCreated": "Категорію створено",
@@ -47,6 +255,7 @@
     "tagDeleted": "Тег видалено",
     "pinUpdated": "Пін оновлено",
     "pinDeleted": "Пін видалено",
-    "boardUpdated": "Дошку оновлено"
+    "boardUpdated": "Дошку оновлено",
+    "boardDeleted": "Дошку видалено"
   }
 }

@@ -1,0 +1,103 @@
+{
+  "about": {
+    "hero": "Where style finds its home",
+    "heroSub": "We're building the world's most expressive visual platform — a place where inspiration becomes identity.",
+    "stats": {
+      "activeCreators": "Active creators",
+      "pinsSaved": "Pins saved",
+      "countries": "Countries",
+      "appRating": "App rating"
+    },
+    "missionLabel": "Our Mission",
+    "missionTitle": "Inspire the world, one aesthetic at a time",
+    "missionText1": "Esthetic was founded on a simple belief — that visual inspiration should be personal, beautiful, and borderless. We built tools that let you capture your style, discover new ideas, and connect with people who see the world the way you do.",
+    "missionText2": "From mood boards to auras, every feature is designed to help you express your aesthetic identity — not someone else's algorithm.",
+    "valuesLabel": "What we stand for",
+    "valuesTitle": "Our values",
+    "values": {
+      "creativeFreedom": {
+        "title": "Creative Freedom",
+        "text": "We believe everyone deserves a space to explore their aesthetic without limits. Esthetic is built around you — your taste, your vision, your world."
+      },
+      "globalCommunity": {
+        "title": "Global Community",
+        "text": "Millions of creators, designers, and everyday dreamers use Esthetic to discover and share ideas across borders, cultures, and styles."
+      },
+      "curatedQuality": {
+        "title": "Curated Quality",
+        "text": "Every pin, board, and aura on Esthetic is shaped by taste. Our smart recommendations surface content that matches your unique aesthetic profile."
+      },
+      "privacyFirst": {
+        "title": "Privacy First",
+        "text": "Your data is yours. We give you full control over what's public, what's private, and how your creative identity is expressed online."
+      }
+    },
+    "storyLabel": "Our Story",
+    "storyTitle": "Built by creators, for creators",
+    "storyText1": "Esthetic started as a student project with a bold idea: what if social media was designed around taste instead of trends? What if the feed felt like your own curated gallery?",
+    "storyText2": "Today, that idea has grown into a global platform — but the core philosophy hasn't changed. Every decision we make starts with the creator."
+  },
+  "business": {
+    "badge": "Esthetic for Business",
+    "hero": "Grow your brand where taste lives",
+    "heroSub": "Reach millions of design-conscious consumers through the most visually curated platform on the internet.",
+    "getStartedFree": "Get started free",
+    "featuresLabel": "What you get",
+    "featuresTitle": "Everything your brand needs",
+    "features": {
+      "analytics": { "title": "Analytics Dashboard", "text": "Track reach, engagement, and saves across your pins and boards. Understand what resonates with your audience and optimize your content strategy." },
+      "promotedPins": { "title": "Promoted Pins", "text": "Put your brand in front of the right audience. Our smart targeting delivers your content to users whose aesthetic matches your brand identity." },
+      "creatorPartnerships": { "title": "Creator Partnerships", "text": "Connect with top creators on Esthetic whose style aligns with your brand. Build authentic collaborations that feel native to the platform." },
+      "brandCollections": { "title": "Brand Collections", "text": "Curate branded mood boards and aura collections that showcase your products in context — the way your customers actually imagine using them." },
+      "globalReach": { "title": "Global Reach", "text": "Esthetic users span 120+ countries. Reach design-conscious consumers worldwide with localized campaigns and multi-language pin support." },
+      "brandSafety": { "title": "Brand Safety", "text": "Your brand appears in a curated, high-quality environment. Our content moderation ensures your ads are never placed next to inappropriate content." }
+    },
+    "whyLabel": "Why Esthetic",
+    "whyTitle": "The audience you've been looking for",
+    "whyText1": "Esthetic users are actively seeking inspiration — they're in a discovery mindset, open to new brands and products that match their aesthetic. That makes them the most receptive audience for visual marketing.",
+    "whyText2": "Unlike other platforms, our users save and revisit content. Your promoted pin doesn't disappear in a feed — it becomes part of someone's mood board.",
+    "pricingLabel": "Pricing",
+    "pricingTitle": "Simple, transparent plans",
+    "mostPopular": "Most popular",
+    "perMonth": "/ month",
+    "contactUs": "Contact us",
+    "getStarted": "Get started",
+    "plans": {
+      "starter": { "name": "Starter", "price": "$49", "desc": "Perfect for small brands and independent creators just starting out.", "features": ["Up to 10 promoted pins", "Basic analytics", "Email support", "1 brand account"] },
+      "growth": { "name": "Growth", "price": "$149", "desc": "For growing brands ready to scale their presence on Esthetic.", "features": ["Up to 50 promoted pins", "Advanced analytics", "Priority support", "3 brand accounts", "Creator matching"] },
+      "enterprise": { "name": "Enterprise", "price": "Custom", "desc": "Full-scale solutions for agencies and large brands.", "features": ["Unlimited promoted pins", "Full analytics suite", "Dedicated manager", "Unlimited accounts", "API access", "Custom integrations"] }
+    },
+    "ctaTitle": "Ready to grow on Esthetic?",
+    "ctaDesc": "Join thousands of brands already reaching their audience through visual storytelling.",
+    "startForFree": "Start for free"
+  },
+  "news": {
+    "badge": "Esthetic News",
+    "hero": "What's new at Esthetic",
+    "heroSub": "Product updates, community stories, and behind-the-scenes from the team building your favourite visual platform.",
+    "featured": "Featured",
+    "latest": "Latest",
+    "readMore": "Read more",
+    "readMoreArrow": "Read more →",
+    "featured_article": {
+      "tag": "Product Update",
+      "date": "July 10, 2026",
+      "title": "Introducing Aura 2.0 — Your Creative Identity, Reimagined",
+      "excerpt": "We've completely rebuilt the Aura experience from the ground up. New layouts, smarter recommendations, and a powerful new editor that puts your aesthetic front and center."
+    },
+    "articles": [
+      {
+        "tag": "For Business",
+        "date": "June 28, 2026",
+        "title": "Promoted Pins Now Available in 40 New Markets",
+        "excerpt": "Esthetic for Business is expanding. Brands in Europe, Asia-Pacific, and Latin America can now run promoted pin campaigns directly from the dashboard."
+      },
+      {
+        "tag": "Design",
+        "date": "June 20, 2026",
+        "title": "Dark Mode Gets a Refresh — Deeper, Crisper, Better",
+        "excerpt": "We listened to your feedback. The new dark mode is more consistent, easier on the eyes, and beautifully paired with our updated color system."
+      }
+    ]
+  }
+}

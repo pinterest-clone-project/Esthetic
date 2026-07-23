@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import Cropper, { type Area } from "react-easy-crop";
 import Modal from "./Modal.tsx";
+import { useTranslation } from "react-i18next";
 
 interface ImageCropperModalProps {
     imageSrc: string;
@@ -45,14 +46,6 @@ const createCroppedImage = async (
     });
 };
 
-const PRESETS = [
-    { label: "Free", width: null, height: null },
-    { label: "1:1", width: 1000, height: 1000 },
-    { label: "4:3", width: 1200, height: 900 },
-    { label: "3:4", width: 900, height: 1200 },
-    { label: "16:9", width: 1600, height: 900 },
-];
-
 const ImageCropperModal = ({
     imageSrc,
     onCrop,
@@ -60,6 +53,16 @@ const ImageCropperModal = ({
     defaultWidth,
     defaultHeight,
 }: ImageCropperModalProps) => {
+    const { t } = useTranslation('common');
+
+    const PRESETS = [
+        { label: t('imageCropper.free'), width: null, height: null },
+        { label: "1:1", width: 1000, height: 1000 },
+        { label: "4:3", width: 1200, height: 900 },
+        { label: "3:4", width: 900, height: 1200 },
+        { label: "16:9", width: 1600, height: 900 },
+    ];
+
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
@@ -129,7 +132,7 @@ const ImageCropperModal = ({
             <div className="flex flex-col gap-5">
                 {/* Header */}
                 <div className="flex items-center justify-between">
-                    <h3 className="text-black dark:text-white text-base font-semibold">Crop Image</h3>
+                    <h3 className="text-black dark:text-white text-base font-semibold">{t('imageCropper.title')}</h3>
                     <button
                         onClick={onClose}
                         className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 transition-colors"
@@ -142,7 +145,7 @@ const ImageCropperModal = ({
 
                 {/* Presets */}
                 <div className="flex items-center gap-2">
-                    <span className="text-gray-500 text-xs shrink-0">Preset</span>
+                    <span className="text-gray-500 text-xs shrink-0">{t('imageCropper.preset')}</span>
                     <div className="flex gap-1.5 flex-wrap">
                         {PRESETS.map(p => {
                             const active = p.width === null
@@ -188,7 +191,7 @@ const ImageCropperModal = ({
 
                 {/* Zoom slider */}
                 <div className="flex items-center gap-3">
-                    <span className="text-gray-500 text-xs shrink-0">Zoom</span>
+                    <span className="text-gray-500 text-xs shrink-0">{t('imageCropper.zoom')}</span>
                     <input
                         type="range"
                         min={1}
@@ -204,9 +207,9 @@ const ImageCropperModal = ({
                 {/* Output size */}
                 <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
-                        <span className="text-gray-500 text-xs">Output size (px)</span>
+                        <span className="text-gray-500 text-xs">{t('imageCropper.outputSize')}</span>
                         <label className="flex items-center gap-2 cursor-pointer">
-                            <span className="text-gray-500 text-xs">Lock aspect</span>
+                            <span className="text-gray-500 text-xs">{t('imageCropper.lockAspect')}</span>
                             <div
                                 onClick={() => setLockAspect(p => !p)}
                                 className={`w-8 h-4 rounded-full transition-colors relative cursor-pointer
@@ -222,12 +225,12 @@ const ImageCropperModal = ({
                     <div className="flex items-center gap-2">
                         {/* Width */}
                         <div className="flex-1 flex flex-col gap-1">
-                            <label className="text-gray-500 text-[10px]">Width</label>
+                            <label className="text-gray-500 text-[10px]">{t('imageCropper.width')}</label>
                             <input
                                 type="number"
                                 value={outputWidth}
                                 onChange={e => handleWidthChange(e.target.value)}
-                                placeholder="Auto"
+                                placeholder={t('imageCropper.auto')}
                                 min={1}
                                 className="bg-white dark:bg-[#1e1e1e] border border-gray-200 dark:border-white/10 rounded-md px-2.5 h-8 text-black dark:text-white text-xs
                                     placeholder:text-gray-400 outline-none focus:border-[#4ade80] transition-colors"
@@ -248,12 +251,12 @@ const ImageCropperModal = ({
 
                         {/* Height */}
                         <div className="flex-1 flex flex-col gap-1">
-                            <label className="text-gray-500 text-[10px]">Height</label>
+                            <label className="text-gray-500 text-[10px]">{t('imageCropper.height')}</label>
                             <input
                                 type="number"
                                 value={outputHeight}
                                 onChange={e => setOutputHeight(e.target.value)}
-                                placeholder="Auto"
+                                placeholder={t('imageCropper.auto')}
                                 min={1}
                                 className="bg-white dark:bg-[#1e1e1e] border border-gray-200 dark:border-white/10 rounded-md px-2.5 h-8 text-black dark:text-white text-xs
                                     placeholder:text-gray-400 outline-none focus:border-[#4ade80] transition-colors"
@@ -276,13 +279,12 @@ const ImageCropperModal = ({
 
                     {parsedWidth && parsedHeight && (
                         <p className="text-[10px] text-gray-400">
-                            Output: {parsedWidth} × {parsedHeight}px
-                            {" — "}aspect {(parsedWidth / parsedHeight).toFixed(2)}:1
+                            {t('imageCropper.outputInfo', { w: parsedWidth, h: parsedHeight, ratio: (parsedWidth! / parsedHeight!).toFixed(2) })}
                         </p>
                     )}
                     {(!outputWidth || !outputHeight) && (
                         <p className="text-[10px] text-gray-400">
-                            Leave blank to use the natural crop size
+                            {t('imageCropper.naturalSize')}
                         </p>
                     )}
                 </div>
@@ -293,14 +295,14 @@ const ImageCropperModal = ({
                         onClick={onClose}
                         className="flex-1 h-10 rounded-xl border border-gray-200 dark:border-white/10 text-gray-500 dark:text-gray-400 text-sm hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
                     >
-                        Cancel
+                        {t('imageCropper.cancel')}
                     </button>
                     <button
                         onClick={handleConfirm}
                         disabled={isProcessing}
                         className="flex-1 h-10 rounded-xl bg-[#4ade80] hover:bg-[#22c55e] disabled:opacity-50 text-black text-sm font-semibold transition-colors"
                     >
-                        {isProcessing ? "Processing..." : "Apply Crop"}
+                        {isProcessing ? t('imageCropper.processing') : t('imageCropper.applyCrop')}
                     </button>
                 </div>
             </div>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { APP_ENV } from "@/constants/env";
 import type { IUser } from "@/types/user/IUser.ts";
 
@@ -22,6 +23,8 @@ const UserTableRow = ({
                           onBlockClick,
                           onUnblock,
                       }: UserTableRowProps) => {
+    const { t, i18n } = useTranslation('admin');
+
     return (
         <tr className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
             <td className="px-4 sm:px-5 py-3">
@@ -38,7 +41,7 @@ const UserTableRow = ({
                     <div className="min-w-0">
                         <p className="text-white/90 tracking-[-0.2px] truncate">
                             {user.userName}
-                            {isSelf && <span className="ml-1.5 text-[10px] text-white/30">(ви)</span>}
+                            {isSelf && <span className="ml-1.5 text-[10px] text-white/30">{t('users.you')}</span>}
                         </p>
                         {(user.firstName || user.lastName) && (
                             <p className="text-white/30 text-xs truncate">
@@ -78,21 +81,21 @@ const UserTableRow = ({
                             onClick={() => onShowReason(user)}
                             className="inline-flex items-center px-2.5 py-1 rounded-full text-xs bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors"
                         >
-                            Заблокований
+                            {t('users.status.blocked')}
                         </button>
                     ) : (
                         <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs bg-red-500/10 text-red-400">
-                            Заблокований
+                            {t('users.status.blocked')}
                         </span>
                     )
                 ) : (
                     <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs bg-btn-primary/10 text-btn-primary">
-                        Активний
+                        {t('users.status.active')}
                     </span>
                 )}
             </td>
             <td className="px-4 sm:px-5 py-3 hidden md:table-cell text-white/40">
-                {new Date(user.createdAt).toLocaleDateString("uk-UA")}
+                {new Date(user.createdAt).toLocaleDateString(i18n.language)}
             </td>
             <td className="px-4 sm:px-5 py-3 text-right">
                 {user.isBlocked ? (
@@ -101,21 +104,21 @@ const UserTableRow = ({
                         disabled={isUnblocking}
                         className="text-xs px-3 py-1.5 rounded-xl bg-white/8 text-white/80 hover:bg-white/15 transition-colors disabled:opacity-50"
                     >
-                        Розблокувати
+                        {t('users.unblock')}
                     </button>
                 ) : blockAllowed ? (
                     <button
                         onClick={() => onBlockClick(user)}
                         className="text-xs px-3 py-1.5 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors"
                     >
-                        Блокувати
+                        {t('users.block')}
                     </button>
                 ) : (
                     <span
                         className="text-xs px-3 py-1.5 rounded-xl bg-white/4 text-white/20 cursor-not-allowed select-none"
-                        title={isSelf ? "Не можна заблокувати себе" : isAdminUser ? "Не можна заблокувати адміністратора" : undefined}
+                        title={isSelf ? t('users.cannotBlockSelf') : isAdminUser ? t('users.cannotBlockAdmin') : undefined}
                     >
-                        Блокувати
+                        {t('users.block')}
                     </span>
                 )}
             </td>

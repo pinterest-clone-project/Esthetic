@@ -1,15 +1,7 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import SortSelect from "@/components/common/SortSelect.tsx";
 import PageSizeSelect from "@/components/common/PageSizeSelect.tsx";
-
-const BOARD_SORT_OPTIONS = [
-    { value: "CreatedAt:Desc", label: "Спочатку нові" },
-    { value: "CreatedAt:Asc", label: "Спочатку старі" },
-    { value: "Title:Asc", label: "За назвою (А-Я)" },
-    { value: "Title:Desc", label: "За назвою (Я-А)" },
-    { value: "PinsCount:Desc", label: "Найбільше пінів" },
-    { value: "PinsCount:Asc", label: "Найменше пінів" },
-];
 
 interface BoardsFiltersProps {
     search: string;
@@ -21,7 +13,17 @@ interface BoardsFiltersProps {
 }
 
 const BoardsFilters = ({ search, onSearchChange, sortValue, onSortChange, pageSize, onPageSizeChange }: BoardsFiltersProps) => {
+    const { t } = useTranslation('admin');
     const [localSearch, setLocalSearch] = useState(search);
+
+    const BOARD_SORT_OPTIONS = [
+        { value: "CreatedAt:Desc", label: t('sort.newestFirst') },
+        { value: "CreatedAt:Asc", label: t('sort.oldestFirst') },
+        { value: "Title:Asc", label: t('sort.nameAZ') },
+        { value: "Title:Desc", label: t('sort.nameZA') },
+        { value: "PinsCount:Desc", label: t('sort.mostPins') },
+        { value: "PinsCount:Asc", label: t('sort.leastPins') },
+    ];
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -39,7 +41,7 @@ const BoardsFilters = ({ search, onSearchChange, sortValue, onSortChange, pageSi
                 type="text"
                 value={localSearch}
                 onChange={(e) => setLocalSearch(e.target.value)}
-                placeholder="Пошук за назвою або описом дошки..."
+                placeholder={t('boards.search')}
                 className="w-full sm:w-80 bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50 transition-colors placeholder:text-white/30"
             />
             <SortSelect value={sortValue} options={BOARD_SORT_OPTIONS} onChange={onSortChange} />

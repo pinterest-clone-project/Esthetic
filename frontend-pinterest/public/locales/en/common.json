@@ -25,8 +25,7 @@
     "done": "Done",
     "report": "Report",
     "signUp": "Sign Up",
-    "logIn": "Log in",
-    "continue": "Continue"
+    "logIn": "Log in"
   },
   "nav": {
     "home": "Home",
@@ -203,6 +202,16 @@
     "toast": {
       "updated": "Profile updated successfully",
       "failed": "Failed to update profile"
+    },
+    "validation": {
+      "firstName": "First name is required",
+      "lastName": "Last name is required",
+      "usernameMin": "Minimum 3 characters",
+      "usernameMax": "Maximum 20 characters",
+      "usernamePattern": "Only Latin letters, digits and _",
+      "email": "Invalid email format",
+      "bioMax": "Maximum 500 characters",
+      "phone": "Invalid phone format"
     }
   },
   "notifications": {
@@ -266,6 +275,35 @@
       "other": "Other"
     }
   },
+  "imageCropper": {
+    "title": "Crop Image",
+    "preset": "Preset",
+    "free": "Free",
+    "zoom": "Zoom",
+    "outputSize": "Output size (px)",
+    "lockAspect": "Lock aspect",
+    "width": "Width",
+    "height": "Height",
+    "auto": "Auto",
+    "outputInfo": "Output: {{w}} × {{h}}px — aspect {{ratio}}:1",
+    "naturalSize": "Leave blank to use the natural crop size",
+    "cancel": "Cancel",
+    "processing": "Processing...",
+    "applyCrop": "Apply Crop"
+  },
+  "comments": {
+    "title": "Comments",
+    "placeholder": "Add a comment...",
+    "replyPlaceholder": "Reply to {{username}}...",
+    "post": "Post",
+    "reply": "Reply",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "signInToComment": "Sign in to comment.",
+    "noComments": "No comments yet. Be the first!"
+  },
   "adminBanner": {
     "title": "Administrator access",
     "welcomePrefix": "Welcome back,",
@@ -291,6 +329,8 @@
     "title": "Settings",
     "theme": "Theme",
     "themeDesc": "Light / Dark mode",
+    "language": "Language",
+    "languageDesc": "Ukrainian / English",
     "adminPanel": "Admin panel",
     "adminPanelDesc": "Manage users and content",
     "recentlyDeleted": "Recently deleted",

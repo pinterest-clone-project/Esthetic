@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -27,31 +27,41 @@ const COUNTRY_NAMES = getCountries()
     .map((c) => c.name)
     .filter((name) => name !== "Russian Federation (the)");
 
-
-const schema = z.object({
-    firstName:   z.string().min(1, "Імʼя обовʼязкове").max(50).or(z.literal("")).optional(),
-    lastName:    z.string().min(1, "Прізвище обовʼязкове").max(50).or(z.literal("")).optional(),
-    userName:    z.string().min(3, "Мінімум 3 символи").max(20, "Максимум 20 символів").regex(/^[a-zA-Z0-9_]+$/, "Лише латинські літери, цифри та _").or(z.literal("")).optional(),
-    email:       z.string().email("Невірний формат email").or(z.literal("")).optional(),
-    bio:         z.string().max(500, "Максимум 500 символів").or(z.literal("")).optional(),
-    phoneNumber: z
-        .string()
-        .regex(/^\+?[0-9\s\-()]{7,20}$/, "Невірний формат телефону")
-        .or(z.literal(""))
-        .optional(),
-    gender:      z.number().optional(),
-    birthDate:   z.string().optional(),
-    isPrivate:   z.boolean().optional(),
-    imageFile:   z.instanceof(File).optional(),
-    country:     z.string().max(100).or(z.literal("")).optional(),
-    language:    z.string().max(50).or(z.literal("")).optional(),
-    categoryIds: z.array(z.string()).optional(),
-});
-
-type FormValues = z.infer<typeof schema>;
+type FormValues = {
+    firstName?: string;
+    lastName?: string;
+    userName?: string;
+    email?: string;
+    bio?: string;
+    phoneNumber?: string;
+    gender?: number;
+    birthDate?: string;
+    isPrivate?: boolean;
+    imageFile?: File;
+    country?: string;
+    language?: string;
+    categoryIds?: string[];
+};
 
 const ProfilePage = () => {
     const { t, i18n } = useTranslation('common');
+
+    const schema = useMemo(() => z.object({
+        firstName:   z.string().min(1, t('profile.validation.firstName')).max(50).or(z.literal("")).optional(),
+        lastName:    z.string().min(1, t('profile.validation.lastName')).max(50).or(z.literal("")).optional(),
+        userName:    z.string().min(3, t('profile.validation.usernameMin')).max(20, t('profile.validation.usernameMax')).regex(/^[a-zA-Z0-9_]+$/, t('profile.validation.usernamePattern')).or(z.literal("")).optional(),
+        email:       z.string().email(t('profile.validation.email')).or(z.literal("")).optional(),
+        bio:         z.string().max(500, t('profile.validation.bioMax')).or(z.literal("")).optional(),
+        phoneNumber: z.string().regex(/^\+?[0-9\s\-()]{7,20}$/, t('profile.validation.phone')).or(z.literal("")).optional(),
+        gender:      z.number().optional(),
+        birthDate:   z.string().optional(),
+        isPrivate:   z.boolean().optional(),
+        imageFile:   z.instanceof(File).optional(),
+        country:     z.string().max(100).or(z.literal("")).optional(),
+        language:    z.string().max(50).or(z.literal("")).optional(),
+        categoryIds: z.array(z.string()).optional(),
+    }), [t]);
+
     const { data: me, isLoading } = useGetMeQuery();
     const [editProfile, { isLoading: isSaving, error: rawError }] = useEditProfileMutation();
     const { showToast } = useToast();
@@ -481,20 +491,7 @@ if (isLoading) return <p>{t('actions.loading', 'Loading...')}</p>;
                     <p className="text-red-400 text-sm mt-4">{apiError.detail ?? apiError.title}</p>
                 )}
 
-                <button
-                    type="button"
-                    onClick={() => navigate("/deleted-auras")}
-                    className="md:hidden mt-4 w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-gray-300 dark:border-white/10 text-gray-500 dark:text-gray-400 text-sm font-medium hover:border-gray-400 transition"
-                >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                        <polyline points="3 6 5 6 21 6"/>
-                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                        <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                    </svg>
-                    {t('profile.recentlyDeleted')}
-                </button>
-
-                <button
+<button
                     type="button"
                     onClick={handleLogout}
                     className="md:hidden mt-3 w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-red-500 text-red-500 text-sm font-medium hover:bg-red-500/10 transition"

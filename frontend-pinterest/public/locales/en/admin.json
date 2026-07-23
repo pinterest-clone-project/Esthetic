@@ -1,21 +1,95 @@
 {
   "title": "Admin panel",
   "dashboard": "Dashboard",
+  "nav": {
+    "dashboard": "Dashboard",
+    "backToSite": "Back to site"
+  },
   "sections": {
     "pins": "Pins",
     "boards": "Boards",
     "categories": "Categories",
     "tags": "Tags",
-    "users": "Users"
+    "users": "Users",
+    "reports": "Reports",
+    "dashboard": "Dashboard"
+  },
+  "pageSize": "{{size}} per page",
+  "sort": {
+    "newestFirst": "Newest first",
+    "oldestFirst": "Oldest first",
+    "nameAZ": "By name (A-Z)",
+    "nameZA": "By name (Z-A)",
+    "mostPins": "Most pins",
+    "leastPins": "Fewest pins",
+    "mostLikes": "Most likes",
+    "mostComments": "Most comments",
+    "mostReports": "Most reports",
+    "leastReports": "Fewest reports",
+    "registeredNewest": "Registration date (newest first)",
+    "registeredOldest": "Registration date (oldest first)",
+    "nameForward": "Name (A → Z)",
+    "nameBackward": "Name (Z → A)"
   },
   "pins": {
     "edit": "Edit pin",
     "delete": "Delete pin",
-    "search": "Search by name, description, source, category or tag..."
+    "search": "Search by name, description, source, category or tag...",
+    "untitled": "Untitled",
+    "likesCount_one": "{{count}} like",
+    "likesCount_other": "{{count}} likes",
+    "commentsCount_one": "{{count}} comment",
+    "commentsCount_other": "{{count}} comments",
+    "tagsCount_one": "{{count}} tag",
+    "tagsCount_other": "{{count}} tags",
+    "viewCreator": "View pin creator",
+    "deleteModal": {
+      "title": "Delete pin?",
+      "untitled": "Untitled pin",
+      "desc": "\"{{name}}\" will be removed and its owner will not be able to restore it.",
+      "cancel": "Cancel",
+      "confirm": "Delete",
+      "success": "Pin deleted",
+      "error": "Unable to delete the pin."
+    },
+    "formModal": {
+      "title": "Edit pin",
+      "changePhoto": "Change photo",
+      "category": "Category",
+      "addTag": "Add tag",
+      "cancel": "Cancel",
+      "save": "Save",
+      "error": "Failed to save the pin. Please try again."
+    }
   },
   "boards": {
     "edit": "Edit board",
-    "search": "Search by board name or description..."
+    "search": "Search by board name or description...",
+    "untitled": "Untitled",
+    "private": "Private",
+    "public": "Public",
+    "archived": "Archived",
+    "pinsCount_one": "{{count}} pin",
+    "pinsCount_other": "{{count}} pins",
+    "editAriaLabel": "Edit board",
+    "deleteModal": {
+      "title": "Delete board?",
+      "desc": "Board \"{{name}}\" will be permanently deleted along with all its pins. This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete",
+      "success": "Board deleted",
+      "error": "Failed to delete the board. Please try again."
+    },
+    "formModal": {
+      "cover": "Cover",
+      "boardName": "Board name",
+      "desc": "Description",
+      "private": "Private board",
+      "cancel": "Cancel",
+      "save": "Save",
+      "required": "Board name is required",
+      "error": "Failed to save the board. Please try again."
+    }
   },
   "categories": {
     "new": "New category",
@@ -23,20 +97,140 @@
     "delete": "Delete category?",
     "name": "Category name",
     "search": "Search by name or slug...",
-    "imageMissing": "Please select an image for the category"
+    "imageMissing": "Please select an image for the category",
+    "pinsCount_one": "{{count}} pin",
+    "pinsCount_other": "{{count}} pins",
+    "editAriaLabel": "Edit category",
+    "deleteAriaLabel": "Delete category",
+    "slugLink": "Link: /{{slug}}",
+    "formModal": {
+      "photo": "Photo",
+      "descPlaceholder": "Description (optional)",
+      "required": "Name is required",
+      "maxName": "Maximum 60 characters",
+      "maxDesc": "Maximum 300 characters",
+      "error": "Something went wrong. Please try again.",
+      "cancel": "Cancel",
+      "save": "Save",
+      "create": "Create"
+    },
+    "deleteModal": {
+      "title": "Delete category?",
+      "desc": "Category \"{{name}}\" will be permanently deleted. This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    }
   },
   "tags": {
     "new": "New tag",
     "edit": "Edit tag",
     "delete": "Delete tag?",
     "name": "Tag name",
-    "search": "Search by tag name..."
+    "search": "Search by tag name...",
+    "pinsCount_one": "{{count}} pin",
+    "pinsCount_other": "{{count}} pins",
+    "editAriaLabel": "Edit tag",
+    "deleteAriaLabel": "Delete tag",
+    "formModal": {
+      "required": "Tag name is required",
+      "maxLength": "Name cannot exceed 50 characters",
+      "error": "Something went wrong. Please try again.",
+      "cancel": "Cancel",
+      "save": "Save",
+      "create": "Create"
+    },
+    "deleteModal": {
+      "title": "Delete tag?",
+      "desc": "Tag \"{{name}}\" will be permanently deleted. This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    }
   },
   "users": {
     "search": "Search by name or email...",
     "block": "Block",
     "unblock": "Unblock",
-    "blockReason": "Block reason..."
+    "blockReason": "Block reason...",
+    "you": "(you)",
+    "table": {
+      "user": "User",
+      "email": "Email",
+      "roles": "Roles",
+      "status": "Status",
+      "registered": "Registered",
+      "actions": "Actions",
+      "notFound": "No users found"
+    },
+    "status": {
+      "blocked": "Blocked",
+      "active": "Active"
+    },
+    "cannotBlockSelf": "Cannot block yourself",
+    "cannotBlockAdmin": "Cannot block an administrator",
+    "blockModal": {
+      "title": "Block {{username}}?",
+      "subtitle": "Provide a block reason, visible only to the administration",
+      "placeholder": "Block reason...",
+      "cancel": "Cancel",
+      "confirm": "Block"
+    },
+    "reasonModal": {
+      "title": "Block reason",
+      "close": "Close"
+    },
+    "filters": {
+      "all": "All",
+      "active": "Active",
+      "blocked": "Blocked"
+    },
+    "pagination": {
+      "info": "Page {{page}} of {{totalPages}} · Total {{totalCount}}",
+      "prev": "Back",
+      "next": "Next"
+    }
+  },
+  "reports": {
+    "statusFilter": {
+      "all": "All statuses"
+    },
+    "status": {
+      "Pending": "Pending",
+      "Reviewed": "Reviewed",
+      "Resolved": "Resolved",
+      "Dismissed": "Dismissed"
+    },
+    "pin": "Pin",
+    "author": "Author:",
+    "reportsCount_one": "{{count}} report",
+    "reportsCount_other": "{{count}} reports",
+    "viewPin": "View pin",
+    "keep": "Keep",
+    "blockAuthor": "Block author",
+    "deletePin": "Delete pin",
+    "deleteModal": {
+      "title": "Delete pin?",
+      "desc": "The owner will not be able to restore this pin.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "errors": {
+      "updateMultiple": "Failed to update status for {{count}} report(s)",
+      "blockUserFailed": "Failed to block user",
+      "deletePinFailed": "Failed to delete pin",
+      "restorePinFailed": "Unable to restore the pin",
+      "dismissFailed": "Failed to dismiss reports"
+    }
+  },
+  "dashboardPage": {
+    "title": "Dashboard",
+    "stats": "General statistics",
+    "users": "Users",
+    "auras": "Auras",
+    "tags": "Tags",
+    "categories": "Categories",
+    "activityTitle": "Activity analytics",
+    "newUsers": "New users (per week)",
+    "newAuras": "Created Auras (per week)"
   },
   "toast": {
     "categoryCreated": "Category created",
@@ -47,6 +241,7 @@
     "tagDeleted": "Tag deleted",
     "pinUpdated": "Pin updated",
     "pinDeleted": "Pin deleted",
-    "boardUpdated": "Board updated"
+    "boardUpdated": "Board updated",
+    "boardDeleted": "Board deleted"
   }
 }

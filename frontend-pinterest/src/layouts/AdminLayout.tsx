@@ -1,18 +1,21 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { NavLink, Outlet } from "react-router";
 import logo from "@/assets/logo.png";
+import LanguageSwitcher from "@/components/header/LanguageSwitcher.tsx";
 
-const navItems = [
-    { to: "/admin", label: "Dashboard", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" },
-    { to: "/admin/users", label: "Користувачі", icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" },
-    { to: "/admin/pins", label: "Піни", icon: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" },
-    { to: "/admin/boards", label: "Дошки", icon: "M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2H7a2 2 0 00-2 2v2" },
-    { to: "/admin/tags", label: "Теги", icon: "M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-5 5a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 10V5a2 2 0 012-2z" },
-    { to: "/admin/categories", label: "Категорії", icon: "M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" },
-    { to: "/admin/reports", label: "Скарги", icon: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" },
+const NAV_ITEMS = [
+    { to: "/admin", key: "sections.dashboard", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" },
+    { to: "/admin/users", key: "sections.users", icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" },
+    { to: "/admin/pins", key: "sections.pins", icon: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" },
+    { to: "/admin/boards", key: "sections.boards", icon: "M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2H7a2 2 0 00-2 2v2" },
+    { to: "/admin/tags", key: "sections.tags", icon: "M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-5 5a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 10V5a2 2 0 012-2z" },
+    { to: "/admin/categories", key: "sections.categories", icon: "M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" },
+    { to: "/admin/reports", key: "sections.reports", icon: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" },
 ];
 
 const AdminLayout = () => {
+    const { t } = useTranslation('admin');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     return (
@@ -35,6 +38,9 @@ const AdminLayout = () => {
                         <span className="text-sm font-medium tracking-[-0.3px] text-white/60">
                             Admin
                         </span>
+                        <div className="ml-2">
+                            <LanguageSwitcher />
+                        </div>
                     </div>
                     <button
                         className="md:hidden text-white/50 hover:text-white"
@@ -47,7 +53,7 @@ const AdminLayout = () => {
                 </div>
 
                 <nav className="flex flex-col gap-1">
-                    {navItems.map(({ to, label, icon }) => (
+                    {NAV_ITEMS.map(({ to, key, icon }) => (
                         <NavLink
                             key={to}
                             to={to}
@@ -64,7 +70,7 @@ const AdminLayout = () => {
                             <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d={icon} />
                             </svg>
-                            {label}
+                            {t(key)}
                         </NavLink>
                     ))}
                 </nav>
@@ -77,7 +83,7 @@ const AdminLayout = () => {
                         <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                         </svg>
-                        На сайт
+                        {t('nav.backToSite')}
                     </NavLink>
                 </div>
             </aside>
@@ -86,16 +92,19 @@ const AdminLayout = () => {
                 <header className="md:hidden flex items-center justify-between px-4 h-14 border-b border-white/10 shrink-0 bg-[#121212]">
                     <div className="flex items-center gap-2">
                         <img src={logo} className="w-6 h-6" alt="Logo" />
-                        <span className="font-medium tracking-[-0.3px] text-sm">Dashboard</span>
+                        <span className="font-medium tracking-[-0.3px] text-sm">{t('nav.dashboard')}</span>
                     </div>
-                    <button
-                        onClick={() => setIsMobileMenuOpen(true)}
-                        className="p-2 -mr-2 text-white/60 hover:text-white"
-                    >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <LanguageSwitcher />
+                        <button
+                            onClick={() => setIsMobileMenuOpen(true)}
+                            className="p-2 -mr-2 text-white/60 hover:text-white"
+                        >
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
                 </header>
 
                 <main className="flex-1 overflow-y-auto scrollbar-hide px-4 py-6 sm:px-8 md:px-10 md:py-8">

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useGetAllCategoriesQuery } from "@/services/categoryService.ts";
 import { useGetAllTagsQuery } from "@/services/tagService.ts";
 import { useUpdatePinMutation } from "@/services/pinService.ts";
@@ -17,10 +18,11 @@ const getErrorMessage = (err: unknown): string => {
         const data = (err as { data?: { message?: string } }).data;
         if (data?.message) return data.message;
     }
-    return "Не вдалося зберегти пін. Спробуйте ще раз.";
+    return "";
 };
 
 const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
+    const { t } = useTranslation('admin');
     const { showToast } = useToast();
     const [updatePin, { isLoading }] = useUpdatePinMutation();
     const { data: categories } = useGetAllCategoriesQuery();
@@ -88,17 +90,17 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
                 tagIds,
                 imageFile: imageFile ?? undefined,
             }).unwrap();
-            showToast("Пін оновлено", "success");
+            showToast(t('toast.pinUpdated'), "success");
             onClose();
         } catch (err) {
-            showToast(getErrorMessage(err), "error");
+            showToast(getErrorMessage(err) || t('pins.formModal.error'), "error");
         }
     };
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-6">
             <form onSubmit={handleSave} className="w-full max-w-2xl max-h-full overflow-y-auto bg-[#161616] border border-white/8 rounded-3xl p-6">
-                <h2 className="text-lg font-semibold mb-5">Редагувати пін</h2>
+                <h2 className="text-lg font-semibold mb-5">{t('pins.formModal.title')}</h2>
 
                 <div className="grid gap-5 md:grid-cols-[160px_1fr]">
                     <div className="flex flex-col gap-3">
@@ -106,7 +108,7 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
                             {previewUrl && <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />}
                         </div>
                         <label className="text-center text-xs px-3 py-2 rounded-xl bg-white/8 text-white/70 hover:bg-white/15 cursor-pointer transition-colors">
-                            Змінити фото
+                            {t('pins.formModal.changePhoto')}
                             <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
                         </label>
                     </div>
@@ -128,12 +130,12 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
                             <input
                                 value={categorySearch}
                                 onChange={(event) => setCategorySearch(event.target.value)}
-                                placeholder={categoryId && categories?.find(c => c.id === categoryId)?.name || "Категорія"}
+                                placeholder={categoryId && categories?.find(c => c.id === categoryId)?.name || t('pins.formModal.category')}
                                 className="bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50 w-full"
                             />
                             {categorySearch && (
                                 <div className="absolute z-10 w-full mt-1 bg-[#1a1a1a] border border-white/8 rounded-2xl max-h-48 overflow-y-auto">
-                                    {categories?.filter(c => 
+                                    {categories?.filter(c =>
                                         c.name.toLowerCase().includes(categorySearch.toLowerCase())
                                     ).map((category) => (
                                         <button
@@ -167,13 +169,13 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
                         <input
                             value={tagSearch}
                             onChange={(event) => setTagSearch(event.target.value)}
-                            placeholder="Додати тег"
+                            placeholder={t('pins.formModal.addTag')}
                             className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50"
                         />
                         {tagSearch && (
                             <div className="absolute z-10 w-full mt-1 bg-[#1a1a1a] border border-white/8 rounded-2xl max-h-48 overflow-y-auto">
-                                {availableTags.filter(t => 
-                                    t.name.toLowerCase().includes(tagSearch.toLowerCase())
+                                {availableTags.filter(tag =>
+                                    tag.name.toLowerCase().includes(tagSearch.toLowerCase())
                                 ).map((tag) => (
                                     <button
                                         key={tag.id}
@@ -206,10 +208,10 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
 
                 <div className="flex gap-2 mt-6">
                     <button type="button" onClick={onClose} className="flex-1 py-2.5 rounded-2xl bg-white/8 text-white/70 hover:bg-white/15 transition-colors">
-                        Скасувати
+                        {t('pins.formModal.cancel')}
                     </button>
                     <button type="submit" disabled={isLoading} className="flex-1 py-2.5 rounded-2xl bg-btn-primary text-white disabled:opacity-50 transition-colors">
-                        Зберегти
+                        {t('pins.formModal.save')}
                     </button>
                 </div>
             </form>

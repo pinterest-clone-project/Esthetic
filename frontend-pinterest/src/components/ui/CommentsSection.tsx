@@ -4,12 +4,14 @@ import { useGetMeQuery } from "@/services/accountService.ts";
 import { useCommentRealtime } from "@/hooks/useCommentRealtime.ts";
 import { APP_ENV } from "@/constants/env";
 import {useNavigate} from "react-router";
+import { useTranslation } from "react-i18next";
 
 interface CommentsSectionProps {
     pinId: string;
 }
 
 const CommentsSection = ({ pinId }: CommentsSectionProps) => {
+    const { t, i18n } = useTranslation('common');
     const { data: comments, isLoading } = useGetCommentsQuery(pinId);
     const [createComment, { isLoading: isSubmitting }] = useCreateCommentMutation();
     const [updateComment, { isLoading: isUpdating }] = useUpdateCommentMutation();
@@ -113,7 +115,7 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
                             {comment.username ?? "User"}
                         </button>
                         <span className="text-gray-500 text-[10px]">
-                            {new Date(comment.createdAt).toLocaleDateString("en-GB", {
+                            {new Date(comment.createdAt).toLocaleDateString(i18n.language, {
                                 day: "numeric", month: "short"
                             })}
                         </span>
@@ -138,14 +140,14 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
                                     className="bg-[#4ade80] hover:bg-[#22c55e] disabled:opacity-40 disabled:cursor-not-allowed
                                         text-black text-[10px] font-semibold px-2 py-0.5 rounded transition-colors"
                                 >
-                                    {isUpdating ? "..." : "Save"}
+                                    {isUpdating ? "..." : t('comments.save')}
                                 </button>
                                 <button
                                     type="button"
                                     onClick={cancelEdit}
                                     className="text-gray-500 hover:text-gray-700 text-[10px] px-2 py-0.5"
                                 >
-                                    Cancel
+                                    {t('comments.cancel')}
                                 </button>
                             </div>
                         </form>
@@ -162,7 +164,7 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
                                 onClick={() => startReply(comment.id)}
                                 className="text-gray-500 hover:text-[#4ade80] text-[10px]"
                             >
-                                Reply
+                                {t('comments.reply')}
                             </button>
                         )}
                         {isOwn && !isEditing && (
@@ -171,13 +173,13 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
                                     onClick={() => startEdit(comment)}
                                     className="text-gray-500 hover:text-blue-400 text-[10px]"
                                 >
-                                    Edit
+                                    {t('comments.edit')}
                                 </button>
                                 <button
                                     onClick={() => handleDelete(comment.id)}
                                     className="text-gray-500 hover:text-red-400 text-[10px]"
                                 >
-                                    Delete
+                                    {t('comments.delete')}
                                 </button>
                             </>
                         )}
@@ -204,7 +206,7 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
                                     type="text"
                                     value={replyText}
                                     onChange={e => setReplyText(e.target.value)}
-                                    placeholder={`Reply to ${comment.username}...`}
+                                    placeholder={t('comments.replyPlaceholder', { username: comment.username })}
                                     maxLength={500}
                                     className="w-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10
                                         rounded-lg px-2 py-1 text-black dark:text-white text-xs
@@ -218,14 +220,14 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
                                         className="bg-[#4ade80] hover:bg-[#22c55e] disabled:opacity-40 disabled:cursor-not-allowed
                                             text-black text-[10px] font-semibold px-2 py-0.5 rounded transition-colors"
                                     >
-                                        {isSubmitting ? "..." : "Reply"}
+                                        {isSubmitting ? "..." : t('comments.reply')}
                                     </button>
                                     <button
                                         type="button"
                                         onClick={cancelReply}
                                         className="text-gray-500 hover:text-gray-700 text-[10px] px-2 py-0.5"
                                     >
-                                        Cancel
+                                        {t('comments.cancel')}
                                     </button>
                                 </div>
                             </div>
@@ -246,7 +248,7 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
     return (
         <div className="flex flex-col gap-4">
             <h3 className="text-black dark:text-white text-sm font-semibold">
-                Comments {comments?.length ? `(${comments.length})` : ""}
+                {t('comments.title')} {comments?.length ? `(${comments.length})` : ""}
             </h3>
 
             {/* Input */}
@@ -272,7 +274,7 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
                             type="text"
                             value={text}
                             onChange={e => setText(e.target.value)}
-                            placeholder="Add a comment..."
+                            placeholder={t('comments.placeholder')}
                             maxLength={500}
                             className="flex-1 min-w-0 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10
                                 rounded-xl px-3 h-8 text-black dark:text-white text-xs
@@ -284,12 +286,12 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
                             className="bg-[#4ade80] hover:bg-[#22c55e] disabled:opacity-40 disabled:cursor-not-allowed
                                 text-black text-xs font-semibold px-3 h-8 rounded-xl transition-colors shrink-0"
                         >
-                            {isSubmitting ? "..." : "Post"}
+                            {isSubmitting ? "..." : t('comments.post')}
                         </button>
                     </div>
                 </form>
             ) : (
-                <p className="text-gray-500 text-xs">Sign in to comment.</p>
+                <p className="text-gray-500 text-xs">{t('comments.signInToComment')}</p>
             )}
 
             {/* List */}
@@ -300,7 +302,7 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
             )}
 
             {!isLoading && !comments?.length && (
-                <p className="text-gray-500 text-xs text-center py-4">No comments yet. Be the first!</p>
+                <p className="text-gray-500 text-xs text-center py-4">{t('comments.noComments')}</p>
             )}
 
             <div className="flex flex-col gap-4">
