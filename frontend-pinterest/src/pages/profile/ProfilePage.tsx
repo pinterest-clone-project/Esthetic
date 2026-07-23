@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -27,31 +27,41 @@ const COUNTRY_NAMES = getCountries()
     .map((c) => c.name)
     .filter((name) => name !== "Russian Federation (the)");
 
-
-const schema = z.object({
-    firstName:   z.string().min(1, "Імʼя обовʼязкове").max(50).or(z.literal("")).optional(),
-    lastName:    z.string().min(1, "Прізвище обовʼязкове").max(50).or(z.literal("")).optional(),
-    userName:    z.string().min(3, "Мінімум 3 символи").max(20, "Максимум 20 символів").regex(/^[a-zA-Z0-9_]+$/, "Лише латинські літери, цифри та _").or(z.literal("")).optional(),
-    email:       z.string().email("Невірний формат email").or(z.literal("")).optional(),
-    bio:         z.string().max(500, "Максимум 500 символів").or(z.literal("")).optional(),
-    phoneNumber: z
-        .string()
-        .regex(/^\+?[0-9\s\-()]{7,20}$/, "Невірний формат телефону")
-        .or(z.literal(""))
-        .optional(),
-    gender:      z.number().optional(),
-    birthDate:   z.string().optional(),
-    isPrivate:   z.boolean().optional(),
-    imageFile:   z.instanceof(File).optional(),
-    country:     z.string().max(100).or(z.literal("")).optional(),
-    language:    z.string().max(50).or(z.literal("")).optional(),
-    categoryIds: z.array(z.string()).optional(),
-});
-
-type FormValues = z.infer<typeof schema>;
+type FormValues = {
+    firstName?: string;
+    lastName?: string;
+    userName?: string;
+    email?: string;
+    bio?: string;
+    phoneNumber?: string;
+    gender?: number;
+    birthDate?: string;
+    isPrivate?: boolean;
+    imageFile?: File;
+    country?: string;
+    language?: string;
+    categoryIds?: string[];
+};
 
 const ProfilePage = () => {
     const { t, i18n } = useTranslation('common');
+
+    const schema = useMemo(() => z.object({
+        firstName:   z.string().min(1, t('profile.validation.firstName')).max(50).or(z.literal("")).optional(),
+        lastName:    z.string().min(1, t('profile.validation.lastName')).max(50).or(z.literal("")).optional(),
+        userName:    z.string().min(3, t('profile.validation.usernameMin')).max(20, t('profile.validation.usernameMax')).regex(/^[a-zA-Z0-9_]+$/, t('profile.validation.usernamePattern')).or(z.literal("")).optional(),
+        email:       z.string().email(t('profile.validation.email')).or(z.literal("")).optional(),
+        bio:         z.string().max(500, t('profile.validation.bioMax')).or(z.literal("")).optional(),
+        phoneNumber: z.string().regex(/^\+?[0-9\s\-()]{7,20}$/, t('profile.validation.phone')).or(z.literal("")).optional(),
+        gender:      z.number().optional(),
+        birthDate:   z.string().optional(),
+        isPrivate:   z.boolean().optional(),
+        imageFile:   z.instanceof(File).optional(),
+        country:     z.string().max(100).or(z.literal("")).optional(),
+        language:    z.string().max(50).or(z.literal("")).optional(),
+        categoryIds: z.array(z.string()).optional(),
+    }), [t]);
+
     const { data: me, isLoading } = useGetMeQuery();
     const [editProfile, { isLoading: isSaving, error: rawError }] = useEditProfileMutation();
     const { showToast } = useToast();

@@ -25,8 +25,7 @@
     "done": "Done",
     "report": "Report",
     "signUp": "Sign Up",
-    "logIn": "Log in",
-    "continue": "Continue"
+    "logIn": "Log in"
   },
   "nav": {
     "home": "Home",
@@ -203,6 +202,16 @@
     "toast": {
       "updated": "Profile updated successfully",
       "failed": "Failed to update profile"
+    },
+    "validation": {
+      "firstName": "First name is required",
+      "lastName": "Last name is required",
+      "usernameMin": "Minimum 3 characters",
+      "usernameMax": "Maximum 20 characters",
+      "usernamePattern": "Only Latin letters, digits and _",
+      "email": "Invalid email format",
+      "bioMax": "Maximum 500 characters",
+      "phone": "Invalid phone format"
     }
   },
   "notifications": {
