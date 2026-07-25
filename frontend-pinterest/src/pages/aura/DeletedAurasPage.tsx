@@ -2,6 +2,7 @@ import { useGetDeletedPinsQuery, useRestorePinMutation } from "@/services/pinSer
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import { APP_ENV } from "@/constants/env";
 import { useTranslation } from "react-i18next";
+import { TrashIcon } from "@/components/ui/Icons.tsx";
 
 const getDaysRemaining = (deletedAt: string) => {
     const deleted = new Date(deletedAt);
@@ -44,12 +45,7 @@ const DeletedAurasPage = () => {
             {!isLoading && !pins?.length && (
                 <div className="flex flex-col items-center gap-4 py-20 text-center">
                     <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-400">
-                            <polyline points="3 6 5 6 21 6"/>
-                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                            <path d="M10 11v6M14 11v6"/>
-                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                        </svg>
+                        <TrashIcon size={28} strokeWidth={1.5} className="text-gray-400" />
                     </div>
                     <p className="text-black dark:text-white font-medium">{t('deleted.empty')}</p>
                     <p className="text-gray-500 text-sm max-w-xs">{t('deleted.emptyDesc')}</p>

@@ -11,14 +11,7 @@ import { moodboardService } from "@/services/moodboardService.ts";
 
 import { APP_ENV } from "@/constants/env";
 import SaveModal from "./SaveModal.tsx";
-
-const ShareIcon = () => (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-        <polyline points="15 3 21 3 21 9" />
-        <line x1="10" y1="14" x2="21" y2="3" />
-    </svg>
-);
+import { HeartIcon, DownloadIcon, TrashIcon, ExternalLinkIcon } from "@/components/ui/Icons.tsx";
 
 const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string }) => {
     const { t } = useTranslation('common');
@@ -152,9 +145,7 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
                     onClick={handleLike}
                     className="flex items-center gap-1 bg-black/50 hover:bg-black/70 rounded-full px-2 py-1 transition-colors cursor-pointer"
                 >
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill={liked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-colors ${liked ? 'text-[#4ade80]' : 'text-white/70'}`}>
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                    </svg>
+                    <HeartIcon size={11} filled={liked} className={`transition-colors ${liked ? 'text-[#4ade80]' : 'text-white/70'}`} />
                     <span className="text-white text-[10px]">{likesCount}</span>
                 </button>
             </div>
@@ -211,17 +202,13 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
                     className="flex items-center justify-center w-7 h-7 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors"
                     title={t('actions.download')}
                 >
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                        <polyline points="7 10 12 15 17 10"/>
-                        <line x1="12" y1="15" x2="12" y2="3"/>
-                    </svg>
+                    <DownloadIcon />
                 </button>
                 <button
                     onClick={handleShare}
                     className="flex items-center justify-center w-7 h-7 bg-black/50 hover:bg-black/70 text-[#4ade80] rounded-full transition-colors"
                 >
-                    <ShareIcon />
+                    <ExternalLinkIcon />
                 </button>
             </div>
 
@@ -246,11 +233,7 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
                             onClick={(e) => { e.stopPropagation(); setConfirmDeleteOpen(false); navigate("/deleted-auras"); }}
                             className="flex items-center gap-1.5 text-[11px] text-[#4ade80] hover:underline mb-4"
                         >
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <polyline points="3 6 5 6 21 6"/>
-                                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                            </svg>
+                            <TrashIcon size={11} />
                             {t('confirm.viewRecentlyDeleted')}
                         </button>
                         <div className="flex gap-2">

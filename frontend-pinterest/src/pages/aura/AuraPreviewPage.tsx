@@ -11,6 +11,7 @@ import ReportModal from "@/components/ui/ReportModal.tsx";
 import {useTrackViewPinMutation} from "@/services/recommendedPinsService.ts";
 import {useToast} from "@/components/ui/Toast/UseToast.ts";
 import { useTranslation } from "react-i18next";
+import { HeartIcon, CommentIcon, SaveBoardIcon, DownloadIcon, ShareIcon, EditIcon, TrashIcon, ReportIcon, DotsVerticalIcon } from "@/components/ui/Icons.tsx";
 
 const AuraPreviewPage = () => {
     const { t, i18n } = useTranslation('pins');
@@ -131,15 +132,11 @@ const AuraPreviewPage = () => {
                                 onClick={handleLike}
                                 className="flex items-center gap-1.5 text-xs transition-colors group"
                             >
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill={liked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-colors ${liked ? 'text-[#4ade80]' : 'text-gray-500 group-hover:text-[#4ade80]'}`}>
-                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                                </svg>
+                                <HeartIcon filled={liked} className={`transition-colors ${liked ? 'text-[#4ade80]' : 'text-gray-500 group-hover:text-[#4ade80]'}`} />
                                 <span className={`transition-colors ${liked ? 'text-white' : 'text-gray-500'}`}>{displayLikesCount}</span>
                             </button>
                             <span className="flex items-center gap-1.5 text-gray-500 text-xs">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#4ade80]">
-                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                                </svg>
+                                <CommentIcon className="text-[#4ade80]" />
                                 {pin.commentsCount}
                             </span>
                         </div>
@@ -151,11 +148,7 @@ const AuraPreviewPage = () => {
                                 onClick={() => setSaveModalOpen(true)}
                                 className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#4ade80] hover:bg-[#22c55e] text-black text-xs font-semibold transition-all duration-150 shadow-[0_0_12px_rgba(74,222,128,0.25)] hover:shadow-[0_0_18px_rgba(74,222,128,0.4)]"
                             >
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-                                    <polyline points="17 21 17 13 7 13 7 21"/>
-                                    <polyline points="7 3 7 8 15 8"/>
-                                </svg>
+                                <SaveBoardIcon />
                                 {t('preview.save')}
                             </button>
 
@@ -166,9 +159,7 @@ const AuraPreviewPage = () => {
                                     className="flex items-center justify-center w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 dark:text-gray-300 text-gray-600 hover:text-black dark:hover:text-white transition-all duration-150"
                                     aria-label="More options"
                                 >
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                                        <circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
-                                    </svg>
+                                    <DotsVerticalIcon />
                                 </button>
 
                                 {menuOpen && (
@@ -178,11 +169,7 @@ const AuraPreviewPage = () => {
                                             onClick={() => { handleDownload(); setMenuOpen(false); }}
                                             className="flex items-center gap-2.5 w-full px-3.5 py-2.5 text-xs text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors"
                                         >
-                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                                <polyline points="7 10 12 15 17 10"/>
-                                                <line x1="12" y1="15" x2="12" y2="3"/>
-                                            </svg>
+                                            <DownloadIcon />
                                             {t('preview.download')}
                                         </button>
 
@@ -195,11 +182,7 @@ const AuraPreviewPage = () => {
                                             }}
                                             className="flex items-center gap-2.5 w-full px-3.5 py-2.5 text-xs text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors"
                                         >
-                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-                                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-                                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-                                            </svg>
+                                            <ShareIcon />
                                             {t('preview.share')}
                                         </button>
 
@@ -211,10 +194,7 @@ const AuraPreviewPage = () => {
                                                     onClick={() => { navigate(`/aura/edit/${pin.id}`); setMenuOpen(false); }}
                                                     className="flex items-center gap-2.5 w-full px-3.5 py-2.5 text-xs text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors"
                                                 >
-                                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                                                    </svg>
+                                                    <EditIcon />
                                                     {t('preview.edit')}
                                                 </button>
                                                 {/* Delete */}
@@ -222,12 +202,7 @@ const AuraPreviewPage = () => {
                                                     onClick={() => { handleDelete(); setMenuOpen(false); }}
                                                     className="flex items-center gap-2.5 w-full px-3.5 py-2.5 text-xs text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
                                                 >
-                                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <polyline points="3 6 5 6 21 6"/>
-                                                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                                                        <path d="M10 11v6"/><path d="M14 11v6"/>
-                                                        <path d="M9 6V4h6v2"/>
-                                                    </svg>
+                                                    <TrashIcon />
                                                     {t('preview.delete')}
                                                 </button>
                                             </>
@@ -239,10 +214,7 @@ const AuraPreviewPage = () => {
                                                     onClick={() => { setReportModalOpen(true); setMenuOpen(false); }}
                                                     className="flex items-center gap-2.5 w-full px-3.5 py-2.5 text-xs text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
                                                 >
-                                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
-                                                        <line x1="4" y1="22" x2="4" y2="15"/>
-                                                    </svg>
+                                                    <ReportIcon />
                                                     {t('preview.report')}
                                                 </button>
                                             </>

@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from "react";
+import { CloseIcon } from "@/components/ui/Icons.tsx";
 import Cropper, { type Area } from "react-easy-crop";
 import Modal from "./Modal.tsx";
 import { useTranslation } from "react-i18next";
@@ -137,9 +138,7 @@ const ImageCropperModal = ({
                         onClick={onClose}
                         className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 transition-colors"
                     >
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                            <path d="M18 6L6 18M6 6l12 12" />
-                        </svg>
+                        <CloseIcon size={12} strokeWidth={2.5} />
                     </button>
                 </div>
 

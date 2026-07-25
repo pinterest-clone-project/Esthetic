@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { CloseIcon } from "@/components/ui/Icons.tsx";
 import { useGetMyMoodboardsQuery } from "../../services/moodboardService.ts";
 import { useSavePinMutation, useUnsavePinMutation, useGetSavedBoardsQuery } from "../../services/pinService.ts";
 import Modal from "./Modal.tsx";
@@ -82,9 +83,7 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                             onClick={onClose}
                             className="absolute top-0 right-0 w-7 h-7 flex items-center justify-center rounded-full bg-white/10 dark:bg-black/10 hover:bg-white/20 dark:hover:bg-black/20 transition-colors"
                         >
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-white dark:text-black">
-                                <path d="M18 6L6 18M6 6l12 12" />
-                            </svg>
+                            <CloseIcon size={12} strokeWidth={2.5} className="text-white dark:text-black" />
                         </button>
                     </div>
 
