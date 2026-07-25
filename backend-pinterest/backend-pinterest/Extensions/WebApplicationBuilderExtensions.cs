@@ -235,6 +235,7 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<INotificationRepository, NotificationRepository>();
         services.AddScoped<IRecommendedRepository, RecommendedRepository>();
         services.AddScoped<IUserCategoryRepository, UserCategoryRepository>();
+        services.AddScoped<INewsRepository, NewsRepository>();
 
         services.AddScoped<IEmailJobScheduler, EmailJobScheduler>();
 
@@ -265,6 +266,7 @@ public static class WebApplicationBuilderExtensions
         services.AddSingleton<ChatMapper>();
         services.AddSingleton<MessageMapper>();
         services.AddSingleton<NotificationMapper>();
+        services.AddSingleton<NewsMapper>();
         #endregion
 
         #region OpenAPI
