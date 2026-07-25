@@ -7,6 +7,7 @@ import { useCreateNewsMutation, useUpdateNewsMutation } from "@/services/newsSer
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import type { INews } from "@/types/news/INews.ts";
 import { APP_ENV } from "@/constants/env";
+import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
 
 const TAGS = [
     "Product Update",
@@ -51,6 +52,7 @@ const NewsFormModal = ({ news, onClose }: NewsFormModalProps) => {
     const [imagePreview, setImagePreview] = useState<string | null>(
         news?.image ? `${APP_ENV.IMAGES_400_URL}${news.image}` : null
     );
+    const [cropperSrc, setCropperSrc] = useState<string | null>(null);
 
     const schema = useMemo(() => z.object({
         titleUk: z.string().min(1, t('news.formModal.required')).max(120, t('news.formModal.maxTitle')),
@@ -86,13 +88,18 @@ const NewsFormModal = ({ news, onClose }: NewsFormModalProps) => {
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
+        const url = URL.createObjectURL(file);
+        setCropperSrc(url);
+        e.target.value = "";
+    };
+
+    const handleCrop = (file: File) => {
         imageFile.current = file;
         const url = URL.createObjectURL(file);
         setImagePreview(prev => {
             if (prev?.startsWith("blob:")) URL.revokeObjectURL(prev);
             return url;
         });
-        e.target.value = "";
     };
 
     const onSubmit = async (values: NewsFormValues) => {
@@ -122,6 +129,7 @@ const NewsFormModal = ({ news, onClose }: NewsFormModalProps) => {
     };
 
     return (
+        <>
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 overflow-y-auto py-8">
             <div className="w-full max-w-lg bg-[#161616] border border-white/8 rounded-3xl p-6">
                 <h2 className="text-lg font-semibold mb-4">
@@ -134,7 +142,7 @@ const NewsFormModal = ({ news, onClose }: NewsFormModalProps) => {
                         <button
                             type="button"
                             onClick={() => fileInputRef.current?.click()}
-                            className="w-32 h-20 rounded-2xl overflow-hidden bg-white/8 border border-white/8 flex items-center justify-center hover:border-white/20 transition-colors"
+                            className="w-24 h-24 rounded-2xl overflow-hidden bg-white/8 border border-white/8 flex items-center justify-center hover:border-btn-primary/50 transition-colors"
                         >
                             {imagePreview ? (
                                 <img src={imagePreview} alt="preview" className="w-full h-full object-cover" />
@@ -210,6 +218,20 @@ const NewsFormModal = ({ news, onClose }: NewsFormModalProps) => {
                 </form>
             </div>
         </div>
+
+        {cropperSrc && (
+            <ImageCropperModal
+                imageSrc={cropperSrc}
+                onCrop={handleCrop}
+                onClose={() => {
+                    URL.revokeObjectURL(cropperSrc);
+                    setCropperSrc(null);
+                }}
+                defaultWidth={1200}
+                defaultHeight={675}
+            />
+        )}
+        </>
     );
 };
 

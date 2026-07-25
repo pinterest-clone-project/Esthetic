@@ -71,7 +71,7 @@ public class PinsController(IMediator mediator) : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetMyPins()
     {
-        var pins = await mediator.Send(new GetUserPinsQuery(CurrentUserId));
+        var pins = await mediator.Send(new GetUserPinsQuery(CurrentUserId, CurrentUserId));
         return Ok(pins);
     }
 
