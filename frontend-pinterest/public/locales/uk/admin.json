@@ -12,7 +12,8 @@
     "tags": "Теги",
     "users": "Користувачі",
     "reports": "Скарги",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "news": "Новини"
   },
   "pageSize": "{{size}} на сторінці",
   "sort": {
@@ -246,6 +247,47 @@
     "newUsers": "Нові користувачі (за тиждень)",
     "newAuras": "Створені Аури (за тиждень)"
   },
+  "news": {
+    "new": "Нова стаття",
+    "edit": "Редагувати статтю",
+    "imageMissing": "Будь ласка, оберіть зображення для статті",
+    "editAriaLabel": "Редагувати статтю",
+    "deleteAriaLabel": "Видалити статтю",
+    "featured": "Головна",
+    "empty": "Статей ще немає",
+    "subtitle": "Управління новинами",
+    "tags": {
+      "productUpdate": "Оновлення продукту",
+      "community": "Спільнота",
+      "design": "Дизайн",
+      "engineering": "Технології",
+      "forBusiness": "Для бізнесу",
+      "partnership": "Партнерство"
+    },
+    "formModal": {
+      "photo": "Фото",
+      "titleUk": "Заголовок (українською)",
+      "titleEn": "Заголовок (англійською)",
+      "excerptUk": "Короткий опис (українською)",
+      "excerptEn": "Короткий опис (англійською)",
+      "tag": "Тег",
+      "publishedAt": "Дата публікації",
+      "isFeatured": "Головна стаття",
+      "required": "Це поле обов'язкове",
+      "maxTitle": "Максимум 120 символів",
+      "maxExcerpt": "Максимум 500 символів",
+      "error": "Щось пішло не так. Спробуйте ще раз.",
+      "cancel": "Скасувати",
+      "save": "Зберегти",
+      "create": "Створити"
+    },
+    "deleteModal": {
+      "title": "Видалити статтю?",
+      "desc": "Стаття \"{{title}}\" буде видалена назавжди.",
+      "cancel": "Скасувати",
+      "confirm": "Видалити"
+    }
+  },
   "toast": {
     "categoryCreated": "Категорію створено",
     "categoryUpdated": "Категорію оновлено",
@@ -256,6 +298,9 @@
     "pinUpdated": "Пін оновлено",
     "pinDeleted": "Пін видалено",
     "boardUpdated": "Дошку оновлено",
-    "boardDeleted": "Дошку видалено"
+    "boardDeleted": "Дошку видалено",
+    "newsCreated": "Статтю створено",
+    "newsUpdated": "Статтю оновлено",
+    "newsDeleted": "Статтю видалено"
   }
 }
