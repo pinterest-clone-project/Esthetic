@@ -44,6 +44,7 @@ const AdminTagsPage        = lazy(() => import("@/pages/admin/AdminTagsPage.tsx"
 const AdminCategoriesPage  = lazy(() => import("@/pages/admin/AdminCategoriesPage.tsx"));
 const AdminPinsPage        = lazy(() => import("@/pages/admin/AdminPinsPage.tsx"));
 const AdminBoardsPage      = lazy(() => import("@/pages/admin/AdminBoardsPage.tsx"));
+const AdminNewsPage        = lazy(() => import("@/pages/admin/AdminNewsPage.tsx"));
 
 const PageLoader = () => (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white dark:bg-[#121212]">
@@ -173,6 +174,7 @@ const App = () => {
                                     <Route path="/admin/boards" element={<AdminBoardsPage />} />
                                     <Route path="/admin/tags" element={<AdminTagsPage />} />
                                     <Route path="/admin/categories" element={<AdminCategoriesPage />} />
+                                    <Route path="/admin/news" element={<AdminNewsPage />} />
                                 </Route>
                             </Route>
 

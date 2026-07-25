@@ -178,6 +178,10 @@ const Header: React.FC = () => {
                     {user ? (
                         <div className="flex items-center gap-14">
 
+                            <Link to="/news" className="hidden lg:block text-black dark:text-white text-sm hover:text-[#1DB954] cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
+                                {t('nav.news', 'News')}
+                            </Link>
+
                             <NotificationBell />
 
                             <div className="relative" ref={dropdownRef}>
