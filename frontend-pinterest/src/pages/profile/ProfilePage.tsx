@@ -22,6 +22,7 @@ import "react-phone-number-input/style.css";
 import { getData as getCountries } from "country-list";
 import { LANGUAGES } from "@/constants/languages.ts";
 import { useTranslation } from "react-i18next";
+import { UploadIcon, CommentIcon } from "@/components/ui/Icons.tsx";
 
 const COUNTRY_NAMES = getCountries()
     .map((c) => c.name)
@@ -204,7 +205,7 @@ if (isLoading) return <p>{t('actions.loading', 'Loading...')}</p>;
                 }
             </div>
             <label className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition cursor-pointer">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <UploadIcon className="text-white" />
                 <input type="file" accept="image/*" className="hidden" onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (!file) return;
@@ -257,7 +258,7 @@ if (isLoading) return <p>{t('actions.loading', 'Loading...')}</p>;
             )}
             {me?.language && (
                 <div className="flex items-center gap-2 text-sm text-[#A1A1A1]">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    <CommentIcon size={14} strokeWidth={1.5} />
                     <span>{me.language}</span>
                 </div>
             )}

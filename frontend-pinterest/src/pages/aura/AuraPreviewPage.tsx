@@ -346,11 +346,7 @@ const AuraPreviewPage = () => {
                             onClick={() => { setConfirmDeleteOpen(false); navigate("/deleted-auras"); }}
                             className="flex items-center gap-1.5 text-[11px] text-[#4ade80] hover:underline mb-4"
                         >
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <polyline points="3 6 5 6 21 6"/>
-                                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                            </svg>
+                            <TrashIcon size={11} />
                             {t('preview.viewRecentlyDeleted')}
                         </button>
                         <div className="flex gap-2">
