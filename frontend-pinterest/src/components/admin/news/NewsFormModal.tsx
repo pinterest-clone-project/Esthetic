@@ -1,0 +1,216 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useCreateNewsMutation, useUpdateNewsMutation } from "@/services/newsService.ts";
+import { useToast } from "@/components/ui/Toast/UseToast.ts";
+import type { INews } from "@/types/news/INews.ts";
+import { APP_ENV } from "@/constants/env";
+
+const TAGS = [
+    "Product Update",
+    "Community",
+    "Design",
+    "Engineering",
+    "For Business",
+    "Partnership",
+];
+
+type NewsFormValues = {
+    titleUk: string;
+    titleEn: string;
+    excerptUk: string;
+    excerptEn: string;
+    tag: string;
+    publishedAt: string;
+    isFeatured: boolean;
+};
+
+interface NewsFormModalProps {
+    news: INews | null;
+    onClose: () => void;
+}
+
+const getApiErrorMessage = (err: unknown): string => {
+    if (err && typeof err === "object" && "data" in err) {
+        const data = (err as { data?: { message?: string } }).data;
+        if (data?.message) return data.message;
+    }
+    return "";
+};
+
+const toDateInputValue = (iso: string) => iso.split("T")[0];
+
+const NewsFormModal = ({ news, onClose }: NewsFormModalProps) => {
+    const { t } = useTranslation('admin');
+    const isEdit = !!news;
+    const { showToast } = useToast();
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const imageFile = useRef<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(
+        news?.image ? `${APP_ENV.IMAGES_400_URL}${news.image}` : null
+    );
+
+    const schema = useMemo(() => z.object({
+        titleUk: z.string().min(1, t('news.formModal.required')).max(120, t('news.formModal.maxTitle')),
+        titleEn: z.string().min(1, t('news.formModal.required')).max(120, t('news.formModal.maxTitle')),
+        excerptUk: z.string().min(1, t('news.formModal.required')).max(500, t('news.formModal.maxExcerpt')),
+        excerptEn: z.string().min(1, t('news.formModal.required')).max(500, t('news.formModal.maxExcerpt')),
+        tag: z.string().min(1, t('news.formModal.required')),
+        publishedAt: z.string().min(1, t('news.formModal.required')),
+        isFeatured: z.boolean(),
+    }), [t]);
+
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<NewsFormValues>({
+        resolver: zodResolver(schema),
+        defaultValues: {
+            titleUk: news?.titleUk ?? "",
+            titleEn: news?.titleEn ?? "",
+            excerptUk: news?.excerptUk ?? "",
+            excerptEn: news?.excerptEn ?? "",
+            tag: news?.tag ?? TAGS[0],
+            publishedAt: news ? toDateInputValue(news.publishedAt) : toDateInputValue(new Date().toISOString()),
+            isFeatured: news?.isFeatured ?? false,
+        },
+    });
+
+    const [createNews] = useCreateNewsMutation();
+    const [updateNews] = useUpdateNewsMutation();
+
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => { document.body.style.overflow = ""; };
+    }, []);
+
+    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        imageFile.current = file;
+        const url = URL.createObjectURL(file);
+        setImagePreview(prev => {
+            if (prev?.startsWith("blob:")) URL.revokeObjectURL(prev);
+            return url;
+        });
+        e.target.value = "";
+    };
+
+    const onSubmit = async (values: NewsFormValues) => {
+        if (!isEdit && !imageFile.current) {
+            showToast(t('news.imageMissing'), "error");
+            return;
+        }
+        try {
+            if (isEdit) {
+                await updateNews({
+                    id: news.id,
+                    ...values,
+                    ...(imageFile.current ? { imageFile: imageFile.current } : {}),
+                }).unwrap();
+                showToast(t('toast.newsUpdated'), "success");
+            } else {
+                await createNews({
+                    ...values,
+                    imageFile: imageFile.current!,
+                }).unwrap();
+                showToast(t('toast.newsCreated'), "success");
+            }
+            onClose();
+        } catch (err) {
+            showToast(getApiErrorMessage(err) || t('news.formModal.error'), "error");
+        }
+    };
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 overflow-y-auto py-8">
+            <div className="w-full max-w-lg bg-[#161616] border border-white/8 rounded-3xl p-6">
+                <h2 className="text-lg font-semibold mb-4">
+                    {isEdit ? t('news.edit') : t('news.new')}
+                </h2>
+                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+
+                    {/* Image */}
+                    <div className="flex justify-center">
+                        <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="w-32 h-20 rounded-2xl overflow-hidden bg-white/8 border border-white/8 flex items-center justify-center hover:border-white/20 transition-colors"
+                        >
+                            {imagePreview ? (
+                                <img src={imagePreview} alt="preview" className="w-full h-full object-cover" />
+                            ) : (
+                                <span className="text-xs text-white/40">{t('news.formModal.photo')}</span>
+                            )}
+                        </button>
+                        <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileSelect} className="hidden" />
+                    </div>
+
+                    {/* Title UK */}
+                    <div>
+                        <input {...register("titleUk")} placeholder={t('news.formModal.titleUk')}
+                            className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-white/20 transition-colors" />
+                        {errors.titleUk && <p className="text-xs text-red-400 mt-1">{errors.titleUk.message}</p>}
+                    </div>
+
+                    {/* Title EN */}
+                    <div>
+                        <input {...register("titleEn")} placeholder={t('news.formModal.titleEn')}
+                            className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-white/20 transition-colors" />
+                        {errors.titleEn && <p className="text-xs text-red-400 mt-1">{errors.titleEn.message}</p>}
+                    </div>
+
+                    {/* Excerpt UK */}
+                    <div>
+                        <textarea {...register("excerptUk")} placeholder={t('news.formModal.excerptUk')} rows={3}
+                            className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-white/20 transition-colors resize-none" />
+                        {errors.excerptUk && <p className="text-xs text-red-400 mt-1">{errors.excerptUk.message}</p>}
+                    </div>
+
+                    {/* Excerpt EN */}
+                    <div>
+                        <textarea {...register("excerptEn")} placeholder={t('news.formModal.excerptEn')} rows={3}
+                            className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-white/20 transition-colors resize-none" />
+                        {errors.excerptEn && <p className="text-xs text-red-400 mt-1">{errors.excerptEn.message}</p>}
+                    </div>
+
+                    {/* Tag */}
+                    <div>
+                        <select {...register("tag")}
+                            className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-white/20 transition-colors">
+                            {TAGS.map(tag => <option key={tag} value={tag}>{tag}</option>)}
+                        </select>
+                        {errors.tag && <p className="text-xs text-red-400 mt-1">{errors.tag.message}</p>}
+                    </div>
+
+                    {/* Published At */}
+                    <div>
+                        <input {...register("publishedAt")} type="date"
+                            className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-white/20 transition-colors" />
+                        {errors.publishedAt && <p className="text-xs text-red-400 mt-1">{errors.publishedAt.message}</p>}
+                    </div>
+
+                    {/* IsFeatured */}
+                    <label className="flex items-center justify-between px-1">
+                        <span className="text-sm text-white/70">{t('news.formModal.isFeatured')}</span>
+                        <input {...register("isFeatured")} type="checkbox"
+                            className="w-4 h-4 accent-[#1DB954]" />
+                    </label>
+
+                    {/* Actions */}
+                    <div className="flex gap-2 mt-2">
+                        <button type="button" onClick={onClose}
+                            className="flex-1 py-2.5 rounded-2xl bg-white/8 text-white/70 hover:bg-white/15 transition-colors">
+                            {t('news.formModal.cancel')}
+                        </button>
+                        <button type="submit" disabled={isSubmitting}
+                            className="flex-1 py-2.5 rounded-2xl bg-[#1DB954] text-white disabled:opacity-50 hover:opacity-90 transition-opacity">
+                            {isEdit ? t('news.formModal.save') : t('news.formModal.create')}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
+
+export default NewsFormModal;
