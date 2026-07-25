@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useGetMyMoodboardsQuery } from "../../services/moodboardService.ts";
 import { useSavePinMutation, useUnsavePinMutation, useGetSavedBoardsQuery } from "../../services/pinService.ts";
 import Modal from "./Modal.tsx";
@@ -20,7 +20,7 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
     const [savePin] = useSavePinMutation();
     const [unsavePin] = useUnsavePinMutation();
     const { showToast } = useToast();
-    const [pendingBoardId, setPendingBoardId] = useState<string | null>(null);
+    const pendingBoardId = useRef<string | null>(null);
 
 
     const [localSaved, setLocalSaved] = useState<Record<string, boolean>>({});
@@ -31,8 +31,8 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
             : savedBoardIds.includes(boardId);
 
     const handleToggle = async (boardId: string) => {
-        if (pendingBoardId === boardId) return;
-        setPendingBoardId(boardId);
+        if (pendingBoardId.current === boardId) return;
+        pendingBoardId.current = boardId;
 
         const currentlySaved = isSaved(boardId);
         setLocalSaved(prev => ({ ...prev, [boardId]: !currentlySaved }));
@@ -53,7 +53,7 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
             setLocalSaved(prev => ({ ...prev, [boardId]: currentlySaved }));
             showToast(tc('toast.somethingWentWrong'), "error");
         } finally {
-            setPendingBoardId(null);
+            pendingBoardId.current = null;
         }
     };
 

@@ -90,6 +90,7 @@ const AppInit = ({ children }: { children: React.ReactNode }) => {
                 >
                     <img
                         src={logo}
+                        alt=""
                         className="w-[150px] h-[150px]"
                         style={{ animation: "logoPulse 1.0s ease-out forwards" }}
                     />

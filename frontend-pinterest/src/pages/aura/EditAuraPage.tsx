@@ -18,7 +18,7 @@ const EditAuraPage = () => {
     const { data: tags } = useGetAllTagsQuery();
 
     const [cropperSrc, setCropperSrc] = useState<string | null>(null);
-    const [imageFile, setImageFile] = useState<File | null>(null);
+    const imageFile = useRef<File | null>(null);
     const [mediaUrl, setMediaUrl] = useState("");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -90,7 +90,7 @@ const EditAuraPage = () => {
     const handleCropDone = (croppedFile: File) => {
         if (cropperSrc) URL.revokeObjectURL(cropperSrc);
         setCropperSrc(null);
-        setImageFile(croppedFile);
+        imageFile.current = croppedFile;
         setMediaUrl("");
         setPreviewUrl(URL.createObjectURL(croppedFile));
     };
@@ -102,7 +102,7 @@ const EditAuraPage = () => {
 
     const handleMediaUrlBlur = () => {
         if (!mediaUrl.trim()) return;
-        setImageFile(null);
+        imageFile.current = null;
         setPreviewUrl(mediaUrl);
     };
 
@@ -125,8 +125,8 @@ const EditAuraPage = () => {
                 sourceUrl: sourceUrl || undefined,
                 categoryId: categoryId || undefined,
                 tagIds: tagIds.length > 0 ? tagIds : undefined,
-                imageFile: imageFile ?? undefined,
-                mediaUrl: !imageFile && mediaUrl.trim() ? mediaUrl.trim() : undefined,
+                imageFile: imageFile.current ?? undefined,
+                mediaUrl: !imageFile.current && mediaUrl.trim() ? mediaUrl.trim() : undefined,
             }).unwrap();
             navigate(`/aura/preview/${id}`);
         } catch (e) {

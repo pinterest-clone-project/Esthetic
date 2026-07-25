@@ -582,6 +582,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                         >
                                             <img
                                                 src={`${APP_ENV.IMAGES_100_URL}${category.image}`}
+                                                alt={category.name}
                                                 className="w-full h-full object-cover"
                                             />
                                             {isSelected && (
@@ -648,6 +649,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                     URL.revokeObjectURL(cropperSrc);
                     setCropperSrc(null);
                     updateField("imageFile", croppedFile);
+                    if (imagePreview?.startsWith("blob:")) URL.revokeObjectURL(imagePreview);
                     setImagePreview(URL.createObjectURL(croppedFile));
                 }}
                 onClose={() => {

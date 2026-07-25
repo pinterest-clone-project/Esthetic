@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import Cropper, { type Area } from "react-easy-crop";
 import Modal from "./Modal.tsx";
 import { useTranslation } from "react-i18next";
@@ -65,7 +65,7 @@ const ImageCropperModal = ({
 
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
-    const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+    const croppedAreaPixels = useRef<Area | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
 
     const [lockAspect, setLockAspect] = useState(
@@ -86,7 +86,7 @@ const ImageCropperModal = ({
             : undefined;
 
     const onCropComplete = useCallback((_: Area, croppedPixels: Area) => {
-        setCroppedAreaPixels(croppedPixels);
+        croppedAreaPixels.current = croppedPixels;
     }, []);
 
     const handlePreset = (w: number | null, h: number | null) => {
@@ -109,12 +109,12 @@ const ImageCropperModal = ({
     };
 
     const handleConfirm = async () => {
-        if (!croppedAreaPixels) return;
+        if (!croppedAreaPixels.current) return;
         setIsProcessing(true);
         try {
             const file = await createCroppedImage(
                 imageSrc,
-                croppedAreaPixels,
+                croppedAreaPixels.current,
                 parsedWidth,
                 parsedHeight
             );

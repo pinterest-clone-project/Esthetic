@@ -152,6 +152,7 @@ const CollectionsPage = () => {
                                     {mb.coverImageUrl ? (
                                         <img
                                             src={`${APP_ENV.IMAGES_1200_URL}${mb.coverImageUrl}`}
+                                            alt={mb.title}
                                             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                                         />
                                     ) : (

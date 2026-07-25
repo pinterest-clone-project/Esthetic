@@ -57,6 +57,7 @@ const SidebarButton = ({ icon, label, active, onClick, extraImgClass = "", child
     >
         <img
             src={icon}
+            alt={label}
             style={{ filter: active ? greenFilter : isDark ? darkFilter : whiteFilter }}
             className={`w-[30px] h-[33px] transition-all duration-200 group-hover:scale-110 ${active ? "opacity-100" : "opacity-50 group-hover:opacity-80"} ${extraImgClass}`}
         />
