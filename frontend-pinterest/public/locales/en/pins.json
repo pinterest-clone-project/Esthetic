@@ -70,6 +70,8 @@
     "moreAuras": "More Auras",
     "viewProfile": "View profile",
     "linkCopied": "Link copied to clipboard",
+    "showMoreTags": "Show more (+{{count}})",
+    "showLessTags": "Show less",
     "deleteConfirmTitle": "Delete this aura?",
     "deleteConfirmDesc": "It will be moved to Recently deleted and permanently removed after 30 days.",
     "viewRecentlyDeleted": "View Recently deleted",

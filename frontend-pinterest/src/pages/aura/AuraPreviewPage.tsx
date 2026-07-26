@@ -32,6 +32,7 @@ const AuraPreviewPage = () => {
     const [reportModalOpen, setReportModalOpen] = useState(false);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    const [tagsExpanded, setTagsExpanded] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -53,10 +54,16 @@ const AuraPreviewPage = () => {
 
     useEffect(() => {
         document.querySelector("main")?.scrollTo({ top: 0, behavior: "instant" });
+        setTagsExpanded(false);
     }, [id]);
 
     const isOwner = me?.id === pin?.creatorId;
     const suggestions = allPins?.filter(p => p.id !== id) ?? [];
+    const VISIBLE_TAGS = 4;
+    const visibleTags = tagsExpanded
+        ? (pin?.tags ?? [])
+        : (pin?.tags ?? []).slice(0, VISIBLE_TAGS);
+    const hiddenTagsCount = Math.max(0, (pin?.tags?.length ?? 0) - VISIBLE_TAGS);
 
     const liked = pin?.isLikedByMe ?? false;
     const displayLikesCount = pin?.likesCount ?? 0;
@@ -271,7 +278,7 @@ const AuraPreviewPage = () => {
                     {/* Tags */}
                     {pin.tags?.length > 0 && (
                         <div className="flex flex-wrap gap-2">
-                            {pin.tags.map(tag => (
+                            {visibleTags.map(tag => (
                                 <button
                                     type="button"
                                     key={tag.id}
@@ -281,6 +288,17 @@ const AuraPreviewPage = () => {
                                     #{tag.name}
                                 </button>
                             ))}
+                            {hiddenTagsCount > 0 && (
+                                <button
+                                    type="button"
+                                    onClick={() => setTagsExpanded(v => !v)}
+                                    className="text-xs text-[#4ade80] hover:text-[#22c55e] px-2.5 py-1 rounded-full transition-colors cursor-pointer"
+                                >
+                                    {tagsExpanded
+                                        ? t('preview.showLessTags')
+                                        : t('preview.showMoreTags', { count: hiddenTagsCount })}
+                                </button>
+                            )}
                         </div>
                     )}
 
