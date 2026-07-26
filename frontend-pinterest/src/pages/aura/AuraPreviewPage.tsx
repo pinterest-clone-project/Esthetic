@@ -255,12 +255,16 @@ const AuraPreviewPage = () => {
                     )}
 
                     {/* Category */}
-                    {pin.categoryName && (
+                    {pin.categoryName && pin.categoryId && (
                         <div className="flex items-center gap-2">
                             <span className="text-gray-600 text-xs">{t('preview.category')}</span>
-                            <span className="text-xs text-[#4ade80] bg-[#4ade80]/10 px-2.5 py-1 rounded-full">
+                            <button
+                                type="button"
+                                onClick={() => navigate(`/aura/search?categoryId=${encodeURIComponent(pin.categoryId!)}`)}
+                                className="text-xs text-[#4ade80] bg-[#4ade80]/10 hover:bg-[#4ade80]/20 px-2.5 py-1 rounded-full transition-colors cursor-pointer"
+                            >
                                 {pin.categoryName}
-                            </span>
+                            </button>
                         </div>
                     )}
 
@@ -268,12 +272,14 @@ const AuraPreviewPage = () => {
                     {pin.tags?.length > 0 && (
                         <div className="flex flex-wrap gap-2">
                             {pin.tags.map(tag => (
-                                <span
+                                <button
+                                    type="button"
                                     key={tag.id}
-                                    className="text-xs text-gray-400 bg-white/5 border border-white/10 px-2.5 py-1 rounded-full"
+                                    onClick={() => navigate(`/aura/search?tagId=${encodeURIComponent(tag.id)}`)}
+                                    className="text-xs text-gray-400 bg-white/5 border border-white/10 hover:border-[#4ade80]/40 hover:text-[#4ade80] px-2.5 py-1 rounded-full transition-colors cursor-pointer"
                                 >
                                     #{tag.name}
-                                </span>
+                                </button>
                             ))}
                         </div>
                     )}
