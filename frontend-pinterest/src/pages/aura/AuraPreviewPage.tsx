@@ -283,7 +283,7 @@ const AuraPreviewPage = () => {
                                     type="button"
                                     key={tag.id}
                                     onClick={() => navigate(`/aura/search?tagId=${encodeURIComponent(tag.id)}`)}
-                                    className="text-xs text-gray-400 bg-white/5 border border-white/10 hover:border-[#4ade80]/40 hover:text-[#4ade80] px-2.5 py-1 rounded-full transition-colors cursor-pointer"
+                                    className="text-xs text-gray-500 dark:text-gray-400 bg-black/5 dark:bg-white/5 border border-[#A1A1A1]/50 dark:border-white/10 hover:border-[#4ade80]/40 hover:text-[#4ade80] px-2.5 py-1 rounded-full transition-colors cursor-pointer"
                                 >
                                     #{tag.name}
                                 </button>

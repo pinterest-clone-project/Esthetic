@@ -122,8 +122,8 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
             dispatch(setUser(account));
             setStep(7);
             setTimeout(() => {
-                onSuccess?.();
                 reset();
+                onSuccess?.();
             }, 2000);
         } catch (err: unknown) {
             const detail = (err as { data?: { detail?: string } })?.data?.detail;

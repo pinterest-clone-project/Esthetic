@@ -152,7 +152,7 @@ const UserPage = () => {
                 {isMe && (
                     <button
                         onClick={() => navigate("/profile")}
-                        className="px-5 py-2 rounded-xl text-sm border border-white/10 text-gray-400 hover:text-white hover:border-white/30 transition-colors"
+                        className="px-5 py-2 rounded-xl text-sm border border-[#A1A1A1]/50 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:border-[#A1A1A1] dark:hover:border-white/30 transition-colors"
                     >
                         {t('user.editProfile')}
                     </button>

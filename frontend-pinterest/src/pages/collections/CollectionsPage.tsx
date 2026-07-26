@@ -8,8 +8,8 @@ import {useLocation, useNavigate} from "react-router";
 import {useGetMyMoodboardsQuery} from "@/services/moodboardService.ts";
 import CreateMoodboardForm from "@/components/moodboard/CreateMoodboardForm.tsx";
 import {APP_ENV} from "@/constants/env";
-import Modal from "@/components/ui/Modal.tsx";
 import PinCard from "@/components/ui/PinCard.tsx";
+import Modal from "@/components/ui/Modal.tsx";
 
 type CollectionTab = "Aura" | "Moodboard";
 
