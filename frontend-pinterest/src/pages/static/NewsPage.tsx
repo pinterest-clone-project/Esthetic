@@ -3,6 +3,7 @@ import im3 from "@/assets/defaults/def-3.jpg";
 import { useTranslation } from "react-i18next";
 import { useGetAllNewsQuery } from "@/services/newsService.ts";
 import { APP_ENV } from "@/constants/env";
+import { Link } from "react-router";
 
 const TAG_COLORS: Record<string, string> = {
     "Product Update": "bg-[#1DB954]/10 text-[#1DB954]",
@@ -52,7 +53,7 @@ const NewsPage = () => {
                 {!isLoading && featured && (
                     <div className="mb-12">
                         <p className="text-xs uppercase tracking-widest text-[#1DB954] font-semibold mb-6">{t('news.featured')}</p>
-                        <div className="grid md:grid-cols-2 gap-8 border border-[#A1A1A1] dark:border-[#333] rounded-2xl overflow-hidden">
+                        <Link to={`/news/${featured.id}`} className="grid md:grid-cols-2 gap-8 border border-[#A1A1A1] dark:border-[#333] rounded-2xl overflow-hidden hover:border-[#1DB954] transition">
                             <div className="h-[280px] md:h-auto">
                                 <img src={getImage(featured.image, im2)} className="w-full h-full object-cover" alt="" />
                             </div>
@@ -68,7 +69,7 @@ const NewsPage = () => {
                                 <h2 className="text-2xl font-bold leading-tight mb-3">{getTitle(featured)}</h2>
                                 <p className="text-[#A1A1A1] text-sm leading-relaxed">{getExcerpt(featured)}</p>
                             </div>
-                        </div>
+                        </Link>
                     </div>
                 )}
 
@@ -77,7 +78,7 @@ const NewsPage = () => {
                         <p className="text-xs uppercase tracking-widest text-[#1DB954] font-semibold mb-6">{t('news.latest')}</p>
                         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {rest.map((n) => (
-                                <div key={n.id} className="flex flex-col border border-[#A1A1A1] dark:border-[#333] rounded-2xl overflow-hidden hover:border-[#1DB954] transition group cursor-pointer">
+                                <Link key={n.id} to={`/news/${n.id}`} className="flex flex-col border border-[#A1A1A1] dark:border-[#333] rounded-2xl overflow-hidden hover:border-[#1DB954] transition group cursor-pointer">
                                     <div className="h-[160px] overflow-hidden">
                                         <img
                                             src={getImage(n.image, im2)}
@@ -98,7 +99,7 @@ const NewsPage = () => {
                                         <p className="text-xs text-[#A1A1A1] leading-relaxed line-clamp-3">{getExcerpt(n)}</p>
                                         <span className="mt-4 text-xs text-[#1DB954] font-medium">{t('news.readMoreArrow')}</span>
                                     </div>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     </>

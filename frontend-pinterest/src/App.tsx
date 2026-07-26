@@ -37,6 +37,7 @@ const BlockedPage          = lazy(() => import("@/pages/auth/BlockedPage.tsx"));
 const AboutPage            = lazy(() => import("@/pages/static/AboutPage.tsx"));
 const ForBusinessPage      = lazy(() => import("@/pages/static/ForBusinessPage.tsx"));
 const NewsPage             = lazy(() => import("@/pages/static/NewsPage.tsx"));
+const NewsDetailPage       = lazy(() => import("@/pages/static/NewsDetailPage.tsx"));
 
 const AdminDashboard       = lazy(() => import("@/pages/admin/AdminDashboard.tsx"));
 const AdminUsersPage       = lazy(() => import("@/pages/admin/AdminUsersPage.tsx"));
@@ -126,6 +127,7 @@ const App = () => {
                                     <Route path="about" element={<AboutPage />} />
                                     <Route path="business" element={<ForBusinessPage />} />
                                     <Route path="news" element={<NewsPage />} />
+                                    <Route path="news/:id" element={<NewsDetailPage />} />
                                 </Route>
 
                                 <Route element={<PrivateRoute />}>

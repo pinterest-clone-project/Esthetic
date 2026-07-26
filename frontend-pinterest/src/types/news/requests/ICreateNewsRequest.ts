@@ -5,6 +5,7 @@ export interface ICreateNewsRequest {
     excerptEn: string;
     tag: string;
     imageFile?: File;
+    content?: string;
     publishedAt: string;
     isFeatured: boolean;
 }

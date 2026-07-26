@@ -8,6 +8,7 @@ import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import type { INews } from "@/types/news/INews.ts";
 import { APP_ENV } from "@/constants/env";
 import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
+import { Editor } from "@tinymce/tinymce-react";
 
 const TAGS = [
     "Product Update",
@@ -26,6 +27,7 @@ type NewsFormValues = {
     tag: string;
     publishedAt: string;
     isFeatured: boolean;
+    content?: string;
 };
 
 interface NewsFormModalProps {
@@ -62,9 +64,10 @@ const NewsFormModal = ({ news, onClose }: NewsFormModalProps) => {
         tag: z.string().min(1, t('news.formModal.required')),
         publishedAt: z.string().min(1, t('news.formModal.required')),
         isFeatured: z.boolean(),
+        content: z.string().optional(),
     }), [t]);
 
-    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<NewsFormValues>({
+    const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<NewsFormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
             titleUk: news?.titleUk ?? "",
@@ -74,6 +77,7 @@ const NewsFormModal = ({ news, onClose }: NewsFormModalProps) => {
             tag: news?.tag ?? TAGS[0],
             publishedAt: news ? toDateInputValue(news.publishedAt) : toDateInputValue(new Date().toISOString()),
             isFeatured: news?.isFeatured ?? false,
+            content: news?.content ?? "",
         },
     });
 
@@ -195,6 +199,29 @@ const NewsFormModal = ({ news, onClose }: NewsFormModalProps) => {
                         <input {...register("publishedAt")} type="date"
                             className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-white/20 transition-colors" />
                         {errors.publishedAt && <p className="text-xs text-red-400 mt-1">{errors.publishedAt.message}</p>}
+                    </div>
+
+                    {/* Content */}
+                    <div>
+                        <label className="text-sm text-white/70 mb-2 block">{t('news.formModal.content')}</label>
+                        <Editor
+                            apiKey="6d380nx6s5ebnl6gwubl451w6ugoces1tb0t8yixr286f9kb"
+                            init={{
+                                height: 300,
+                                menubar: false,
+                                plugins: 'link image code lists table media help wordcount',
+                                toolbar: 'undo redo | blocks | ' +
+                                    'bold italic forecolor | alignleft aligncenter ' +
+                                    'alignright alignjustify | bullist numlist outdent indent | ' +
+                                    'removeformat | help',
+                                content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 14px; }',
+                                skin: 'oxide-dark',
+                                content_css: 'dark',
+                                background_color: '#1a1a1a',
+                            }}
+                            initialValue={news?.content ?? ""}
+                            onEditorChange={(content: string) => setValue('content', content)}
+                        />
                     </div>
 
                     {/* IsFeatured */}

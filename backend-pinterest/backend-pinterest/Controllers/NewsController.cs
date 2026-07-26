@@ -18,6 +18,15 @@ public class NewsController(IMediator mediator) : ControllerBase
         return Ok(news);
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    {
+        var news = await mediator.Send(new GetNewsByIdQuery(id));
+        if (news == null)
+            return NotFound();
+        return Ok(news);
+    }
+
     [HttpPost("create")]
     [Consumes("multipart/form-data")]
     [Authorize(Roles = Roles.Admin)]
