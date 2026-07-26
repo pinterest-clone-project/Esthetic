@@ -228,3 +228,17 @@ html, body {
     background: #1a1a1a;
     color: white;
 }
+
+/* Mobile burger menu animation */
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Fix: mobile input horizontal scroll/cursor movement */
+input[type="text"],
+input:not([type]) {
+    touch-action: pan-x;
+    -webkit-user-select: text;
+    user-select: text;
+}

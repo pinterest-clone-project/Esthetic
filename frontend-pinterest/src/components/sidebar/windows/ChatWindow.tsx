@@ -107,7 +107,7 @@ const ChatWindow = ({ chat, onClose }: ChatWindowProps) => {
                         onChange={(e) => setText(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
                         placeholder={t('chat.messagePlaceholder')}
-                        className="flex-1 bg-transparent text-sm text-black dark:text-white outline-none placeholder:text-[#555]"
+                        className="flex-1 min-w-0 bg-transparent text-sm text-black dark:text-white outline-none placeholder:text-[#555] overflow-x-auto"
                     />
                     <button
                         onClick={handleSend}
