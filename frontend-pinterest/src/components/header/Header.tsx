@@ -24,7 +24,6 @@ import NotificationBell from "@/components/header/NotificationBell.tsx";
 import {useTheme} from "@/context/ThemeContext.tsx";
 import Modal from "@/components/ui/Modal.tsx";
 import LanguageSwitcher from "@/components/header/LanguageSwitcher.tsx";
-import { Newspaper, Info, Briefcase } from "lucide-react";
 
 type ModalType = "login" | "signup" | "forgot-password" | "reset-password" | null;
 
@@ -221,36 +220,11 @@ const Header: React.FC = () => {
                                     </button>
                                 </div>
                                 {dropdownOpen && (
-                                    <div className="absolute right-0 top-12 bg-white dark:bg-[#1a1a1a]  rounded-[10px] shadow-2xl w-48 py-2 z-50 border border-[#A1A1A1] dark:border-[#535353]">
+                                    <div className="absolute right-0 top-12 bg-white dark:bg-[#1a1a1a] rounded-[10px] shadow-2xl w-48 py-2 z-50 border border-[#A1A1A1] dark:border-[#535353] animate-[dropdownIn_0.2s_ease]">
                                         <div className="px-4 py-2 border-b border-[#A1A1A1] dark:border-[#535353] mb-1">
                                             <p className="text-black dark:text-white text-sm font-medium">{user?.firstName}</p>
                                             <p className="text-[#A1A1A1] text-xs">{user?.email}</p>
                                         </div>
-
-                                        <Link
-                                            to="/news"
-                                            onClick={() => setDropdownOpen(false)}
-                                            className="w-full px-4 py-2 text-left text-sm text-black dark:text-white hover:bg-[#A1A1A1] dark:hover:bg-[#535353] transition flex items-center gap-2"
-                                        >
-                                            <Newspaper size={16} />
-                                            {t('nav.news', 'News')}
-                                        </Link>
-                                        <Link
-                                            to="/about"
-                                            onClick={() => setDropdownOpen(false)}
-                                            className="w-full px-4 py-2 text-left text-sm text-black dark:text-white hover:bg-[#A1A1A1] dark:hover:bg-[#535353] transition flex items-center gap-2"
-                                        >
-                                            <Info size={16} />
-                                            {t('nav.about', 'About Us')}
-                                        </Link>
-                                        <Link
-                                            to="/business"
-                                            onClick={() => setDropdownOpen(false)}
-                                            className="w-full px-4 py-2 text-left text-sm text-black dark:text-white hover:bg-[#A1A1A1] dark:hover:bg-[#535353] transition flex items-center gap-2 border-b border-[#A1A1A1] dark:border-[#535353]"
-                                        >
-                                            <Briefcase size={16} />
-                                            {t('nav.business', 'For Business')}
-                                        </Link>
 
                                         {isAdmin && (
                                             <button

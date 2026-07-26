@@ -156,7 +156,6 @@ const App = () => {
                                     <Route path="/collections" element={<Navigate to="/collections/aura" replace />} />
                                     <Route path="/collections/aura" element={<CollectionsPage />} />
                                     <Route path="/collections/moodboard" element={<CollectionsPage />} />
-                                    <Route path="/collections/ai" element={<CollectionsPage />} />
 
                                     <Route path="/chat" element={<ChatPage />} />
                                     <Route path="/settings" element={<SettingsPage />} />

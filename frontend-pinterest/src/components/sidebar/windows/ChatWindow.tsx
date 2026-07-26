@@ -16,6 +16,21 @@ interface ChatWindowProps {
 const formatTime = (iso: string, lang: string) =>
     new Date(iso).toLocaleTimeString(lang, { hour: "2-digit", minute: "2-digit" });
 
+const formatDateSeparator = (iso: string, lang: string) => {
+    const date = new Date(iso);
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    if (date.toDateString() === today.toDateString())
+        return lang.startsWith("uk") ? "Сьогодні" : "Today";
+    if (date.toDateString() === yesterday.toDateString())
+        return lang.startsWith("uk") ? "Вчора" : "Yesterday";
+    return date.toLocaleDateString(lang, { day: "numeric", month: "long", year: "numeric" });
+};
+
+const getDateKey = (iso: string) => new Date(iso).toDateString();
+
 const ChatWindow = ({ chat, onClose }: ChatWindowProps) => {
     const { t, i18n } = useTranslation('common');
     const currentUserId = useAppSelector((s) => s.auth.user?.id);
@@ -78,21 +93,33 @@ const ChatWindow = ({ chat, onClose }: ChatWindowProps) => {
                 className="flex-1 overflow-y-auto px-4 py-3 flex flex-col gap-2 min-h-0"
                 style={{ scrollbarWidth: "none" }}
             >
-                {messages.map((m) => {
+                {messages.map((m, i) => {
                     const isOwn = m.senderId === currentUserId;
+                    const showDateSeparator = i === 0 || getDateKey(m.sentAt) !== getDateKey(messages[i - 1].sentAt);
                     return (
-                        <div key={m.id} className={`flex ${isOwn ? "justify-end" : "justify-start"}`}>
-                            <div
-                                className={`max-w-[75%] px-3 pt-2 pb-1 text-sm whitespace-pre-wrap break-words flex flex-col ${
-                                    isOwn
-                                        ? "bg-[#1DB954] text-black rounded-[18px] rounded-br-[4px]"
-                                        : "bg-[#2a2a2a] text-white rounded-[18px] rounded-bl-[4px]"
-                                }`}
-                            >
-                                <span>{m.content}</span>
-                                <span className={`text-[10px] mt-0.5 self-end ${isOwn ? "text-black/50" : "text-white/40"}`}>
-                                    {formatTime(m.sentAt, i18n.language)}
-                                </span>
+                        <div key={m.id}>
+                            {showDateSeparator && (
+                                <div className="flex items-center gap-2 my-2">
+                                    <div className="flex-1 h-px bg-black/10 dark:bg-white/10" />
+                                    <span className="text-[11px] text-black/40 dark:text-white/40 shrink-0">
+                                        {formatDateSeparator(m.sentAt, i18n.language)}
+                                    </span>
+                                    <div className="flex-1 h-px bg-black/10 dark:bg-white/10" />
+                                </div>
+                            )}
+                            <div className={`flex ${isOwn ? "justify-end" : "justify-start"}`}>
+                                <div
+                                    className={`max-w-[75%] px-3 pt-2 pb-1 text-sm whitespace-pre-wrap break-words flex flex-col ${
+                                        isOwn
+                                            ? "bg-[#1DB954] text-black rounded-[18px] rounded-br-[4px]"
+                                            : "bg-[#2a2a2a] text-white rounded-[18px] rounded-bl-[4px]"
+                                    }`}
+                                >
+                                    <span>{m.content}</span>
+                                    <span className={`text-[10px] mt-0.5 self-end ${isOwn ? "text-black/50" : "text-white/40"}`}>
+                                        {formatTime(m.sentAt, i18n.language)}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     );

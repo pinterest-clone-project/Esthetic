@@ -229,6 +229,12 @@ html, body {
     color: white;
 }
 
+/* Header dropdown animation */
+@keyframes dropdownIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
 /* Mobile burger menu animation */
 @keyframes slideDown {
     from { opacity: 0; transform: translateY(-8px); }

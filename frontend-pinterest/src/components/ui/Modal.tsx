@@ -67,7 +67,7 @@ const Modal = ({
                         borderTopLeftRadius: 0,
                         borderBottomLeftRadius: 0,
                     }}
-                    className="fixed bottom-0 z-50 bg-white dark:bg-[#1a1a1a] shadow-2xl flex flex-col"
+                    className="fixed bottom-0 z-50 bg-white dark:bg-[#1a1a1a] text-black dark:text-white shadow-2xl flex flex-col"
                     onClick={(e) => e.stopPropagation()}
                 >
                     {title && (
