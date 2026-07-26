@@ -9,9 +9,11 @@ import UsersTable from "@/components/admin/users/UsersTable.tsx";
 import BlockUserModal from "@/components/admin/users/BlockUserModal.tsx";
 import BlockReasonModal from "@/components/admin/users/BlockReasonModal.tsx";
 import Pagination from "@/components/common/Pagination.tsx";
+import { useTheme } from "@/context/ThemeContext.tsx";
 
 const AdminUsersPage = () => {
     const currentUser = useSelector(selectUser);
+    const { theme } = useTheme();
 
     const {
         search,
@@ -81,7 +83,7 @@ const AdminUsersPage = () => {
     return (
         <div className="relative z-10 w-full max-w-full overflow-hidden">
             <h1 className="text-xl sm:text-2xl font-bold tracking-[-0.5px] mb-1">Користувачі</h1>
-            <p className="text-xs sm:text-sm text-white/30 mb-6 sm:mb-8 tracking-[-0.3px]">
+            <p className="text-xs sm:text-sm text-gray-400 dark:text-white/30 mb-6 sm:mb-8 tracking-[-0.3px]">
                 Управління користувачами та блокування
             </p>
 
@@ -109,6 +111,7 @@ const AdminUsersPage = () => {
                 onShowReason={setReasonTarget}
                 onBlockClick={setBlockTarget}
                 onUnblock={handleUnblock}
+                theme={theme}
             />
 
             {!isLoadingState && data && (

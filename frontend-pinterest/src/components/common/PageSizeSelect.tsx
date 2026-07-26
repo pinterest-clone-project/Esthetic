@@ -13,7 +13,7 @@ const PageSizeSelect = ({ value, onChange }: PageSizeSelectProps) => {
         <select
             value={value}
             onChange={(e) => onChange(Number(e.target.value))}
-            className="bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50 transition-colors"
+            className="bg-gray-100 dark:bg-[#1a1a1a] border border-gray-200 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-btn-primary/50 transition-colors"
         >
             {PAGE_SIZE_OPTIONS.map((size) => (
                 <option key={size} value={size}>{t('pageSize', { size })}</option>

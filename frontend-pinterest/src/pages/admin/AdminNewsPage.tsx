@@ -7,16 +7,21 @@ import type { INews } from "@/types/news/INews.ts";
 import NewsRow from "@/components/admin/news/NewsRow.tsx";
 import NewsFormModal from "@/components/admin/news/NewsFormModal.tsx";
 import DeleteNewsModal from "@/components/admin/news/DeleteNewsModal.tsx";
+import { useTheme } from "@/context/ThemeContext.tsx";
 
 const AdminNewsPage = () => {
     const { t } = useTranslation('admin');
     const { data, isLoading } = useGetAllNewsQuery();
+    const { theme } = useTheme();
 
     const [editingNews, setEditingNews] = useState<INews | null | "new">(null);
     const [deletingNews, setDeletingNews] = useState<INews | null>(null);
 
     return (
-        <SkeletonTheme baseColor="#202020" highlightColor="#333333">
+        <SkeletonTheme 
+            baseColor={theme === "dark" ? "#202020" : "#e5e7eb"} 
+            highlightColor={theme === "dark" ? "#333333" : "#f3f4f6"}
+        >
             <div className="relative z-10 w-full max-w-full overflow-x-hidden">
                 <div className="flex items-center justify-between mb-1">
                     <h1 className="text-xl sm:text-2xl font-bold tracking-[-0.5px]">{t('sections.news')}</h1>
@@ -28,7 +33,7 @@ const AdminNewsPage = () => {
                         {t('news.new')}
                     </button>
                 </div>
-                <p className="text-xs sm:text-sm text-white/30 mb-6 sm:mb-8 tracking-[-0.3px]">
+                <p className="text-xs sm:text-sm text-gray-400 dark:text-white/30 mb-6 sm:mb-8 tracking-[-0.3px]">
                     {t('news.subtitle')}
                 </p>
 
@@ -38,7 +43,7 @@ const AdminNewsPage = () => {
                             <Skeleton key={idx} height={68} borderRadius={16} />
                         ))
                         : !data?.length
-                            ? <p className="text-sm text-white/40 text-center py-10">{t('news.empty')}</p>
+                            ? <p className="text-sm text-gray-400 dark:text-white/40 text-center py-10">{t('news.empty')}</p>
                             : data.map((item) => (
                                 <NewsRow
                                     key={item.id}
@@ -54,6 +59,7 @@ const AdminNewsPage = () => {
                 <NewsFormModal
                     news={editingNews === "new" ? null : editingNews}
                     onClose={() => setEditingNews(null)}
+                    theme={theme}
                 />
             )}
 

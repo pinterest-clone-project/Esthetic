@@ -25,25 +25,25 @@ const Pagination = ({ page, totalPages, totalCount, onPageChange }: PaginationPr
     if (totalCount <= 0) return null;
 
     return (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4 text-xs text-white/40">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4 text-xs text-gray-500 dark:text-white/40">
             <span>{t('pagination.info', { page, totalPages, totalCount })}</span>
             <div className="flex items-center gap-1.5 flex-wrap justify-center">
                 <button
                     onClick={() => onPageChange(Math.max(1, page - 1))}
                     disabled={page <= 1}
-                    className="px-3 py-1.5 rounded-xl bg-white/8 text-white/70 hover:bg-white/15 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="px-3 py-1.5 rounded-xl bg-gray-200 dark:bg-white/8 text-gray-700 dark:text-white/70 hover:bg-gray-300 dark:hover:bg-white/15 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                     {t('pagination.prev')}
                 </button>
                 {pageItems.map((item, idx) =>
                     item === "..." ? (
-                        <span key={`dots-${idx}`} className="px-2 text-white/30 select-none">…</span>
+                        <span key={`dots-${idx}`} className="px-2 text-gray-400 dark:text-white/30 select-none">…</span>
                     ) : (
                         <button
                             key={item}
                             onClick={() => onPageChange(item)}
                             className={`min-w-[32px] px-2.5 py-1.5 rounded-xl transition-colors ${
-                                item === page ? "bg-btn-primary/15 text-btn-primary font-medium" : "bg-white/8 text-white/70 hover:bg-white/15"
+                                item === page ? "bg-btn-primary/15 text-btn-primary font-medium" : "bg-gray-200 dark:bg-white/8 text-gray-700 dark:text-white/70 hover:bg-gray-300 dark:hover:bg-white/15"
                             }`}
                         >
                             {item}
@@ -53,7 +53,7 @@ const Pagination = ({ page, totalPages, totalCount, onPageChange }: PaginationPr
                 <button
                     onClick={() => onPageChange(Math.min(totalPages, page + 1))}
                     disabled={page >= totalPages}
-                    className="px-3 py-1.5 rounded-xl bg-white/8 text-white/70 hover:bg-white/15 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="px-3 py-1.5 rounded-xl bg-gray-200 dark:bg-white/8 text-gray-700 dark:text-white/70 hover:bg-gray-300 dark:hover:bg-white/15 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                     {t('pagination.next')}
                 </button>

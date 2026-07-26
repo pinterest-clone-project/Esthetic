@@ -9,7 +9,6 @@ import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import type { ICategory } from "@/types/categories/ICategory.ts";
 import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
 import { APP_ENV } from "@/constants/env";
-
 type CategoryFormValues = {
     name: string;
     description?: string;
@@ -129,8 +128,8 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
     return (
         <>
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
-                <div className="w-full max-w-md bg-[#161616] border border-white/8 rounded-3xl p-6">
-                    <h2 className="text-lg font-semibold mb-4">
+                <div className="w-full max-w-md bg-gray-100 dark:bg-[#161616] border border-gray-200 dark:border-white/8 rounded-3xl p-6">
+                    <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
                         {isEdit ? t('categories.edit') : t('categories.new')}
                     </h2>
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
@@ -139,12 +138,12 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
                             <button
                                 type="button"
                                 onClick={() => fileInputRef.current?.click()}
-                                className="w-24 h-24 rounded-2xl overflow-hidden bg-white/8 border border-white/8 flex items-center justify-center hover:border-btn-primary/50 transition-colors"
+                                className="w-24 h-24 rounded-2xl overflow-hidden bg-gray-200 dark:bg-white/8 border border-gray-300 dark:border-white/8 flex items-center justify-center hover:border-btn-primary/50 transition-colors"
                             >
                                 {imagePreview ? (
                                     <img src={imagePreview} alt="preview" className="w-full h-full object-cover" />
                                 ) : (
-                                    <span className="text-xs text-white/40">{t('categories.formModal.photo')}</span>
+                                    <span className="text-xs text-gray-500 dark:text-white/40">{t('categories.formModal.photo')}</span>
                                 )}
                             </button>
                             <input
@@ -161,13 +160,13 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
                                 {...register("name")}
                                 type="text"
                                 placeholder={t('categories.name')}
-                                className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50 transition-colors"
+                                className="w-full bg-gray-200 dark:bg-[#1a1a1a] border border-gray-300 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-btn-primary/50 transition-colors"
                             />
-                            {errors.name && <p className="text-xs text-red-400 mt-1">{errors.name.message}</p>}
+                            {errors.name && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.name.message}</p>}
                         </div>
 
                         {slug && (
-                            <p className="text-xs text-white/30 px-1">
+                            <p className="text-xs text-gray-500 dark:text-white/30 px-1">
                                 {t('categories.slugLink', { slug })}
                             </p>
                         )}
@@ -177,10 +176,10 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
                                 {...register("description")}
                                 placeholder={t('categories.formModal.descPlaceholder')}
                                 rows={3}
-                                className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50 transition-colors resize-none"
+                                className="w-full bg-gray-200 dark:bg-[#1a1a1a] border border-gray-300 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-btn-primary/50 transition-colors resize-none"
                             />
                             {errors.description && (
-                                <p className="text-xs text-red-400 mt-1">{errors.description.message}</p>
+                                <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.description.message}</p>
                             )}
                         </div>
 
@@ -188,7 +187,7 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
                             <button
                                 type="button"
                                 onClick={onClose}
-                                className="flex-1 py-2.5 rounded-2xl bg-white/8 text-white/70 hover:bg-white/15 transition-colors"
+                                className="flex-1 py-2.5 rounded-2xl bg-gray-200 dark:bg-white/8 text-gray-700 dark:text-white/70 hover:bg-gray-300 dark:hover:bg-white/15 transition-colors"
                             >
                                 {t('categories.formModal.cancel')}
                             </button>
