@@ -133,7 +133,7 @@ const AuraPreviewPage = () => {
                                 className="flex items-center gap-1.5 text-xs transition-colors group"
                             >
                                 <HeartIcon filled={liked} className={`transition-colors ${liked ? 'text-[#4ade80]' : 'text-gray-500 group-hover:text-[#4ade80]'}`} />
-                                <span className={`transition-colors ${liked ? 'text-white' : 'text-gray-500'}`}>{displayLikesCount}</span>
+                                <span className={`transition-colors ${liked ? 'text-[#4ade80]' : 'text-gray-500 dark:text-gray-400'}`}>{displayLikesCount}</span>
                             </button>
                             <span className="flex items-center gap-1.5 text-gray-500 text-xs">
                                 <CommentIcon className="text-[#4ade80]" />
@@ -156,14 +156,14 @@ const AuraPreviewPage = () => {
                             <div className="relative" ref={menuRef}>
                                 <button
                                     onClick={() => setMenuOpen(o => !o)}
-                                    className="flex items-center justify-center w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 dark:text-gray-300 text-gray-600 hover:text-black dark:hover:text-white transition-all duration-150"
+                                    className="flex items-center justify-center w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-[#A1A1A1]/50 hover:border-[#A1A1A1] dark:border-white/10 dark:hover:border-white/20 dark:text-gray-300 text-gray-600 hover:text-black dark:hover:text-white transition-all duration-150"
                                     aria-label="More options"
                                 >
                                     <DotsVerticalIcon />
                                 </button>
 
                                 {menuOpen && (
-                                    <div className="absolute right-0 top-full mt-1.5 w-44 bg-white dark:bg-[#1a1a1a] border border-black/10 dark:border-white/10 rounded-xl shadow-xl z-20 overflow-hidden py-1">
+                                    <div className="absolute right-0 top-full mt-1.5 w-44 bg-white dark:bg-[#1a1a1a] border border-[#A1A1A1] dark:border-white/10 rounded-xl shadow-xl z-20 overflow-hidden py-1 animate-[dropdownIn_0.2s_ease]">
                                         {/* Download */}
                                         <button
                                             onClick={() => { handleDownload(); setMenuOpen(false); }}
@@ -270,7 +270,7 @@ const AuraPreviewPage = () => {
                             {pin.tags.map(tag => (
                                 <span
                                     key={tag.id}
-                                    className="text-xs text-gray-400 bg-white/5 border border-white/10 px-2.5 py-1 rounded-full"
+                                    className="text-xs text-gray-500 dark:text-gray-400 bg-black/5 dark:bg-white/5 border border-[#A1A1A1]/50 dark:border-white/10 px-2.5 py-1 rounded-full"
                                 >
                                     #{tag.name}
                                 </span>
