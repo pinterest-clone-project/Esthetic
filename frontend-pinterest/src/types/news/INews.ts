@@ -6,6 +6,7 @@ export interface INews {
     excerptEn: string;
     tag: string;
     image: string | null;
+    content: string | null;
     publishedAt: string;
     isFeatured: boolean;
 }

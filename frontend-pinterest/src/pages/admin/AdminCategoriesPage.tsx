@@ -9,8 +9,10 @@ import DeleteCategoryModal from "@/components/admin/categories/DeleteCategoryMod
 import Pagination from "@/components/common/Pagination.tsx";
 import {useSearchCategoriesQuery} from "@/services/categoryService.ts";
 import type {ICategory} from "@/types/categories/ICategory.ts";
+import { useTheme } from "@/context/ThemeContext.tsx";
 
 const AdminCategoriesPage = () => {
+    const { theme } = useTheme();
     const {
         search, setSearch, page, setPage, pageSize, handlePageSizeChange,
         sortBy, sortDirection, sortValue, handleSortChange,
@@ -32,7 +34,10 @@ const AdminCategoriesPage = () => {
     }, [data, totalPages]);
 
     return (
-        <SkeletonTheme baseColor="#202020" highlightColor="#333333">
+        <SkeletonTheme 
+            baseColor={theme === "dark" ? "#202020" : "#e5e7eb"} 
+            highlightColor={theme === "dark" ? "#333333" : "#f3f4f6"}
+        >
             <div className="relative z-10 w-full max-w-full overflow-x-hidden">
                 <div className="flex items-center justify-between mb-1">
                     <h1 className="text-xl sm:text-2xl font-bold tracking-[-0.5px]">Категорії</h1>
@@ -44,7 +49,7 @@ const AdminCategoriesPage = () => {
                         Нова категорія
                     </button>
                 </div>
-                <p className="text-xs sm:text-sm text-white/30 mb-6 sm:mb-8 tracking-[-0.3px]">
+                <p className="text-xs sm:text-sm text-gray-400 dark:text-white/30 mb-6 sm:mb-8 tracking-[-0.3px]">
                     Керування категоріями платформи
                 </p>
 
@@ -61,7 +66,7 @@ const AdminCategoriesPage = () => {
                     {isLoadingState
                         ? Array.from({ length: 6 }).map((_, idx) => <Skeleton key={idx} height={68} borderRadius={16} />)
                         : data?.items.length === 0
-                            ? <p className="text-sm text-white/40 text-center py-10">Категорій не знайдено</p>
+                            ? <p className="text-sm text-gray-400 dark:text-white/40 text-center py-10">Категорій не знайдено</p>
                             : data?.items.map((category) => (
                                 <CategoryRow
                                     key={category.id}

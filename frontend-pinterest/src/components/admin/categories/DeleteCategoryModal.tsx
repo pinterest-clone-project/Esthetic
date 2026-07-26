@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import { useDeleteCategoryMutation } from "@/services/categoryService.ts";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import type { ICategory } from "@/types/categories/ICategory.ts";
-
 interface DeleteCategoryModalProps {
     category: ICategory;
     onClose: () => void;
@@ -33,15 +32,15 @@ const DeleteCategoryModal = ({ category, onClose }: DeleteCategoryModalProps) =>
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
-            <div className="w-full max-w-sm bg-[#161616] border border-white/8 rounded-3xl p-6">
-                <h2 className="text-lg font-semibold mb-2">{t('categories.deleteModal.title')}</h2>
-                <p className="text-sm text-white/50 mb-4">
+            <div className="w-full max-w-sm bg-gray-100 dark:bg-[#161616] border border-gray-200 dark:border-white/8 rounded-3xl p-6">
+                <h2 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">{t('categories.deleteModal.title')}</h2>
+                <p className="text-sm text-gray-600 dark:text-white/50 mb-4">
                     {t('categories.deleteModal.desc', { name: category.name })}
                 </p>
                 <div className="flex gap-2">
                     <button
                         onClick={onClose}
-                        className="flex-1 py-2.5 rounded-2xl bg-white/8 text-white/70 hover:bg-white/15 transition-colors"
+                        className="flex-1 py-2.5 rounded-2xl bg-gray-200 dark:bg-white/8 text-gray-700 dark:text-white/70 hover:bg-gray-300 dark:hover:bg-white/15 transition-colors"
                     >
                         {t('categories.deleteModal.cancel')}
                     </button>

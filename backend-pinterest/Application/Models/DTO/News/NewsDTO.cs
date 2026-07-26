@@ -9,6 +9,7 @@ public class NewsDTO
     public string ExcerptEn { get; set; } = string.Empty;
     public string Tag { get; set; } = string.Empty;
     public string? Image { get; set; }
+    public string? Content { get; set; }
     public DateTime PublishedAt { get; set; }
     public bool IsFeatured { get; set; }
 }

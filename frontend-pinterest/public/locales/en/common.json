@@ -302,7 +302,9 @@
     "save": "Save",
     "cancel": "Cancel",
     "signInToComment": "Sign in to comment.",
-    "noComments": "No comments yet. Be the first!"
+    "noComments": "No comments yet. Be the first!",
+    "showMore": "Show more (+{{count}})",
+    "showLess": "Show less"
   },
   "adminBanner": {
     "title": "Administrator access",

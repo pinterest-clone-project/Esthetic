@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { APP_ENV } from "@/constants/env";
 import type { IUser } from "@/types/user/IUser.ts";
-
 interface UserTableRowProps {
     user: IUser;
     isSelf: boolean;
@@ -26,32 +25,32 @@ const UserTableRow = ({
     const { t, i18n } = useTranslation('admin');
 
     return (
-        <tr className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+        <tr className="border-b border-gray-200 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
             <td className="px-4 sm:px-5 py-3">
                 <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center overflow-hidden shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-white/10 flex items-center justify-center overflow-hidden shrink-0">
                         {user.image ? (
                             <img src={`${APP_ENV.IMAGES_100_URL}${user.image}`} alt={user.userName ?? ""} className="w-full h-full object-cover" />
                         ) : (
-                            <span className="text-xs text-white/50">
+                            <span className="text-xs text-gray-500 dark:text-white/50">
                                 {(user.userName ?? "?").charAt(0).toUpperCase()}
                             </span>
                         )}
                     </div>
                     <div className="min-w-0">
-                        <p className="text-white/90 tracking-[-0.2px] truncate">
+                        <p className="text-gray-800 dark:text-white/90 tracking-[-0.2px] truncate">
                             {user.userName}
-                            {isSelf && <span className="ml-1.5 text-[10px] text-white/30">{t('users.you')}</span>}
+                            {isSelf && <span className="ml-1.5 text-[10px] text-gray-400 dark:text-white/30">{t('users.you')}</span>}
                         </p>
                         {(user.firstName || user.lastName) && (
-                            <p className="text-white/30 text-xs truncate">
+                            <p className="text-gray-400 dark:text-white/30 text-xs truncate">
                                 {[user.firstName, user.lastName].filter(Boolean).join(" ")}
                             </p>
                         )}
                     </div>
                 </div>
             </td>
-            <td className="px-4 sm:px-5 py-3 hidden sm:table-cell text-white/50 truncate max-w-[200px]">
+            <td className="px-4 sm:px-5 py-3 hidden sm:table-cell text-gray-500 dark:text-white/50 truncate max-w-[200px]">
                 {user.email}
             </td>
             <td className="px-4 sm:px-5 py-3 hidden lg:table-cell">
@@ -62,15 +61,15 @@ const UserTableRow = ({
                                 key={role}
                                 className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] ${
                                     role === "Admin"
-                                        ? "bg-purple-500/10 text-purple-400"
-                                        : "bg-white/8 text-white/50"
+                                        ? "bg-purple-100 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400"
+                                        : "bg-gray-200 dark:bg-white/8 text-gray-600 dark:text-white/50"
                                 }`}
                             >
                                 {role}
                             </span>
                         ))
                     ) : (
-                        <span className="text-white/20 text-xs">—</span>
+                        <span className="text-gray-300 dark:text-white/20 text-xs">—</span>
                     )}
                 </div>
             </td>
@@ -79,12 +78,12 @@ const UserTableRow = ({
                     user.blockReason ? (
                         <button
                             onClick={() => onShowReason(user)}
-                            className="inline-flex items-center px-2.5 py-1 rounded-full text-xs bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors"
+                            className="inline-flex items-center px-2.5 py-1 rounded-full text-xs bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-500/20 transition-colors"
                         >
                             {t('users.status.blocked')}
                         </button>
                     ) : (
-                        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs bg-red-500/10 text-red-400">
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-400">
                             {t('users.status.blocked')}
                         </span>
                     )
@@ -94,7 +93,7 @@ const UserTableRow = ({
                     </span>
                 )}
             </td>
-            <td className="px-4 sm:px-5 py-3 hidden md:table-cell text-white/40">
+            <td className="px-4 sm:px-5 py-3 hidden md:table-cell text-gray-400 dark:text-white/40">
                 {new Date(user.createdAt).toLocaleDateString(i18n.language)}
             </td>
             <td className="px-4 sm:px-5 py-3 text-right">
@@ -102,20 +101,20 @@ const UserTableRow = ({
                     <button
                         onClick={() => onUnblock(user.id)}
                         disabled={isUnblocking}
-                        className="text-xs px-3 py-1.5 rounded-xl bg-white/8 text-white/80 hover:bg-white/15 transition-colors disabled:opacity-50"
+                        className="text-xs px-3 py-1.5 rounded-xl bg-gray-200 dark:bg-white/8 text-gray-700 dark:text-white/80 hover:bg-gray-300 dark:hover:bg-white/15 transition-colors disabled:opacity-50"
                     >
                         {t('users.unblock')}
                     </button>
                 ) : blockAllowed ? (
                     <button
                         onClick={() => onBlockClick(user)}
-                        className="text-xs px-3 py-1.5 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors"
+                        className="text-xs px-3 py-1.5 rounded-xl bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-500/20 transition-colors"
                     >
                         {t('users.block')}
                     </button>
                 ) : (
                     <span
-                        className="text-xs px-3 py-1.5 rounded-xl bg-white/4 text-white/20 cursor-not-allowed select-none"
+                        className="text-xs px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-white/4 text-gray-400 dark:text-white/20 cursor-not-allowed select-none"
                         title={isSelf ? t('users.cannotBlockSelf') : isAdminUser ? t('users.cannotBlockAdmin') : undefined}
                     >
                         {t('users.block')}

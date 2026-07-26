@@ -10,6 +10,10 @@ export const newsService = api.injectEndpoints({
             query: () => ({ url: "News/getAll", method: "GET" }),
             providesTags: ["News"],
         }),
+        getNewsById: builder.query<INews, string>({
+            query: (id) => ({ url: `News/${id}`, method: "GET" }),
+            providesTags: ["News"],
+        }),
         createNews: builder.mutation<void, ICreateNewsRequest>({
             query: (data) => ({
                 url: "News/create",
@@ -35,6 +39,7 @@ export const newsService = api.injectEndpoints({
 
 export const {
     useGetAllNewsQuery,
+    useGetNewsByIdQuery,
     useCreateNewsMutation,
     useUpdateNewsMutation,
     useDeleteNewsMutation,
