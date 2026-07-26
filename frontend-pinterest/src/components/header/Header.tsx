@@ -24,6 +24,7 @@ import NotificationBell from "@/components/header/NotificationBell.tsx";
 import {useTheme} from "@/context/ThemeContext.tsx";
 import Modal from "@/components/ui/Modal.tsx";
 import LanguageSwitcher from "@/components/header/LanguageSwitcher.tsx";
+import { Newspaper, Info, Briefcase } from "lucide-react";
 
 type ModalType = "login" | "signup" | "forgot-password" | "reset-password" | null;
 
@@ -231,9 +232,7 @@ const Header: React.FC = () => {
                                             onClick={() => setDropdownOpen(false)}
                                             className="w-full px-4 py-2 text-left text-sm text-black dark:text-white hover:bg-[#A1A1A1] dark:hover:bg-[#535353] transition flex items-center gap-2"
                                         >
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                                <path d="M4 4h16v16H4z"/><path d="M4 9h16M9 9v11"/>
-                                            </svg>
+                                            <Newspaper size={16} />
                                             {t('nav.news', 'News')}
                                         </Link>
                                         <Link
@@ -241,9 +240,7 @@ const Header: React.FC = () => {
                                             onClick={() => setDropdownOpen(false)}
                                             className="w-full px-4 py-2 text-left text-sm text-black dark:text-white hover:bg-[#A1A1A1] dark:hover:bg-[#535353] transition flex items-center gap-2"
                                         >
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                                <circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>
-                                            </svg>
+                                            <Info size={16} />
                                             {t('nav.about', 'About Us')}
                                         </Link>
                                         <Link
@@ -251,9 +248,7 @@ const Header: React.FC = () => {
                                             onClick={() => setDropdownOpen(false)}
                                             className="w-full px-4 py-2 text-left text-sm text-black dark:text-white hover:bg-[#A1A1A1] dark:hover:bg-[#535353] transition flex items-center gap-2 border-b border-[#A1A1A1] dark:border-[#535353]"
                                         >
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                                <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-                                            </svg>
+                                            <Briefcase size={16} />
                                             {t('nav.business', 'For Business')}
                                         </Link>
 
