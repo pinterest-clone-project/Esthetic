@@ -3,7 +3,6 @@ import type { ReportStatusFilter } from "@/hooks/useAdminReportsFilters.ts";
 import SortSelect from "@/components/common/SortSelect.tsx";
 import PageSizeSelect from "@/components/common/PageSizeSelect.tsx";
 import StatusFilterSelect from "@/components/admin/reports/StatusFilterSelect.tsx";
-
 interface ReportsFiltersProps {
     status: ReportStatusFilter;
     onStatusChange: (value: ReportStatusFilter) => void;

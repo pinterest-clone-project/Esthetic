@@ -1,10 +1,11 @@
 import Header from "../components/header/Header.tsx";
-import { Outlet, useLocation } from "react-router";
+import { useLocation } from "react-router";
 import Sidebar from "@/components/sidebar/SideBar.tsx";
 import { useAppSelector } from "@/store";
 import TopProgressBar from "@/components/ui/TopProgressBar.tsx";
 import BottomNav from "@/components/navigation/BottomNav.tsx";
 import BackButton from "@/components/ui/BackButton.tsx";
+import PageTransition from "@/components/ui/PageTransition.tsx";
 
 const BACK_BUTTON_ROUTES = [
     /^\/profile$/,
@@ -36,7 +37,7 @@ const Layout = () => {
                 {user && <Sidebar />}
                 <main className="flex-1 px-4 overflow-y-auto scroll-smooth pb-20 md:pb-0 main-scroll">
                     {showBack && <BackButton className="mt-4 mb-2" />}
-                    <Outlet />
+                    <PageTransition />
                 </main>
             </div>
             <BottomNav />

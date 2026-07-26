@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import SortSelect from "@/components/common/SortSelect.tsx";
 import PageSizeSelect from "@/components/common/PageSizeSelect.tsx";
-
 interface BoardsFiltersProps {
     search: string;
     onSearchChange: (value: string) => void;
@@ -42,7 +41,7 @@ const BoardsFilters = ({ search, onSearchChange, sortValue, onSortChange, pageSi
                 value={localSearch}
                 onChange={(e) => setLocalSearch(e.target.value)}
                 placeholder={t('boards.search')}
-                className="w-full sm:w-80 bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50 transition-colors placeholder:text-white/30"
+                className="w-full sm:w-80 bg-gray-100 dark:bg-[#1a1a1a] border border-gray-200 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-btn-primary/50 transition-colors placeholder:text-gray-400 dark:placeholder:text-white/30"
             />
             <SortSelect value={sortValue} options={BOARD_SORT_OPTIONS} onChange={onSortChange} />
             <PageSizeSelect value={pageSize} onChange={onPageSizeChange} />

@@ -8,6 +8,8 @@ import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import type { INews } from "@/types/news/INews.ts";
 import { APP_ENV } from "@/constants/env";
 import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
+import { Editor } from "@tinymce/tinymce-react";
+import type { Theme } from "@/context/ThemeContext.tsx";
 
 const TAGS = [
     "Product Update",
@@ -26,11 +28,13 @@ type NewsFormValues = {
     tag: string;
     publishedAt: string;
     isFeatured: boolean;
+    content?: string;
 };
 
 interface NewsFormModalProps {
     news: INews | null;
     onClose: () => void;
+    theme: Theme;
 }
 
 const getApiErrorMessage = (err: unknown): string => {
@@ -43,7 +47,7 @@ const getApiErrorMessage = (err: unknown): string => {
 
 const toDateInputValue = (iso: string) => iso.split("T")[0];
 
-const NewsFormModal = ({ news, onClose }: NewsFormModalProps) => {
+const NewsFormModal = ({ news, onClose, theme }: NewsFormModalProps) => {
     const { t } = useTranslation('admin');
     const isEdit = !!news;
     const { showToast } = useToast();
@@ -62,9 +66,10 @@ const NewsFormModal = ({ news, onClose }: NewsFormModalProps) => {
         tag: z.string().min(1, t('news.formModal.required')),
         publishedAt: z.string().min(1, t('news.formModal.required')),
         isFeatured: z.boolean(),
+        content: z.string().optional(),
     }), [t]);
 
-    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<NewsFormValues>({
+    const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<NewsFormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
             titleUk: news?.titleUk ?? "",
@@ -74,6 +79,7 @@ const NewsFormModal = ({ news, onClose }: NewsFormModalProps) => {
             tag: news?.tag ?? TAGS[0],
             publishedAt: news ? toDateInputValue(news.publishedAt) : toDateInputValue(new Date().toISOString()),
             isFeatured: news?.isFeatured ?? false,
+            content: news?.content ?? "",
         },
     });
 
@@ -131,8 +137,8 @@ const NewsFormModal = ({ news, onClose }: NewsFormModalProps) => {
     return (
         <>
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 overflow-y-auto py-8">
-            <div className="w-full max-w-lg bg-[#161616] border border-white/8 rounded-3xl p-6">
-                <h2 className="text-lg font-semibold mb-4">
+            <div className="w-full max-w-lg bg-gray-100 dark:bg-[#161616] border border-gray-200 dark:border-white/8 rounded-3xl p-6">
+                <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
                     {isEdit ? t('news.edit') : t('news.new')}
                 </h2>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
@@ -142,12 +148,12 @@ const NewsFormModal = ({ news, onClose }: NewsFormModalProps) => {
                         <button
                             type="button"
                             onClick={() => fileInputRef.current?.click()}
-                            className="w-24 h-24 rounded-2xl overflow-hidden bg-white/8 border border-white/8 flex items-center justify-center hover:border-btn-primary/50 transition-colors"
+                            className="w-24 h-24 rounded-2xl overflow-hidden bg-gray-200 dark:bg-white/8 border border-gray-300 dark:border-white/8 flex items-center justify-center hover:border-btn-primary/50 transition-colors"
                         >
                             {imagePreview ? (
                                 <img src={imagePreview} alt="preview" className="w-full h-full object-cover" />
                             ) : (
-                                <span className="text-xs text-white/40">{t('news.formModal.photo')}</span>
+                                <span className="text-xs text-gray-500 dark:text-white/40">{t('news.formModal.photo')}</span>
                             )}
                         </button>
                         <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileSelect} className="hidden" />
@@ -156,50 +162,73 @@ const NewsFormModal = ({ news, onClose }: NewsFormModalProps) => {
                     {/* Title UK */}
                     <div>
                         <input {...register("titleUk")} placeholder={t('news.formModal.titleUk')}
-                            className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-white/20 transition-colors" />
-                        {errors.titleUk && <p className="text-xs text-red-400 mt-1">{errors.titleUk.message}</p>}
+                            className="w-full bg-gray-200 dark:bg-[#1a1a1a] border border-gray-300 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-white/20 transition-colors" />
+                        {errors.titleUk && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.titleUk.message}</p>}
                     </div>
 
                     {/* Title EN */}
                     <div>
                         <input {...register("titleEn")} placeholder={t('news.formModal.titleEn')}
-                            className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-white/20 transition-colors" />
-                        {errors.titleEn && <p className="text-xs text-red-400 mt-1">{errors.titleEn.message}</p>}
+                            className="w-full bg-gray-200 dark:bg-[#1a1a1a] border border-gray-300 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-white/20 transition-colors" />
+                        {errors.titleEn && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.titleEn.message}</p>}
                     </div>
 
                     {/* Excerpt UK */}
                     <div>
                         <textarea {...register("excerptUk")} placeholder={t('news.formModal.excerptUk')} rows={3}
-                            className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-white/20 transition-colors resize-none" />
-                        {errors.excerptUk && <p className="text-xs text-red-400 mt-1">{errors.excerptUk.message}</p>}
+                            className="w-full bg-gray-200 dark:bg-[#1a1a1a] border border-gray-300 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-white/20 transition-colors resize-none" />
+                        {errors.excerptUk && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.excerptUk.message}</p>}
                     </div>
 
                     {/* Excerpt EN */}
                     <div>
                         <textarea {...register("excerptEn")} placeholder={t('news.formModal.excerptEn')} rows={3}
-                            className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-white/20 transition-colors resize-none" />
-                        {errors.excerptEn && <p className="text-xs text-red-400 mt-1">{errors.excerptEn.message}</p>}
+                            className="w-full bg-gray-200 dark:bg-[#1a1a1a] border border-gray-300 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-white/20 transition-colors resize-none" />
+                        {errors.excerptEn && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.excerptEn.message}</p>}
                     </div>
 
                     {/* Tag */}
                     <div>
                         <select {...register("tag")}
-                            className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-white/20 transition-colors">
+                            className="w-full bg-gray-200 dark:bg-[#1a1a1a] border border-gray-300 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-white/20 transition-colors">
                             {TAGS.map(tag => <option key={tag} value={tag}>{tag}</option>)}
                         </select>
-                        {errors.tag && <p className="text-xs text-red-400 mt-1">{errors.tag.message}</p>}
+                        {errors.tag && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.tag.message}</p>}
                     </div>
 
                     {/* Published At */}
                     <div>
                         <input {...register("publishedAt")} type="date"
-                            className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-white/20 transition-colors" />
-                        {errors.publishedAt && <p className="text-xs text-red-400 mt-1">{errors.publishedAt.message}</p>}
+                            className="w-full bg-gray-200 dark:bg-[#1a1a1a] border border-gray-300 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-white/20 transition-colors" />
+                        {errors.publishedAt && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.publishedAt.message}</p>}
+                    </div>
+
+                    {/* Content */}
+                    <div>
+                        <label className="text-sm text-gray-700 dark:text-white/70 mb-2 block">{t('news.formModal.content')}</label>
+                        <Editor
+                            apiKey="6d380nx6s5ebnl6gwubl451w6ugoces1tb0t8yixr286f9kb"
+                            init={{
+                                height: 300,
+                                menubar: false,
+                                plugins: 'link image code lists table media help wordcount',
+                                toolbar: 'undo redo | blocks | ' +
+                                    'bold italic forecolor | alignleft aligncenter ' +
+                                    'alignright alignjustify | bullist numlist outdent indent | ' +
+                                    'removeformat | help',
+                                content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 14px; }',
+                                skin: theme === 'dark' ? 'oxide-dark' : 'oxide',
+                                content_css: theme === 'dark' ? 'dark' : 'default',
+                                background_color: theme === 'dark' ? '#1a1a1a' : '#ffffff',
+                            }}
+                            initialValue={news?.content ?? ""}
+                            onEditorChange={(content: string) => setValue('content', content)}
+                        />
                     </div>
 
                     {/* IsFeatured */}
                     <label className="flex items-center justify-between px-1">
-                        <span className="text-sm text-white/70">{t('news.formModal.isFeatured')}</span>
+                        <span className="text-sm text-gray-700 dark:text-white/70">{t('news.formModal.isFeatured')}</span>
                         <input {...register("isFeatured")} type="checkbox"
                             className="w-4 h-4 accent-[#1DB954]" />
                     </label>
@@ -207,7 +236,7 @@ const NewsFormModal = ({ news, onClose }: NewsFormModalProps) => {
                     {/* Actions */}
                     <div className="flex gap-2 mt-2">
                         <button type="button" onClick={onClose}
-                            className="flex-1 py-2.5 rounded-2xl bg-white/8 text-white/70 hover:bg-white/15 transition-colors">
+                            className="flex-1 py-2.5 rounded-2xl bg-gray-200 dark:bg-white/8 text-gray-700 dark:text-white/70 hover:bg-gray-300 dark:hover:bg-white/15 transition-colors">
                             {t('news.formModal.cancel')}
                         </button>
                         <button type="submit" disabled={isSubmitting}

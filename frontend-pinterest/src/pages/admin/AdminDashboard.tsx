@@ -13,6 +13,7 @@ import {
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { useGetStatisticsQuery, useGetDailyStatisticsQuery } from '@/services/statisticsService.ts';
+import { useTheme } from '@/context/ThemeContext.tsx';
 
 ChartJS.register(
     CategoryScale,
@@ -28,8 +29,10 @@ const AdminDashboard = () => {
     const { t, i18n } = useTranslation('admin');
     const { data: statistics, isLoading: isStatsLoading } = useGetStatisticsQuery();
     const { data: dailyStats, isLoading: isDailyLoading } = useGetDailyStatisticsQuery();
+    const { theme } = useTheme();
 
     const isLoading = isStatsLoading || isDailyLoading;
+    const isDark = theme === 'dark';
 
     const stats = statistics ? [
         { label: t('dashboardPage.users'), value: statistics.userCount.toLocaleString(), icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" },
@@ -45,11 +48,11 @@ const AdminDashboard = () => {
         scales: {
             x: {
                 grid: { display: false },
-                ticks: { color: '#ffffff50', font: { size: 10 } }
+                ticks: { color: isDark ? '#ffffff50' : '#6b7280', font: { size: 10 } }
             },
             y: {
-                grid: { color: '#ffffff10' },
-                ticks: { color: '#ffffff50', font: { size: 10 } },
+                grid: { color: isDark ? '#ffffff10' : '#e5e7eb' },
+                ticks: { color: isDark ? '#ffffff50' : '#6b7280', font: { size: 10 } },
                 border: { display: false }
             }
         }
@@ -85,15 +88,18 @@ const AdminDashboard = () => {
     } : null;
 
     return (
-        <SkeletonTheme baseColor="#202020" highlightColor="#333333">
+        <SkeletonTheme 
+            baseColor={isDark ? "#202020" : "#e5e7eb"} 
+            highlightColor={isDark ? "#333333" : "#f3f4f6"}
+        >
             <div className="relative z-10 w-full max-w-full overflow-hidden">
                 <h1 className="text-xl sm:text-2xl font-bold tracking-[-0.5px] mb-1">{t('dashboardPage.title')}</h1>
-                <p className="text-xs sm:text-sm text-white/30 mb-6 sm:mb-8 tracking-[-0.3px]">{t('dashboardPage.stats')}</p>
+                <p className="text-xs sm:text-sm text-gray-400 dark:text-white/30 mb-6 sm:mb-8 tracking-[-0.3px]">{t('dashboardPage.stats')}</p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-10">
                     {isLoading
                         ? Array.from({ length: 4 }).map((_, idx) => (
-                            <div key={idx} className="bg-[#1a1a1a] border border-white/8 rounded-2xl p-4 sm:p-5 flex flex-col gap-3">
+                            <div key={idx} className="bg-gray-100 dark:bg-[#1a1a1a] border border-gray-200 dark:border-white/8 rounded-2xl p-4 sm:p-5 flex flex-col gap-3">
                                 <Skeleton circle width={36} height={36} />
                                 <div>
                                     <Skeleton width={80} height={12} style={{ marginBottom: '6px', marginTop: '4px' }} />
@@ -102,14 +108,14 @@ const AdminDashboard = () => {
                             </div>
                         ))
                         : stats.map(({label, value, icon}) => (
-                            <div key={label} className="bg-[#1a1a1a] border border-white/8 rounded-2xl p-4 sm:p-5 flex flex-col gap-3 transition-transform hover:-translate-y-1 duration-200">
+                            <div key={label} className="bg-gray-100 dark:bg-[#1a1a1a] border border-gray-200 dark:border-white/8 rounded-2xl p-4 sm:p-5 flex flex-col gap-3 transition-transform hover:-translate-y-1 duration-200">
                                 <div className="w-9 h-9 rounded-xl bg-btn-primary/10 flex items-center justify-center">
                                     <svg className="w-4 h-4 text-btn-primary" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" d={icon}/>
                                     </svg>
                                 </div>
                                 <div>
-                                    <p className="text-white/40 text-xs tracking-[-0.2px] mb-1">{label}</p>
+                                    <p className="text-gray-500 dark:text-white/40 text-xs tracking-[-0.2px] mb-1">{label}</p>
                                     <p className="text-2xl sm:text-3xl font-bold tracking-[-1px]">{value}</p>
                                 </div>
                             </div>
@@ -117,12 +123,12 @@ const AdminDashboard = () => {
                     }
                 </div>
 
-                <h2 className="text-xs sm:text-sm text-white/40 tracking-[-0.3px] mb-3 uppercase">{t('dashboardPage.activityTitle')}</h2>
+                <h2 className="text-xs sm:text-sm text-gray-400 dark:text-white/40 tracking-[-0.3px] mb-3 uppercase">{t('dashboardPage.activityTitle')}</h2>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
-                    <div className="bg-[#1a1a1a] border border-white/8 rounded-2xl p-4 sm:p-6 h-[280px] sm:h-[320px] flex flex-col">
-                        <h3 className="text-white/80 text-sm font-medium tracking-[-0.2px] mb-4">{t('dashboardPage.newUsers')}</h3>
+                    <div className="bg-gray-100 dark:bg-[#1a1a1a] border border-gray-200 dark:border-white/8 rounded-2xl p-4 sm:p-6 h-[280px] sm:h-[320px] flex flex-col">
+                        <h3 className="text-gray-700 dark:text-white/80 text-sm font-medium tracking-[-0.2px] mb-4">{t('dashboardPage.newUsers')}</h3>
                         <div className="relative flex-1 w-full min-h-0">
                             {isDailyLoading || !lineChartData ? (
                                 <Skeleton height="100%" borderRadius={8} />
@@ -132,8 +138,8 @@ const AdminDashboard = () => {
                         </div>
                     </div>
 
-                    <div className="bg-[#1a1a1a] border border-white/8 rounded-2xl p-4 sm:p-6 h-[280px] sm:h-[320px] flex flex-col">
-                        <h3 className="text-white/80 text-sm font-medium tracking-[-0.2px] mb-4">{t('dashboardPage.newAuras')}</h3>
+                    <div className="bg-gray-100 dark:bg-[#1a1a1a] border border-gray-200 dark:border-white/8 rounded-2xl p-4 sm:p-6 h-[280px] sm:h-[320px] flex flex-col">
+                        <h3 className="text-gray-700 dark:text-white/80 text-sm font-medium tracking-[-0.2px] mb-4">{t('dashboardPage.newAuras')}</h3>
                         <div className="relative flex-1 w-full min-h-0">
                             {isDailyLoading || !barChartData ? (
                                 <Skeleton height="100%" borderRadius={8} />

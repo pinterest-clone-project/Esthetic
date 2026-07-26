@@ -64,8 +64,8 @@ const DeletedAurasPage = () => {
                                         alt={pin.title ?? ""}
                                         className="w-full object-cover"
                                     />
-                                    {/* Overlay on hover */}
-                                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center gap-2 p-3">
+                                    {/* Overlay: always visible on mobile, hover-only on desktop */}
+                                    <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center gap-2 p-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 md:pointer-events-none md:group-hover:pointer-events-auto transition-opacity duration-200">
                                         <button
                                             onClick={(e) => handleRestore(e, pin.id)}
                                             className="w-full px-3 py-2 bg-[#4ade80] hover:bg-[#22c55e] text-black text-xs font-semibold rounded-xl transition-colors"

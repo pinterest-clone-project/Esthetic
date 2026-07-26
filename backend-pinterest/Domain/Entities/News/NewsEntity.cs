@@ -12,6 +12,7 @@ public class NewsEntity : BaseEntity
     public string ExcerptEn { get; set; } = string.Empty;
     public string Tag { get; set; } = string.Empty;
     public string? Image { get; set; }
+    public string? Content { get; set; }
     public DateTime PublishedAt { get; set; } = DateTime.UtcNow;
     public bool IsFeatured { get; set; }
 }

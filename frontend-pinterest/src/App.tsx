@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router";
 import { lazy, Suspense, useEffect, useState } from "react";
+import { AnimatePresence, motion, MotionConfig } from "framer-motion";
 import { useAppDispatch } from "./store";
 import { setUser } from "./store/slices/authSlice";
 import { useGetMeQuery } from "./services/accountService";
@@ -36,6 +37,7 @@ const BlockedPage          = lazy(() => import("@/pages/auth/BlockedPage.tsx"));
 const AboutPage            = lazy(() => import("@/pages/static/AboutPage.tsx"));
 const ForBusinessPage      = lazy(() => import("@/pages/static/ForBusinessPage.tsx"));
 const NewsPage             = lazy(() => import("@/pages/static/NewsPage.tsx"));
+const NewsDetailPage       = lazy(() => import("@/pages/static/NewsDetailPage.tsx"));
 
 const AdminDashboard       = lazy(() => import("@/pages/admin/AdminDashboard.tsx"));
 const AdminUsersPage       = lazy(() => import("@/pages/admin/AdminUsersPage.tsx"));
@@ -56,7 +58,6 @@ const AppInit = ({ children }: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
     const { data, isSuccess, isLoading } = useGetMeQuery();
     const [showLoader, setShowLoader] = useState(true);
-    const [fadeOut, setFadeOut] = useState(false);
 
     useChatRealtime();
     useNotificationRealtime();
@@ -69,41 +70,32 @@ const AppInit = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         if (!isLoading) {
-            const fadeTimer = setTimeout(() => setFadeOut(true), 400);
-            const hideTimer = setTimeout(() => setShowLoader(false), 800);
-            return () => {
-                clearTimeout(fadeTimer);
-                clearTimeout(hideTimer);
-            };
+            const hideTimer = setTimeout(() => setShowLoader(false), 700);
+            return () => clearTimeout(hideTimer);
         }
     }, [isLoading]);
 
     return (
         <>
-            {showLoader && (
-                <div
-                    className="fixed inset-0 z-[9999] flex items-center justify-center bg-white dark:bg-[#121212]"
-                    style={{
-                        opacity: fadeOut ? 0 : 1,
-                        transition: "opacity 0.6s ease",
-                        pointerEvents: fadeOut ? "none" : "all",
-                    }}
-                >
-                    <img
-                        src={logo}
-                        alt=""
-                        className="w-[150px] h-[150px]"
-                        style={{ animation: "logoPulse 1.0s ease-out forwards" }}
-                    />
-                    <style>{`
-                        @keyframes logoPulse {
-                            0%   { opacity: 0; transform: scale(0.8); }
-                            60%  { opacity: 1; transform: scale(1.05); }
-                            100% { opacity: 1; transform: scale(1); }
-                        }
-                    `}</style>
-                </div>
-            )}
+            <AnimatePresence>
+                {showLoader && (
+                    <motion.div
+                        className="fixed inset-0 z-[9999] flex items-center justify-center bg-white dark:bg-[#121212]"
+                        initial={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                    >
+                        <motion.img
+                            src={logo}
+                            alt=""
+                            className="w-[150px] h-[150px]"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                        />
+                    </motion.div>
+                )}
+            </AnimatePresence>
             {children}
         </>
     );
@@ -118,6 +110,7 @@ const App = () => {
     const user = useSelector(selectUser);
 
     return (
+        <MotionConfig reducedMotion="user">
         <ToastProvider>
             <AppInit>
                 <Suspense fallback={<PageLoader />}>
@@ -134,6 +127,7 @@ const App = () => {
                                     <Route path="about" element={<AboutPage />} />
                                     <Route path="business" element={<ForBusinessPage />} />
                                     <Route path="news" element={<NewsPage />} />
+                                    <Route path="news/:id" element={<NewsDetailPage />} />
                                 </Route>
 
                                 <Route element={<PrivateRoute />}>
@@ -183,6 +177,7 @@ const App = () => {
                 </Suspense>
             </AppInit>
         </ToastProvider>
+        </MotionConfig>
     );
 };
 

@@ -32,6 +32,7 @@ const AuraPreviewPage = () => {
     const [reportModalOpen, setReportModalOpen] = useState(false);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    const [tagsExpanded, setTagsExpanded] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -53,10 +54,16 @@ const AuraPreviewPage = () => {
 
     useEffect(() => {
         document.querySelector("main")?.scrollTo({ top: 0, behavior: "instant" });
+        setTagsExpanded(false);
     }, [id]);
 
     const isOwner = me?.id === pin?.creatorId;
     const suggestions = allPins?.filter(p => p.id !== id) ?? [];
+    const VISIBLE_TAGS = 4;
+    const visibleTags = tagsExpanded
+        ? (pin?.tags ?? [])
+        : (pin?.tags ?? []).slice(0, VISIBLE_TAGS);
+    const hiddenTagsCount = Math.max(0, (pin?.tags?.length ?? 0) - VISIBLE_TAGS);
 
     const liked = pin?.isLikedByMe ?? false;
     const displayLikesCount = pin?.likesCount ?? 0;
@@ -255,26 +262,43 @@ const AuraPreviewPage = () => {
                     )}
 
                     {/* Category */}
-                    {pin.categoryName && (
+                    {pin.categoryName && pin.categoryId && (
                         <div className="flex items-center gap-2">
                             <span className="text-gray-600 text-xs">{t('preview.category')}</span>
-                            <span className="text-xs text-[#4ade80] bg-[#4ade80]/10 px-2.5 py-1 rounded-full">
+                            <button
+                                type="button"
+                                onClick={() => navigate(`/aura/search?categoryId=${encodeURIComponent(pin.categoryId!)}`)}
+                                className="text-xs text-[#4ade80] bg-[#4ade80]/10 hover:bg-[#4ade80]/20 px-2.5 py-1 rounded-full transition-colors cursor-pointer"
+                            >
                                 {pin.categoryName}
-                            </span>
+                            </button>
                         </div>
                     )}
 
                     {/* Tags */}
                     {pin.tags?.length > 0 && (
                         <div className="flex flex-wrap gap-2">
-                            {pin.tags.map(tag => (
-                                <span
+                            {visibleTags.map(tag => (
+                                <button
+                                    type="button"
                                     key={tag.id}
-                                    className="text-xs text-gray-500 dark:text-gray-400 bg-black/5 dark:bg-white/5 border border-[#A1A1A1]/50 dark:border-white/10 px-2.5 py-1 rounded-full"
+                                    onClick={() => navigate(`/aura/search?tagId=${encodeURIComponent(tag.id)}`)}
+                                    className="text-xs text-gray-400 bg-white/5 border border-white/10 hover:border-[#4ade80]/40 hover:text-[#4ade80] px-2.5 py-1 rounded-full transition-colors cursor-pointer"
                                 >
                                     #{tag.name}
-                                </span>
+                                </button>
                             ))}
+                            {hiddenTagsCount > 0 && (
+                                <button
+                                    type="button"
+                                    onClick={() => setTagsExpanded(v => !v)}
+                                    className="text-xs text-[#4ade80] hover:text-[#22c55e] px-2.5 py-1 rounded-full transition-colors cursor-pointer"
+                                >
+                                    {tagsExpanded
+                                        ? t('preview.showLessTags')
+                                        : t('preview.showMoreTags', { count: hiddenTagsCount })}
+                                </button>
+                            )}
                         </div>
                     )}
 

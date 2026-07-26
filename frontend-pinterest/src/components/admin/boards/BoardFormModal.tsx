@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { useUpdateMoodboardMutation, type MoodboardAdmin } from "@/services/moodboardService.ts";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import { APP_ENV } from "@/constants/env";
-
 interface BoardFormModalProps {
     board: MoodboardAdmin;
     onClose: () => void;
@@ -71,15 +70,15 @@ const BoardFormModal = ({ board, onClose }: BoardFormModalProps) => {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-6">
-            <form onSubmit={handleSave} className="w-full max-w-md bg-[#161616] border border-white/8 rounded-3xl p-6">
-                <h2 className="text-lg font-semibold mb-5">{t('boards.edit')}</h2>
+            <form onSubmit={handleSave} className="w-full max-w-md bg-gray-100 dark:bg-[#161616] border border-gray-200 dark:border-white/8 rounded-3xl p-6">
+                <h2 className="text-lg font-semibold mb-5 text-gray-900 dark:text-white">{t('boards.edit')}</h2>
 
                 <div className="flex justify-center mb-4">
-                    <label className="w-28 h-28 rounded-2xl overflow-hidden bg-white/8 border border-white/8 flex items-center justify-center cursor-pointer hover:border-btn-primary/50 transition-colors">
+                    <label className="w-28 h-28 rounded-2xl overflow-hidden bg-gray-200 dark:bg-white/8 border border-gray-300 dark:border-white/8 flex items-center justify-center cursor-pointer hover:border-btn-primary/50 transition-colors">
                         {previewUrl ? (
                             <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
                         ) : (
-                            <span className="text-xs text-white/40">{t('boards.formModal.cover')}</span>
+                            <span className="text-xs text-gray-500 dark:text-white/40">{t('boards.formModal.cover')}</span>
                         )}
                         <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
                     </label>
@@ -90,16 +89,16 @@ const BoardFormModal = ({ board, onClose }: BoardFormModalProps) => {
                         value={title}
                         onChange={(event) => setTitle(event.target.value)}
                         placeholder={t('boards.formModal.boardName')}
-                        className="bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50"
+                        className="bg-gray-200 dark:bg-[#1a1a1a] border border-gray-300 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-btn-primary/50"
                     />
                     <textarea
                         value={description}
                         onChange={(event) => setDescription(event.target.value)}
                         placeholder={t('boards.formModal.desc')}
                         rows={4}
-                        className="bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50 resize-none"
+                        className="bg-gray-200 dark:bg-[#1a1a1a] border border-gray-300 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-btn-primary/50 resize-none"
                     />
-                    <label className="flex items-center justify-between gap-3 rounded-2xl border border-white/8 bg-[#1a1a1a] px-4 py-3 text-sm text-white/70">
+                    <label className="flex items-center justify-between gap-3 rounded-2xl border border-gray-300 dark:border-white/8 bg-gray-200 dark:bg-[#1a1a1a] px-4 py-3 text-sm text-gray-700 dark:text-white/70">
                         <span>{t('boards.formModal.private')}</span>
                         <input
                             type="checkbox"
@@ -111,7 +110,7 @@ const BoardFormModal = ({ board, onClose }: BoardFormModalProps) => {
                 </div>
 
                 <div className="flex gap-2 mt-6">
-                    <button type="button" onClick={onClose} className="flex-1 py-2.5 rounded-2xl bg-white/8 text-white/70 hover:bg-white/15 transition-colors">
+                    <button type="button" onClick={onClose} className="flex-1 py-2.5 rounded-2xl bg-gray-200 dark:bg-white/8 text-gray-700 dark:text-white/70 hover:bg-gray-300 dark:hover:bg-white/15 transition-colors">
                         {t('boards.formModal.cancel')}
                     </button>
                     <button type="submit" disabled={isLoading} className="flex-1 py-2.5 rounded-2xl bg-btn-primary text-white disabled:opacity-50 transition-colors">

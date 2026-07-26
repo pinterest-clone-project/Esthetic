@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { NavLink, Outlet } from "react-router";
+import { NavLink } from "react-router";
 import logo from "@/assets/logo.png";
 import LanguageSwitcher from "@/components/header/LanguageSwitcher.tsx";
+import PageTransition from "@/components/ui/PageTransition.tsx";
 
 const NAV_ITEMS = [
     { to: "/admin", key: "sections.dashboard", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" },
@@ -20,7 +21,7 @@ const AdminLayout = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     return (
-        <div className="flex min-h-screen bg-[#121212] text-white">
+        <div className="flex min-h-screen bg-white dark:bg-[#121212] text-black dark:text-white">
             {isMobileMenuOpen && (
                 <div
                     className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
@@ -29,14 +30,14 @@ const AdminLayout = () => {
             )}
 
             <aside className={`
-                fixed inset-y-0 left-0 z-50 w-[220px] flex flex-col border-r border-white/10 bg-[#121212] px-4 py-6
+                fixed inset-y-0 left-0 z-40 w-[220px] flex flex-col border-r border-gray-200 dark:border-white/10 bg-white dark:bg-[#121212] px-4 py-6
                 transition-transform duration-300 ease-in-out md:relative md:translate-x-0 shrink-0
                 ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
             `}>
                 <div className="flex items-center justify-between mb-10 px-2">
                     <div className="flex items-center gap-2">
                         <img src={logo} className="w-7 h-7" alt="Logo" />
-                        <span className="text-sm font-medium tracking-[-0.3px] text-white/60">
+                        <span className="text-sm font-medium tracking-[-0.3px] text-gray-600 dark:text-white/60">
                             Admin
                         </span>
                         <div className="ml-2">
@@ -44,7 +45,7 @@ const AdminLayout = () => {
                         </div>
                     </div>
                     <button
-                        className="md:hidden text-white/50 hover:text-white"
+                        className="md:hidden text-gray-400 dark:text-white/50 hover:text-gray-600 dark:hover:text-white"
                         onClick={() => setIsMobileMenuOpen(false)}
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -64,7 +65,7 @@ const AdminLayout = () => {
                                 `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm tracking-[-0.3px] transition-colors duration-150
                                 ${isActive
                                     ? "bg-btn-primary/10 text-btn-primary"
-                                    : "text-white/50 hover:text-white hover:bg-white/5"
+                                    : "text-gray-500 dark:text-white/50 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
                                 }`
                             }
                         >
@@ -76,10 +77,10 @@ const AdminLayout = () => {
                     ))}
                 </nav>
 
-                <div className="mt-auto border-t border-white/10 pt-4">
+                <div className="mt-auto border-t border-gray-200 dark:border-white/10 pt-4">
                     <NavLink
                         to="/"
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/30 hover:text-white/60 transition-colors duration-150"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-400 dark:text-white/30 hover:text-gray-600 dark:hover:text-white/60 transition-colors duration-150"
                     >
                         <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -90,7 +91,7 @@ const AdminLayout = () => {
             </aside>
 
             <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
-                <header className="md:hidden flex items-center justify-between px-4 h-14 border-b border-white/10 shrink-0 bg-[#121212]">
+                <header className="md:hidden flex items-center justify-between px-4 h-14 border-b border-gray-200 dark:border-white/10 shrink-0 bg-white dark:bg-[#121212]">
                     <div className="flex items-center gap-2">
                         <img src={logo} className="w-6 h-6" alt="Logo" />
                         <span className="font-medium tracking-[-0.3px] text-sm">{t('nav.dashboard')}</span>
@@ -99,7 +100,7 @@ const AdminLayout = () => {
                         <LanguageSwitcher />
                         <button
                             onClick={() => setIsMobileMenuOpen(true)}
-                            className="p-2 -mr-2 text-white/60 hover:text-white"
+                            className="p-2 -mr-2 text-gray-400 dark:text-white/60 hover:text-gray-600 dark:hover:text-white"
                         >
                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4 6h16M4 12h16M4 18h16" />
@@ -109,7 +110,7 @@ const AdminLayout = () => {
                 </header>
 
                 <main className="flex-1 overflow-y-auto scrollbar-hide px-4 py-6 sm:px-8 md:px-10 md:py-8">
-                    <Outlet />
+                    <PageTransition />
                 </main>
             </div>
         </div>

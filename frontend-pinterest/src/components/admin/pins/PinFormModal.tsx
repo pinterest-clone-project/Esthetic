@@ -7,7 +7,6 @@ import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import { APP_ENV } from "@/constants/env";
 import type { IPinResponse } from "@/types/pin/responses/IPinResponses.ts";
 import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
-
 interface PinFormModalProps {
     pin: IPinResponse;
     onClose: () => void;
@@ -104,15 +103,15 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-6">
-            <form onSubmit={handleSave} className="w-full max-w-2xl max-h-full overflow-y-auto bg-[#161616] border border-white/8 rounded-3xl p-6">
-                <h2 className="text-lg font-semibold mb-5">{t('pins.formModal.title')}</h2>
+            <form onSubmit={handleSave} className="w-full max-w-2xl max-h-full overflow-y-auto bg-gray-100 dark:bg-[#161616] border border-gray-200 dark:border-white/8 rounded-3xl p-6">
+                <h2 className="text-lg font-semibold mb-5 text-gray-900 dark:text-white">{t('pins.formModal.title')}</h2>
 
                 <div className="grid gap-5 md:grid-cols-[160px_1fr]">
                     <div className="flex flex-col gap-3">
-                        <div className="w-40 h-40 rounded-2xl overflow-hidden bg-white/8 border border-white/8">
+                        <div className="w-40 h-40 rounded-2xl overflow-hidden bg-gray-200 dark:bg-white/8 border border-gray-300 dark:border-white/8">
                             {previewUrl && <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />}
                         </div>
-                        <label className="text-center text-xs px-3 py-2 rounded-xl bg-white/8 text-white/70 hover:bg-white/15 cursor-pointer transition-colors">
+                        <label className="text-center text-xs px-3 py-2 rounded-xl bg-gray-200 dark:bg-white/8 text-gray-700 dark:text-white/70 hover:bg-gray-300 dark:hover:bg-white/15 cursor-pointer transition-colors">
                             {t('pins.formModal.changePhoto')}
                             <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
                         </label>
@@ -123,23 +122,23 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
                             value={title}
                             onChange={(event) => setTitle(event.target.value)}
                             placeholder="Назва"
-                            className="bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50"
+                            className="bg-gray-200 dark:bg-[#1a1a1a] border border-gray-300 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-btn-primary/50"
                         />
                         <input
                             value={sourceUrl}
                             onChange={(event) => setSourceUrl(event.target.value)}
                             placeholder="Посилання на джерело"
-                            className="bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50"
+                            className="bg-gray-200 dark:bg-[#1a1a1a] border border-gray-300 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-btn-primary/50"
                         />
                         <div className="relative">
                             <input
                                 value={categorySearch}
                                 onChange={(event) => setCategorySearch(event.target.value)}
                                 placeholder={categoryId && categories?.find(c => c.id === categoryId)?.name || t('pins.formModal.category')}
-                                className="bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50 w-full"
+                                className="bg-gray-200 dark:bg-[#1a1a1a] border border-gray-300 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-btn-primary/50 w-full"
                             />
                             {categorySearch && (
-                                <div className="absolute z-10 w-full mt-1 bg-[#1a1a1a] border border-white/8 rounded-2xl max-h-48 overflow-y-auto">
+                                <div className="absolute z-10 w-full mt-1 bg-gray-200 dark:bg-[#1a1a1a] border border-gray-300 dark:border-white/8 rounded-2xl max-h-48 overflow-y-auto">
                                     {categories?.filter(c =>
                                         c.name.toLowerCase().includes(categorySearch.toLowerCase())
                                     ).map((category) => (
@@ -150,7 +149,7 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
                                                 setCategoryId(category.id);
                                                 setCategorySearch("");
                                             }}
-                                            className="w-full text-left px-4 py-2 text-sm text-white/80 hover:bg-white/10 transition-colors"
+                                            className="w-full text-left px-4 py-2 text-sm text-gray-800 dark:text-white/80 hover:bg-gray-300 dark:hover:bg-white/10 transition-colors"
                                         >
                                             {category.name}
                                         </button>
@@ -166,7 +165,7 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
                     onChange={(event) => setDescription(event.target.value)}
                     placeholder="Опис"
                     rows={4}
-                    className="w-full mt-4 bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50 resize-none"
+                    className="w-full mt-4 bg-gray-200 dark:bg-[#1a1a1a] border border-gray-300 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-btn-primary/50 resize-none"
                 />
 
                 <div className="mt-4">
@@ -175,10 +174,10 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
                             value={tagSearch}
                             onChange={(event) => setTagSearch(event.target.value)}
                             placeholder={t('pins.formModal.addTag')}
-                            className="w-full bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50"
+                            className="w-full bg-gray-200 dark:bg-[#1a1a1a] border border-gray-300 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-btn-primary/50"
                         />
                         {tagSearch && (
-                            <div className="absolute z-10 w-full mt-1 bg-[#1a1a1a] border border-white/8 rounded-2xl max-h-48 overflow-y-auto">
+                            <div className="absolute z-10 w-full mt-1 bg-gray-200 dark:bg-[#1a1a1a] border border-gray-300 dark:border-white/8 rounded-2xl max-h-48 overflow-y-auto">
                                 {availableTags.filter(tag =>
                                     tag.name.toLowerCase().includes(tagSearch.toLowerCase())
                                 ).map((tag) => (
@@ -189,7 +188,7 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
                                             setTagIds((prev) => [...prev, tag.id]);
                                             setTagSearch("");
                                         }}
-                                        className="w-full text-left px-4 py-2 text-sm text-white/80 hover:bg-white/10 transition-colors"
+                                        className="w-full text-left px-4 py-2 text-sm text-gray-800 dark:text-white/80 hover:bg-gray-300 dark:hover:bg-white/10 transition-colors"
                                     >
                                         #{tag.name}
                                     </button>
@@ -212,7 +211,7 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
                 </div>
 
                 <div className="flex gap-2 mt-6">
-                    <button type="button" onClick={onClose} className="flex-1 py-2.5 rounded-2xl bg-white/8 text-white/70 hover:bg-white/15 transition-colors">
+                    <button type="button" onClick={onClose} className="flex-1 py-2.5 rounded-2xl bg-gray-200 dark:bg-white/8 text-gray-700 dark:text-white/70 hover:bg-gray-300 dark:hover:bg-white/15 transition-colors">
                         {t('pins.formModal.cancel')}
                     </button>
                     <button type="submit" disabled={isLoading} className="flex-1 py-2.5 rounded-2xl bg-btn-primary text-white disabled:opacity-50 transition-colors">

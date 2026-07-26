@@ -70,6 +70,8 @@
     "moreAuras": "Більше аур",
     "viewProfile": "Переглянути профіль",
     "linkCopied": "Посилання скопійовано",
+    "showMoreTags": "Показати більше (+{{count}})",
+    "showLessTags": "Показати менше",
     "deleteConfirmTitle": "Видалити цю ауру?",
     "deleteConfirmDesc": "Вона буде переміщена до нещодавно видалених і назавжди видалена через 30 днів.",
     "viewRecentlyDeleted": "Переглянути нещодавно видалені",

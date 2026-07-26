@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useGetCommentsQuery, useCreateCommentMutation, useUpdateCommentMutation, useDeleteCommentMutation } from "../../services/commentService.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
 import { useCommentRealtime } from "@/hooks/useCommentRealtime.ts";
@@ -27,6 +27,17 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
     const [editText, setEditText] = useState("");
     const [replyingTo, setReplyingTo] = useState<string | null>(null);
     const [replyText, setReplyText] = useState("");
+    const [commentsExpanded, setCommentsExpanded] = useState(false);
+
+    const VISIBLE_COMMENTS = 3;
+    const visibleComments = commentsExpanded
+        ? (comments ?? [])
+        : (comments ?? []).slice(0, VISIBLE_COMMENTS);
+    const hiddenCommentsCount = Math.max(0, (comments?.length ?? 0) - VISIBLE_COMMENTS);
+
+    useEffect(() => {
+        setCommentsExpanded(false);
+    }, [pinId]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -306,8 +317,20 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
             )}
 
             <div className="flex flex-col gap-4">
-                {comments?.map(comment => renderComment(comment))}
+                {visibleComments.map(comment => renderComment(comment))}
             </div>
+
+            {hiddenCommentsCount > 0 && (
+                <button
+                    type="button"
+                    onClick={() => setCommentsExpanded(v => !v)}
+                    className="self-start text-xs text-[#4ade80] hover:text-[#22c55e] transition-colors cursor-pointer"
+                >
+                    {commentsExpanded
+                        ? t('comments.showLess')
+                        : t('comments.showMore', { count: hiddenCommentsCount })}
+                </button>
+            )}
         </div>
     );
 };

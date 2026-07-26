@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import type { UserSortBy } from "@/types/user/UserSortBy.ts";
 import type { SortDirection } from "@/types/SortDirection.ts";
 import { PAGE_SIZE_OPTIONS, SORT_OPTIONS, type StatusFilter } from "@/constants/common";
-
 interface UsersFiltersProps {
     search: string;
     onSearchChange: (value: string) => void;
@@ -39,12 +38,12 @@ const UsersFilters = ({
                 value={search}
                 onChange={(e) => onSearchChange(e.target.value)}
                 placeholder={t('users.search')}
-                className="flex-1 min-w-[180px] bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white placeholder:text-white/30 outline-none focus:border-btn-primary/50 transition-colors"
+                className="flex-1 min-w-[180px] bg-gray-100 dark:bg-[#1a1a1a] border border-gray-200 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 outline-none focus:border-btn-primary/50 transition-colors"
             />
             <select
                 value={status}
                 onChange={(e) => onStatusChange(e.target.value as StatusFilter)}
-                className="bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50 transition-colors"
+                className="bg-gray-100 dark:bg-[#1a1a1a] border border-gray-200 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-btn-primary/50 transition-colors"
             >
                 <option value="all">{t('users.filters.all')}</option>
                 <option value="active">{t('users.filters.active')}</option>
@@ -53,7 +52,7 @@ const UsersFilters = ({
             <select
                 value={sortValue}
                 onChange={(e) => onSortChange(e.target.value)}
-                className="bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50 transition-colors"
+                className="bg-gray-100 dark:bg-[#1a1a1a] border border-gray-200 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-btn-primary/50 transition-colors"
             >
                 {SORT_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -64,7 +63,7 @@ const UsersFilters = ({
             <select
                 value={pageSize}
                 onChange={(e) => onPageSizeChange(Number(e.target.value))}
-                className="bg-[#1a1a1a] border border-white/8 rounded-2xl px-4 py-2.5 text-sm text-white/80 outline-none focus:border-btn-primary/50 transition-colors"
+                className="bg-gray-100 dark:bg-[#1a1a1a] border border-gray-200 dark:border-white/8 rounded-2xl px-4 py-2.5 text-sm text-gray-800 dark:text-white/80 outline-none focus:border-btn-primary/50 transition-colors"
             >
                 {PAGE_SIZE_OPTIONS.map((size) => (
                     <option key={size} value={size}>

@@ -265,7 +265,8 @@
       "error": "Something went wrong. Please try again.",
       "cancel": "Cancel",
       "save": "Save",
-      "create": "Create"
+      "create": "Create",
+      "content": "Content"
     },
     "deleteModal": {
       "title": "Delete article?",

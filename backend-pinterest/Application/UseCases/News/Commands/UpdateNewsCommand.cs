@@ -14,6 +14,7 @@ public record UpdateNewsCommand : IRequest
     public required string ExcerptEn { get; init; }
     public required string Tag { get; init; }
     [FromForm] public IFormFile? ImageFile { get; init; }
+    public string? Content { get; init; }
     public DateTime PublishedAt { get; init; }
     public bool IsFeatured { get; init; }
 }

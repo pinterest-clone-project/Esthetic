@@ -5,8 +5,10 @@ import { useAdminReportsFilters } from "@/hooks/useAdminReportsFilters.ts";
 import ReportsFilters from "@/components/admin/reports/ReportsFilters.tsx";
 import PinReportGroupCard from "@/components/admin/reports/PinReportGroupCard.tsx";
 import Pagination from "@/components/common/Pagination.tsx";
+import { useTheme } from "@/context/ThemeContext.tsx";
 
 const AdminReportsPage = () => {
+    const { theme } = useTheme();
     const {
         status, setStatus, page, setPage, pageSize, handlePageSizeChange,
         sortBy, sortDirection, sortValue, handleSortChange, statusParam,
@@ -25,10 +27,13 @@ const AdminReportsPage = () => {
     }, [data, totalPages]);
 
     return (
-        <SkeletonTheme baseColor="#202020" highlightColor="#333333">
+        <SkeletonTheme 
+            baseColor={theme === "dark" ? "#202020" : "#e5e7eb"} 
+            highlightColor={theme === "dark" ? "#333333" : "#f3f4f6"}
+        >
             <div className="relative z-10 w-full max-w-full overflow-x-hidden">
                 <h1 className="text-xl sm:text-2xl font-bold tracking-[-0.5px] mb-1">Скарги</h1>
-                <p className="text-xs sm:text-sm text-white/30 mb-6 sm:mb-8 tracking-[-0.3px]">
+                <p className="text-xs sm:text-sm text-gray-400 dark:text-white/30 mb-6 sm:mb-8 tracking-[-0.3px]">
                     Скарги на піни, згруповані по об'єкту
                 </p>
 
@@ -45,7 +50,7 @@ const AdminReportsPage = () => {
                     {isLoadingState
                         ? Array.from({ length: 4 }).map((_, idx) => <Skeleton key={idx} height={72} borderRadius={16} />)
                         : data?.items.length === 0
-                            ? <p className="text-sm text-white/40 text-center py-10">Скарг не знайдено</p>
+                            ? <p className="text-sm text-gray-400 dark:text-white/40 text-center py-10">Скарг не знайдено</p>
                             : data?.items.map((group) => <PinReportGroupCard key={group.pinId} group={group} />)}
                 </div>
 
