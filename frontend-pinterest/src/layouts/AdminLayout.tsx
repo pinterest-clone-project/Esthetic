@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { NavLink, Outlet } from "react-router";
+import { NavLink } from "react-router";
 import logo from "@/assets/logo.png";
 import LanguageSwitcher from "@/components/header/LanguageSwitcher.tsx";
+import PageTransition from "@/components/ui/PageTransition.tsx";
 
 const NAV_ITEMS = [
     { to: "/admin", key: "sections.dashboard", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" },
@@ -109,7 +110,7 @@ const AdminLayout = () => {
                 </header>
 
                 <main className="flex-1 overflow-y-auto scrollbar-hide px-4 py-6 sm:px-8 md:px-10 md:py-8">
-                    <Outlet />
+                    <PageTransition />
                 </main>
             </div>
         </div>

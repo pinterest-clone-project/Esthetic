@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAppDispatch } from "@/store/index.ts";
 import { useNavigate } from "react-router";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
@@ -8,6 +9,7 @@ import { useGetMeQuery } from "@/services/accountService.ts";
 import { useDeletePinMutation, useUnsavePinMutation } from "@/services/pinService.ts";
 import { useLikeMutation, useUnlikeMutation } from "@/services/likeService.ts";
 import { moodboardService } from "@/services/moodboardService.ts";
+import { pinCardVariants, scaleIn, fadeIn } from "@/lib/motion";
 
 import { APP_ENV } from "@/constants/env";
 import SaveModal from "./SaveModal.tsx";
@@ -119,17 +121,24 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
     };
 
     return (
-        <div
+        <motion.div
             className="relative break-inside-avoid mb-3 rounded-xl overflow-hidden group cursor-pointer"
+            variants={pinCardVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "0px 0px -40px 0px" }}
+            whileHover={{ y: -2 }}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => { setHovered(false); setShowEditMenu(false); }}
             onClick={() => navigate(`/aura/preview/${pin.id}`)}
         >
-            <img
+            <motion.img
                 src={pin.image ? `${APP_ENV.IMAGES_800_URL}${pin.image}` : ""}
                 alt={pin.title ?? "Pin"}
-                className="w-full block rounded-xl transition-transform duration-300 group-hover:scale-[1.02]"
+                className="w-full block rounded-xl"
                 loading="lazy"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
             />
 
             <div className={`absolute inset-0 rounded-xl bg-black/30 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`} />
@@ -160,22 +169,30 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
                         >
                             ···
                         </button>
-                        {showEditMenu && (
-                            <div className="absolute top-8 right-0 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-2xl overflow-hidden w-28 z-10">
-                                <button
-                                    className="w-full text-left px-4 py-2.5 text-xs text-gray-300 hover:bg-white/10 hover:text-white transition-colors"
-                                    onClick={handleEdit}
+                        <AnimatePresence>
+                            {showEditMenu && (
+                                <motion.div
+                                    className="absolute top-8 right-0 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-2xl overflow-hidden w-28 z-10"
+                                    initial={{ opacity: 0, y: -6, scale: 0.96 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, y: -4, scale: 0.96 }}
+                                    transition={{ duration: 0.15 }}
                                 >
-                                    {t('actions.edit')}
-                                </button>
-                                <button
-                                    className="w-full text-left px-4 py-2.5 text-xs text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
-                                    onClick={handleDelete}
-                                >
-                                    {t('actions.delete')}
-                                </button>
-                            </div>
-                        )}
+                                    <button
+                                        className="w-full text-left px-4 py-2.5 text-xs text-gray-300 hover:bg-white/10 hover:text-white transition-colors"
+                                        onClick={handleEdit}
+                                    >
+                                        {t('actions.edit')}
+                                    </button>
+                                    <button
+                                        className="w-full text-left px-4 py-2.5 text-xs text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
+                                        onClick={handleDelete}
+                                    >
+                                        {t('actions.delete')}
+                                    </button>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
                 )}
                 {boardId ? (
@@ -218,42 +235,52 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
                 </div>
             )}
 
-            {confirmDeleteOpen && (
-                <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
-                    onClick={(e) => { e.stopPropagation(); setConfirmDeleteOpen(false); }}
-                >
-                    <div
-                        className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 w-72 shadow-2xl"
-                        onClick={(e) => e.stopPropagation()}
+            <AnimatePresence>
+                {confirmDeleteOpen && (
+                    <motion.div
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+                        variants={fadeIn}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        onClick={(e) => { e.stopPropagation(); setConfirmDeleteOpen(false); }}
                     >
-                        <p className="text-white text-sm font-medium mb-1">{t('confirm.deleteAura')}</p>
-                        <p className="text-gray-400 text-xs mb-3">{t('confirm.deleteAuraDesc')}</p>
-                        <button
-                            onClick={(e) => { e.stopPropagation(); setConfirmDeleteOpen(false); navigate("/deleted-auras"); }}
-                            className="flex items-center gap-1.5 text-[11px] text-[#4ade80] hover:underline mb-4"
+                        <motion.div
+                            className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 w-72 shadow-2xl"
+                            variants={scaleIn}
+                            initial="hidden"
+                            animate="visible"
+                            exit="exit"
+                            onClick={(e) => e.stopPropagation()}
                         >
-                            <TrashIcon size={11} />
-                            {t('confirm.viewRecentlyDeleted')}
-                        </button>
-                        <div className="flex gap-2">
+                            <p className="text-white text-sm font-medium mb-1">{t('confirm.deleteAura')}</p>
+                            <p className="text-gray-400 text-xs mb-3">{t('confirm.deleteAuraDesc')}</p>
                             <button
-                                className="flex-1 py-2 rounded-xl text-xs text-gray-300 bg-white/10 hover:bg-white/15 transition-colors"
-                                onClick={() => setConfirmDeleteOpen(false)}
+                                onClick={(e) => { e.stopPropagation(); setConfirmDeleteOpen(false); navigate("/deleted-auras"); }}
+                                className="flex items-center gap-1.5 text-[11px] text-[#4ade80] hover:underline mb-4"
                             >
-                                {t('actions.cancel')}
+                                <TrashIcon size={11} />
+                                {t('confirm.viewRecentlyDeleted')}
                             </button>
-                            <button
-                                className="flex-1 py-2 rounded-xl text-xs text-white bg-red-500 hover:bg-red-600 transition-colors"
-                                onClick={confirmDelete}
-                            >
-                                {t('actions.delete')}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
+                            <div className="flex gap-2">
+                                <button
+                                    className="flex-1 py-2 rounded-xl text-xs text-gray-300 bg-white/10 hover:bg-white/15 transition-colors"
+                                    onClick={() => setConfirmDeleteOpen(false)}
+                                >
+                                    {t('actions.cancel')}
+                                </button>
+                                <button
+                                    className="flex-1 py-2 rounded-xl text-xs text-white bg-red-500 hover:bg-red-600 transition-colors"
+                                    onClick={confirmDelete}
+                                >
+                                    {t('actions.delete')}
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.div>
     );
 };
 

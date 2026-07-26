@@ -1,4 +1,5 @@
 import { useCallback, useState, type ReactNode } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { Toast, type ToastVariant } from './Toast';
 import { ToastContext } from './ToastContext';
 
@@ -25,9 +26,11 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
         <ToastContext.Provider value={{ showToast }}>
             {children}
             <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2">
-                {toasts.map((toast) => (
-                    <Toast key={toast.id} message={toast.message} variant={toast.variant} onClose={() => removeToast(toast.id)} />
-                ))}
+                <AnimatePresence mode="popLayout">
+                    {toasts.map((toast) => (
+                        <Toast key={toast.id} message={toast.message} variant={toast.variant} onClose={() => removeToast(toast.id)} />
+                    ))}
+                </AnimatePresence>
             </div>
         </ToastContext.Provider>
     );
