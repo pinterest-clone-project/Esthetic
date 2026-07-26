@@ -31,7 +31,9 @@ const Header: React.FC = () => {
     const [activeModal, setActiveModal] = useState<ModalType>(null);
     const [resetEmail, setResetEmail] = useState("");
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const headerRef = useRef<HTMLElement>(null);
     const user = useAppSelector((state) => state.auth.user);
     const isAdmin = useAppSelector(selectIsAdmin);
     const dispatch = useAppDispatch();
@@ -49,6 +51,9 @@ const Header: React.FC = () => {
         const handleClickOutside = (e: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
                 setDropdownOpen(false);
+            }
+            if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
+                setMobileMenuOpen(false);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
@@ -78,7 +83,7 @@ const Header: React.FC = () => {
 
 
     return (
-        <header className="sticky top-0 z-50 w-full bg-white dark:bg-black py-3">
+        <header ref={headerRef} className="sticky top-0 z-50 w-full bg-white dark:bg-black py-3 relative">
             <div className="max-w-[1505px] h-[50px] mx-auto px-4 flex items-center justify-between gap-4
             ">
 
@@ -123,11 +128,20 @@ const Header: React.FC = () => {
 
                 {!user && (
                     <div className="flex md:hidden items-center gap-2 shrink-0">
-                        <Button variant="primary" size="sm" radius={4} className="!w-auto px-3"
+                        <button
+                            onClick={() => setMobileMenuOpen(o => !o)}
+                            className="flex flex-col justify-center items-center w-9 h-9 gap-[5px]"
+                            aria-label="Menu"
+                        >
+                            <span className={`block w-5 h-[2px] bg-black dark:bg-white rounded transition-all duration-300 origin-center ${mobileMenuOpen ? "rotate-45 translate-y-[7px]" : ""}`} />
+                            <span className={`block w-5 h-[2px] bg-black dark:bg-white rounded transition-all duration-300 ${mobileMenuOpen ? "opacity-0" : ""}`} />
+                            <span className={`block w-5 h-[2px] bg-black dark:bg-white rounded transition-all duration-300 origin-center ${mobileMenuOpen ? "-rotate-45 -translate-y-[7px]" : ""}`} />
+                        </button>
+                        <Button variant="primary" size="sm" radius={10} style={{ width: 95, height: 36 }}
                                 onClick={() => setActiveModal("signup")}>
                             {t('actions.signUp', 'Sign Up')}
                         </Button>
-                        <Button variant={theme === "dark" ? "dark" : "light"} size="sm" radius={4} className="!w-auto px-3"
+                        <Button variant={theme === "dark" ? "dark" : "light"} size="sm" radius={10} style={{ width: 80, height: 36 }}
                                 onClick={() => setActiveModal("login")}>
                             {t('actions.logIn', 'Log in')}
                         </Button>
@@ -178,10 +192,6 @@ const Header: React.FC = () => {
                     {user ? (
                         <div className="flex items-center gap-14">
 
-                            <Link to="/news" className="hidden lg:block text-black dark:text-white text-sm hover:text-[#1DB954] cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
-                                {t('nav.news', 'News')}
-                            </Link>
-
                             <NotificationBell />
 
                             <div className="relative" ref={dropdownRef}>
@@ -210,7 +220,7 @@ const Header: React.FC = () => {
                                     </button>
                                 </div>
                                 {dropdownOpen && (
-                                    <div className="absolute right-0 top-12 bg-white dark:bg-[#1a1a1a]  rounded-[10px] shadow-2xl w-48 py-2 z-50 border border-[#A1A1A1] dark:border-[#535353]">
+                                    <div className="absolute right-0 top-12 bg-white dark:bg-[#1a1a1a] rounded-[10px] shadow-2xl w-48 py-2 z-50 border border-[#A1A1A1] dark:border-[#535353] animate-[dropdownIn_0.2s_ease]">
                                         <div className="px-4 py-2 border-b border-[#A1A1A1] dark:border-[#535353] mb-1">
                                             <p className="text-black dark:text-white text-sm font-medium">{user?.firstName}</p>
                                             <p className="text-[#A1A1A1] text-xs">{user?.email}</p>
@@ -262,6 +272,37 @@ const Header: React.FC = () => {
 
                 </nav>
             </div>
+
+            {!user && mobileMenuOpen && (
+                <div className="md:hidden absolute top-full left-0 w-full bg-white dark:bg-black border-t border-black/10 dark:border-white/10 shadow-lg z-40 animate-[slideDown_0.2s_ease]">
+                    <div className="px-6 py-4 flex flex-col gap-1">
+                        <div className="pb-3 border-b border-black/10 dark:border-white/10">
+                            <LanguageSwitcher />
+                        </div>
+                        <Link
+                            to="/about"
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="py-3 text-black dark:text-white text-sm font-medium border-b border-black/10 dark:border-white/10 hover:text-[#1DB954] transition-colors"
+                        >
+                            {t('nav.about', 'About Us')}
+                        </Link>
+                        <Link
+                            to="/business"
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="py-3 text-black dark:text-white text-sm font-medium border-b border-black/10 dark:border-white/10 hover:text-[#1DB954] transition-colors"
+                        >
+                            {t('nav.business', 'For Business')}
+                        </Link>
+                        <Link
+                            to="/news"
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="py-3 text-black dark:text-white text-sm font-medium hover:text-[#1DB954] transition-colors"
+                        >
+                            {t('nav.news', 'News')}
+                        </Link>
+                    </div>
+                </div>
+            )}
 
             <Modal isOpen={activeModal === "signup"} onClose={() => setActiveModal(null)}
                    width={450} height="auto" borderRadius={20}>

@@ -1,4 +1,4 @@
-import { useNavigate, Link } from "react-router";
+import { useNavigate, Link, Navigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { clearUser } from "@/store/slices/authSlice.ts";
 import { api } from "@/services/api.ts";
@@ -11,11 +11,16 @@ import profileIcon from "@/assets/icons/profile_icon.svg";
 import themeIcon from "@/assets/icons/theme_mode.svg";
 import { useTranslation } from "react-i18next";
 import { TrashIcon } from "@/components/ui/Icons.tsx";
+import { useTheme } from "@/context/ThemeContext.tsx";
 
 const whiteFilter = "brightness(0)";
+const darkFilter = "brightness(0) invert(1)";
 
 const SettingsPage = () => {
     const { t } = useTranslation('common');
+    const { theme } = useTheme();
+
+    if (window.innerWidth >= 768) return <Navigate to="/" replace />;
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const isAdmin = useAppSelector(selectIsAdmin);
@@ -57,7 +62,7 @@ const SettingsPage = () => {
             <div className="flex items-center justify-between w-full px-4 py-4 rounded-2xl bg-[#f5f5f5] dark:bg-[#1a1a1a]">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] flex items-center justify-center shrink-0">
-                        <img src={themeIcon} style={{ filter: whiteFilter }} className="w-5 h-5" alt="" />
+                        <img src={themeIcon} style={{ filter: theme === "dark" ? darkFilter : whiteFilter }} className="w-5 h-5" alt="" />
                     </div>
                     <div>
                         <p className="text-sm font-medium">{t('settings.theme')}</p>
@@ -136,12 +141,12 @@ const SettingsPage = () => {
                 </div>
             </button>
 
-            <div className="flex items-center justify-center gap-4 py-2 mt-1">
+            <div className="border-t border-black/10 dark:border-white/10 mt-1 pt-3 flex items-center justify-center gap-3">
+                <Link to="/news" className="text-xs text-[#A1A1A1] hover:text-[#1DB954] transition-colors">{t('nav.news')}</Link>
+                <span className="text-[#A1A1A1] text-xs">·</span>
                 <Link to="/about" className="text-xs text-[#A1A1A1] hover:text-[#1DB954] transition-colors">{t('nav.about')}</Link>
                 <span className="text-[#A1A1A1] text-xs">·</span>
                 <Link to="/business" className="text-xs text-[#A1A1A1] hover:text-[#1DB954] transition-colors">{t('nav.business')}</Link>
-                <span className="text-[#A1A1A1] text-xs">·</span>
-                <Link to="/news" className="text-xs text-[#A1A1A1] hover:text-[#1DB954] transition-colors">{t('nav.news')}</Link>
             </div>
         </div>
     );

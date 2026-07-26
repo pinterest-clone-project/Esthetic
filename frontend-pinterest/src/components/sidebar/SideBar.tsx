@@ -1,11 +1,11 @@
 import { useNavigate, useLocation } from "react-router";
 import homeIcon from "../../../src/assets/icons/home_icon.svg";
-import collectionIcon from "../../../src/assets/icons/collection_icon.svg";
 import addIcon from "../../../src/assets/icons/add_icon.svg";
 import settingsIcon from "../../../src/assets/icons/settings_icon.svg";
 import profileIcon from "../../../src/assets/icons/profile_icon.svg";
+import collectionIcon from "../../../src/assets/icons/collection_icon.svg";
 import auraIcon from "../../../src/assets/icons/aura_icon.svg";
-import themeIcon from "../../../src/assets/icons/theme_mode.svg"
+import themeIcon from "../../../src/assets/icons/theme_mode.svg";
 import React, {useEffect, useState} from "react";
 import {useLogoutMutation} from "@/services/accountService.ts";
 import {clearUser} from "@/store/slices/authSlice.ts";
@@ -37,7 +37,7 @@ const modalItems = [
 const greenFilter =
     "brightness(0) saturate(100%) invert(58%) sepia(61%) saturate(450%) hue-rotate(95deg) brightness(95%)";
 const whiteFilter = "brightness(0)";
-const darkFilter = "brightness(0)  invert(1)";
+const darkFilter = "brightness(0) invert(1)";
 
 type ModalType = 'friends' | 'settings' | 'create' | null;
 
@@ -60,7 +60,7 @@ const SidebarButton = ({ icon, label, active, onClick, extraImgClass = "", child
             src={icon}
             alt={label}
             style={{ filter: active ? greenFilter : isDark ? darkFilter : whiteFilter }}
-            className={`w-[30px] h-[33px] transition-all duration-200 group-hover:scale-110 ${active ? "opacity-100" : "opacity-50 group-hover:opacity-80"} ${extraImgClass}`}
+            className={`w-[30px] h-[33px] transition-all duration-200 group-hover:scale-110 ${active ? "opacity-100" : "opacity-40 group-hover:opacity-70"} ${extraImgClass}`}
         />
         <span className="absolute left-12 px-2 py-1 rounded-md bg-[#1a1a1a] text-white dark:text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-150 pointer-events-none border border-white/10">
             {label}
@@ -253,7 +253,7 @@ const Sidebar = () => {
                     className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group "
                 >
                     <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1] flex items-center justify-center transition-colors shrink-0">
-                        <img src={profileIcon} style={{ filter: whiteFilter }} className="w-5 h-5" alt="" />
+                        <img src={profileIcon} style={{ filter: theme === "dark" ? darkFilter : whiteFilter }} className="w-5 h-5" alt="" />
                     </div>
                     <div className="text-left">
                         <p className="text-black dark:text-white text-sm font-medium">{t('sidebar.profile')}</p>
@@ -264,7 +264,7 @@ const Sidebar = () => {
                 <div className="flex items-center justify-between w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1] flex items-center justify-center transition-colors shrink-0">
-                            <img src={themeIcon} style={{ filter: whiteFilter }} className="w-5 h-5" alt="" />
+                            <img src={themeIcon} style={{ filter: theme === "dark" ? darkFilter : whiteFilter }} className="w-5 h-5" alt="" />
                         </div>
                         <div className="text-left">
                             <p className="text-black dark:text-white text-sm font-medium">{t('sidebar.theme')}</p>
@@ -278,14 +278,22 @@ const Sidebar = () => {
                     onClick={() => { navigate('/deleted-auras'); closeModal(); }}
                     className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group"
                 >
-                    <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1] flex items-center justify-center transition-colors shrink-0">
-                        <TrashIcon size={18} strokeWidth={1.5} className="text-black" />
+                    <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1] flex items-center justify-center transition-colors shrink-0 text-black dark:text-white">
+                        <TrashIcon size={18} strokeWidth={1.5} />
                     </div>
                     <div className="text-left">
                         <p className="text-black dark:text-white text-sm font-medium">{t('sidebar.recentlyDeleted')}</p>
                         <p className="text-black dark:text-[#A1A1A1] text-xs">{t('sidebar.recentlyDeletedDesc')}</p>
                     </div>
                 </button>
+
+                <div className="border-t border-black/10 dark:border-white/10 mt-1 pt-3 px-3 flex items-center justify-center gap-3">
+                    <button onClick={() => { navigate('/news'); closeModal(); }} className="text-xs text-[#A1A1A1] hover:text-[#1DB954] transition-colors">{t('nav.news')}</button>
+                    <span className="text-[#A1A1A1] text-xs">·</span>
+                    <button onClick={() => { navigate('/about'); closeModal(); }} className="text-xs text-[#A1A1A1] hover:text-[#1DB954] transition-colors">{t('nav.about')}</button>
+                    <span className="text-[#A1A1A1] text-xs">·</span>
+                    <button onClick={() => { navigate('/business'); closeModal(); }} className="text-xs text-[#A1A1A1] hover:text-[#1DB954] transition-colors">{t('nav.business')}</button>
+                </div>
 
                 <button
                     onClick={handleLogout}
@@ -310,8 +318,8 @@ const Sidebar = () => {
                     onClick={() => { navigate('/collections/moodboard'); closeModal(); }}
                     className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group"
                 >
-                    <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1]  flex items-center justify-center transition-colors shrink-0">
-                        <img src={collectionIcon} style={{ filter: whiteFilter }} className="w-5 h-5" alt="" />
+                    <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1] flex items-center justify-center transition-colors shrink-0">
+                        <img src={collectionIcon} style={{ filter: theme === "dark" ? darkFilter : whiteFilter }} className="w-5 h-5" alt="" />
                     </div>
                     <div className="text-left">
                         <p className="text-black dark:text-white text-sm font-medium">{t('sidebar.moodboard')}</p>
@@ -323,8 +331,8 @@ const Sidebar = () => {
                     onClick={() => { navigate('/aura/create'); closeModal(); }}
                     className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group"
                 >
-                    <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1]  flex items-center justify-center transition-colors shrink-0">
-                        <img src={auraIcon} style={{ filter: whiteFilter }} className="w-5 h-5" alt="" />
+                    <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1] flex items-center justify-center transition-colors shrink-0">
+                        <img src={auraIcon} style={{ filter: theme === "dark" ? darkFilter : whiteFilter }} className="w-5 h-5" alt="" />
                     </div>
                     <div className="text-left">
                         <p className="text-black dark:text-white text-sm font-medium">{t('sidebar.aura')}</p>

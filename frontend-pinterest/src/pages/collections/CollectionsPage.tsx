@@ -8,20 +8,19 @@ import {useLocation, useNavigate} from "react-router";
 import {useGetMyMoodboardsQuery} from "@/services/moodboardService.ts";
 import CreateMoodboardForm from "@/components/moodboard/CreateMoodboardForm.tsx";
 import {APP_ENV} from "@/constants/env";
-import Modal from "@/components/ui/Modal.tsx";
 import PinCard from "@/components/ui/PinCard.tsx";
+import Modal from "@/components/ui/Modal.tsx";
 
-type CollectionTab = "Aura" | "Moodboard" | "Esthetic AI";
+type CollectionTab = "Aura" | "Moodboard";
 
 const CollectionsPage = () => {
     const { t } = useTranslation('common');
     const navigate = useNavigate();
 
-    const tabs: CollectionTab[] = ["Aura", "Moodboard", "Esthetic AI"];
+    const tabs: CollectionTab[] = ["Aura", "Moodboard"];
     const tabLabels: Record<CollectionTab, string> = {
         "Aura": t('collections.tabAura'),
-        "Moodboard": t('collections.tabMoodboard'),
-        "Esthetic AI": t('collections.tabAI'),
+        "Moodboard": t('collections.tabMoodboard')
     };
     const [showCreateMoodboard, setShowCreateMoodboard] = useState(false);
     const { data: myPins } = useGetMyPinsQuery();
@@ -33,16 +32,13 @@ const CollectionsPage = () => {
     const location = useLocation();
     const activeTab: CollectionTab = location.pathname.includes("moodboard")
         ? "Moodboard"
-        : location.pathname.includes("ai")
-            ? "Esthetic AI"
-            : "Aura";
+        : "Aura";
 
     const hasAuras = activeTab === "Aura" && myPins && myPins.length > 0;
 
     const tabRoutes: Record<CollectionTab, string> = {
         "Aura": "/collections/aura",
         "Moodboard": "/collections/moodboard",
-        "Esthetic AI": "/collections/ai",
     };
 
     return (
@@ -190,10 +186,6 @@ const CollectionsPage = () => {
                         ))}
                     </div>
                 </div>
-            )}
-
-            {activeTab === "Esthetic AI" && (
-                <div className="flex justify-center mt-16 text-white/40 text-sm">{t('collections.comingSoon')}</div>
             )}
 
             <Modal
