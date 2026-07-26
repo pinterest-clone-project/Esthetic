@@ -22,6 +22,7 @@ import {useTheme} from "@/context/ThemeContext.tsx";
 import Modal from "@/components/ui/Modal.tsx";
 import ThemeToggle from "@/components/ui/ThemeToggle.tsx";
 import { useTranslation } from "react-i18next";
+import { TrashIcon } from "@/components/ui/Icons.tsx";
 
 const navItems = [
     { path: "/", icon: homeIcon, labelKey: "sidebar.main" },
@@ -57,6 +58,7 @@ const SidebarButton = ({ icon, label, active, onClick, extraImgClass = "", child
     >
         <img
             src={icon}
+            alt={label}
             style={{ filter: active ? greenFilter : isDark ? darkFilter : whiteFilter }}
             className={`w-[30px] h-[33px] transition-all duration-200 group-hover:scale-110 ${active ? "opacity-100" : "opacity-50 group-hover:opacity-80"} ${extraImgClass}`}
         />
@@ -277,11 +279,7 @@ const Sidebar = () => {
                     className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group"
                 >
                     <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1] flex items-center justify-center transition-colors shrink-0">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-black dark:text-white">
-                            <polyline points="3 6 5 6 21 6"/>
-                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                        </svg>
+                        <TrashIcon size={18} strokeWidth={1.5} className="text-black" />
                     </div>
                     <div className="text-left">
                         <p className="text-black dark:text-white text-sm font-medium">{t('sidebar.recentlyDeleted')}</p>

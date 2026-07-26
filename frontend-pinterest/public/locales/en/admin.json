@@ -12,7 +12,8 @@
     "tags": "Tags",
     "users": "Users",
     "reports": "Reports",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "news": "News"
   },
   "pageSize": "{{size}} per page",
   "sort": {
@@ -232,6 +233,47 @@
     "newUsers": "New users (per week)",
     "newAuras": "Created Auras (per week)"
   },
+  "news": {
+    "new": "New article",
+    "edit": "Edit article",
+    "imageMissing": "Please select an image for the article",
+    "editAriaLabel": "Edit article",
+    "deleteAriaLabel": "Delete article",
+    "featured": "Featured",
+    "empty": "No articles yet",
+    "subtitle": "Manage news articles",
+    "tags": {
+      "productUpdate": "Product Update",
+      "community": "Community",
+      "design": "Design",
+      "engineering": "Engineering",
+      "forBusiness": "For Business",
+      "partnership": "Partnership"
+    },
+    "formModal": {
+      "photo": "Photo",
+      "titleUk": "Title (Ukrainian)",
+      "titleEn": "Title (English)",
+      "excerptUk": "Excerpt (Ukrainian)",
+      "excerptEn": "Excerpt (English)",
+      "tag": "Tag",
+      "publishedAt": "Publication date",
+      "isFeatured": "Featured article",
+      "required": "This field is required",
+      "maxTitle": "Maximum 120 characters",
+      "maxExcerpt": "Maximum 500 characters",
+      "error": "Something went wrong. Please try again.",
+      "cancel": "Cancel",
+      "save": "Save",
+      "create": "Create"
+    },
+    "deleteModal": {
+      "title": "Delete article?",
+      "desc": "Article \"{{title}}\" will be permanently deleted.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    }
+  },
   "toast": {
     "categoryCreated": "Category created",
     "categoryUpdated": "Category updated",
@@ -242,6 +284,9 @@
     "pinUpdated": "Pin updated",
     "pinDeleted": "Pin deleted",
     "boardUpdated": "Board updated",
-    "boardDeleted": "Board deleted"
+    "boardDeleted": "Board deleted",
+    "newsCreated": "Article created",
+    "newsUpdated": "Article updated",
+    "newsDeleted": "Article deleted"
   }
 }

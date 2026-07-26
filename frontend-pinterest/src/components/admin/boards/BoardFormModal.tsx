@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useUpdateMoodboardMutation, type MoodboardAdmin } from "@/services/moodboardService.ts";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
@@ -24,7 +24,7 @@ const BoardFormModal = ({ board, onClose }: BoardFormModalProps) => {
     const [title, setTitle] = useState(board.title ?? "");
     const [description, setDescription] = useState(board.description ?? "");
     const [isPrivate, setIsPrivate] = useState(board.isPrivate);
-    const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
+    const coverImageFile = useRef<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState(board.coverImageUrl ? `${APP_ENV.IMAGES_200_URL}${board.coverImageUrl}` : "");
 
     useEffect(() => {
@@ -42,7 +42,7 @@ const BoardFormModal = ({ board, onClose }: BoardFormModalProps) => {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (!file) return;
-        setCoverImageFile(file);
+        coverImageFile.current = file;
         setPreviewUrl(URL.createObjectURL(file));
         event.target.value = "";
     };
@@ -60,7 +60,7 @@ const BoardFormModal = ({ board, onClose }: BoardFormModalProps) => {
                 title: title.trim(),
                 description: description.trim(),
                 isPrivate,
-                coverImageFile: coverImageFile ?? undefined,
+                coverImageFile: coverImageFile.current ?? undefined,
             }).unwrap();
             showToast(t('toast.boardUpdated'), "success");
             onClose();

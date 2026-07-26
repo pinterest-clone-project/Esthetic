@@ -86,6 +86,7 @@ const Header: React.FC = () => {
                     <img
                         className="w-11 h-11"
                         src={logo}
+                        alt="Esthetic logo"
                     />
 
                     {!user && (
@@ -99,6 +100,7 @@ const Header: React.FC = () => {
                     <div className="flex items-center bg-[#A2A2A2] dark:bg-[#535353] rounded-[10px] px-4 h-9 w-full max-w-[586px] h-[40px]">
                         <img
                             src={theme === "dark" ? searchIconDark : searchIconLight}
+                            alt=""
                             className="w-[27px] h-[27px] opacity-70 cursor-pointer"
                         />
 
@@ -113,7 +115,7 @@ const Header: React.FC = () => {
 
                         <Link to="/aura/search">
                             <div className="relative flex items-center justify-center w-11 h-11">
-                                <img src={theme=== "dark" ? filterIconDark : filterIconLight} className="w-[30px] h-[30px] opacity-70" />
+                                <img src={theme=== "dark" ? filterIconDark : filterIconLight} alt="" className="w-[30px] h-[30px] opacity-70" />
                             </div>
                         </Link>
                     </div>
@@ -175,6 +177,10 @@ const Header: React.FC = () => {
 
                     {user ? (
                         <div className="flex items-center gap-14">
+
+                            <Link to="/news" className="hidden lg:block text-black dark:text-white text-sm hover:text-[#1DB954] cursor-pointer transition font-normal leading-5 tracking-[-0.5px]">
+                                {t('nav.news', 'News')}
+                            </Link>
 
                             <NotificationBell />
 

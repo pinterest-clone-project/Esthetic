@@ -13,6 +13,7 @@ using Domain.Entities.Pin;
 using Domain.Entities.PinTag;
 using Domain.Entities.Recommended;
 using Domain.Entities.Report;
+using Domain.Entities.News;
 using Domain.Entities.Tag;
 using Domain.Entities.UserBlock;
 using Microsoft.AspNetCore.Identity;
@@ -49,6 +50,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     public DbSet<MessageEntity> Messages { get; set; }
     public DbSet<TagEntity> Tags { get; set; }
     public DbSet<NotificationEntity> Notifications { get; set; }
+    public DbSet<NewsEntity> News { get; set; }
     public DbSet<UserPinInteraction> UserPinInteractions { get; set; }
     public DbSet<UserCategory> UserCategories { get; set; }
 

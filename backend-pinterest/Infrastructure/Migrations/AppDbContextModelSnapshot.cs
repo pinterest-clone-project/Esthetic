@@ -560,6 +560,58 @@ namespace Infrastructure.Migrations
                     b.ToTable("Likes");
                 });
 
+            modelBuilder.Entity("Domain.Entities.News.NewsEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ExcerptEn")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ExcerptUk")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("PublishedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Tag")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("TitleEn")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("TitleUk")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("News");
+                });
+
             modelBuilder.Entity("Domain.Entities.Notification.NotificationEntity", b =>
                 {
                     b.Property<Guid>("Id")

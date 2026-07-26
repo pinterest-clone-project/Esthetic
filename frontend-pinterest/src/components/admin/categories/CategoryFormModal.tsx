@@ -58,7 +58,7 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
     const slug = toSlug(nameValue || "");
 
     const [rawImageSrc, setRawImageSrc] = useState<string | null>(null);
-    const [imageFile, setImageFile] = useState<File | null>(null);
+    const imageFile = useRef<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(
         category?.image ? getCategoryImageUrl(category.image) : null
     );
@@ -73,6 +73,16 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
         };
     }, []);
 
+    useEffect(() => {
+        if (!rawImageSrc) return;
+        return () => URL.revokeObjectURL(rawImageSrc);
+    }, [rawImageSrc]);
+
+    useEffect(() => {
+        if (!imagePreview?.startsWith("blob:")) return;
+        return () => URL.revokeObjectURL(imagePreview);
+    }, [imagePreview]);
+
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -81,12 +91,12 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
     };
 
     const handleCropped = (file: File) => {
-        setImageFile(file);
+        imageFile.current = file;
         setImagePreview(URL.createObjectURL(file));
     };
 
     const onSubmit = async (values: CategoryFormValues) => {
-        if (!isEdit && !imageFile) {
+        if (!isEdit && !imageFile.current) {
             showToast(t('categories.imageMissing'), "error");
             return;
         }
@@ -98,7 +108,7 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
                     name: values.name,
                     slug,
                     description: values.description ?? "",
-                    ...(imageFile ? { imageFile } : {}),
+                    ...(imageFile.current ? { imageFile: imageFile.current } : {}),
                 }).unwrap();
                 showToast(t('toast.categoryUpdated'), "success");
             } else {
@@ -106,7 +116,7 @@ const CategoryFormModal = ({ category, onClose }: CategoryFormModalProps) => {
                     name: values.name,
                     slug,
                     description: values.description ?? "",
-                    imageFile: imageFile!,
+                    imageFile: imageFile.current!,
                 }).unwrap();
                 showToast(t('toast.categoryCreated'), "success");
             }

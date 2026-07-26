@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useGetAllCategoriesQuery } from "@/services/categoryService.ts";
 import { useGetAllTagsQuery } from "@/services/tagService.ts";
@@ -33,7 +33,7 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
     const [sourceUrl, setSourceUrl] = useState(pin.sourceUrl ?? "");
     const [categoryId, setCategoryId] = useState(pin.categoryId ?? "");
     const [tagIds, setTagIds] = useState<string[]>(pin.tags.map((tag) => tag.id));
-    const [imageFile, setImageFile] = useState<File | null>(null);
+    const imageFile = useRef<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState(pin.image ? `${APP_ENV.IMAGES_1200_URL}${pin.image}` : "");
     const [showCropper, setShowCropper] = useState(false);
     const [cropperImageSrc, setCropperImageSrc] = useState("");
@@ -51,6 +51,11 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
         if (!previewUrl.startsWith("blob:")) return;
         return () => URL.revokeObjectURL(previewUrl);
     }, [previewUrl]);
+
+    useEffect(() => {
+        if (!cropperImageSrc) return;
+        return () => URL.revokeObjectURL(cropperImageSrc);
+    }, [cropperImageSrc]);
 
     const selectedTags = useMemo(
         () => tags?.filter((tag) => tagIds.includes(tag.id)) ?? [],
@@ -71,7 +76,7 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
     };
 
     const handleCropComplete = (croppedFile: File) => {
-        setImageFile(croppedFile);
+        imageFile.current = croppedFile;
         setPreviewUrl(URL.createObjectURL(croppedFile));
         setShowCropper(false);
         setCropperImageSrc("");
@@ -88,7 +93,7 @@ const PinFormModal = ({ pin, onClose }: PinFormModalProps) => {
                 sourceUrl: sourceUrl.trim() || undefined,
                 categoryId: categoryId || undefined,
                 tagIds,
-                imageFile: imageFile ?? undefined,
+                imageFile: imageFile.current ?? undefined,
             }).unwrap();
             showToast(t('toast.pinUpdated'), "success");
             onClose();

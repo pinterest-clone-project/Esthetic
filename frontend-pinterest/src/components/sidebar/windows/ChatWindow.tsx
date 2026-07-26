@@ -6,6 +6,7 @@ import {useNavigate} from "react-router";
 import Modal from "@/components/ui/Modal.tsx";
 import {APP_ENV} from "@/constants/env";
 import {useTranslation} from "react-i18next";
+import { CloseIcon } from "@/components/ui/Icons.tsx";
 
 interface ChatWindowProps {
     chat: IChat;
@@ -69,9 +70,7 @@ const ChatWindow = ({ chat, onClose }: ChatWindowProps) => {
                     onClick={onClose}
                     className="w-7 h-7 flex items-center justify-center rounded-full bg-[#D1D1D1] dark:bg-[#2a2a2a] hover:bg-[#3a3a3a] transition-colors"
                 >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
-                        <path d="M18 6L6 18M6 6l12 12"/>
-                    </svg>
+                    <CloseIcon className="text-white" />
                 </button>
             </div>
 

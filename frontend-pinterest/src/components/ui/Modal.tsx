@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
+import { CloseIcon } from "@/components/ui/Icons.tsx";
 
 interface ModalProps {
     isOpen: boolean;
@@ -78,9 +79,7 @@ const Modal = ({
                                 onClick={onClose}
                                 className="w-7 h-7 flex items-center justify-center rounded-full bg-[#A1A1A1] dark:bg-[#a2a2a2] hover:bg-[#3a3a3a] transition-colors cursor-pointer"
                             >
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
-                                    <path d="M18 6L6 18M6 6l12 12" />
-                                </svg>
+                                <CloseIcon className="text-white" />
                             </button>
                         </div>
                     )}

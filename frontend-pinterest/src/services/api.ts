@@ -25,6 +25,7 @@ export const api = createApi({
         "AllCategories",
         "Statistics",
         "DeletedPins",
+        "News",
     ],
     endpoints: () => ({})
 });

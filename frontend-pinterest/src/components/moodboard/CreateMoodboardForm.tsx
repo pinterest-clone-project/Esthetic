@@ -182,6 +182,7 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
                                         >
                                             <img
                                                 src={pin.image ? `${APP_ENV.IMAGES_800_URL}${pin.image}` : undefined}
+                                                alt={pin.title ?? ""}
                                                 className="w-full h-full object-cover"
                                             />
                                             {isSelected && (

@@ -1,4 +1,5 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
+import { CloseIcon } from "@/components/ui/Icons.tsx";
 import Cropper, { type Area } from "react-easy-crop";
 import Modal from "./Modal.tsx";
 import { useTranslation } from "react-i18next";
@@ -65,7 +66,7 @@ const ImageCropperModal = ({
 
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
-    const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+    const croppedAreaPixels = useRef<Area | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
 
     const [lockAspect, setLockAspect] = useState(
@@ -86,7 +87,7 @@ const ImageCropperModal = ({
             : undefined;
 
     const onCropComplete = useCallback((_: Area, croppedPixels: Area) => {
-        setCroppedAreaPixels(croppedPixels);
+        croppedAreaPixels.current = croppedPixels;
     }, []);
 
     const handlePreset = (w: number | null, h: number | null) => {
@@ -109,12 +110,12 @@ const ImageCropperModal = ({
     };
 
     const handleConfirm = async () => {
-        if (!croppedAreaPixels) return;
+        if (!croppedAreaPixels.current) return;
         setIsProcessing(true);
         try {
             const file = await createCroppedImage(
                 imageSrc,
-                croppedAreaPixels,
+                croppedAreaPixels.current,
                 parsedWidth,
                 parsedHeight
             );
@@ -137,9 +138,7 @@ const ImageCropperModal = ({
                         onClick={onClose}
                         className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 transition-colors"
                     >
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                            <path d="M18 6L6 18M6 6l12 12" />
-                        </svg>
+                        <CloseIcon size={12} strokeWidth={2.5} />
                     </button>
                 </div>
 

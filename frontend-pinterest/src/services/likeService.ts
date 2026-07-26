@@ -7,14 +7,14 @@ export const likeService = api.injectEndpoints({
                 url: `Likes/like/${pinId}`,
                 method: 'PUT',
             }),
-            invalidatesTags: ["AllPins"],
+            invalidatesTags: ["AllPins", "MyPins"],
         }),
         unlike: builder.mutation<void, string>({
             query: (pinId) => ({
                 url: `Likes/unlike/${pinId}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: ["AllPins"],
+            invalidatesTags: ["AllPins", "MyPins"],
         }),
     }),
 });
