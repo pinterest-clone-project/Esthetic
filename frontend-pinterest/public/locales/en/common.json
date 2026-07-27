@@ -247,7 +247,9 @@
     "searchPlaceholder": "Search by nickname",
     "messagePlaceholder": "Message",
     "noUsersFound": "No users found",
-    "noChats": "No chats yet. Search for a user to start."
+    "noChats": "No chats yet. Search for a user to start.",
+    "today": "Today",
+    "yesterday": "Yesterday"
   },
   "pagination": {
     "info": "Page {{page}} of {{totalPages}} · Total {{totalCount}}",

@@ -70,8 +70,21 @@ const SidebarButton = ({ icon, label, active, onClick, extraImgClass = "", child
 );
 
 
+const formatLastMessageTime = (iso: string, lang: string) => {
+    const date = new Date(iso);
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    if (date.toDateString() === today.toDateString())
+        return date.toLocaleTimeString(lang, { hour: "2-digit", minute: "2-digit" });
+    if (date.toDateString() === yesterday.toDateString())
+        return date.toLocaleDateString(lang, { weekday: "short" });
+    return date.toLocaleDateString(lang, { day: "numeric", month: "short" });
+};
+
 const Sidebar = () => {
-    const { t } = useTranslation('common');
+    const { t, i18n } = useTranslation('common');
     const navigate = useNavigate();
     const location = useLocation();
     const [activeModal, setActiveModal] = useState<ModalType>(null);
@@ -230,7 +243,14 @@ const Sidebar = () => {
                                         {chat.otherUser.image && <img src={`${APP_ENV.IMAGES_100_URL}${chat.otherUser.image}`} className="w-full h-full object-cover" alt={chat.otherUser.username} />}
                                     </div>
                                     <div className="text-left flex-1 overflow-hidden">
-                                        <p className="text-black dark:text-white text-sm">{chat.otherUser.username}</p>
+                                        <div className="flex items-center justify-between gap-1">
+                                            <p className="text-black dark:text-white text-sm">{chat.otherUser.username}</p>
+                                            {chat.lastMessage && (
+                                                <span className="text-[#A1A1A1] text-[10px] shrink-0">
+                                                    {formatLastMessageTime(chat.lastMessage.sentAt, i18n.language)}
+                                                </span>
+                                            )}
+                                        </div>
                                         {chat.lastMessage && (
                                             <p className="text-black dark:text-[#A1A1A1] text-xs truncate">{chat.lastMessage.content}</p>
                                         )}

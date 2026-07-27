@@ -16,16 +16,14 @@ interface ChatWindowProps {
 const formatTime = (iso: string, lang: string) =>
     new Date(iso).toLocaleTimeString(lang, { hour: "2-digit", minute: "2-digit" });
 
-const formatDateSeparator = (iso: string, lang: string) => {
+const formatDateSeparator = (iso: string, lang: string, t: (key: string) => string) => {
     const date = new Date(iso);
     const today = new Date();
     const yesterday = new Date();
     yesterday.setDate(today.getDate() - 1);
 
-    if (date.toDateString() === today.toDateString())
-        return lang.startsWith("uk") ? "Сьогодні" : "Today";
-    if (date.toDateString() === yesterday.toDateString())
-        return lang.startsWith("uk") ? "Вчора" : "Yesterday";
+    if (date.toDateString() === today.toDateString()) return t('chat.today');
+    if (date.toDateString() === yesterday.toDateString()) return t('chat.yesterday');
     return date.toLocaleDateString(lang, { day: "numeric", month: "long", year: "numeric" });
 };
 
@@ -102,7 +100,7 @@ const ChatWindow = ({ chat, onClose }: ChatWindowProps) => {
                                 <div className="flex items-center gap-2 my-2">
                                     <div className="flex-1 h-px bg-black/10 dark:bg-white/10" />
                                     <span className="text-[11px] text-black/40 dark:text-white/40 shrink-0">
-                                        {formatDateSeparator(m.sentAt, i18n.language)}
+                                        {formatDateSeparator(m.sentAt, i18n.language, t)}
                                     </span>
                                     <div className="flex-1 h-px bg-black/10 dark:bg-white/10" />
                                 </div>
