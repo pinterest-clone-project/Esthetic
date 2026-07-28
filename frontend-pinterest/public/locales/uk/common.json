@@ -247,7 +247,9 @@
     "searchPlaceholder": "Пошук за нікнеймом",
     "messagePlaceholder": "Повідомлення",
     "noUsersFound": "Користувачів не знайдено",
-    "noChats": "Чатів ще немає. Знайдіть користувача, щоб почати."
+    "noChats": "Чатів ще немає. Знайдіть користувача, щоб почати.",
+    "today": "Сьогодні",
+    "yesterday": "Вчора"
   },
   "pagination": {
     "info": "Сторінка {{page}} з {{totalPages}} · Всього {{totalCount}}",

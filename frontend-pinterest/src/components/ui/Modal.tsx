@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { CloseIcon } from "@/components/ui/Icons.tsx";
@@ -29,6 +29,12 @@ const Modal = ({
                    title,
                    disableInnerScroll = false,
                }: ModalProps) => {
+    const [mounted, setMounted] = useState(isOpen);
+
+    useEffect(() => {
+        if (isOpen) setMounted(true);
+    }, [isOpen]);
+
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === "Escape") onClose();
@@ -51,13 +57,20 @@ const Modal = ({
         };
     }, [isOpen]);
 
+    if (!mounted) return null;
+
+    const handleExitComplete = () => {
+        if (!isOpen) setMounted(false);
+    };
+
     if (variant === "sidebar") {
         return createPortal(
-            <AnimatePresence>
+            <AnimatePresence onExitComplete={handleExitComplete}>
                 {isOpen && (
                     <>
                         {closeOnOverlay && (
                             <motion.div
+                                key="sidebar-overlay"
                                 className="fixed inset-0 z-40"
                                 variants={fadeIn}
                                 initial="hidden"
@@ -67,6 +80,7 @@ const Modal = ({
                             />
                         )}
                         <motion.div
+                            key="sidebar-content"
                             style={{
                                 width,
                                 left: `calc((100vw - 1505px) / 2 + 64px)`,
@@ -109,9 +123,10 @@ const Modal = ({
     }
 
     return createPortal(
-        <AnimatePresence>
+        <AnimatePresence onExitComplete={handleExitComplete}>
             {isOpen && (
                 <motion.div
+                    key="modal-overlay"
                     className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 dark:bg-black/60"
                     variants={fadeIn}
                     initial="hidden"
@@ -120,6 +135,7 @@ const Modal = ({
                     onClick={closeOnOverlay ? onClose : undefined}
                 >
                     <motion.div
+                        key="modal-content"
                         style={{
                             maxWidth: width,
                             height: height === "auto" ? undefined : height,

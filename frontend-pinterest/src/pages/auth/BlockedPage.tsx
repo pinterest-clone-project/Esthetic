@@ -69,12 +69,12 @@ const BlockedPage = () => {
                 </Button>
             </div>
 
-            <Modal isOpen={activeModal === "signup"} onClose={() => setActiveModal(null)}
+            <Modal isOpen={activeModal === "signup" && !user} onClose={() => setActiveModal(null)}
                    width={450} height="auto" borderRadius={20}>
                 <RegisterForm onSuccess={() => setActiveModal(null)} />
             </Modal>
 
-            <Modal isOpen={activeModal === "login"} onClose={() => setActiveModal(null)}
+            <Modal isOpen={activeModal === "login" && !user} onClose={() => setActiveModal(null)}
                    width={450} height="auto" borderRadius={20}>
                 <LoginForm
                     onSuccess={() => setActiveModal(null)}

@@ -219,7 +219,7 @@ const FirstPage = () => {
             </section>
 
             <Modal
-                isOpen={activeModal === "signup"}
+                isOpen={activeModal === "signup" && !user}
                 onClose={() => setActiveModal(null)}
                 width={450}
                 height="auto"
