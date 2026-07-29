@@ -1,6 +1,7 @@
 import {api} from "@/services/api.ts";
 import type { IChat } from "@/types/chat/IChat";
 import type {IMessage} from "@/types/chat/IMessage.ts";
+import type { IReactionGroup } from "@/types/chat/IReactionGroup.ts";
 import type {RootState} from "@/store";
 
 export const chatService = api.injectEndpoints({
@@ -48,6 +49,8 @@ export const chatService = api.injectEndpoints({
                             content,
                             sentAt: new Date().toISOString(),
                             isRead: false,
+                            reactions: [],
+                            myReaction: null,
                         });
                     })
                 );
@@ -71,6 +74,31 @@ export const chatService = api.injectEndpoints({
             query: (chatId) => ({ url: `Chat/${chatId}/read`, method: "POST" }),
             invalidatesTags: ["Chat"],
         }),
+
+        toggleReaction: builder.mutation<IReactionGroup[], { messageId: string; emoji: string }>({
+            query: ({ messageId, emoji }) => ({
+                url: `Chat/messages/${messageId}/reactions`,
+                method: "POST",
+                body: { emoji },
+            }),
+            async onQueryStarted({ messageId }, { dispatch, queryFulfilled, getState }) {
+                try {
+                    const { data: reactions } = await queryFulfilled;
+                    const state = getState() as RootState;
+                    const chatsData = chatService.endpoints.getChats.select()(state).data ?? [];
+                    for (const chat of chatsData) {
+                        dispatch(
+                            chatService.util.updateQueryData("getMessages", chat.id, (draft) => {
+                                const msg = draft.find((m) => m.id === messageId);
+                                if (msg) msg.reactions = reactions;
+                            })
+                        );
+                    }
+                } catch {
+                    // server is source of truth
+                }
+            },
+        }),
     }),
     overrideExisting: false,
 });
@@ -81,4 +109,5 @@ export const {
     useGetMessagesQuery,
     useSendMessageMutation,
     useMarkChatAsReadMutation,
+    useToggleReactionMutation,
 } = chatService;
