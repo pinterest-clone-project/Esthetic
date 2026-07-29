@@ -222,15 +222,17 @@ const FirstPage = () => {
                 </div>
             </section>
 
-            <Modal
-                isOpen={activeModal === "signup" && !user}
-                onClose={() => setActiveModal(null)}
-                width={450}
-                height="auto"
-                borderRadius={20}
-            >
-                <RegisterForm onSuccess={() => setActiveModal(null)}/>
-            </Modal>
+            {!user && (
+                <Modal
+                    isOpen={activeModal === "signup"}
+                    onClose={() => setActiveModal(null)}
+                    width={450}
+                    height="auto"
+                    borderRadius={20}
+                >
+                    <RegisterForm onSuccess={() => setActiveModal(null)}/>
+                </Modal>
+            )}
 
         </div>
     )
