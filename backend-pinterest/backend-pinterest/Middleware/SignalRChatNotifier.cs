@@ -11,4 +11,11 @@ public class SignalRChatNotifier(IHubContext<ChatHub> hubContext) : IChatNotifie
         hubContext.Clients.Group(receiverId.ToString()).SendAsync("ReceiveMessage", message);
     public Task NotifyNewChatAsync(Guid receiverId, ChatDTO chat) =>
         hubContext.Clients.Group(receiverId.ToString()).SendAsync("ReceiveNewChat", chat);
+
+    public Task NotifyReactionUpdatedAsync(Guid receiverId, Guid messageId, IEnumerable<ReactionGroupDTO> reactions) =>
+        hubContext.Clients.Group(receiverId.ToString()).SendAsync("ReactionUpdated", new
+        {
+            messageId = messageId.ToString(),
+            reactions
+        });
 }

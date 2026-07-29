@@ -21,7 +21,7 @@ public partial class ChatMapper
         return dto with
         {
             OtherUser = userMapper.ToShortDTO(other),
-            LastMessage = lastMessage is null ? null : messageMapper.ToDTO(lastMessage),
+            LastMessage = lastMessage is null ? null : messageMapper.ToDTO(lastMessage, currentUserId),
             UnreadCount = unreadCount
         };
     }
