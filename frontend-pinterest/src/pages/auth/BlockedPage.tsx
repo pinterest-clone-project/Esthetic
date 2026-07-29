@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/store/selectors/authSelectors.ts";
 import Modal from "@/components/ui/Modal.tsx";
@@ -15,6 +15,10 @@ const BlockedPage = () => {
     const user = useSelector(selectUser);
     const { theme } = useTheme();
     const [activeModal, setActiveModal] = useState<ModalType>(null);
+
+    useEffect(() => {
+        if (user) setActiveModal(null);
+    }, [user]);
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen text-center px-4 bg-white dark:bg-[#121212]">

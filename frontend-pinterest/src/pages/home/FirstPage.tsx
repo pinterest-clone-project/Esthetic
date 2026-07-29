@@ -9,7 +9,7 @@ import im8 from "../../../src/assets/defaults/def-8.jpg"
 import { useAppSelector } from "@/store";
 import Modal from "@/components/ui/Modal.tsx";
 import RegisterForm from "@/components/auth/RegisterForm.tsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { fadeUp, staggerContainer, staggerFast } from "@/lib/motion";
@@ -23,6 +23,10 @@ const FirstPage = () => {
     const { t } = useTranslation('common');
     const user = useAppSelector((state) => state.auth.user);
     const [activeModal, setActiveModal] = useState<"signup" | null>(null);
+
+    useEffect(() => {
+        if (user) setActiveModal(null);
+    }, [user]);
 
     return (
         <div className="scroll-smooth">
