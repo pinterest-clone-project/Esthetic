@@ -232,6 +232,7 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<IPinRepository, PinRepository>();
         services.AddScoped<IChatRepository, ChatRepository>();
         services.AddScoped<IMessageRepository, MessageRepository>();
+        services.AddScoped<IMessageReactionRepository, MessageReactionRepository>();
         services.AddScoped<INotificationRepository, NotificationRepository>();
         services.AddScoped<IRecommendedRepository, RecommendedRepository>();
         services.AddScoped<IUserCategoryRepository, UserCategoryRepository>();
