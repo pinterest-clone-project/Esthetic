@@ -308,41 +308,45 @@ const Header: React.FC = () => {
                 </div>
             )}
 
-            <Modal isOpen={activeModal === "signup" && !user} onClose={() => setActiveModal(null)}
-                   width={450} height="auto" borderRadius={20}>
-                <RegisterForm onSuccess={() => setActiveModal(null)} />
-            </Modal>
+            {!user && (
+                <>
+                    <Modal isOpen={activeModal === "signup"} onClose={() => setActiveModal(null)}
+                           width={450} height="auto" borderRadius={20}>
+                        <RegisterForm onSuccess={() => setActiveModal(null)} />
+                    </Modal>
 
-            <Modal isOpen={activeModal === "login" && !user} onClose={() => setActiveModal(null)}
-                   width={450} height="auto" borderRadius={20}>
-                <LoginForm
-                    onSuccess={() => setActiveModal(null)}
-                    onForgotPassword={() => setActiveModal("forgot-password")}
-                />
-            </Modal>
+                    <Modal isOpen={activeModal === "login"} onClose={() => setActiveModal(null)}
+                           width={450} height="auto" borderRadius={20}>
+                        <LoginForm
+                            onSuccess={() => setActiveModal(null)}
+                            onForgotPassword={() => setActiveModal("forgot-password")}
+                        />
+                    </Modal>
 
-            <Modal isOpen={activeModal === "forgot-password"} onClose={() => setActiveModal(null)}
-                   width={450} height="auto" borderRadius={20}>
-                <ForgotPasswordForm
-                    onSuccess={(email) => {
-                        setResetEmail(email);
-                        setActiveModal("reset-password");
-                    }}
-                    onBack={() => setActiveModal("login")}
-                />
-            </Modal>
+                    <Modal isOpen={activeModal === "forgot-password"} onClose={() => setActiveModal(null)}
+                           width={450} height="auto" borderRadius={20}>
+                        <ForgotPasswordForm
+                            onSuccess={(email) => {
+                                setResetEmail(email);
+                                setActiveModal("reset-password");
+                            }}
+                            onBack={() => setActiveModal("login")}
+                        />
+                    </Modal>
 
-            <Modal isOpen={activeModal === "reset-password"} onClose={() => setActiveModal(null)}
-                   width={450} height="auto" borderRadius={20}>
-                <ResetPasswordForm
-                    email={resetEmail}
-                    onSuccess={() => {
-                        setResetEmail("");
-                        setActiveModal("login");
-                    }}
-                    onBack={() => setActiveModal("forgot-password")}
-                />
-            </Modal>
+                    <Modal isOpen={activeModal === "reset-password"} onClose={() => setActiveModal(null)}
+                           width={450} height="auto" borderRadius={20}>
+                        <ResetPasswordForm
+                            email={resetEmail}
+                            onSuccess={() => {
+                                setResetEmail("");
+                                setActiveModal("login");
+                            }}
+                            onBack={() => setActiveModal("forgot-password")}
+                        />
+                    </Modal>
+                </>
+            )}
 
         </header>
     );
