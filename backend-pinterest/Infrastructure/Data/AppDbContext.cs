@@ -48,6 +48,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     public DbSet<BoardSectionEntity> BoardsSection { get; set; }
     public DbSet<ChatEntity> Chats { get; set; }
     public DbSet<MessageEntity> Messages { get; set; }
+    public DbSet<MessageReactionEntity> MessageReactions { get; set; }
     public DbSet<TagEntity> Tags { get; set; }
     public DbSet<NotificationEntity> Notifications { get; set; }
     public DbSet<NewsEntity> News { get; set; }
