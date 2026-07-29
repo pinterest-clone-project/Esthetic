@@ -54,8 +54,23 @@ const ChatView = ({ chat, onBack }: { chat: IChat; onBack: () => void }) => {
     const [sendMessage, { isLoading: isSending }] = useSendMessageMutation();
     const [markAsRead] = useMarkChatAsReadMutation();
     const [toggleReaction] = useToggleReactionMutation();
-    const [pickerMessageId, setPickerMessageId] = useState<string | null>(null);
+    const [picker, setPicker] = useState<{ id: string; el: HTMLElement } | null>(null);
+    const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [text, setText] = useState("");
+
+    const handleLongPressStart = (e: React.TouchEvent, messageId: string) => {
+        const el = e.currentTarget as HTMLElement;
+        longPressTimer.current = setTimeout(() => {
+            setPicker({ id: messageId, el });
+        }, 500);
+    };
+
+    const handleLongPressEnd = () => {
+        if (longPressTimer.current) {
+            clearTimeout(longPressTimer.current);
+            longPressTimer.current = null;
+        }
+    };
     const bottomRef = useRef<HTMLDivElement>(null);
 
     const { unreadCount } = useGetChatsQuery(undefined, {
@@ -126,21 +141,26 @@ const ChatView = ({ chat, onBack }: { chat: IChat; onBack: () => void }) => {
                             <div className={`flex ${isOwn ? "justify-end" : "justify-start"}`}>
                                 <div className="relative group max-w-[75%]">
                                     <button
-                                        onClick={() => setPickerMessageId(pickerMessageId === m.id ? null : m.id)}
+                                        onClick={(e) => setPicker(picker?.id === m.id ? null : { id: m.id, el: e.currentTarget })}
                                         className={`absolute top-1 opacity-0 group-hover:opacity-100 transition-opacity z-10 w-6 h-6 flex items-center justify-center rounded-full bg-white dark:bg-[#1e1e1e] border border-[#e5e5e5] dark:border-[#333] text-sm ${isOwn ? "-left-7" : "-right-7"}`}
                                     >
                                         😊
                                     </button>
 
-                                    {pickerMessageId === m.id && (
+                                    {picker?.id === m.id && (
                                         <ReactionPicker
+                                            anchorEl={picker.el}
                                             isOwn={isOwn}
                                             onSelect={(emoji) => toggleReaction({ messageId: m.id, emoji })}
-                                            onClose={() => setPickerMessageId(null)}
+                                            onClose={() => setPicker(null)}
                                         />
                                     )}
 
-                                    <div className={`px-3 pt-2 pb-1 text-sm whitespace-pre-wrap break-words flex flex-col ${
+                                    <div
+                                        onTouchStart={(e) => handleLongPressStart(e, m.id)}
+                                        onTouchEnd={handleLongPressEnd}
+                                        onTouchMove={handleLongPressEnd}
+                                        className={`px-3 pt-2 pb-1 text-sm whitespace-pre-wrap break-words flex flex-col select-none ${
                                         isOwn
                                             ? "bg-[#1DB954] text-black rounded-[18px] rounded-br-[4px]"
                                             : "bg-[#e5e5e5] dark:bg-[#2a2a2a] text-black dark:text-white rounded-[18px] rounded-bl-[4px]"
