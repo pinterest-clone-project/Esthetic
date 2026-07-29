@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { getChatConnection, startChatConnection } from "@/utils/chatHub.ts";
 import type { IMessage } from "@/types/chat/IMessage.ts";
 import type { IChat } from "@/types/chat/IChat.ts";
+import type { IReactionGroup } from "@/types/chat/IReactionGroup.ts";
 import { chatService } from "@/services/chatService.ts";
 import { selectIsAuth } from "@/store/selectors/authSelectors.ts";
 
@@ -50,6 +51,25 @@ export const useChatRealtime = () => {
                     })
                 );
             });
+
+            connection.on("ReactionUpdated", ({ messageId, reactions }: { messageId: string; reactions: IReactionGroup[] }) => {
+                dispatch((_, getState) => {
+                    const state = getState() as { api: { queries: Record<string, { data?: IMessage[] }> } };
+                    const queries = state.api?.queries ?? {};
+                    for (const key of Object.keys(queries)) {
+                        if (!key.startsWith("getMessages(")) continue;
+                        const cachedMessages = queries[key]?.data;
+                        if (!cachedMessages?.some((m: IMessage) => m.id === messageId)) continue;
+                        const chatId = key.replace('getMessages("', "").replace('")', "");
+                        dispatch(
+                            chatService.util.updateQueryData("getMessages", chatId, (draft) => {
+                                const msg = draft.find((m) => m.id === messageId);
+                                if (msg) msg.reactions = reactions;
+                            })
+                        );
+                    }
+                });
+            });
         };
 
         setup();
@@ -59,6 +79,7 @@ export const useChatRealtime = () => {
             const conn = getChatConnection();
             conn.off("ReceiveMessage");
             conn.off("ReceiveNewChat");
+            conn.off("ReactionUpdated");
         };
     }, [isAuth, dispatch]);
 };
