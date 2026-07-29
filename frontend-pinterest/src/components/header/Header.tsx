@@ -45,6 +45,10 @@ const Header: React.FC = () => {
     const unreadCount = (notificationsData?.items ?? []).filter((n) => !n.isRead).length;
 
     const { t } = useTranslation('common');
+
+    useEffect(() => {
+        if (user) setActiveModal(null);
+    }, [user]);
     const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
