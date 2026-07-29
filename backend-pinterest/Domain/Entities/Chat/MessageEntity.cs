@@ -19,4 +19,6 @@ public class MessageEntity
     public DateTime SentAt { get; set; } = DateTime.UtcNow;
 
     public bool IsRead { get; set; } = false;
+
+    public ICollection<MessageReactionEntity> Reactions { get; set; } = [];
 }
