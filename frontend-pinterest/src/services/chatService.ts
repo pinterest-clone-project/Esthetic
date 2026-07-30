@@ -59,8 +59,12 @@ export const chatService = api.injectEndpoints({
                     const { data: saved } = await queryFulfilled;
                     dispatch(
                         chatService.util.updateQueryData("getMessages", chatId, (draft) => {
-                            const idx = draft.findIndex((m) => m.id === tempId);
-                            if (idx !== -1) draft[idx] = saved;
+                            // Remove duplicate if SignalR already added the real message
+                            const signalrIdx = draft.findIndex((m) => m.id === saved.id);
+                            if (signalrIdx !== -1) draft.splice(signalrIdx, 1);
+
+                            const tempIdx = draft.findIndex((m) => m.id === tempId);
+                            if (tempIdx !== -1) draft[tempIdx] = saved;
                         })
                     );
                 } catch {
