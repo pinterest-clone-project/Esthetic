@@ -19,6 +19,6 @@ public class GetChatMessagesQueryHandler(IChatRepository chatRepository, IMessag
             throw new ForbiddenException("Ви не є учасником цього чату");
 
         var messages = await messageRepository.GetChatMessagesAsync(request.ChatId, ct);
-        return messages.Select(messageMapper.ToDTO).OrderBy(m => m.SentAt).ToList();
+        return messages.Select(m => messageMapper.ToDTO(m, request.UserId)).OrderBy(m => m.SentAt).ToList();
     }
 }

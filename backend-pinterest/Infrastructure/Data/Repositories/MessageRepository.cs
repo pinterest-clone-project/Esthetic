@@ -17,8 +17,14 @@ public class MessageRepository(AppDbContext db) : IMessageRepository
         db.Messages
             .Where(m => m.ChatId == chatId)
             .Include(m => m.Sender)
+            .Include(m => m.Reactions)
             .OrderByDescending(m => m.SentAt)
             .ToListAsync(ct);
+
+    public Task<MessageEntity?> GetByIdAsync(Guid id, CancellationToken ct = default) =>
+        db.Messages
+            .Include(m => m.Reactions)
+            .FirstOrDefaultAsync(m => m.Id == id, ct);
 
     public Task<int> GetUnreadCountAsync(Guid chatId, Guid userId, CancellationToken ct = default) =>
         db.Messages.CountAsync(m => m.ChatId == chatId && m.SenderId != userId && !m.IsRead, ct);

@@ -347,5 +347,16 @@
     "deleteAuraDesc": "It will be moved to Recently deleted and permanently removed after 30 days.",
     "viewRecentlyDeleted": "View Recently deleted",
     "deleteBoard": "Delete this board?"
+  },
+  "usernameSetup": {
+    "title": "Choose your username",
+    "subtitle": "This is how other users will find you. You can change it later in settings.",
+    "label": "Username",
+    "placeholder": "e.g. john_doe",
+    "save": "Save and continue",
+    "saving": "Saving...",
+    "errorMin": "Username must be at least 3 characters",
+    "errorInvalid": "Only letters, numbers and underscores allowed",
+    "errorTaken": "This username is already taken"
   }
 }

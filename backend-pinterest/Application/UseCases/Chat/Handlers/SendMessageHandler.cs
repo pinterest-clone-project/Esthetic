@@ -28,7 +28,7 @@ public class SendMessageHandler(
             Content = request.Content.Trim()
         }, ct);
 
-        var dto = messageMapper.ToDTO(message);
+        var dto = messageMapper.ToDTO(message, request.SenderId);
         var receiverId = chat.User1Id == request.SenderId ? chat.User2Id : chat.User1Id;
         await chatNotifier.NotifyNewMessageAsync(receiverId, dto);
 

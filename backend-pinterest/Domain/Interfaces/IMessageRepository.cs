@@ -8,4 +8,5 @@ public interface IMessageRepository
     Task<List<MessageEntity>> GetChatMessagesAsync(Guid chatId, CancellationToken ct = default);
     Task<int> GetUnreadCountAsync(Guid chatId, Guid userId, CancellationToken ct = default);
     Task MarkAsReadAsync(Guid chatId, Guid readerId, CancellationToken ct = default);
+    Task<MessageEntity?> GetByIdAsync(Guid id, CancellationToken ct = default);
 }

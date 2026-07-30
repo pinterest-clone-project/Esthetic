@@ -41,6 +41,11 @@ public class ChatController(IMediator mediator) : ControllerBase
         await mediator.Send(new MarkChatAsReadCommand(chatId, CurrentUserId));
         return Ok();
     }
+
+    [HttpPost("messages/{messageId}/reactions")]
+    public async Task<IActionResult> ToggleReaction(Guid messageId, [FromBody] ToggleReactionBody body)
+        => Ok(await mediator.Send(new ToggleReactionCommand(messageId, CurrentUserId, body.Emoji)));
 }
 
 public record SendMessageBody(string Content);
+public record ToggleReactionBody(string Emoji);

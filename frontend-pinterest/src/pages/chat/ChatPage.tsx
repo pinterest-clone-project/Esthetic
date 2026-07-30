@@ -7,11 +7,14 @@ import {
     useGetOrCreateChatMutation,
     useMarkChatAsReadMutation,
     useSendMessageMutation,
+    useToggleReactionMutation,
 } from "@/services/chatService";
 import { useSearchUsersQuery } from "@/services/userService";
 import { APP_ENV } from "@/constants/env";
 import type { IChat } from "@/types/chat/IChat";
 import { useTranslation } from "react-i18next";
+import { ReactionPicker } from "@/components/chat/ReactionPicker.tsx";
+import { MessageReactionBar } from "@/components/chat/MessageReactionBar.tsx";
 
 const formatTime = (iso: string, lang: string) =>
     new Date(iso).toLocaleTimeString(lang, { hour: "2-digit", minute: "2-digit" });
@@ -50,7 +53,24 @@ const ChatView = ({ chat, onBack }: { chat: IChat; onBack: () => void }) => {
     const { data: messages = [] } = useGetMessagesQuery(chat.id);
     const [sendMessage, { isLoading: isSending }] = useSendMessageMutation();
     const [markAsRead] = useMarkChatAsReadMutation();
+    const [toggleReaction] = useToggleReactionMutation();
+    const [picker, setPicker] = useState<{ id: string; el: HTMLElement } | null>(null);
+    const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [text, setText] = useState("");
+
+    const handleLongPressStart = (e: React.TouchEvent, messageId: string) => {
+        const el = e.currentTarget as HTMLElement;
+        longPressTimer.current = setTimeout(() => {
+            setPicker({ id: messageId, el });
+        }, 500);
+    };
+
+    const handleLongPressEnd = () => {
+        if (longPressTimer.current) {
+            clearTimeout(longPressTimer.current);
+            longPressTimer.current = null;
+        }
+    };
     const bottomRef = useRef<HTMLDivElement>(null);
 
     const { unreadCount } = useGetChatsQuery(undefined, {
@@ -119,15 +139,44 @@ const ChatView = ({ chat, onBack }: { chat: IChat; onBack: () => void }) => {
                                 </div>
                             )}
                             <div className={`flex ${isOwn ? "justify-end" : "justify-start"}`}>
-                                <div className={`max-w-[75%] px-3 pt-2 pb-1 text-sm whitespace-pre-wrap break-words flex flex-col ${
-                                    isOwn
-                                        ? "bg-[#1DB954] text-black rounded-[18px] rounded-br-[4px]"
-                                        : "bg-[#e5e5e5] dark:bg-[#2a2a2a] text-black dark:text-white rounded-[18px] rounded-bl-[4px]"
-                                }`}>
-                                    <span>{m.content}</span>
-                                    <span className={`text-[10px] mt-0.5 self-end ${isOwn ? "text-black/50" : "text-black/40 dark:text-white/40"}`}>
-                                        {formatTime(m.sentAt, i18n.language)}
-                                    </span>
+                                <div className="relative group max-w-[75%]">
+                                    <button
+                                        onClick={(e) => setPicker(picker?.id === m.id ? null : { id: m.id, el: e.currentTarget })}
+                                        className={`absolute top-1 opacity-0 group-hover:opacity-100 transition-opacity z-10 w-6 h-6 flex items-center justify-center rounded-full bg-white dark:bg-[#1e1e1e] border border-[#e5e5e5] dark:border-[#333] text-sm ${isOwn ? "-left-7" : "-right-7"}`}
+                                    >
+                                        😊
+                                    </button>
+
+                                    {picker?.id === m.id && (
+                                        <ReactionPicker
+                                            anchorEl={picker.el}
+                                            isOwn={isOwn}
+                                            onSelect={(emoji) => toggleReaction({ messageId: m.id, emoji })}
+                                            onClose={() => setPicker(null)}
+                                        />
+                                    )}
+
+                                    <div
+                                        onTouchStart={(e) => handleLongPressStart(e, m.id)}
+                                        onTouchEnd={handleLongPressEnd}
+                                        onTouchMove={handleLongPressEnd}
+                                        className={`px-3 pt-2 pb-1 text-sm whitespace-pre-wrap break-words flex flex-col select-none ${
+                                        isOwn
+                                            ? "bg-[#1DB954] text-black rounded-[18px] rounded-br-[4px]"
+                                            : "bg-[#e5e5e5] dark:bg-[#2a2a2a] text-black dark:text-white rounded-[18px] rounded-bl-[4px]"
+                                    }`}>
+                                        <span>{m.content}</span>
+                                        <span className={`text-[10px] mt-0.5 self-end ${isOwn ? "text-black/50" : "text-black/40 dark:text-white/40"}`}>
+                                            {formatTime(m.sentAt, i18n.language)}
+                                        </span>
+                                    </div>
+
+                                    <MessageReactionBar
+                                        reactions={m.reactions ?? []}
+                                        currentUserEmoji={m.myReaction ?? null}
+                                        onToggle={(emoji) => toggleReaction({ messageId: m.id, emoji })}
+                                        isOwn={isOwn}
+                                    />
                                 </div>
                             </div>
                         </div>

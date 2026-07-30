@@ -1,12 +1,14 @@
 import type {IChat} from "@/types/chat/IChat.ts";
 import {useAppSelector} from "@/store";
-import {useGetChatsQuery, useGetMessagesQuery, useMarkChatAsReadMutation, useSendMessageMutation} from "@/services/chatService.ts";
+import {useGetChatsQuery, useGetMessagesQuery, useMarkChatAsReadMutation, useSendMessageMutation, useToggleReactionMutation} from "@/services/chatService.ts";
 import {useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router";
 import Modal from "@/components/ui/Modal.tsx";
 import {APP_ENV} from "@/constants/env";
 import {useTranslation} from "react-i18next";
 import { CloseIcon } from "@/components/ui/Icons.tsx";
+import { ReactionPicker } from "@/components/chat/ReactionPicker.tsx";
+import { MessageReactionBar } from "@/components/chat/MessageReactionBar.tsx";
 
 interface ChatWindowProps {
     chat: IChat;
@@ -35,6 +37,8 @@ const ChatWindow = ({ chat, onClose }: ChatWindowProps) => {
     const { data: messages = [] } = useGetMessagesQuery(chat.id);
     const [sendMessage, { isLoading: isSending }] = useSendMessageMutation();
     const [markAsRead] = useMarkChatAsReadMutation();
+    const [toggleReaction] = useToggleReactionMutation();
+    const [picker, setPicker] = useState<{ id: string; el: HTMLElement } | null>(null);
     const [text, setText] = useState("");
     const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -106,17 +110,42 @@ const ChatWindow = ({ chat, onClose }: ChatWindowProps) => {
                                 </div>
                             )}
                             <div className={`flex ${isOwn ? "justify-end" : "justify-start"}`}>
-                                <div
-                                    className={`max-w-[75%] px-3 pt-2 pb-1 text-sm whitespace-pre-wrap break-words flex flex-col ${
-                                        isOwn
-                                            ? "bg-[#1DB954] text-black rounded-[18px] rounded-br-[4px]"
-                                            : "bg-[#2a2a2a] text-white rounded-[18px] rounded-bl-[4px]"
-                                    }`}
-                                >
-                                    <span>{m.content}</span>
-                                    <span className={`text-[10px] mt-0.5 self-end ${isOwn ? "text-black/50" : "text-white/40"}`}>
-                                        {formatTime(m.sentAt, i18n.language)}
-                                    </span>
+                                <div className="relative group max-w-[75%]">
+                                    <button
+                                        onClick={(e) => setPicker(picker?.id === m.id ? null : { id: m.id, el: e.currentTarget })}
+                                        className={`absolute top-1 opacity-0 group-hover:opacity-100 transition-opacity z-10 w-6 h-6 flex items-center justify-center rounded-full bg-white dark:bg-[#1e1e1e] border border-[#e5e5e5] dark:border-[#333] text-sm ${isOwn ? "-left-7" : "-right-7"}`}
+                                    >
+                                        😊
+                                    </button>
+
+                                    {picker?.id === m.id && (
+                                        <ReactionPicker
+                                            anchorEl={picker.el}
+                                            isOwn={isOwn}
+                                            onSelect={(emoji) => toggleReaction({ messageId: m.id, emoji })}
+                                            onClose={() => setPicker(null)}
+                                        />
+                                    )}
+
+                                    <div
+                                        className={`px-3 pt-2 pb-1 text-sm whitespace-pre-wrap break-words flex flex-col ${
+                                            isOwn
+                                                ? "bg-[#1DB954] text-black rounded-[18px] rounded-br-[4px]"
+                                                : "bg-[#2a2a2a] text-white rounded-[18px] rounded-bl-[4px]"
+                                        }`}
+                                    >
+                                        <span>{m.content}</span>
+                                        <span className={`text-[10px] mt-0.5 self-end ${isOwn ? "text-black/50" : "text-white/40"}`}>
+                                            {formatTime(m.sentAt, i18n.language)}
+                                        </span>
+                                    </div>
+
+                                    <MessageReactionBar
+                                        reactions={m.reactions ?? []}
+                                        currentUserEmoji={m.myReaction ?? null}
+                                        onToggle={(emoji) => toggleReaction({ messageId: m.id, emoji })}
+                                        isOwn={isOwn}
+                                    />
                                 </div>
                             </div>
                         </div>

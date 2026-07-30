@@ -9,6 +9,7 @@ import { useNotificationRealtime } from "@/hooks/useNotificationRealtime.ts";
 import { ToastProvider } from "@/components/ui/Toast/ToastProvider.tsx";
 import logo from "@/assets/logo.png";
 
+import { UsernameSetupModal } from "@/components/auth/UsernameSetupModal.tsx";
 import Layout from "@/layouts/Layout.tsx";
 import AdminLayout from "@/layouts/AdminLayout.tsx";
 import PrivateRoute from "@/components/routes/PrivateRoute.tsx";
@@ -113,6 +114,7 @@ const App = () => {
         <MotionConfig reducedMotion="user">
         <ToastProvider>
             <AppInit>
+                {user && user.userName.includes("@") && <UsernameSetupModal />}
                 <Suspense fallback={<PageLoader />}>
                     {user?.isBlocked ? (
                         <BlockedPage />
