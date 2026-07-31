@@ -11,6 +11,7 @@ import ReportModal from "@/components/ui/ReportModal.tsx";
 import {useTrackViewPinMutation} from "@/services/recommendedPinsService.ts";
 import {useToast} from "@/components/ui/Toast/UseToast.ts";
 import { useTranslation } from "react-i18next";
+import { useIsBlockedQuery, useBlockUserMutation, useUnblockUserMutation } from "@/services/blockService.ts";
 
 const AuraPreviewPage = () => {
     const { t, i18n } = useTranslation('pins');
@@ -30,6 +31,24 @@ const AuraPreviewPage = () => {
     const [saveModalOpen, setSaveModalOpen] = useState(false);
     const [reportModalOpen, setReportModalOpen] = useState(false);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+    const isOwner = me?.id === pin?.creatorId;
+
+    const { data: isBlocked } = useIsBlockedQuery(pin?.creatorId ?? "", {
+        skip: !me || !pin || isOwner,
+    });
+    const [blockUser] = useBlockUserMutation();
+    const [unblockUser] = useUnblockUserMutation();
+
+    const handleBlockToggle = async () => {
+        if (!pin) return;
+        if (isBlocked) {
+            await unblockUser(String(pin?.creatorId));
+            showToast(`User unblocked ${pin?.creatorId}`, "success");
+        } else {
+            await blockUser(String(pin?.creatorId));
+            showToast(`User blocked ${pin?.creatorId}`, "success");
+        }
+    };
 
     useEffect(() => {
         if (pin) {
@@ -41,7 +60,6 @@ const AuraPreviewPage = () => {
         document.querySelector("main")?.scrollTo({ top: 0, behavior: "instant" });
     }, [id]);
 
-    const isOwner = me?.id === pin?.creatorId;
     const suggestions = allPins?.filter(p => p.id !== id) ?? [];
 
     const liked = pin?.isLikedByMe ?? false;
@@ -199,19 +217,36 @@ const AuraPreviewPage = () => {
                                         {t('preview.delete')}
                                     </button>
                                 </>
-                            ) : (
-                                <button
-                                    onClick={() => setReportModalOpen(true)}
-                                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-gray-600 hover:text-red-400 hover:bg-red-500/10 text-xs font-medium transition-all duration-150"
-                                    title="Report"
-                                >
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
-                                        <line x1="4" y1="22" x2="4" y2="15"/>
-                                    </svg>
-                                    {t('preview.report')}
-                                </button>
-                            )}
+                                ) : (
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={handleBlockToggle}
+                                            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all duration-150
+                                                ${isBlocked
+                                                    ? "text-orange-400 hover:text-orange-300 hover:bg-orange-500/10 border border-orange-500/20 hover:border-orange-400/40"
+                                                    : "text-gray-600 hover:text-orange-400 hover:bg-orange-500/10 text-xs font-medium"
+                                                }`}
+                                            title={isBlocked ? "Unblock user" : "Block user"}
+                                        >
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <circle cx="12" cy="12" r="10"/>
+                                                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                                            </svg>
+                                            {isBlocked ? "Unblock" : "Block"}
+                                        </button>
+                                        <button
+                                            onClick={() => setReportModalOpen(true)}
+                                            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-gray-600 hover:text-red-400 hover:bg-red-500/10 text-xs font-medium transition-all duration-150"
+                                            title="Report"
+                                        >
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                                                <line x1="4" y1="22" x2="4" y2="15"/>
+                                            </svg>
+                                            Report
+                                        </button>
+                                    </div>
+                                )}
                         </div>
                     </div>
 
