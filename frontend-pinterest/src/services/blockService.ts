@@ -10,7 +10,6 @@ export const blockService = api.injectEndpoints({
             query: (blockedId) => ({
                 url: `UserBlock/block/${String(blockedId)}`,
                 method: 'PUT',
-                body: null,
             }),
             invalidatesTags: (_res, _err, id) => [{ type: 'BlockStatus', id }],
         }),
@@ -18,7 +17,6 @@ export const blockService = api.injectEndpoints({
             query: (blockedId) => ({
                 url: `UserBlock/unblock/${blockedId}`,
                 method: 'DELETE',
-                body: null,
             }),
             invalidatesTags: (_res, _err, id) => [{ type: 'BlockStatus', id }],
         }),
