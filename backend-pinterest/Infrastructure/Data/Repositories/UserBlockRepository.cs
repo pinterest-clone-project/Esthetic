@@ -35,4 +35,8 @@ public class UserBlockRepository(AppDbContext context) : IUserBlockRepository
             await context.SaveChangesAsync(ct);
         }
     }
+
+    public async Task<bool> IsBlockedAsync(Guid blockerId, Guid blockedId, CancellationToken ct = default)
+    => await context.UserBlocks
+        .AnyAsync(b => b.BlockerId == blockerId && b.BlockedId == blockedId, ct);
 }
