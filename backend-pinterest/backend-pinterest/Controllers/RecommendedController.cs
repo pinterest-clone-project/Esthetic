@@ -1,5 +1,6 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Validators;
+using Application.Models.DTO;
 using Application.Models.DTO.Pin;
 using Application.UseCases.Recommended.Command;
 using Application.UseCases.Recommended.Query;
@@ -33,10 +34,10 @@ public class RecommendedController(IMediator mediator) : ControllerBase
 
     }
     [HttpGet("recommended")]
-    public async Task<List<PinSummaryDTO>> GetRecommended()
+    public async Task<PagedResult<PinSummaryDTO>> GetRecommended(
+    [FromQuery] int page = 1, [FromQuery] int pageSize = 20, [FromQuery] int seed = 0)
     {
-        var query = new GetRecommendedPinsQuery(CurrentUserId);
-        var result = await mediator.Send(query);
-        return result;
+        var query = new GetRecommendedPinsQuery(CurrentUserId, page, pageSize, seed);
+        return await mediator.Send(query);
     }
 }
