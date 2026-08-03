@@ -1,8 +1,10 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Validators;
-using Application.UseCases.BlockUsers.Commands;
+using Application.UseCases.UserBlock.Commands;
+using Application.UseCases.UserBlock.Queries;
 using Domain.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -10,6 +12,7 @@ namespace backend_pinterest.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class UserBlockController(IMediator mediator) : ControllerBase
 {
     private Guid CurrentUserId => Guid.Parse(
@@ -35,6 +38,24 @@ public class UserBlockController(IMediator mediator) : ControllerBase
             BlockerId = CurrentUserId,
             BlockedId = blockedId
         });
+        return Ok(result);
+    }
+
+    [HttpGet("isBlocked/{blockedId}")]
+    public async Task<IActionResult> IsBlocked([FromRoute] Guid blockedId)
+    {
+        var result = await mediator.Send(new IsBlockedQuery
+        {
+            BlockerId = CurrentUserId,
+            BlockedId = blockedId
+        });
+        return Ok(result);
+    }
+
+    [HttpGet("blocked")]
+    public async Task<IActionResult> GetBlockedUsers()
+    {
+        var result = await mediator.Send(new GetBlockedUsersQuery(CurrentUserId));
         return Ok(result);
     }
 }

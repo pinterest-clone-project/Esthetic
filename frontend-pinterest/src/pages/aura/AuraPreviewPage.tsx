@@ -12,6 +12,7 @@ import {useTrackViewPinMutation} from "@/services/recommendedPinsService.ts";
 import {useToast} from "@/components/ui/Toast/UseToast.ts";
 import { useTranslation } from "react-i18next";
 import { HeartIcon, CommentIcon, SaveBoardIcon, DownloadIcon, ShareIcon, EditIcon, TrashIcon, ReportIcon, DotsVerticalIcon } from "@/components/ui/Icons.tsx";
+import { useDefaultIsBlockedQuery, useDefaultBlockUserMutation, useDefaultUnblockUserMutation } from "@/services/blockService.ts";
 
 const AuraPreviewPage = () => {
     const { t, i18n } = useTranslation('pins');
@@ -45,6 +46,24 @@ const AuraPreviewPage = () => {
         document.addEventListener("mousedown", handler);
         return () => document.removeEventListener("mousedown", handler);
     }, [menuOpen]);
+    const isOwner = me?.id === pin?.creatorId;
+
+    const { data: isBlocked } = useDefaultIsBlockedQuery(pin?.creatorId ?? "", {
+        skip: !me || !pin || isOwner,
+    });
+    const [blockUser] = useDefaultBlockUserMutation();
+    const [unblockUser] = useDefaultUnblockUserMutation();
+
+    const handleBlockToggle = async () => {
+        if (!pin) return;
+        if (isBlocked) {
+            await unblockUser(String(pin?.creatorId));
+            showToast(`User unblocked ${pin?.creatorName}`, "success");
+        } else {
+            await blockUser(String(pin?.creatorId));
+            showToast(`User blocked ${pin?.creatorName}`, "success");
+        }
+    };
 
     useEffect(() => {
         if (pin) {
@@ -57,7 +76,6 @@ const AuraPreviewPage = () => {
         setTagsExpanded(false);
     }, [id]);
 
-    const isOwner = me?.id === pin?.creatorId;
     const suggestions = allPins?.filter(p => p.id !== id) ?? [];
     const VISIBLE_TAGS = 4;
     const visibleTags = tagsExpanded
@@ -216,6 +234,23 @@ const AuraPreviewPage = () => {
                                         ) : (
                                             <>
                                                 <div className="h-px bg-black/5 dark:bg-white/5 my-1"/>
+                                                {/* block */}
+                                                <button
+                                                    onClick={handleBlockToggle}
+                                                    className={`flex items-center gap-2.5 w-full px-3.5 py-2.5 text-xs font-medium transition-all duration-150
+                                                        ${isBlocked
+                                                            ? "text-orange-400 hover:text-orange-300 hover:bg-orange-500/10 border border-orange-500/20 hover:border-orange-400/40"
+                                                            : "text-gray-600 hover:text-orange-400 hover:bg-orange-500/10 text-xs font-medium"
+                                                        }`}
+                                                    title={isBlocked ? "Unblock user" : "Block user"}
+                                                >
+                                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <circle cx="12" cy="12" r="10"/>
+                                                        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                                                    </svg>
+                                                    {isBlocked ? "Unblock" : "Block"}
+                                                </button>
+
                                                 {/* Report */}
                                                 <button
                                                     onClick={() => { setReportModalOpen(true); setMenuOpen(false); }}

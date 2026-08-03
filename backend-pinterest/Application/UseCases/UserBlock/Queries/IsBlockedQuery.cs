@@ -1,9 +1,8 @@
-﻿using MediatR;
+using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Application.UseCases.BlockUsers.Commands;
-
-public record BlockUserCommand : IRequest<Unit>
+namespace Application.UseCases.UserBlock.Queries;
+public record IsBlockedQuery : IRequest<bool>
 {
     [BindNever]
     public Guid BlockerId { get; init; }

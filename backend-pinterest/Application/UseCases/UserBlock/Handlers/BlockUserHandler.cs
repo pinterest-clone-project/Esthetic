@@ -1,8 +1,8 @@
-﻿using Application.UseCases.BlockUsers.Commands;
+﻿using Application.UseCases.UserBlock.Commands;
 using Domain.Interfaces;
 using MediatR;
 
-namespace Application.UseCases.BlockUsers.Handlers;
+namespace Application.UseCases.UserBlock.Handlers;
 
 public class BlockUserHandler(IUserBlockRepository blockRepository) : IRequestHandler<BlockUserCommand, Unit>
 {
