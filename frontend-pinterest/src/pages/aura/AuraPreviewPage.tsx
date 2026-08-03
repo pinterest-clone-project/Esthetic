@@ -12,7 +12,7 @@ import {useTrackViewPinMutation} from "@/services/recommendedPinsService.ts";
 import {useToast} from "@/components/ui/Toast/UseToast.ts";
 import { useTranslation } from "react-i18next";
 import { HeartIcon, CommentIcon, SaveBoardIcon, DownloadIcon, ShareIcon, EditIcon, TrashIcon, ReportIcon, DotsVerticalIcon } from "@/components/ui/Icons.tsx";
-import { useIsBlockedQuery, useBlockUserMutation, useUnblockUserMutation } from "@/services/blockService.ts";
+import { useDefaultIsBlockedQuery, useDefaultBlockUserMutation, useDefaultUnblockUserMutation } from "@/services/blockService.ts";
 
 const AuraPreviewPage = () => {
     const { t, i18n } = useTranslation('pins');
@@ -48,14 +48,15 @@ const AuraPreviewPage = () => {
     }, [menuOpen]);
     const isOwner = me?.id === pin?.creatorId;
 
-    const { data: isBlocked } = useIsBlockedQuery(pin?.creatorId ?? "", {
+    const { data: isBlocked } = useDefaultIsBlockedQuery(pin?.creatorId ?? "", {
         skip: !me || !pin || isOwner,
     });
-    const [blockUser] = useBlockUserMutation();
-    const [unblockUser] = useUnblockUserMutation();
+    const [blockUser] = useDefaultBlockUserMutation();
+    const [unblockUser] = useDefaultUnblockUserMutation();
 
     const handleBlockToggle = async () => {
         if (!pin) return;
+        console.log("pin?.creatorId", pin?.creatorId);
         if (isBlocked) {
             await unblockUser(String(pin?.creatorId));
             showToast(`User unblocked ${pin?.creatorId}`, "success");
