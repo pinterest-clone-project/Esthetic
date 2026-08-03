@@ -39,4 +39,10 @@ public class UserBlockRepository(AppDbContext context) : IUserBlockRepository
     public async Task<bool> IsBlockedAsync(Guid blockerId, Guid blockedId, CancellationToken ct = default)
     => await context.UserBlocks
         .AnyAsync(b => b.BlockerId == blockerId && b.BlockedId == blockedId, ct);
+
+    public async Task<List<Guid>> GetBlockedUserIdsAsync(Guid userId, CancellationToken ct = default)
+    => await context.UserBlocks
+        .Where(b => b.BlockerId == userId || b.BlockedId == userId)
+        .Select(b => b.BlockerId == userId ? b.BlockedId : b.BlockerId)
+        .ToListAsync(ct);
 }

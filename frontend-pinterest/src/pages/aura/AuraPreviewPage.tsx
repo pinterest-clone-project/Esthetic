@@ -56,13 +56,12 @@ const AuraPreviewPage = () => {
 
     const handleBlockToggle = async () => {
         if (!pin) return;
-        console.log("pin?.creatorId", pin?.creatorId);
         if (isBlocked) {
             await unblockUser(String(pin?.creatorId));
-            showToast(`User unblocked ${pin?.creatorId}`, "success");
+            showToast(`User unblocked ${pin?.creatorName}`, "success");
         } else {
             await blockUser(String(pin?.creatorId));
-            showToast(`User blocked ${pin?.creatorId}`, "success");
+            showToast(`User blocked ${pin?.creatorName}`, "success");
         }
     };
 
