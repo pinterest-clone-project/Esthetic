@@ -1,4 +1,5 @@
 import { api } from "./api.ts";
+import type { IBlockedUser } from "@/types/userblock/IBlockedUser.ts";
 
 export const blockService = api.injectEndpoints({
     endpoints: (builder) => ({
@@ -21,6 +22,10 @@ export const blockService = api.injectEndpoints({
             }),
             invalidatesTags: (_res, _err, id) => [{ type: 'BlockStatus', id }],
         }),
+        getBlockedUsers: builder.query<IBlockedUser[], void>({
+            query: () => `UserBlock/blocked`,
+            providesTags: ['BlockStatus'],
+        }),
     }),
 });
 
@@ -28,4 +33,5 @@ export const {
     useDefaultIsBlockedQuery,
     useDefaultBlockUserMutation,
     useDefaultUnblockUserMutation,
+    useGetBlockedUsersQuery,
 } = blockService;

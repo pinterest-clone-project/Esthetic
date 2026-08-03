@@ -1,7 +1,7 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Validators;
-using Application.UseCases.BlockUsers.Commands;
-using Application.UseCases.BlockUsers.Queries;
+using Application.UseCases.UserBlock.Commands;
+using Application.UseCases.UserBlock.Queries;
 using Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -49,6 +49,13 @@ public class UserBlockController(IMediator mediator) : ControllerBase
             BlockerId = CurrentUserId,
             BlockedId = blockedId
         });
+        return Ok(result);
+    }
+
+    [HttpGet("blocked")]
+    public async Task<IActionResult> GetBlockedUsers()
+    {
+        var result = await mediator.Send(new GetBlockedUsersQuery(CurrentUserId));
         return Ok(result);
     }
 }

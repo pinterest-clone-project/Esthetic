@@ -1,8 +1,8 @@
-using Application.UseCases.BlockUsers.Queries;
+using Application.UseCases.UserBlock.Queries;
 using Domain.Interfaces;
 using MediatR;
 
-namespace Application.UseCases.BlockUsers.Handlers;
+namespace Application.UseCases.UserBlock.Handlers;
 public class IsBlockedHandler(IUserBlockRepository blockRepository)
     : IRequestHandler<IsBlockedQuery, bool>
 {

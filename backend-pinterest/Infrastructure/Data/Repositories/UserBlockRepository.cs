@@ -45,4 +45,10 @@ public class UserBlockRepository(AppDbContext context) : IUserBlockRepository
         .Where(b => b.BlockerId == userId || b.BlockedId == userId)
         .Select(b => b.BlockerId == userId ? b.BlockedId : b.BlockerId)
         .ToListAsync(ct);
+
+    public async Task<List<UserBlockEntity>> GetBlockedUsersAsync(Guid blockerId, CancellationToken ct = default)
+    => await context.UserBlocks
+        .Where(b => b.BlockerId == blockerId)
+        .Include(b => b.Blocked) // UserEntity navigation on UserBlockEntity
+        .ToListAsync(ct);
 }
