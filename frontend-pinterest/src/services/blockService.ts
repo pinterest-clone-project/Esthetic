@@ -5,7 +5,7 @@ export const blockService = api.injectEndpoints({
     endpoints: (builder) => ({
         defaultIsBlocked: builder.query<boolean, string>({
             query: (blockedId) => `UserBlock/isBlocked/${blockedId}`,
-            providesTags: (_res, _err, id) => [{ type: 'BlockStatus', id }],
+            providesTags: ["BlockStatus"],
         }),
         defaultBlockUser: builder.mutation<void, string>({
             query: (blockedId) => ({
@@ -13,14 +13,14 @@ export const blockService = api.injectEndpoints({
                 method: 'PUT',
             }),
 
-            invalidatesTags: (_res, _err, id) => [{ type: 'BlockStatus', id }],
+            invalidatesTags: ["BlockStatus"],
         }),
         defaultUnblockUser: builder.mutation<void, string>({
             query: (blockedId) => ({
                 url: `UserBlock/unblock/${blockedId}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: (_res, _err, id) => [{ type: 'BlockStatus', id }],
+            invalidatesTags: ["BlockStatus"],
         }),
         getBlockedUsers: builder.query<IBlockedUser[], void>({
             query: () => `UserBlock/blocked`,

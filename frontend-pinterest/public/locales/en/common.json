@@ -20,6 +20,7 @@
     "follow": "Follow",
     "unfollow": "Unfollow",
     "block": "Block",
+    "unblock": "Unblock",
     "restore": "Restore",
     "unsave": "Unsave",
     "done": "Done",
@@ -72,7 +73,8 @@
     "noAuras": "No auras yet",
     "noAurasFound": "No auras found",
     "noMoodboards": "No moodboards yet",
-    "noNotifications": "No notifications"
+    "noNotifications": "No notifications",
+    "noBlockedUsers": "No blocked users"
   },
   "toast": {
     "linkCopied": "Link copied!",
@@ -320,12 +322,7 @@
   "blocked": {
     "title": "Your account has been blocked",
     "reason": "Reason: {{reason}}",
-    "contact": "If you believe this is a mistake, please contact support.",
-    "users": {
-      "title": "Blocked Users",
-      "noBlockedUsers": "No blocked users",
-      "unblock": "Unblock"
-    }
+    "contact": "If you believe this is a mistake, please contact support."
   },
   "notFound": {
     "title": "Page not found",
