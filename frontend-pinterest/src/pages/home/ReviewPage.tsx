@@ -64,7 +64,8 @@ function useAspectRatios(pins: IPinSummaryResponse[]) {
     }, [pins]);
 
     const getAspectRatio = useCallback((pin: IPinSummaryResponse) => {
-        return (pin.image && aspectRatioCache.get(pin.image)) ?? DEFAULT_ASPECT_RATIO;
+        if (!pin.image) return DEFAULT_ASPECT_RATIO;
+        return aspectRatioCache.get(pin.image) ?? DEFAULT_ASPECT_RATIO;
     }, []);
 
     return { getAspectRatio, tick };
