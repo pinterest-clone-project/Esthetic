@@ -60,7 +60,7 @@ public class PinRepository(AppDbContext db) : BaseRepository<PinEntity>(db), IPi
 
     public async Task<List<PinEntity>> GetDeletedByUserAsync(Guid userId, CancellationToken ct = default)
         => await _db.Pins
-            .Where(p => p.CreatorId == userId && p.IsDeleted)
+            .Where(p => p.CreatorId == userId && p.IsDeleted && !p.DeletedByAdmin)
             .OrderByDescending(p => p.DeletedAt)
             .ToListAsync(ct);
 

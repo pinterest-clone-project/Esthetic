@@ -119,8 +119,8 @@ const SettingsPage = () => {
                     </svg>
                 </div>
                 <div className="text-left flex-1">
-                    <p className="text-sm font-medium">Blocked Users</p>
-                    <p className="text-[#A1A1A1] text-xs">Manage who you've blocked</p>
+                    <p className="text-sm font-medium">{t('settings.blockedUsers')}</p>
+                    <p className="text-[#A1A1A1] text-xs">{t('settings.blockedUsersDesc')}</p>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A1A1A1" strokeWidth="2">
                     <path d="M9 18l6-6-6-6"/>

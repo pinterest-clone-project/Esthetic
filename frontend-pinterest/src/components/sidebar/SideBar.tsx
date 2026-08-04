@@ -306,8 +306,8 @@ const Sidebar = () => {
                         </svg>
                     </div>
                     <div className="text-left">
-                        <p className="text-black dark:text-white text-sm font-medium">Blocked Users</p>
-                        <p className="text-black dark:text-[#A1A1A1] text-xs">Manage who you've blocked</p>
+                        <p className="text-black dark:text-white text-sm font-medium">{t('settings.blockedUsers')}</p>
+                        <p className="text-black dark:text-[#A1A1A1] text-xs">{t('settings.blockedUsersDesc')}</p>
                     </div>
                 </button>
 

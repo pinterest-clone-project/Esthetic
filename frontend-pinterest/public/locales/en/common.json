@@ -320,7 +320,12 @@
   "blocked": {
     "title": "Your account has been blocked",
     "reason": "Reason: {{reason}}",
-    "contact": "If you believe this is a mistake, please contact support."
+    "contact": "If you believe this is a mistake, please contact support.",
+    "users": {
+      "title": "Blocked Users",
+      "noBlockedUsers": "No blocked users",
+      "unblock": "Unblock"
+    }
   },
   "notFound": {
     "title": "Page not found",
@@ -337,6 +342,8 @@
     "languageDesc": "Ukrainian / English",
     "adminPanel": "Admin panel",
     "adminPanelDesc": "Manage users and content",
+    "blockedUsers": "Blocked Users",
+    "blockedUsersDesc": "Manage who you've blocked",
     "recentlyDeleted": "Recently deleted",
     "recentlyDeletedDesc": "Auras deleted in the last 30 days",
     "logout": "Logout",
