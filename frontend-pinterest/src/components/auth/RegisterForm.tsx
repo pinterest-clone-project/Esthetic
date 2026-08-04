@@ -358,40 +358,47 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                         </p>
 
                         <div className="space-y-3">
-                            <Button
-                                type="button"
-                                variant="primary"
-                                fullWidth
-                                radius={5}
-                                onClick={() => {
-                                    updateField("gender", "Male");
-                                    setStep(4);
-                                }}
-                            >
-                                {t('register.male')}
-                            </Button>
+                            <div className="flex space-x-3">
+                                <Button
+                                    type="button"
+                                    variant="primary"
+                                    fullWidth
+                                    style={{ width: "30%", height: 70 }}
+                                    radius={5}
+                                    onClick={() => {
+                                        updateField("gender", "Male");
+                                        setStep(4);
+                                    }}
+                                >
+                                    {t('register.male')}
+                                </Button>
 
-                            <Button
-                                type="button"
-                                variant="secondary"
-                                fullWidth
-                                radius={5}
-                                style={{ backgroundColor: "#535353" }}
-                                onClick={() => {
-                                    updateField("gender", "Female");
-                                    setStep(4);
-                                }}
-                            >
-                                {t('register.female')}
-                            </Button>
+                                <Button
+                                    type="button"
+                                    variant="primary"
+                                    style={{ width: "30%", height: 70 }}
+                                    radius={5}
+                                    onClick={() => {
+                                        updateField("gender", "Other");
+                                        setStep(4);
+                                    }}
+                                >
+                                    {t('Non-Binary')}
+                                </Button>
 
-                            <button
-                                type="button"
-                                onClick={() => { updateField("gender", "Other"); setStep(4); }}
-                                className="w-full text-center text-xs text-[#A1A1A1] hover:text-white dark:hover:text-black transition"
-                            >
-                                {t('register.other')}
-                            </button>
+                                <Button
+                                    type="button"
+                                    variant="primary"
+                                    style={{ width: "30%", height: 70 }}
+                                    radius={5}
+                                    onClick={() => {
+                                        updateField("gender", "Female");
+                                        setStep(4);
+                                    }}
+                                >
+                                    {t('register.female')}
+                                </Button>
+                            </div>
 
                             <button
                                 type="button"

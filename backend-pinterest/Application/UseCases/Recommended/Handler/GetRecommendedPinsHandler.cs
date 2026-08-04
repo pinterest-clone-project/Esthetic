@@ -1,5 +1,4 @@
-﻿
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Application.Mappers;
 using Application.Models.DTO;
 using Application.Models.DTO.Pin;
@@ -14,16 +13,24 @@ namespace Application.UseCases.Recommended.Handler;
 public class GetRecommendedPinsHandler(
     IRecommendedRepository recommendedRepository,
     IPinRepository pinRepository,
-    IPagedService pagedService,
+    IUserBlockRepository userBlockRepository,
     PinMapper pinMapper) : IRequestHandler<GetRecommendedPinsQuery, PagedResult<PinSummaryDTO>>
 {
     public async Task<PagedResult<PinSummaryDTO>> Handle(GetRecommendedPinsQuery request, CancellationToken ct)
     {
+        var blockedIds = request.UserId != Guid.Empty
+            ? await userBlockRepository.GetBlockedUserIdsAsync(request.UserId, ct)
+            : new List<Guid>();
+
         var personalizedQuery = await BuildPersonalizedQuery(request.UserId, ct);
-        var personalizedIds = await personalizedQuery.Select(p => p.Id).ToListAsync(ct);
+        var personalizedIds = await personalizedQuery
+            .Where(p => !blockedIds.Contains(p.CreatorId))
+            .Select(p => p.Id)
+            .ToListAsync(ct);
 
         var randomPoolIds = await pinRepository.GetQueryable()
             .Where(p => !personalizedIds.Contains(p.Id))
+            .Where(p => !blockedIds.Contains(p.CreatorId))
             .Select(p => p.Id)
             .ToListAsync(ct);
 
@@ -73,6 +80,7 @@ public class GetRecommendedPinsHandler(
             PageSize = request.PageSize
         };
     }
+
     private static List<Guid> ShuffleDeterministic(List<Guid> source, int seed)
     {
         var rng = new Random(seed);
@@ -96,7 +104,7 @@ public class GetRecommendedPinsHandler(
     {
         var baseQuery = ApplyIncludes(pinRepository.GetQueryable());
 
-        if (userId == Guid.Empty) return baseQuery.Where(p => false); 
+        if (userId == Guid.Empty) return baseQuery.Where(p => false);
 
         var userPinsInteractions = await recommendedRepository.GetAllByUserAsync(userId);
         if (userPinsInteractions.Count < 10) return baseQuery.Where(p => false);

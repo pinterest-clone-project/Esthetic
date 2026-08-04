@@ -35,6 +35,7 @@ const ForgotPasswordPage   = lazy(() => import("@/pages/auth/ForgotPasswordPage.
 const ResetPasswordPage    = lazy(() => import("@/pages/auth/ResetPasswordPage.tsx"));
 const NotFoundPage         = lazy(() => import("./pages/NotFoundPage.tsx"));
 const BlockedPage          = lazy(() => import("@/pages/auth/BlockedPage.tsx"));
+const BlockedUsersPage     = lazy(() => import("@/pages/userBlock/BlockedUsersPage.tsx"));
 const AboutPage            = lazy(() => import("@/pages/static/AboutPage.tsx"));
 const ForBusinessPage      = lazy(() => import("@/pages/static/ForBusinessPage.tsx"));
 const NewsPage             = lazy(() => import("@/pages/static/NewsPage.tsx"));
@@ -155,6 +156,7 @@ const App = () => {
 
                                     <Route path="/chat" element={<ChatPage />} />
                                     <Route path="/settings" element={<SettingsPage />} />
+                                    <Route path="/settings/blocked" element={<BlockedUsersPage />} />
                                     <Route path="/deleted-auras" element={<DeletedAurasPage />} />
                                     <Route path="/notifications" element={<NotificationsPage />} />
                                 </Route>
