@@ -17,6 +17,7 @@ export const useAdminPinsFilters = () => {
     const sortBy = (searchParams.get("sortBy") as PinSortBy) ?? "CreatedAt";
     const sortDirection = (searchParams.get("sortDirection") as SortDirection) ?? "Desc";
     const sortValue = `${sortBy}:${sortDirection}` as `${PinSortBy}:${SortDirection}`;
+    const onlyDeletedByAdmin = searchParams.get("onlyDeletedByAdmin") === "true";
 
     const updateParams = (updates: Record<string, string | null>) => {
         setSearchParams((prev) => {
@@ -40,6 +41,12 @@ export const useAdminPinsFilters = () => {
         const [newSortBy, newSortDirection] = value.split(":");
         updateParams({ sortBy: newSortBy, sortDirection: newSortDirection, page: "1" });
     };
+    const setOnlyDeletedByAdmin = (value: boolean) =>
+        updateParams({ onlyDeletedByAdmin: value ? "true" : null, page: "1" });
 
-    return { search, setSearch, page, setPage, pageSize, handlePageSizeChange, sortBy, sortDirection, sortValue, handleSortChange };
+    return {
+        search, setSearch, page, setPage, pageSize, handlePageSizeChange,
+        sortBy, sortDirection, sortValue, handleSortChange,
+        onlyDeletedByAdmin, setOnlyDeletedByAdmin,
+    };
 };

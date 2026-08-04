@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { useAdminPinsFilters } from "@/hooks/useAdminPinsFilters.ts";
-import { useSearchPinsQuery, useGetPinByIdQuery } from "@/services/pinService.ts";
+import { useSearchPinsQuery, useGetPinByIdQuery, useAdminRestorePinMutation } from "@/services/pinService.ts";
 import PinsFilters from "@/components/admin/pins/PinsFilters.tsx";
 import PinRow from "@/components/admin/pins/PinRow.tsx";
 import PinFormModal from "@/components/admin/pins/PinFormModal.tsx";
@@ -15,6 +15,7 @@ const AdminPinsPage = () => {
     const {
         search, setSearch, page, setPage, pageSize, handlePageSizeChange,
         sortBy, sortDirection, sortValue, handleSortChange,
+        onlyDeletedByAdmin, setOnlyDeletedByAdmin,
     } = useAdminPinsFilters();
 
     const { data, isLoading, isFetching } = useSearchPinsQuery({
@@ -23,11 +24,13 @@ const AdminPinsPage = () => {
         sortDirection,
         page,
         pageSize,
+        onlyDeletedByAdmin,
     });
 
     const [editingPinId, setEditingPinId] = useState<string | null>(null);
     const [deletingPin, setDeletingPin] = useState<IPinSummaryResponse | null>(null);
     const { currentData: editingPin } = useGetPinByIdQuery(editingPinId!, { skip: !editingPinId });
+    const [restorePin, { isLoading: isRestoring }] = useAdminRestorePinMutation();
 
     const isLoadingState = isLoading || (isFetching && !data);
     const totalPages = data?.totalPages ?? 1;
@@ -38,8 +41,8 @@ const AdminPinsPage = () => {
     }, [data, totalPages]);
 
     return (
-        <SkeletonTheme 
-            baseColor={theme === "dark" ? "#202020" : "#e5e7eb"} 
+        <SkeletonTheme
+            baseColor={theme === "dark" ? "#202020" : "#e5e7eb"}
             highlightColor={theme === "dark" ? "#333333" : "#f3f4f6"}
         >
             <div className="relative z-10 w-full max-w-full overflow-x-hidden">
@@ -57,13 +60,31 @@ const AdminPinsPage = () => {
                     onPageSizeChange={handlePageSizeChange}
                 />
 
+                <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-white/60 mb-4 select-none cursor-pointer w-fit">
+                    <input
+                        type="checkbox"
+                        checked={onlyDeletedByAdmin}
+                        onChange={(e) => setOnlyDeletedByAdmin(e.target.checked)}
+                        className="accent-btn-primary"
+                    />
+                    Показати видалені адміном
+                </label>
+
                 <div className="flex flex-col gap-2">
                     {isLoadingState
                         ? Array.from({ length: 6 }).map((_, idx) => <Skeleton key={idx} height={74} borderRadius={16} />)
                         : data?.items.length === 0
                             ? <p className="text-sm text-gray-400 dark:text-white/40 text-center py-10">Пінів не знайдено</p>
                             : data?.items.map((pin) => (
-                                <PinRow key={pin.id} pin={pin} onEdit={setEditingPinId} onDelete={setDeletingPin} />
+                                <PinRow
+                                    key={pin.id}
+                                    pin={pin}
+                                    onEdit={setEditingPinId}
+                                    onDelete={setDeletingPin}
+                                    isDeletedView={onlyDeletedByAdmin}
+                                    onRestore={(id) => restorePin(id)}
+                                    isRestoring={isRestoring}
+                                />
                             ))}
                 </div>
 

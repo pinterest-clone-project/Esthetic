@@ -17,7 +17,12 @@ public class SearchPinsHandler(
 {
     public async Task<PagedResult<PinSummaryDTO>> Handle(SearchPinsQuery request, CancellationToken cancellationToken)
     {
-        var query = pinRepository.GetQueryable()
+        var baseQuery = request.OnlyDeletedByAdmin
+            ? pinRepository.GetQueryableIncludingDeleted()
+                .Where(p => p.IsDeleted && p.DeletedByAdmin)
+            : pinRepository.GetQueryable();
+
+        var query = baseQuery
             .Include(p => p.PinTags)!.ThenInclude(pt => pt.Tag)
             .Include(p => p.Category)
             .Include(p => p.Creator)
@@ -27,10 +32,7 @@ public class SearchPinsHandler(
             .ApplySorting(request);
 
         return await pagedService.GetPagedAsync(
-            query,
-            p => pinMapper.ToSummaryDto(p, request.CurrentUserId),
-            request.Page,
-            request.PageSize,
-            cancellationToken);
+            query, p => pinMapper.ToSummaryDto(p, request.CurrentUserId),
+            request.Page, request.PageSize, cancellationToken);
     }
 }
