@@ -9,4 +9,5 @@ export interface ISearchPinsParams {
     sortDirection?: SortDirection;
     page?: number;
     pageSize?: number;
+    onlyDeletedByAdmin?: boolean;
 }

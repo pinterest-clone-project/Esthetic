@@ -2,8 +2,10 @@ import { useNavigate } from "react-router";
 import { useGetBlockedUsersQuery, useDefaultUnblockUserMutation } from "@/services/blockService.ts";
 import { APP_ENV } from "@/constants/env";
 import profileIcon from "@/assets/icons/profile_icon.svg";
+import { useTranslation } from "react-i18next";
 
 const BlockedUsersPage = () => {
+    const { t } = useTranslation(['common', 'settings']);
     const navigate = useNavigate();
     const { data: blockedUsers, isLoading } = useGetBlockedUsersQuery();
     const [unblockUser] = useDefaultUnblockUserMutation();
@@ -19,7 +21,7 @@ const BlockedUsersPage = () => {
                         <path d="M15 19l-7-7 7-7"/>
                     </svg>
                 </button>
-                <h1 className="text-xl font-bold">Blocked Users</h1>
+                <h1 className="text-xl font-bold">{t('settings:blockedUsers')}</h1>
             </div>
 
             {isLoading && (
@@ -34,7 +36,7 @@ const BlockedUsersPage = () => {
                         <circle cx="12" cy="12" r="10"/>
                         <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
                     </svg>
-                    <p className="text-[#A1A1A1] text-sm">No blocked users</p>
+                    <p className="text-[#A1A1A1] text-sm">{t('common:empty.noBlockedUsers')}</p>
                 </div>
             )}
 
@@ -63,7 +65,7 @@ const BlockedUsersPage = () => {
                             onClick={() => unblockUser(user.userId)}
                             className="text-xs text-orange-400 hover:text-orange-300 border border-orange-500/20 hover:border-orange-400/40 hover:bg-orange-500/10 px-3 py-1.5 rounded-lg transition-colors"
                         >
-                            Unblock
+                            {t('actions.unblock')}
                         </button>
                     </div>
                 ))}

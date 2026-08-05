@@ -15,7 +15,7 @@ import { HeartIcon, CommentIcon, SaveBoardIcon, DownloadIcon, ShareIcon, EditIco
 import { useDefaultIsBlockedQuery, useDefaultBlockUserMutation, useDefaultUnblockUserMutation } from "@/services/blockService.ts";
 
 const AuraPreviewPage = () => {
-    const { t, i18n } = useTranslation('pins');
+    const { t, i18n } = useTranslation(['pins', 'common']);
     const {id} = useParams<{ id: string }>();
     const navigate = useNavigate();
 
@@ -58,10 +58,10 @@ const AuraPreviewPage = () => {
         if (!pin) return;
         if (isBlocked) {
             await unblockUser(String(pin?.creatorId));
-            showToast(`User unblocked ${pin?.creatorName}`, "success");
+            showToast(t('pins:preview.block.unblocked'), "success");
         } else {
             await blockUser(String(pin?.creatorId));
-            showToast(`User blocked ${pin?.creatorName}`, "success");
+            showToast(t('pins:preview.block.blocked'), "success");
         }
     };
 
@@ -242,13 +242,13 @@ const AuraPreviewPage = () => {
                                                             ? "text-orange-400 hover:text-orange-300 hover:bg-orange-500/10 border border-orange-500/20 hover:border-orange-400/40"
                                                             : "text-gray-600 hover:text-orange-400 hover:bg-orange-500/10 text-xs font-medium"
                                                         }`}
-                                                    title={isBlocked ? "Unblock user" : "Block user"}
+                                                    title={isBlocked ? t('common:actions.unblock') : t('common:actions.block')}
                                                 >
                                                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                         <circle cx="12" cy="12" r="10"/>
                                                         <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
                                                     </svg>
-                                                    {isBlocked ? "Unblock" : "Block"}
+                                                    {isBlocked ? t('common:actions.unblock') : t('common:actions.block')}
                                                 </button>
 
                                                 {/* Report */}

@@ -20,6 +20,7 @@
     "follow": "Стежити",
     "unfollow": "Відписатись",
     "block": "Заблокувати",
+    "unblock": "Розблокувати",
     "restore": "Відновити",
     "unsave": "Видалити",
     "done": "Готово",
@@ -72,7 +73,8 @@
     "noAuras": "Аури відсутні",
     "noAurasFound": "Аури не знайдено",
     "noMoodboards": "Мудборди відсутні",
-    "noNotifications": "Сповіщень немає"
+    "noNotifications": "Сповіщень немає",
+    "noBlockedUsers": "Немає заблокованих користувачів"
   },
   "toast": {
     "linkCopied": "Посилання скопійовано!",
@@ -337,6 +339,8 @@
     "languageDesc": "Українська / Англійська",
     "adminPanel": "Адмін-панель",
     "adminPanelDesc": "Керування користувачами та контентом",
+    "blockedUsers": "Заблоковані користувачі",
+    "blockedUsersDesc": "Керуйте заблокованими користувачами",
     "recentlyDeleted": "Нещодавно видалені",
     "recentlyDeletedDesc": "Аури видалені за останні 30 днів",
     "logout": "Вихід",

@@ -1,22 +1,78 @@
 import PinCard from "@/components/ui/PinCard.tsx";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useGetRecommendedPinsQuery } from "@/services/recommendedPinsService.ts";
+import type { IPinSummaryResponse } from "@/types/pin/responses/IPinSummaryResponse.ts";
 import { useAppSelector } from "@/store";
 import { selectIsAdmin } from "@/store/selectors/authSelectors.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { fadeIn, scaleIn } from "@/lib/motion";
+import {APP_ENV} from "@/constants/env";
 
 const PinCardSkeleton = ({ height }: { height: number }) => (
-    <div className="break-inside-avoid mb-3 rounded-xl overflow-hidden bg-white/5 animate-pulse"
+    <div className="rounded-xl overflow-hidden bg-white/5 animate-pulse"
          style={{ height: `${height}px` }} />
 );
 
+function useColumnCount() {
+    const [count, setCount] = useState(2);
+
+    useEffect(() => {
+        const calc = () => {
+            const w = window.innerWidth;
+            if (w >= 1024) setCount(5);
+            else if (w >= 768) setCount(4);
+            else if (w >= 640) setCount(3);
+            else setCount(2);
+        };
+        calc();
+        window.addEventListener("resize", calc);
+        return () => window.removeEventListener("resize", calc);
+    }, []);
+
+    return count;
+}
+
+const DEFAULT_ASPECT_RATIO = 1; // заглушка (1:1) поки картинка не завантажена
+const CARD_CHROME_RATIO = 0.15; // додаткова "вага" на текст/padding під зображенням, у частках від висоти картинки
+
+// Кеш aspect ratio по URL картинки — щоб не перезавантажувати вже виміряні
+const aspectRatioCache = new Map<string, number>();
+
+function useAspectRatios(pins: IPinSummaryResponse[]) {
+    const [tick, forceRerender] = useState(0);
+
+    useEffect(() => {
+        pins.forEach(pin => {
+            if (!pin.image || aspectRatioCache.has(pin.image)) return;
+
+            const img = new Image();
+            const fullUrl = `${APP_ENV.IMAGES_800_URL}${pin.image}`;
+
+            img.onload = () => {
+                aspectRatioCache.set(pin.image, img.naturalWidth / img.naturalHeight);
+                forceRerender(x => x + 1);
+            };
+            img.onerror = () => {
+                aspectRatioCache.set(pin.image, DEFAULT_ASPECT_RATIO);
+                forceRerender(x => x + 1);
+            };
+            img.src = fullUrl;
+        });
+    }, [pins]);
+
+    const getAspectRatio = useCallback((pin: IPinSummaryResponse) => {
+        if (!pin.image) return DEFAULT_ASPECT_RATIO;
+        return aspectRatioCache.get(pin.image) ?? DEFAULT_ASPECT_RATIO;
+    }, []);
+
+    return { getAspectRatio, tick };
+}
+
 const ReviewPage = () => {
     const { t } = useTranslation('common');
-    const { data: pins, isLoading, isError } = useGetRecommendedPinsQuery();
     const isAdmin = useAppSelector(selectIsAdmin);
     const { data: me } = useGetMeQuery();
     const navigate = useNavigate();
@@ -29,10 +85,78 @@ const ReviewPage = () => {
         setBannerDismissed(true);
     };
 
+    const columnCount = useColumnCount();
+
     const skeletonHeights = useMemo(
         () => Array.from({ length: 12 }, () => Math.floor(Math.random() * 120) + 160),
         []
     );
+
+    // --- infinite scroll state ---
+    const [page, setPage] = useState(1);
+    const [pins, setPins] = useState<IPinSummaryResponse[]>([]);
+    const [seed] = useState(() => Math.floor(Math.random() * 1_000_000));
+    const { data, isLoading, isFetching, isError } = useGetRecommendedPinsQuery({ page, seed });
+
+    useEffect(() => {
+        if (!data) return;
+        setPins(prev => page === 1 ? data.items : [...prev, ...data.items]);
+    }, [data]);
+
+    const hasMore = data ? data.page < data.totalPages : true;
+
+    const isFetchingRef = useRef(false);
+    const hasMoreRef = useRef(true);
+
+    useEffect(() => { isFetchingRef.current = isFetching; }, [isFetching]);
+    useEffect(() => { hasMoreRef.current = hasMore; }, [hasMore]);
+
+    const observerRef = useRef<IntersectionObserver | null>(null);
+
+    const sentinelRef = useCallback((node: HTMLDivElement | null) => {
+        observerRef.current?.disconnect();
+        if (!node) return;
+
+        observerRef.current = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting && hasMoreRef.current && !isFetchingRef.current) {
+                isFetchingRef.current = true;
+                setPage(prev => prev + 1);
+            }
+        }, { rootMargin: "300px" });
+
+        observerRef.current.observe(node);
+    }, []);
+
+    useEffect(() => () => observerRef.current?.disconnect(), []);
+    // --- end infinite scroll state ---
+
+    // --- masonry по реальному aspect ratio зображень ---
+    const { getAspectRatio, tick } = useAspectRatios(pins);
+
+    const columns = useMemo(() => {
+        const cols: IPinSummaryResponse[][] = Array.from({ length: columnCount }, () => []);
+        const heights = new Array(columnCount).fill(0);
+
+        pins.forEach(pin => {
+            const ratio = getAspectRatio(pin);
+            const relativeHeight = (1 / ratio) * (1 + CARD_CHROME_RATIO);
+
+            const shortestCol = heights.indexOf(Math.min(...heights));
+            cols[shortestCol].push(pin);
+            heights[shortestCol] += relativeHeight;
+        });
+
+        return cols;
+        // tick доданий навмисно: перераховуємо, коли підʼїжджають реальні aspect ratio,
+        // а не тільки коли змінюється сам масив pins (наступна сторінка)
+    }, [pins, columnCount, getAspectRatio, tick]);
+
+    const skeletonColumns = useMemo(() => {
+        const cols: number[][] = Array.from({ length: columnCount }, () => []);
+        skeletonHeights.forEach((h, i) => cols[i % columnCount].push(h));
+        return cols;
+    }, [skeletonHeights, columnCount]);
+    // --- end masonry ---
 
     return (
         <div className="w-full min-h-full bg-white dark:bg-black px-2 py-4 sm:px-6 sm:py-6">
@@ -94,15 +218,39 @@ const ReviewPage = () => {
                 </div>
             )}
 
-            {/* Masonry grid */}
-            <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3">
+            {/* Masonry grid — ручний розподіл по реальному aspect ratio зображень */}
+            <div className="flex gap-3">
                 {isLoading
-                    ? skeletonHeights.map((h, i) => <PinCardSkeleton key={i} height={h} />)
-                    : pins?.map(pin => <PinCard key={pin.id} pin={pin} />)
+                    ? skeletonColumns.map((col, colIdx) => (
+                        <div key={colIdx} className="flex-1 flex flex-col gap-3">
+                            {col.map((h, i) => <PinCardSkeleton key={i} height={h} />)}
+                        </div>
+                    ))
+                    : columns.map((col, colIdx) => (
+                        <div key={colIdx} className="flex-1 flex flex-col gap-3">
+                            {col.map(pin => <PinCard key={pin.id} pin={pin} />)}
+                        </div>
+                    ))
                 }
             </div>
 
-            {!isLoading && !isError && pins?.length === 0 && (
+            {/* Sentinel для довантаження наступної сторінки */}
+            {!isLoading && hasMore && (
+                <div ref={sentinelRef} className="h-10" />
+            )}
+
+            {/* Скелетони під час довантаження наступної сторінки */}
+            {isFetching && !isLoading && (
+                <div className="flex gap-3 mt-3">
+                    {Array.from({ length: columnCount }).map((_, colIdx) => (
+                        <div key={colIdx} className="flex-1">
+                            <PinCardSkeleton height={skeletonHeights[colIdx % skeletonHeights.length]} />
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {!isLoading && !isError && pins.length === 0 && (
                 <div className="flex items-center justify-center h-40">
                     <p className="text-gray-500 text-sm">{t('adminBanner.noPins')}</p>
                 </div>
@@ -112,4 +260,3 @@ const ReviewPage = () => {
 };
 
 export default ReviewPage;
-

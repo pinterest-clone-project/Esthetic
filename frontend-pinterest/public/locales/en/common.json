@@ -20,6 +20,7 @@
     "follow": "Follow",
     "unfollow": "Unfollow",
     "block": "Block",
+    "unblock": "Unblock",
     "restore": "Restore",
     "unsave": "Unsave",
     "done": "Done",
@@ -72,7 +73,8 @@
     "noAuras": "No auras yet",
     "noAurasFound": "No auras found",
     "noMoodboards": "No moodboards yet",
-    "noNotifications": "No notifications"
+    "noNotifications": "No notifications",
+    "noBlockedUsers": "No blocked users"
   },
   "toast": {
     "linkCopied": "Link copied!",
@@ -337,6 +339,8 @@
     "languageDesc": "Ukrainian / English",
     "adminPanel": "Admin panel",
     "adminPanelDesc": "Manage users and content",
+    "blockedUsers": "Blocked Users",
+    "blockedUsersDesc": "Manage who you've blocked",
     "recentlyDeleted": "Recently deleted",
     "recentlyDeletedDesc": "Auras deleted in the last 30 days",
     "logout": "Logout",

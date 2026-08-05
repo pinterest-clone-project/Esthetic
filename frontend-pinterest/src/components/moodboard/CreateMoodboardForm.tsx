@@ -19,18 +19,24 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
 
 
     const { data: myPins } = useGetMyPinsQuery(undefined, { skip: step === 1 });
-    const { data: recommendedPins } = useGetRecommendedPinsQuery(undefined, { skip: step === 1 });
+    const { data: recommendedPins } = useGetRecommendedPinsQuery(
+        { page: 1, seed: 0 },
+        { skip: step === 1 }
+    );
 
     const [showAll, setShowAll] = useState(false);
 
     const allPins = [
         ...(myPins ?? []),
-        ...(recommendedPins ?? []).filter(
+        ...(recommendedPins?.items ?? []).filter(
             (rec) => !myPins?.some((mine) => mine.id === rec.id)
         ),
     ];
 
-    const shuffled = useMemo(() => [...allPins].sort(() => Math.random() - 0.5), [myPins, recommendedPins]);
+    const shuffled = useMemo(
+        () => [...allPins].sort(() => Math.random() - 0.5),
+        [myPins, recommendedPins]
+    );
     const pinsToShow = showAll ? allPins : shuffled.slice(0, 6);
 
 

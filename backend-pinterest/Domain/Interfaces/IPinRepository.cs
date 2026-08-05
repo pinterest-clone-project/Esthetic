@@ -12,4 +12,5 @@ public interface IPinRepository : IBaseRepository<PinEntity>
     Task<List<PinEntity>> GetDeletedByUserAsync(Guid userId, CancellationToken ct = default);
     Task RestoreAsync(Guid id, CancellationToken ct = default);
     Task HardDeleteExpiredAsync(CancellationToken ct = default);
+    IQueryable<PinEntity> GetQueryableIncludingDeleted();
 }
