@@ -1,115 +1,108 @@
 import React, { useState, useEffect } from "react";
-import { useGetMoodboardByIdQuery, useDeleteMoodboardMutation, useUpdateMoodboardMutation } from "@/services/moodboardService.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
 import { useParams, useNavigate } from "react-router";
 import { APP_ENV } from "@/constants/env";
 import PinCard from "@/components/ui/PinCard.tsx";
-import ReportModal from "@/components/ui/ReportModal.tsx";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import { useTranslation } from "react-i18next";
-import { ShareIcon, EditIcon, TrashIcon, ReportIcon } from "@/components/ui/Icons.tsx";
-import { useGetBoardSectionsQuery } from "@/services/boardSectionService";
-import BoardSectionCard from "@/components/ui/BoardSectionCard.tsx";
-import { motion } from "framer-motion";
+import { ShareIcon, EditIcon, TrashIcon } from "@/components/ui/Icons.tsx";
+import {
+    useDeleteBoardSectionMutation,
+    useGetBoardSectionByIdQuery,
+    useUpdateBoardSectionMutation
+} from "@/services/boardSectionService";
 
 const MoodboardPreviewPage: React.FC = () => {
     const { t, i18n } = useTranslation('boards');
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { data: board, isLoading, isError } = useGetMoodboardByIdQuery(id!);
+    const { data: section, isLoading, isError } = useGetBoardSectionByIdQuery(id!);
     const { data: me } = useGetMeQuery();
-    const isOwner = !!me && !!board && me.id === board.ownerId;
+    const isOwner = !!me && !!section && me.id === section.ownerId;
 
-    const [deleteBoard] = useDeleteMoodboardMutation();
-    const [updateBoard, { isLoading: isSaving }] = useUpdateMoodboardMutation();
+    const [deleteSection] = useDeleteBoardSectionMutation();
+    const [updateSection, { isLoading: isSaving }] = useUpdateBoardSectionMutation();
     const { showToast } = useToast();
 
-    const [reportModalOpen, setReportModalOpen] = useState(false);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const [editing, setEditing] = useState(false);
     const [editTitle, setEditTitle] = useState("");
-    const [editDescription, setEditDescription] = useState("");
-    const [editIsPrivate, setEditIsPrivate] = useState(false);
-
-    const { data: sections } = useGetBoardSectionsQuery(board?.id!, {
-        skip: !board,
-    });
 
     useEffect(() => {
-        if (board) {
-            setEditTitle(board.title ?? "");
-            setEditDescription(board.description ?? "");
-            setEditIsPrivate(board.isPrivate ?? false);
+        if (section) {
+            setEditTitle(section.title ?? "");
         }
-    }, [board]);
+    }, [section]);
 
     const confirmDelete = async () => {
-        if (!board) return;
-        await deleteBoard(board.id);
+        if (!section) return;
+        await deleteSection(section.id);
         setConfirmDeleteOpen(false);
         navigate(-1);
     };
 
     const handleSave = async () => {
-        if (!board || !editTitle.trim()) return;
+        if (!section || !editTitle.trim()) return;
         try {
-            await updateBoard({
-                id: board.id,
-                title: editTitle.trim(),
-                description: editDescription.trim() || undefined,
-                isPrivate: editIsPrivate,
+            await updateSection({
+                id: section.id,
+                title: editTitle.trim()
             }).unwrap();
             setEditing(false);
-            showToast(t('preview.boardUpdated'), "success");
+            showToast(t('sectionPreview.sectionUpdated'), "success");
         } catch {
-            showToast(t('preview.saveFailed'), "error");
+            showToast(t('sectionPreview.saveFailed'), "error");
         }
     };
 
     const handleCancelEdit = () => {
-        if (board) {
-            setEditTitle(board.title ?? "");
-            setEditDescription(board.description ?? "");
-            setEditIsPrivate(board.isPrivate ?? false);
+        if (section) {
+            setEditTitle(section.title ?? "");
         }
         setEditing(false);
     };
-
     if (isLoading) return (
         <div className="w-full min-h-full bg-white dark:bg-[#000000] flex items-center justify-center">
             <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-[#1DB954] animate-spin" />
         </div>
     );
 
-    if (isError || !board) return (
+    if (isError || !section) return (
         <div className="w-full min-h-full bg-white dark:bg-[#000000] flex items-center justify-center">
             <p className="text-red-400 text-sm">{t('preview.notFound')}</p>
         </div>
     );
 
+    const previewPins = section.pins.slice(0, 3);
+
+
     return (
         <div className="w-full min-h-full bg-white dark:bg-[#000000]">
             <div className="relative w-full overflow-hidden">
-                {board.coverImageUrl && (
-                    <div
-                        className="absolute inset-0 bg-cover bg-center scale-110 blur-2xl opacity-40"
-                        style={{ backgroundImage: `url(${APP_ENV.IMAGES_400_URL}${board.coverImageUrl})` }}
-                    />
-                )}
                 <div className="absolute inset-0 bg-gradient-to-b from-white/60 dark:from-black/60 via-white/80 dark:via-black/70 to-white dark:to-black" />
 
                 <div className="relative px-6 pt-10 pb-8 flex flex-col sm:flex-row items-center sm:items-end gap-6">
                     <div className="w-40 h-40 sm:w-52 sm:h-52 rounded-2xl overflow-hidden shadow-2xl shrink-0 mt-8 sm:mt-0">
-                        {board.coverImageUrl ? (
-                            <img
-                                src={`${APP_ENV.IMAGES_400_URL}${board.coverImageUrl}`}
-                                alt={board.title}
-                                className="w-full h-full object-cover"
-                            />
-                        ) : (
-                            <div className="w-full h-full bg-[#1a1a1a]" />
-                        )}
-                    </div>
+                            <div className="grid grid-cols-3 gap-0 w-full h-full">
+                                {[0, 1, 2].map((index) => {
+                                    const pin = previewPins[index];
+
+                                    return pin ? (
+                                        <img
+                                            key={pin.id}
+                                            src={`${APP_ENV.IMAGES_400_URL}${pin.image}`}
+                                            alt=""
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        <div
+                                            key={index}
+                                            className="w-full h-full bg-[#2a2a2a]"
+                                        />
+                                    );
+                                })}
+                            </div>
+                        </div>
 
                     <div className="text-center sm:text-left w-full sm:w-auto">
                         {editing ? (
@@ -121,23 +114,7 @@ const MoodboardPreviewPage: React.FC = () => {
                                     placeholder={t('fields.title')}
                                     className="bg-white/10 dark:bg-black/30 border border-white/20 dark:border-white/15 rounded-lg px-3 h-9 text-black dark:text-white text-sm font-semibold outline-none focus:border-[#1DB954] transition-colors placeholder:text-gray-400 w-full"
                                 />
-                                <textarea
-                                    value={editDescription}
-                                    onChange={e => setEditDescription(e.target.value)}
-                                    placeholder={t('fields.descriptionOptional')}
-                                    rows={3}
-                                    className="bg-white/10 dark:bg-black/30 border border-white/20 dark:border-white/15 rounded-lg px-3 py-2 text-black dark:text-white text-xs outline-none focus:border-[#1DB954] transition-colors resize-none placeholder:text-gray-400 w-full"
-                                />
-                                <div className="flex items-center justify-between">
-                                    <span className="text-black dark:text-white text-xs">{t('preview.privateBoard')}</span>
-                                    <button
-                                        type="button"
-                                        onClick={() => setEditIsPrivate(p => !p)}
-                                        className={`relative w-10 h-5 rounded-full transition-colors duration-200 ${editIsPrivate ? "bg-[#1DB954]" : "bg-black/20 dark:bg-white/20"}`}
-                                    >
-                                        <span className={`absolute top-[2px] w-4 h-4 bg-white rounded-full shadow transition-all duration-200 ${editIsPrivate ? "left-[22px]" : "left-[2px]"}`} />
-                                    </button>
-                                </div>
+
                                 <div className="flex gap-2 mt-1">
                                     <button
                                         onClick={handleSave}
@@ -156,19 +133,12 @@ const MoodboardPreviewPage: React.FC = () => {
                             </div>
                         ) : (
                             <>
-                                <h1 className="text-black dark:text-white text-2xl sm:text-3xl font-semibold">{board.title}</h1>
-                                {board.description && (
-                                    <p className="text-gray-500 dark:text-gray-300 text-sm mt-1">{board.description}</p>
-                                )}
+                                <h1 className="text-black dark:text-white text-2xl sm:text-3xl font-semibold">{section.title}</h1>
                                 <div className="flex items-center justify-center sm:justify-start gap-3 mt-2">
-                                    <span className="text-xs text-gray-600 dark:text-gray-400">{board.pinsCount} pins</span>
-                                    {board.isPrivate && (
-                                        <span className="text-xs text-[#A1A1A1] bg-black/10 dark:bg-black/40 px-3 py-1 rounded-full border border-black/10 dark:border-white/10">
-                                            {t('preview.private')}
-                                        </span>
-                                    )}
+                                    <span className="text-xs text-gray-600 dark:text-gray-400">{section.pinsCount} pins</span>
+
                                     <span className="text-xs text-gray-500 dark:text-gray-600">
-                                        {new Date(board.createdAt).toLocaleDateString(i18n.language, {
+                                        {new Date(section.createdAt).toLocaleDateString(i18n.language, {
                                             day: "numeric", month: "long", year: "numeric"
                                         })}
                                     </span>
@@ -180,7 +150,7 @@ const MoodboardPreviewPage: React.FC = () => {
                             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-4">
                                 <button
                                     onClick={() => {
-                                        navigator.clipboard.writeText(`${window.location.origin}/moodboard/preview/${board.id}`);
+                                        navigator.clipboard.writeText(`${window.location.origin}/section/preview/${section.id}`);
                                         showToast(t('preview.linkCopied'), "success");
                                     }}
                                     className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/5 dark:hover:bg-white/10 hover:bg-black/5 border dark:border-white/10 dark:hover:border-white/20 border-black/10 hover:border-black/20 dark:text-gray-300 text-gray-700 dark:hover:text-white hover:text-black text-xs font-medium transition-all duration-150"
@@ -189,7 +159,7 @@ const MoodboardPreviewPage: React.FC = () => {
                                     {t('preview.share')}
                                 </button>
 
-                                {isOwner ? (
+                                {isOwner && (
                                     <>
                                         <button
                                             onClick={() => setEditing(true)}
@@ -198,6 +168,7 @@ const MoodboardPreviewPage: React.FC = () => {
                                             <EditIcon />
                                             {t('preview.edit')}
                                         </button>
+
                                         <button
                                             onClick={() => setConfirmDeleteOpen(true)}
                                             className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-400/40 text-red-400 hover:text-red-300 text-xs font-medium transition-all duration-150"
@@ -206,57 +177,16 @@ const MoodboardPreviewPage: React.FC = () => {
                                             {t('preview.delete')}
                                         </button>
                                     </>
-                                ) : (
-                                    <button
-                                        onClick={() => setReportModalOpen(true)}
-                                        className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-gray-600 hover:text-red-400 hover:bg-red-500/10 text-xs font-medium transition-all duration-150"
-                                        title={t('preview.report')}
-                                    >
-                                        <ReportIcon />
-                                        {t('preview.report')}
-                                    </button>
                                 )}
                             </div>
                         )}
                     </div>
-                </div>
+                    </div>
             </div>
 
             <div className="px-6 py-8">
 
-                {sections && sections.length > 0 && (
-                    <>
-                    <div className="flex items-center gap-4 mb-6">
-                        <div className="flex-1 h-px bg-black/5 dark:bg-white/5" />
-                        <span className="text-gray-600 text-xs tracking-widest uppercase">
-                    Sections
-                </span>
-                        <div className="flex-1 h-px bg-black/5 dark:bg-white/5" />
-                    </div>
-
-                        <div className="flex flex-wrap gap-4 mb-10">
-                            {sections.map((section) => (
-                                <motion.div
-                                    key={section.id}
-                                    whileHover={{
-                                        y: -6,
-                                        scale: 1.03,
-                                    }}
-                                    transition={{
-                                        duration: 0.4,
-                                        ease: [0.22, 1, 0.36, 1],
-                                    }}
-                                    className="cursor-pointer"
-                                >
-                                    <BoardSectionCard section={section} />
-                                </motion.div>
-                            ))}
-                        </div>
-
-                    </>
-                )}
-
-                {board.previewPins.length > 0 ? (
+                {section.pins.length > 0 ? (
                     <>
                         <div className="flex items-center gap-4 mb-6">
                             <div className="flex-1 h-px bg-black/5 dark:bg-white/5" />
@@ -264,9 +194,9 @@ const MoodboardPreviewPage: React.FC = () => {
                             <div className="flex-1 h-px bg-black/5 dark:bg-white/5" />
                         </div>
                         <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3">
-                            {board.previewPins.map((pin) => (
+                            {section.pins.map((pin) => (
                                 <div key={pin.id} className="break-inside-avoid mb-3">
-                                    <PinCard pin={pin}  />
+                                    <PinCard pin={pin}   />
                                 </div>
                             ))}
                         </div>
@@ -281,12 +211,6 @@ const MoodboardPreviewPage: React.FC = () => {
                 )}
             </div>
 
-            {reportModalOpen && (
-                <ReportModal
-                    userId={board.ownerId}
-                    onClose={() => setReportModalOpen(false)}
-                />
-            )}
             {confirmDeleteOpen && (
                 <div
                     className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"

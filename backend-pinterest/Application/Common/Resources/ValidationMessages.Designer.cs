@@ -88,6 +88,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can only delete your own sections.
+        /// </summary>
+        internal static string BoardSectionDelOwnSections {
+            get {
+                return ResourceManager.GetString("BoardSectionDelOwnSections", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Title.
         /// </summary>
         internal static string BoardTitleField {
@@ -106,6 +115,15 @@ namespace Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can only update your own sections.
+        /// </summary>
+        internal static string BoardUpdateOwnBoardSections {
+            get {
+                return ResourceManager.GetString("BoardUpdateOwnBoardSections", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The code has expired.
         /// </summary>
         internal static string CodeHasExpired {
@@ -120,24 +138,6 @@ namespace Application.Common.Resources {
         internal static string EmailAlreadyExists {
             get {
                 return ResourceManager.GetString("EmailAlreadyExists", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to This username is already taken.
-        /// </summary>
-        internal static string UserNameAlreadyTaken {
-            get {
-                return ResourceManager.GetString("UserNameAlreadyTaken", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Username can only contain letters, numbers and underscores.
-        /// </summary>
-        internal static string UserNameFormat {
-            get {
-                return ResourceManager.GetString("UserNameFormat", resourceCulture);
             }
         }
         
@@ -579,6 +579,24 @@ namespace Application.Common.Resources {
         internal static string UserAlreadyBlocked {
             get {
                 return ResourceManager.GetString("UserAlreadyBlocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This username is already taken.
+        /// </summary>
+        internal static string UserNameAlreadyTaken {
+            get {
+                return ResourceManager.GetString("UserNameAlreadyTaken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username can only contain letters, numbers and underscores.
+        /// </summary>
+        internal static string UserNameFormat {
+            get {
+                return ResourceManager.GetString("UserNameFormat", resourceCulture);
             }
         }
         

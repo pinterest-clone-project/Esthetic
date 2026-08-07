@@ -35,7 +35,9 @@
   "saveModal": {
     "title": "Оберіть мудборд",
     "done": "Готово",
-    "noMoodboards": "Мудбордів ще немає."
+    "noMoodboards": "Мудбордів ще немає.",
+    "saveToBoard": "Зберегти до мудборду",
+    "removeFromBoard": "Видалити з мудборду"
   },
   "preview": {
     "notFound": "Дошку не знайдено.",

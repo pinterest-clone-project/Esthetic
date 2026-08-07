@@ -13,6 +13,8 @@ import {useToast} from "@/components/ui/Toast/UseToast.ts";
 import { useTranslation } from "react-i18next";
 import { HeartIcon, CommentIcon, SaveBoardIcon, DownloadIcon, ShareIcon, EditIcon, TrashIcon, ReportIcon, DotsVerticalIcon } from "@/components/ui/Icons.tsx";
 import { useDefaultIsBlockedQuery, useDefaultBlockUserMutation, useDefaultUnblockUserMutation } from "@/services/blockService.ts";
+import {usePinSave} from "@/hooks/usePinSave.ts";
+
 
 const AuraPreviewPage = () => {
     const { t, i18n } = useTranslation(['pins', 'common']);
@@ -28,13 +30,17 @@ const AuraPreviewPage = () => {
     const [deletePin] = useDeletePinMutation();
     const [like] = useLikeMutation();
     const [unlike] = useUnlikeMutation();
-
     const [saveModalOpen, setSaveModalOpen] = useState(false);
     const [reportModalOpen, setReportModalOpen] = useState(false);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const [tagsExpanded, setTagsExpanded] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+
+    const {
+        isSaved,
+        unsave
+    } = usePinSave(pin?.id ?? "");
 
     useEffect(() => {
         if (!menuOpen) return;
@@ -64,6 +70,18 @@ const AuraPreviewPage = () => {
             showToast(t('pins:preview.block.blocked'), "success");
         }
     };
+
+    const handleSaveClick = async () => {
+        if (!pin) return;
+
+        if (!isSaved) {
+            setSaveModalOpen(true);
+            return;
+        }
+
+        await unsave();
+    };
+
 
     useEffect(() => {
         if (pin) {
@@ -169,13 +187,25 @@ const AuraPreviewPage = () => {
                         {/* Primary + kebab */}
                         <div className="flex items-center gap-2">
                             {/* Save — primary */}
-                            <button
-                                onClick={() => setSaveModalOpen(true)}
-                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#4ade80] hover:bg-[#22c55e] text-black text-xs font-semibold transition-all duration-150 shadow-[0_0_12px_rgba(74,222,128,0.25)] hover:shadow-[0_0_18px_rgba(74,222,128,0.4)]"
-                            >
-                                <SaveBoardIcon />
-                                {t('preview.save')}
-                            </button>
+                            {!isSaved? (
+                                <button
+                                    onClick={handleSaveClick}
+                                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#4ade80] hover:bg-[#22c55e] text-black text-xs font-semibold transition-all duration-150 shadow-[0_0_12px_rgba(74,222,128,0.25)] hover:shadow-[0_0_18px_rgba(74,222,128,0.4)]"
+                                >
+                                    <SaveBoardIcon />
+                                    {t('preview.save')}
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={handleSaveClick}
+                                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-400 hover:bg-red-500 dark:bg-red-500 dark:hover:bg-red-600 text-black text-xs font-semibold transition-all duration-150 shadow-[0_0_12px_rgba(74,222,128,0.25)] hover:shadow-[0_0_18px_rgba(74,222,128,0.4)]"
+                                >
+                                    <TrashIcon/>
+                                    {t('preview.unsave')}
+                                </button>
+                            )
+                            }
+
 
                             {/* Kebab menu */}
                             <div className="relative" ref={menuRef}>

@@ -22,23 +22,42 @@ public class UnsavePinHandler(
         if (board.OwnerId != request.UserId)
             throw new ForbiddenException(ValidationMessages.ErrorNoPermission);
 
-        var boardPin = await boardPinRepository.GetByPinAndBoardAsync(request.PinId, request.BoardId, cancellationToken)
-            ?? throw new KeyNotFoundException(ValidationMessages.NotFound("Saved pin"));
+        var boardPin = await boardPinRepository
+            .GetQueryable()
+            .FirstOrDefaultAsync(
+                bp =>
+                    bp.PinId == request.PinId &&
+                    bp.BoardId == request.BoardId &&
+                    bp.SectionId == request.SectionId,
+                cancellationToken);
+
+        if (boardPin == null)
+        {
+            throw new KeyNotFoundException(
+                ValidationMessages.NotFound("Saved pin")
+            );
+        }
 
         await boardPinRepository.DeleteAsync(boardPin.Id, cancellationToken);
 
         await RegenerateCollageAsync(board, cancellationToken);
+
         return Unit.Value;
     }
+
 
     private async Task RegenerateCollageAsync(BoardEntity board, CancellationToken cancellationToken)
     {
         var pinIds = await boardPinRepository.GetQueryable()
-            .Where(bp => bp.BoardId == board.Id)
-            .OrderByDescending(bp => bp.CreatedAt)
-            .Take(4)
-            .Select(bp => bp.PinId)
-            .ToListAsync(cancellationToken);
+    .Where(bp =>
+        bp.BoardId == board.Id &&
+        bp.SectionId == null &&
+        !bp.IsDeleted)
+    .OrderByDescending(bp => bp.CreatedAt)
+    .Take(4)
+    .Select(bp => bp.PinId)
+    .ToListAsync(cancellationToken);
+
 
         var oldCover = board.CoverImageUrl;
 

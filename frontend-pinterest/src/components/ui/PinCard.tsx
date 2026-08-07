@@ -1,21 +1,20 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAppDispatch } from "@/store/index.ts";
 import { useNavigate } from "react-router";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import { useTranslation } from "react-i18next";
 import type { IPinSummaryResponse } from "@/types/pin/responses/IPinSummaryResponse.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
-import { useDeletePinMutation, useUnsavePinMutation } from "@/services/pinService.ts";
+import { useDeletePinMutation } from "@/services/pinService.ts";
 import { useLikeMutation, useUnlikeMutation } from "@/services/likeService.ts";
-import { moodboardService } from "@/services/moodboardService.ts";
 import { pinCardVariants, scaleIn, fadeIn } from "@/lib/motion";
+import { usePinSave } from "@/hooks/usePinSave";
 
 import { APP_ENV } from "@/constants/env";
 import SaveModal from "./SaveModal.tsx";
 import { HeartIcon, DownloadIcon, TrashIcon, ExternalLinkIcon } from "@/components/ui/Icons.tsx";
 
-const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string }) => {
+const PinCard = ({ pin }: { pin: IPinSummaryResponse}) => {
     const { t } = useTranslation('common');
     const [hovered, setHovered] = useState(false);
     const [saveModalOpen, setSaveModalOpen] = useState(false);
@@ -23,10 +22,8 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
     const { data: me } = useGetMeQuery();
     const [deletePin] = useDeletePinMutation();
-    const [unsavePin] = useUnsavePinMutation();
     const [like] = useLikeMutation();
     const [unlike] = useUnlikeMutation();
     const { showToast } = useToast();
@@ -34,6 +31,11 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
     const isOwner = !!me && me.id === pin.creatorId;
     const [liked, setLiked] = useState(pin.isLikedByMe ?? false);
     const [likesCount, setLikesCount] = useState(pin.likesCount);
+    const {
+        isSaved,
+        unsave
+    } = usePinSave(pin.id);
+
 
     useEffect(() => {
         setLiked(pin.isLikedByMe ?? false);
@@ -79,24 +81,7 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
         }
     };
 
-    const handleUnsave = async (e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (!boardId) return;
 
-        const patch = dispatch(
-            moodboardService.util.updateQueryData("getMoodboardById", boardId, (draft) => {
-                draft.previewPins = draft.previewPins.filter((p) => p.id !== pin.id);
-            })
-        );
-        showToast(t('toast.removedFromBoard'), "success");
-
-        try {
-            await unsavePin({ pinId: pin.id, boardId }).unwrap();
-        } catch {
-            patch.undo();
-            showToast(t('toast.somethingWentWrong'), "error");
-        }
-    };
 
     const handleDownload = async (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -202,21 +187,27 @@ const PinCard = ({ pin, boardId }: { pin: IPinSummaryResponse; boardId?: string 
                             </AnimatePresence>
                         </div>
                     )}
-                    {boardId ? (
-                        <button
-                            onClick={handleUnsave}
-                            className="bg-red-500 hover:bg-red-600 text-white text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors"
-                        >
-                            {t('actions.unsave')}
-                        </button>
-                    ) : (
-                        <button
-                            onClick={(e) => { e.stopPropagation(); setSaveModalOpen(true); }}
-                            className="bg-[#4ade80] hover:bg-[#22c55e] text-black text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors"
-                        >
-                            {t('actions.save')}
-                        </button>
-                    )}
+                        {isSaved ? (
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        unsave();
+                                    }}
+                                    className="bg-red-500 hover:bg-red-600 text-white text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors"
+                                >
+                                    {t('actions.unsave')}
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setSaveModalOpen(true);
+                                    }}
+                                    className="bg-[#4ade80] hover:bg-[#22c55e] text-black text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors"
+                                >
+                                    {t('actions.save')}
+                                </button>
+                            )}
                 </div>
 
                 <div

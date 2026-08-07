@@ -35,7 +35,9 @@
   "saveModal": {
     "title": "Choose Moodboard",
     "done": "Done",
-    "noMoodboards": "No moodboards yet."
+    "noMoodboards": "No moodboards yet.",
+    "saveToBoard": "Save to moodboard",
+    "removeFromBoard": "Unsave from moodboard"
   },
   "preview": {
     "notFound": "Board not found.",
@@ -77,5 +79,8 @@
     "nothingToShow": "Nothing to show here",
     "saving": "Saving...",
     "save": "Save"
+  },
+  "sectionPreview": {
+    "sectionUpdated": "Section updated"
   }
 }
