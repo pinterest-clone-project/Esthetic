@@ -187,15 +187,25 @@ const AuraPreviewPage = () => {
                         {/* Primary + kebab */}
                         <div className="flex items-center gap-2">
                             {/* Save — primary */}
-                            <button
-                                onClick={handleSaveClick}
-                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#4ade80] hover:bg-[#22c55e] text-black text-xs font-semibold transition-all duration-150 shadow-[0_0_12px_rgba(74,222,128,0.25)] hover:shadow-[0_0_18px_rgba(74,222,128,0.4)]"
-                            >
-                                <SaveBoardIcon />
-                                {!isSaved
-                                    ? t('preview.save')
-                                : t('preview.unsave')}
-                            </button>
+                            {!isSaved? (
+                                <button
+                                    onClick={handleSaveClick}
+                                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#4ade80] hover:bg-[#22c55e] text-black text-xs font-semibold transition-all duration-150 shadow-[0_0_12px_rgba(74,222,128,0.25)] hover:shadow-[0_0_18px_rgba(74,222,128,0.4)]"
+                                >
+                                    <SaveBoardIcon />
+                                    {t('preview.save')}
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={handleSaveClick}
+                                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-400 hover:bg-red-500 dark:bg-red-500 dark:hover:bg-red-600 text-black text-xs font-semibold transition-all duration-150 shadow-[0_0_12px_rgba(74,222,128,0.25)] hover:shadow-[0_0_18px_rgba(74,222,128,0.4)]"
+                                >
+                                    <TrashIcon/>
+                                    {t('preview.unsave')}
+                                </button>
+                            )
+                            }
+
 
                             {/* Kebab menu */}
                             <div className="relative" ref={menuRef}>
