@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import { ShareIcon, EditIcon, TrashIcon, ReportIcon } from "@/components/ui/Icons.tsx";
 import { useGetBoardSectionsQuery } from "@/services/boardSectionService";
 import BoardSectionCard from "@/components/ui/BoardSectionCard.tsx";
+import { motion } from "framer-motion";
 
 const MoodboardPreviewPage: React.FC = () => {
     const { t, i18n } = useTranslation('boards');
@@ -233,14 +234,25 @@ const MoodboardPreviewPage: React.FC = () => {
                         <div className="flex-1 h-px bg-black/5 dark:bg-white/5" />
                     </div>
 
-                    <div className="flex flex-wrap gap-4 mb-10" >
-                        {sections.map((section) => (
-                            <BoardSectionCard
-                                key={section.id}
-                                section={section}
-                            />
-                        ))}
-                    </div>
+                        <div className="flex flex-wrap gap-4 mb-10">
+                            {sections.map((section) => (
+                                <motion.div
+                                    key={section.id}
+                                    whileHover={{
+                                        y: -6,
+                                        scale: 1.03,
+                                    }}
+                                    transition={{
+                                        duration: 0.4,
+                                        ease: [0.22, 1, 0.36, 1],
+                                    }}
+                                    className="cursor-pointer"
+                                >
+                                    <BoardSectionCard section={section} />
+                                </motion.div>
+                            ))}
+                        </div>
+
                     </>
                 )}
 
