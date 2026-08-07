@@ -13,7 +13,7 @@ import {useToast} from "@/components/ui/Toast/UseToast.ts";
 import { useTranslation } from "react-i18next";
 import { HeartIcon, CommentIcon, SaveBoardIcon, DownloadIcon, ShareIcon, EditIcon, TrashIcon, ReportIcon, DotsVerticalIcon } from "@/components/ui/Icons.tsx";
 import { useDefaultIsBlockedQuery, useDefaultBlockUserMutation, useDefaultUnblockUserMutation } from "@/services/blockService.ts";
-import {useGetSavedLocationsQuery,useUnsavePinMutation} from "@/services/pinService.ts";
+import {usePinSave} from "@/hooks/usePinSave.ts";
 
 
 const AuraPreviewPage = () => {
@@ -30,7 +30,6 @@ const AuraPreviewPage = () => {
     const [deletePin] = useDeletePinMutation();
     const [like] = useLikeMutation();
     const [unlike] = useUnlikeMutation();
-    const [unsavePin] = useUnsavePinMutation();
     const [saveModalOpen, setSaveModalOpen] = useState(false);
     const [reportModalOpen, setReportModalOpen] = useState(false);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
@@ -38,13 +37,10 @@ const AuraPreviewPage = () => {
     const [tagsExpanded, setTagsExpanded] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
-    const { data: savedLocations = [] } =
-        useGetSavedLocationsQuery(pin?.id ?? "", {
-            skip: !pin
-        });
-
-    const isSaved = savedLocations.length > 0;
-
+    const {
+        isSaved,
+        unsave
+    } = usePinSave(pin?.id ?? "");
 
     useEffect(() => {
         if (!menuOpen) return;
@@ -78,34 +74,12 @@ const AuraPreviewPage = () => {
     const handleSaveClick = async () => {
         if (!pin) return;
 
-        if (savedLocations.length === 0) {
+        if (!isSaved) {
             setSaveModalOpen(true);
             return;
         }
 
-        try {
-            // remove all existing saves
-            await Promise.all(
-                savedLocations.map(location =>
-                    unsavePin({
-                        pinId: pin.id,
-                        boardId: location.boardId,
-                        sectionId: location.sectionId ?? undefined
-                    }).unwrap()
-                )
-            );
-
-            showToast(
-                t('common:toast.removedFromBoard'),
-                "success"
-            );
-
-        } catch {
-            showToast(
-                t('common:toast.somethingWentWrong'),
-                "error"
-            );
-        }
+        await unsave();
     };
 
 
