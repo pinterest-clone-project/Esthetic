@@ -266,7 +266,7 @@ const MoodboardPreviewPage: React.FC = () => {
                         <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-3">
                             {board.previewPins.map((pin) => (
                                 <div key={pin.id} className="break-inside-avoid mb-3">
-                                    <PinCard pin={pin} boardId={isOwner ? board.id : undefined} />
+                                    <PinCard pin={pin}  />
                                 </div>
                             ))}
                         </div>
