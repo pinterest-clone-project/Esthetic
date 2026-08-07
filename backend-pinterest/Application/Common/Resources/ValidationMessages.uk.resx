@@ -297,4 +297,7 @@
   <data name="MinItems" xml:space="preserve">
     <value>{0} має містити щонайменше {1} елементів.</value>
   </data>
+  <data name="BoardSectionDelOwnSections" xml:space="preserve">
+    <value>Ви можете видаляти лише власні секції</value>
+  </data>
 </root>

@@ -297,4 +297,7 @@
   <data name="MinItems" xml:space="preserve">
     <value>{0} must contain at least {1} items.</value>
   </data>
+  <data name="BoardSectionDelOwnSections" xml:space="preserve">
+    <value>You can only delete your own sections</value>
+  </data>
 </root>
