@@ -5,5 +5,5 @@ using MediatR;
 
 namespace Application.UseCases.BoardSections.Queries;
 
-public class GetBoardSectionsQuery(Guid BoardId,
+public record GetBoardSectionsQuery(Guid BoardId,
     Guid? CurrentUserId = null) : IRequest<List<BoardSectionDTO>>;
