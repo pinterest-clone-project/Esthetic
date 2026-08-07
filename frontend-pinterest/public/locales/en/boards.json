@@ -79,5 +79,8 @@
     "nothingToShow": "Nothing to show here",
     "saving": "Saving...",
     "save": "Save"
+  },
+  "sectionPreview": {
+    "sectionUpdated": "Section updated"
   }
 }

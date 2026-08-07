@@ -1,5 +1,6 @@
 import { APP_ENV } from "@/constants/env";
 import type { BoardSection } from "@/services/boardSectionService";
+import {useNavigate} from "react-router";
 
 interface Props {
     section: BoardSection;
@@ -7,9 +8,10 @@ interface Props {
 
 const BoardSectionCard = ({ section }: Props) => {
     const slots = [0, 1, 2];
+    const navigate = useNavigate();
 
     return (
-        <div className="w-44">
+        <div className="w-44" onClick={()=>navigate(`/section/preview/${section.id}`)}>
             <div className="w-full h-28 rounded-xl overflow-hidden bg-[#2a2a2a] flex">
                 {slots.map((index) => {
                     const pin = section.previewPins[index];

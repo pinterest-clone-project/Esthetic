@@ -27,6 +27,7 @@ const ProfilePage          = lazy(() => import("@/pages/profile/ProfilePage.tsx"
 const UserPage             = lazy(() => import("@/pages/user/UserPage.tsx"));
 const CollectionsPage      = lazy(() => import("@/pages/collections/CollectionsPage.tsx"));
 const MoodboardPreviewPage = lazy(() => import("@/pages/moodboard/MoodboardPreviewPage.tsx"));
+const MoodboardSectionPreviewPage = lazy(() => import("@/pages/moodboard/MoodboardSectionPreviePage.tsx"));
 const ChatPage             = lazy(() => import("@/pages/chat/ChatPage.tsx"));
 const SettingsPage         = lazy(() => import("@/pages/settings/SettingsPage.tsx"));
 const DeletedAurasPage     = lazy(() => import("@/pages/aura/DeletedAurasPage.tsx"));
@@ -149,6 +150,8 @@ const App = () => {
                                     <Route path="moodboard">
                                         <Route path="preview/:id" element={<MoodboardPreviewPage />} />
                                     </Route>
+
+                                    <Route path="section/preview/:id" element={<MoodboardSectionPreviewPage />} />
 
                                     <Route path="/collections" element={<Navigate to="/collections/aura" replace />} />
                                     <Route path="/collections/aura" element={<CollectionsPage />} />

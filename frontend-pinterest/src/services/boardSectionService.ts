@@ -10,6 +10,17 @@ export interface BoardSection {
     updatedAt: string | null;
 }
 
+export interface BoardSectionDetails {
+    id: string;
+    boardId: string;
+    title: string;
+    pinsCount: number;
+    pins: any[];
+    createdAt: string;
+    updatedAt: string | null;
+    ownerId: string
+}
+
 export interface CreateBoardSectionRequest {
     boardId: string;
     title: string;
@@ -28,7 +39,7 @@ export const boardSectionService = api.injectEndpoints({
             providesTags: ["BoardSections"],
         }),
 
-        getBoardSectionById: builder.query<BoardSection, string>({
+        getBoardSectionById: builder.query<BoardSectionDetails, string>({
             query: (id) => `BoardSections/getById/${id}`,
             providesTags: ["BoardSections"],
         }),

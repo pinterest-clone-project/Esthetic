@@ -233,7 +233,7 @@ const MoodboardPreviewPage: React.FC = () => {
                         <div className="flex-1 h-px bg-black/5 dark:bg-white/5" />
                     </div>
 
-                    <div className="flex flex-wrap gap-4 mb-10">
+                    <div className="flex flex-wrap gap-4 mb-10" >
                         {sections.map((section) => (
                             <BoardSectionCard
                                 key={section.id}

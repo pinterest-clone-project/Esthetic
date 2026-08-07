@@ -10,7 +10,6 @@ import CreateMoodboardForm from "@/components/moodboard/CreateMoodboardForm.tsx"
 import {APP_ENV} from "@/constants/env";
 import PinCard from "@/components/ui/PinCard.tsx";
 import Modal from "@/components/ui/Modal.tsx";
-import BoardSectionCard from "@/components/ui/BoardSectionCard.tsx";
 
 type CollectionTab = "Aura" | "Moodboard";
 
