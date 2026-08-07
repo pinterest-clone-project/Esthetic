@@ -18,6 +18,7 @@ public class GetBoardSectionHandler(IBoardSectionRepository boardSectionReposito
             .Include(s => s.BoardPins)
             .ThenInclude(bp => bp.Pin)
             .OrderByDescending(s => s.CreatedAt)
+            .Take(3)
             .ToListAsync(cancellationToken);
         return sections.Select(s => mapper.ToDto(s, request.CurrentUserId))
             .ToList();

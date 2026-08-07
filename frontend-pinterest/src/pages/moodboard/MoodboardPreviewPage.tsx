@@ -8,6 +8,8 @@ import ReportModal from "@/components/ui/ReportModal.tsx";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import { useTranslation } from "react-i18next";
 import { ShareIcon, EditIcon, TrashIcon, ReportIcon } from "@/components/ui/Icons.tsx";
+import { useGetBoardSectionsQuery } from "@/services/boardSectionService";
+import BoardSectionCard from "@/components/ui/BoardSectionCard.tsx";
 
 const MoodboardPreviewPage: React.FC = () => {
     const { t, i18n } = useTranslation('boards');
@@ -27,6 +29,10 @@ const MoodboardPreviewPage: React.FC = () => {
     const [editTitle, setEditTitle] = useState("");
     const [editDescription, setEditDescription] = useState("");
     const [editIsPrivate, setEditIsPrivate] = useState(false);
+
+    const { data: sections } = useGetBoardSectionsQuery(board?.id!, {
+        skip: !board,
+    });
 
     useEffect(() => {
         if (board) {
@@ -216,6 +222,28 @@ const MoodboardPreviewPage: React.FC = () => {
             </div>
 
             <div className="px-6 py-8">
+
+                {sections && sections.length > 0 && (
+                    <>
+                    <div className="flex items-center gap-4 mb-6">
+                        <div className="flex-1 h-px bg-black/5 dark:bg-white/5" />
+                        <span className="text-gray-600 text-xs tracking-widest uppercase">
+                    Sections
+                </span>
+                        <div className="flex-1 h-px bg-black/5 dark:bg-white/5" />
+                    </div>
+
+                    <div className="flex flex-wrap gap-4 mb-10">
+                        {sections.map((section) => (
+                            <BoardSectionCard
+                                key={section.id}
+                                section={section}
+                            />
+                        ))}
+                    </div>
+                    </>
+                )}
+
                 {board.previewPins.length > 0 ? (
                     <>
                         <div className="flex items-center gap-4 mb-6">
@@ -230,6 +258,8 @@ const MoodboardPreviewPage: React.FC = () => {
                                 </div>
                             ))}
                         </div>
+
+
                     </>
                 ) : (
                     <div className="flex flex-col items-center justify-center h-64 text-black dark:text-[#A1A1A1]">
