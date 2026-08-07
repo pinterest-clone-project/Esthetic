@@ -257,6 +257,7 @@ public static class WebApplicationBuilderExtensions
 
         #region Mappers
         services.AddSingleton<BoardMapper>();
+        services.AddSingleton<BoardSectionMapper>();
         services.AddSingleton<CategoryMapper>();
         services.AddSingleton<CommentMapper>();
         services.AddSingleton<PinMapper>();
