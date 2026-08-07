@@ -203,7 +203,7 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                                         onClick={() => setSelectedBoardId(board.id)}
                                         className="cursor-pointer"
                                     >
-                                        <div className="relative rounded-lg overflow-hidden aspect-square bg-white/10 dark:bg-black/10">
+                                        <div className="relative rounded-lg overflow-hidden aspect-square bg-white/30 dark:bg-black/10">
                                             {thumb ? (
                                                 <img
                                                     src={thumb}
@@ -242,7 +242,7 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                                 className="
         w-full py-3 rounded-xl
         bg-[#1DB954]
-        text-black text-sm
+        dark:text-black text-white text-sm
         font-medium
     "
                             >
@@ -250,8 +250,6 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                                     ? t('saveModal.removeFromBoard')
                                     : t('saveModal.saveToBoard')}
                             </button>
-
-
 
 
 
@@ -282,8 +280,8 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                                                 : handleSave(section.id)
                                         }
                                         className="
-                text-left px-4 py-3 rounded-xl
-                bg-white/5 hover:bg-white/10
+                text-left px-4 py-3 rounded-xl dark:bg-gray-300 dark:hover:bg-gray-400 dark:text-black text-gray-300
+                bg-white/30 hover:bg-white/20
             "
                                     >
                                         {sectionSaved
@@ -316,8 +314,8 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                                 }
                                 placeholder="Section name"
                                 className="
-            flex-1 rounded-lg px-3 py-2
-            bg-white/10
+            flex-1 rounded-lg px-3 py-2 dark:text-black text-white
+            bg-white/30 dark:bg-gray-300
             "
                             />
 
@@ -326,7 +324,7 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                                 className="
         px-4 rounded-lg
         bg-[#1DB954]
-        text-black text-sm
+        dark:text-black text-white text-sm
     "
                             >
                                 Create
