@@ -41,6 +41,8 @@ public partial class BoardSectionMapper (PinMapper pinMapper)
     {
         var dto = ToDetailsDtoInternal(src);
 
+        dto.OwnerId = src.Board.OwnerId;
+
         dto.Pins = src.BoardPins.Where(bp => !bp.IsDeleted)
             .OrderByDescending(bp => bp.CreatedAt)
             .Select(bp => pinMapper.ToSummaryDto(bp.Pin, currentUserId))

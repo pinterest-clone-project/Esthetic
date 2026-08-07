@@ -16,6 +16,7 @@ public class GetBoardSectionByIdHandler(IBoardSectionRepository boardSectionRepo
     public async Task<BoardSectionDetailsDTO> Handle(GetBoardSectionByIdQuery request, CancellationToken cancellationToken)
     {
         var section = await boardSectionRepository.GetQueryable()
+            .Include(s=>s.Board)
             .Include(s => s.BoardPins)
             .ThenInclude(bp => bp.Pin)
             .ThenInclude(p => p.Likes)

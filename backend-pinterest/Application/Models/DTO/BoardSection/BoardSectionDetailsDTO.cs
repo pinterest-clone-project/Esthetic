@@ -9,6 +9,7 @@ public class BoardSectionDetailsDTO
     public Guid Id { get; set; }
 
     public Guid BoardId { get; set; }
+    public Guid OwnerId { get; set; }
 
     public string Title { get; set; } = string.Empty;
 
