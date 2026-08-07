@@ -34,7 +34,7 @@ public class GetUserBoardsHandler(
                 CoverImageUrl = b.CoverImageUrl,
                 IsPrivate = b.IsPrivate,
                 IsArchived = b.IsArchived,
-                PinsCount = b.BoardPins.Count(bp => !bp.IsDeleted),
+                PinsCount = b.BoardPins.Count(bp => !bp.IsDeleted && bp.SectionId==null),
                 CreatedAt = b.CreatedAt
             },
             request.Page,

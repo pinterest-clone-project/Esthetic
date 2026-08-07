@@ -14,7 +14,7 @@ public class GetPinSavedBoardsHandler(IBoardPinRepository boardPinRepository, IB
             .Select(b => b.Id);
 
         return await boardPinRepository.GetQueryable()
-            .Where(bp => bp.PinId == request.PinId && userBoardIds.Contains(bp.BoardId))
+            .Where(bp => bp.PinId == request.PinId && userBoardIds.Contains(bp.BoardId) && bp.SectionId == null)
             .Select(bp => bp.BoardId)
             .ToListAsync(cancellationToken);
     }

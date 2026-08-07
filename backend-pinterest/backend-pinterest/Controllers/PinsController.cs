@@ -140,4 +140,19 @@ public class PinsController(IMediator mediator) : ControllerBase
         await mediator.Send(new RestorePinCommand(id, CurrentUserId, true));
         return NoContent();
     }
+
+    [HttpGet("{pinId:guid}/saved-locations")]
+    [Authorize]
+    public async Task<IActionResult> GetSavedLocations(Guid pinId)
+    {
+        var locations = await mediator.Send(
+            new GetPinSavedLocationQuery(
+                pinId,
+                CurrentUserId
+            )
+        );
+
+        return Ok(locations);
+    }
+
 }

@@ -1,68 +1,146 @@
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { CloseIcon } from "@/components/ui/Icons.tsx";
 import { useGetMyMoodboardsQuery } from "../../services/moodboardService.ts";
-import { useSavePinMutation, useUnsavePinMutation, useGetSavedBoardsQuery } from "../../services/pinService.ts";
+import {useGetSavedLocationsQuery, useSavePinMutation, useUnsavePinMutation} from "../../services/pinService.ts";
 import Modal from "./Modal.tsx";
 import { APP_ENV } from "@/constants/env";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import { useTranslation } from "react-i18next";
+import {useGetBoardSectionsQuery, useCreateBoardSectionMutation} from "@/services/boardSectionService.ts";
 
 interface SaveModalProps {
     pinId: string;
     onClose: () => void;
 }
 
-
 const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
     const { t } = useTranslation('boards');
     const { t: tc } = useTranslation('common');
     const { data: moodboards, isLoading: boardsLoading } = useGetMyMoodboardsQuery();
-    const { data: savedBoardIds = [], isLoading: savedLoading } = useGetSavedBoardsQuery(pinId);
     const [savePin] = useSavePinMutation();
-    const [unsavePin] = useUnsavePinMutation();
     const { showToast } = useToast();
-    const pendingBoardId = useRef<string | null>(null);
 
+    const [selectedBoardId, setSelectedBoardId] = useState<string | null>(null);
+    const [createSectionOpen, setCreateSectionOpen] = useState(false);
+    const [newSectionTitle, setNewSectionTitle] = useState("");
 
-    const [localSaved, setLocalSaved] = useState<Record<string, boolean>>({});
+    const {data: sections, isLoading: sectionsLoading} = useGetBoardSectionsQuery(selectedBoardId!,{
+        skip: !selectedBoardId
+    });
 
-    const isSaved = (boardId: string) =>
-        localSaved[boardId] !== undefined
-            ? localSaved[boardId]
-            : savedBoardIds.includes(boardId);
+    const { data: savedLocations = [] } =
+        useGetSavedLocationsQuery(pinId);
 
-    const handleToggle = async (boardId: string) => {
-        if (pendingBoardId.current === boardId) return;
-        pendingBoardId.current = boardId;
+    const [isSaved, setIsSaved] = useState(false);
 
-        const currentlySaved = isSaved(boardId);
-        setLocalSaved(prev => ({ ...prev, [boardId]: !currentlySaved }));
-
-        if (currentlySaved) {
-            showToast(tc('toast.removedFromBoard'), "success");
-        } else {
-            showToast(tc('toast.savedToBoard'), "success");
+    useEffect(() => {
+        if (!selectedBoardId) {
+            setIsSaved(false);
+            return;
         }
+
+        setIsSaved(
+            savedLocations.some(
+                location => location.boardId === selectedBoardId
+            )
+        );
+    }, [savedLocations, selectedBoardId]);
+
+
+
+    const [createSection] = useCreateBoardSectionMutation();
+
+    const handleSave = async (sectionId?: string) => {
+        if (!selectedBoardId) return;
 
         try {
-            if (currentlySaved) {
-                await unsavePin({ pinId, boardId }).unwrap();
-            } else {
-                await savePin({ pinId, boardId }).unwrap();
-            }
+            await savePin({
+                pinId,
+                boardId: selectedBoardId,
+                sectionId
+            }).unwrap();
+
+            setIsSaved(true);
+
+            showToast(
+                tc('toast.savedToBoard'),
+                "success"
+            );
+
+            onClose();
+
         } catch {
-            setLocalSaved(prev => ({ ...prev, [boardId]: currentlySaved }));
-            showToast(tc('toast.somethingWentWrong'), "error");
-        } finally {
-            pendingBoardId.current = null;
+            showToast(
+                tc('toast.somethingWentWrong'),
+                "error"
+            );
         }
     };
+
+    const [unsavePin] = useUnsavePinMutation();
+
+    const handleUnsave = async () => {
+        if (!selectedBoardId) return;
+
+        try {
+            const locations = savedLocations.filter(
+                x => x.boardId === selectedBoardId
+            );
+
+            await Promise.all(
+                locations.map(location =>
+                    unsavePin({
+                        pinId,
+                        boardId: location.boardId,
+                        sectionId: location.sectionId ?? undefined
+                    }).unwrap()
+                )
+            );
+
+            setIsSaved(false);
+
+            showToast(
+                tc('toast.removedFromBoard'),
+                "success"
+            );
+
+        } catch {
+            showToast(
+                tc('toast.somethingWentWrong'),
+                "error"
+            );
+        }
+    };
+
+
+    const handleCreateSection = async () => {
+        if (!selectedBoardId) return;
+        if (!newSectionTitle.trim()) return;
+
+        try {
+            await createSection({
+                boardId: selectedBoardId,
+                title: newSectionTitle.trim()
+            }).unwrap();
+
+            setNewSectionTitle("");
+            setCreateSectionOpen(false);
+
+        } catch {
+            showToast(
+                tc('toast.somethingWentWrong'),
+                "error"
+            );
+        }
+    };
+
+
 
     const handleDone = () => {
         onClose();
     };
 
-    const isLoading = boardsLoading || savedLoading;
+    const isLoading = boardsLoading;
 
     return (
         <Modal
@@ -79,6 +157,18 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                         <h3 className="text-center text-white dark:text-black text-lg font-semibold">
                             {t('saveModal.title')}
                         </h3>
+                        {selectedBoardId && (
+                            <button
+                                onClick={() => {
+                                    setSelectedBoardId(null);
+                                    setCreateSectionOpen(false);
+                                }}
+                                className="absolute left-0 text-xs text-gray-400 hover:text-white"
+                            >
+                                ← {tc('actions.back')}
+                            </button>
+                        )}
+
                         <button
                             onClick={onClose}
                             className="absolute top-0 right-0 w-7 h-7 flex items-center justify-center rounded-full bg-white/10 dark:bg-black/10 hover:bg-white/20 dark:hover:bg-black/20 transition-colors"
@@ -100,10 +190,9 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                     )}
 
                     {/* Grid */}
-                    {!isLoading && !!moodboards?.items?.length && (
+                    {!selectedBoardId && !!moodboards?.items?.length && (
                         <div className="grid grid-cols-3 gap-3 mb-2 max-h-[340px] overflow-y-auto">
                             {moodboards.items.map(board => {
-                                const saved = isSaved(board.id);
                                 const thumb = board.coverImageUrl
                                     ? `${APP_ENV.IMAGES_400_URL}${board.coverImageUrl}`
                                     : null;
@@ -111,7 +200,7 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                                 return (
                                     <div
                                         key={board.id}
-                                        onClick={() => handleToggle(board.id)}
+                                        onClick={() => setSelectedBoardId(board.id)}
                                         className="cursor-pointer"
                                     >
                                         <div className="relative rounded-lg overflow-hidden aspect-square bg-white/10 dark:bg-black/10">
@@ -130,13 +219,6 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                                                 </div>
                                             )}
 
-                                            {saved && (
-                                                <div className="absolute bottom-1.5 right-1.5 w-6 h-6 rounded-full bg-[#1DB954] flex items-center justify-center">
-                                                    <svg width="12" height="10" viewBox="0 0 10 8" fill="none">
-                                                        <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                    </svg>
-                                                </div>
-                                            )}
                                         </div>
 
                                         <p className="text-[11px] text-gray-400 truncate mt-1.5">
@@ -147,6 +229,113 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                             })}
                         </div>
                     )}
+
+                    {selectedBoardId && (
+                        <div className="flex flex-col gap-3">
+
+                            <button
+                                onClick={() =>
+                                    isSaved
+                                        ? handleUnsave()
+                                        : handleSave()
+                                }
+                                className="
+        w-full py-3 rounded-xl
+        bg-[#1DB954]
+        text-black text-sm
+        font-medium
+    "
+                            >
+                                {isSaved
+                                    ? t('saveModal.removeFromBoard')
+                                    : t('saveModal.saveToBoard')}
+                            </button>
+
+
+
+
+
+                            <p className="text-xs text-gray-400">
+                                Sections
+                            </p>
+
+
+                            {sectionsLoading && (
+                                <p className="text-xs text-gray-400">
+                                    Loading sections...
+                                </p>
+                            )}
+
+                            {sections?.map(section => {
+                                const sectionSaved = savedLocations.some(
+                                    x =>
+                                        x.boardId === selectedBoardId &&
+                                        x.sectionId === section.id
+                                );
+
+                                return (
+                                    <button
+                                        key={section.id}
+                                        onClick={() =>
+                                            sectionSaved
+                                                ? handleUnsave()
+                                                : handleSave(section.id)
+                                        }
+                                        className="
+                text-left px-4 py-3 rounded-xl
+                bg-white/5 hover:bg-white/10
+            "
+                                    >
+                                        {sectionSaved
+                                            ? `Remove from ${section.title}`
+                                            : `Save to ${section.title}`
+                                        }
+                                    </button>
+                                );
+                            })}
+
+
+                            <button
+                                onClick={() => setCreateSectionOpen(true)}
+                                className="text-[#1DB954] text-sm"
+                            >
+                                + Create section
+                            </button>
+
+
+                        </div>
+                    )}
+
+                    {createSectionOpen && (
+                        <div className="flex gap-2">
+
+                            <input
+                                value={newSectionTitle}
+                                onChange={(e)=>
+                                    setNewSectionTitle(e.target.value)
+                                }
+                                placeholder="Section name"
+                                className="
+            flex-1 rounded-lg px-3 py-2
+            bg-white/10
+            "
+                            />
+
+                            <button
+                                onClick={handleCreateSection}
+                                className="
+        px-4 rounded-lg
+        bg-[#1DB954]
+        text-black text-sm
+    "
+                            >
+                                Create
+                            </button>
+
+
+                        </div>
+                    )}
+
 
                     <button
                         onClick={handleDone}

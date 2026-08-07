@@ -54,21 +54,46 @@ export const pinService = api.injectEndpoints({
             }),
             providesTags: ['MyPins'],
         }),
-        savePin: builder.mutation<void, { pinId: string; boardId: string; }>({
+        savePin: builder.mutation<
+            void,
+            {
+                pinId: string;
+                boardId: string;
+                sectionId?: string;
+            }
+        >({
             query: (body) => ({
                 url: `Pins/${body.pinId}/save`,
                 method: 'POST',
                 body,
             }),
-            invalidatesTags: ['MyMoodboards'],
+            invalidatesTags: (_result, _error, arg) => [
+                {
+                    type: "SavedLocations",
+                    id: arg.pinId
+                }
+            ],
         }),
-        unsavePin: builder.mutation<void, { pinId: string; boardId: string }>({
+
+        unsavePin: builder.mutation<
+            void,
+            {
+                pinId: string;
+                boardId: string;
+                sectionId?: string;
+            }
+        >({
             query: (body) => ({
                 url: `Pins/${body.pinId}/unsave`,
                 method: 'DELETE',
                 body,
             }),
-            invalidatesTags: ['MyMoodboards'],
+            invalidatesTags: (_result, _error, arg) => [
+                {
+                    type: "SavedLocations",
+                    id: arg.pinId
+                }
+            ],
         }),
         getSavedBoards: builder.query<string[], string>({
             query: (pinId) => `Pins/${pinId}/saved-boards`,
@@ -94,6 +119,23 @@ export const pinService = api.injectEndpoints({
             query: (id) => ({ url: `Pins/admin/restore/${id}`, method: 'POST' }),
             invalidatesTags: ['DeletedPins', 'MyPins', 'AllPins'],
         }),
+        getSavedLocations: builder.query<
+            {
+                boardId: string;
+                sectionId: string | null;
+            }[],
+            string
+        >({
+            query: (pinId) => `Pins/${pinId}/saved-locations`,
+            providesTags: (_result, _error, pinId) => [
+                {
+                    type: "SavedLocations",
+                    id: pinId
+                }
+            ],
+        }),
+
+
     }),
 });
 
@@ -113,4 +155,5 @@ export const {
     useGetDeletedPinsQuery,
     useRestorePinMutation,
     useAdminRestorePinMutation,
+    useGetSavedLocationsQuery
 } = pinService;

@@ -29,17 +29,29 @@ public class SavePinHandler(
         if (existing != null)
         {
             if (!existing.IsDeleted)
+            {
+                existing.SectionId = request.SectionId;
+                await boardPinRepository.UpdateAsync(existing, cancellationToken);
+
+                await RegenerateCollageAsync(board, cancellationToken);
+
                 return Unit.Value;
+            }
+
 
             existing.IsDeleted = false;
+            existing.SectionId = request.SectionId;
+
             await boardPinRepository.UpdateAsync(existing, cancellationToken);
         }
+
         else
         {
             var boardPin = new BoardPinEntity
             {
                 BoardId = request.BoardId,
                 PinId = request.PinId,
+                SectionId = request.SectionId
             };
             await boardPinRepository.AddAsync(boardPin, cancellationToken);
         }
@@ -51,11 +63,15 @@ public class SavePinHandler(
     private async Task RegenerateCollageAsync(BoardEntity board, CancellationToken cancellationToken)
     {
         var pinIds = await boardPinRepository.GetQueryable()
-            .Where(bp => bp.BoardId == board.Id)
-            .OrderByDescending(bp => bp.CreatedAt)
-            .Take(4)
-            .Select(bp => bp.PinId)
-            .ToListAsync(cancellationToken);
+    .Where(bp =>
+        bp.BoardId == board.Id &&
+        bp.SectionId == null &&
+        !bp.IsDeleted)
+    .OrderByDescending(bp => bp.CreatedAt)
+    .Take(4)
+    .Select(bp => bp.PinId)
+    .ToListAsync(cancellationToken);
+
 
         if (pinIds.Count == 0)
             return;
