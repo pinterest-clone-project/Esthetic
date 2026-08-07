@@ -300,4 +300,7 @@
   <data name="BoardSectionDelOwnSections" xml:space="preserve">
     <value>Ви можете видаляти лише власні секції</value>
   </data>
+  <data name="BoardUpdateOwnBoardSections" xml:space="preserve">
+    <value>Ви можете оновлювати лише власні секції</value>
+  </data>
 </root>

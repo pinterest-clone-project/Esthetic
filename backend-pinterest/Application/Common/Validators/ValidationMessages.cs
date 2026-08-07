@@ -68,6 +68,7 @@ public static class ValidationMessages
     public static string BoardDelOwnBoards => Get("BoardDelOwnBoards");
     public static string BoardSectionDelOwnSections => Get("BoardSectionDelOwnSections");
     public static string BoardUpdateOwnBoards => Get("BoardUpdateOwnBoards");
+    public static string BoardUpdateOwnBoardSections => Get("BoardUpdateOwnBoardSections");
     public static string Tag => Get("Tag");
     public static string EmailAlreadyExists => Get("EmailAlreadyExists");
     public static string UserNameAlreadyTaken => Get("UserNameAlreadyTaken");

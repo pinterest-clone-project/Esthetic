@@ -24,7 +24,7 @@ public class UpdateBoardSectionHandler(IBoardSectionRepository boardSectionRepos
             ?? throw new NotFoundException(ValidationMessages.NotFound(ValidationMessages.Board));
 
         if (board.OwnerId != request.OwnerId)
-            throw new UnauthorizedException(ValidationMessages.BoardUpdateOwnBoards);
+            throw new UnauthorizedException(ValidationMessages.BoardUpdateOwnBoardSections);
 
         mapper.Patch(request, section);
 

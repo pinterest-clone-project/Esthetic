@@ -300,4 +300,7 @@
   <data name="BoardSectionDelOwnSections" xml:space="preserve">
     <value>You can only delete your own sections</value>
   </data>
+  <data name="BoardUpdateOwnBoardSections" xml:space="preserve">
+    <value>You can only update your own sections</value>
+  </data>
 </root>
