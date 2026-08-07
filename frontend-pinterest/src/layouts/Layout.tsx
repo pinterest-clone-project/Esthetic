@@ -22,6 +22,7 @@ const BACK_BUTTON_ROUTES = [
     /^\/business$/,
     /^\/about$/,
     /^\/news$/,
+    /^\/section\/preview\/.+$/,
 ];
 
 const Layout = () => {
