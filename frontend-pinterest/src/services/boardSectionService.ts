@@ -41,7 +41,12 @@ export const boardSectionService = api.injectEndpoints({
 
         getBoardSectionById: builder.query<BoardSectionDetails, string>({
             query: (id) => `BoardSections/getById/${id}`,
-            providesTags: ["BoardSections"],
+            providesTags: (_result, _error, id) => [
+                {
+                    type: "BoardSections",
+                    id: id
+                }
+            ],
         }),
 
         createBoardSection: builder.mutation<

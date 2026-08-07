@@ -82,7 +82,16 @@ export const moodboardService = api.injectEndpoints({
         }),
         getMoodboardById: builder.query<MoodboardDetail, string>({
             query: (id) => `Boards/getById/${id}`,
-            providesTags: ["MyMoodboards", "AllMoodboards"],
+            providesTags: (_result, _error, id) => [
+                {
+                    type: "MyMoodboards",
+                    id: id
+                },
+                {
+                    type: "AllMoodboards",
+                    id: id
+                }
+            ],
         }),
         updateMoodboard: builder.mutation<MoodboardAdmin, UpdateMoodboardRequest>({
             query: ({ id, ...body }) => ({
