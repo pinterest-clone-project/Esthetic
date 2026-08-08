@@ -33,7 +33,6 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse}) => {
     const [likesCount, setLikesCount] = useState(pin.likesCount);
     const {
         isSaved,
-        unsave
     } = usePinSave(pin.id);
 
 

@@ -39,7 +39,6 @@ const AuraPreviewPage = () => {
 
     const {
         isSaved,
-        unsave
     } = usePinSave(pin?.id ?? "");
 
     useEffect(() => {
