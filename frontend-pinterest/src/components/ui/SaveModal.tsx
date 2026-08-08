@@ -18,6 +18,7 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
     const { t: tc } = useTranslation('common');
     const { data: moodboards, isLoading: boardsLoading } = useGetMyMoodboardsQuery();
     const [savePin] = useSavePinMutation();
+    const [loadingTarget, setLoadingTarget] = useState<string | null>(null); // 'board' | sectionId
     const { showToast } = useToast();
 
     const [selectedBoardId, setSelectedBoardId] = useState<string | null>(null);
@@ -53,6 +54,8 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
     const handleSave = async (sectionId?: string) => {
         if (!selectedBoardId) return;
 
+        const target = sectionId ?? 'board';
+        setLoadingTarget(target);
         try {
             await savePin({
                 pinId,
@@ -74,18 +77,22 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                 tc('toast.somethingWentWrong'),
                 "error"
             );
+        } finally {
+            setLoadingTarget(null);
         }
     };
 
     const [unsavePin] = useUnsavePinMutation();
 
-    const handleUnsave = async () => {
+    const handleUnsave = async (sectionId?: string) => {
         if (!selectedBoardId) return;
 
+        const target = sectionId ?? 'board';
+        setLoadingTarget(target);
         try {
-            const locations = savedLocations.filter(
-                x => x.boardId === selectedBoardId
-            );
+            const locations = sectionId
+                ? savedLocations.filter(x => x.boardId === selectedBoardId && x.sectionId === sectionId)
+                : savedLocations.filter(x => x.boardId === selectedBoardId);
 
             await Promise.all(
                 locations.map(location =>
@@ -109,6 +116,8 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                 tc('toast.somethingWentWrong'),
                 "error"
             );
+        } finally {
+            setLoadingTarget(null);
         }
     };
 
@@ -135,10 +144,6 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
     };
 
 
-
-    const handleDone = () => {
-        onClose();
-    };
 
     const isLoading = boardsLoading;
 
@@ -177,7 +182,6 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                         </button>
                     </div>
 
-
                     {isLoading && (
                         <div className="flex justify-center py-8">
                             <div className="w-6 h-6 rounded-full border-2 border-white/20 dark:border-black/20 border-t-[#1DB954] animate-spin" />
@@ -196,6 +200,7 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                                 const thumb = board.coverImageUrl
                                     ? `${APP_ENV.IMAGES_400_URL}${board.coverImageUrl}`
                                     : null;
+                                const isPinInBoard = savedLocations.some(l => l.boardId === board.id);
 
                                 return (
                                     <div
@@ -218,7 +223,13 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                                                     </svg>
                                                 </div>
                                             )}
-
+                                            {isPinInBoard && (
+                                                <div className="absolute bottom-1.5 right-1.5 w-5 h-5 rounded-full bg-[#4ade80] flex items-center justify-center">
+                                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3">
+                                                        <polyline points="20 6 9 17 4 12"/>
+                                                    </svg>
+                                                </div>
+                                            )}
                                         </div>
 
                                         <p className="text-[11px] text-gray-400 truncate mt-1.5">
@@ -230,118 +241,109 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                         </div>
                     )}
 
-                    {selectedBoardId && (
-                        <div className="flex flex-col gap-3">
+                    {!selectedBoardId && !!moodboards?.items?.length && (
+                        <p className="text-[11px] text-gray-500 text-center">
+                            {t('saveModal.sectionHint')}
+                        </p>
+                    )}
 
+                    {selectedBoardId && (
+                        <div className="flex flex-col gap-2">
+
+                            {/* Save / Remove from board */}
                             <button
-                                onClick={() =>
+                                onClick={() => isSaved ? handleUnsave() : handleSave()}
+                                disabled={loadingTarget !== null}
+                                className={`w-full py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-2 ${
                                     isSaved
-                                        ? handleUnsave()
-                                        : handleSave()
-                                }
-                                className="
-        w-full py-3 rounded-xl
-        bg-[#1DB954]
-        dark:text-black text-white text-sm
-        font-medium
-    "
+                                        ? "bg-white/10 hover:bg-white/20 dark:bg-black/10 dark:hover:bg-black/20 text-red-400"
+                                        : "bg-[#1DB954] hover:bg-[#1aa34a] text-white dark:text-black"
+                                } disabled:opacity-60`}
                             >
-                                {isSaved
-                                    ? t('saveModal.removeFromBoard')
-                                    : t('saveModal.saveToBoard')}
+                                {loadingTarget === 'board' && <div className="w-3.5 h-3.5 rounded-full border-2 border-current border-t-transparent animate-spin" />}
+                                {isSaved ? t('saveModal.removeFromBoard') : t('saveModal.saveToBoard')}
                             </button>
 
-
-
-                            <p className="text-xs text-gray-400">
-                                Sections
-                            </p>
-
+                            {/* Sections */}
+                            {(sectionsLoading || !!sections?.length) && (
+                                <p className="text-[11px] text-gray-500 uppercase tracking-wide mt-1 px-0.5">
+                                    {t('saveModal.sections')}
+                                </p>
+                            )}
 
                             {sectionsLoading && (
-                                <p className="text-xs text-gray-400">
-                                    Loading sections...
-                                </p>
+                                <div className="flex justify-center py-3">
+                                    <div className="w-4 h-4 rounded-full border-2 border-white/20 border-t-[#1DB954] animate-spin" />
+                                </div>
                             )}
 
                             {sections?.map(section => {
                                 const sectionSaved = savedLocations.some(
-                                    x =>
-                                        x.boardId === selectedBoardId &&
-                                        x.sectionId === section.id
+                                    x => x.boardId === selectedBoardId && x.sectionId === section.id
                                 );
-
                                 return (
                                     <button
                                         key={section.id}
-                                        onClick={() =>
+                                        onClick={() => sectionSaved ? handleUnsave(section.id) : handleSave(section.id)}
+                                        disabled={loadingTarget !== null}
+                                        className={`flex items-center justify-between text-left px-4 py-2.5 rounded-xl text-sm transition-colors disabled:opacity-60 ${
                                             sectionSaved
-                                                ? handleUnsave()
-                                                : handleSave(section.id)
-                                        }
-                                        className="
-                text-left px-4 py-3 rounded-xl dark:bg-gray-300 dark:hover:bg-gray-400 dark:text-black text-gray-300
-                bg-white/30 hover:bg-white/20
-            "
+                                                ? "bg-white/10 dark:bg-black/10 text-red-400 hover:bg-white/20 dark:hover:bg-black/20"
+                                                : "bg-white/10 dark:bg-black/10 text-white dark:text-black hover:bg-white/20 dark:hover:bg-black/20"
+                                        }`}
                                     >
-                                        {sectionSaved
-                                            ? `Remove from ${section.title}`
-                                            : `Save to ${section.title}`
-                                        }
+                                        <span>{section.title}</span>
+                                        {loadingTarget === section.id ? (
+                                            <div className="w-3 h-3 rounded-full border-2 border-current border-t-transparent animate-spin" />
+                                        ) : sectionSaved && (
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                                <polyline points="20 6 9 17 4 12"/>
+                                            </svg>
+                                        )}
                                     </button>
                                 );
                             })}
 
-
-                            <button
-                                onClick={() => setCreateSectionOpen(true)}
-                                className="text-[#1DB954] text-sm"
-                            >
-                                + Create section
-                            </button>
-
-
-                        </div>
-                    )}
-
-                    {createSectionOpen && (
-                        <div className="flex gap-2">
-
-                            <input
-                                value={newSectionTitle}
-                                onChange={(e)=>
-                                    setNewSectionTitle(e.target.value)
-                                }
-                                placeholder="Section name"
-                                className="
-            flex-1 rounded-lg px-3 py-2 dark:text-black text-white
-            bg-white/30 dark:bg-gray-300
-            "
-                            />
-
-                            <button
-                                onClick={handleCreateSection}
-                                className="
-        px-4 rounded-lg
-        bg-[#1DB954]
-        dark:text-black text-white text-sm
-    "
-                            >
-                                Create
-                            </button>
-
+                            {/* Create section */}
+                            {!createSectionOpen ? (
+                                <button
+                                    onClick={() => setCreateSectionOpen(true)}
+                                    className="flex items-center gap-1.5 text-[#1DB954] hover:text-[#1aa34a] text-sm transition-colors mt-1"
+                                >
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                                    </svg>
+                                    {t('saveModal.createSection')}
+                                </button>
+                            ) : (
+                                <div className="flex gap-2 mt-1">
+                                    <input
+                                        autoFocus
+                                        value={newSectionTitle}
+                                        onChange={(e) => setNewSectionTitle(e.target.value)}
+                                        onKeyDown={(e) => e.key === 'Enter' && handleCreateSection()}
+                                        placeholder={t('saveModal.sectionName')}
+                                        className="flex-1 rounded-lg px-3 py-2 text-sm dark:text-black text-white bg-white/20 dark:bg-black/10 placeholder-gray-400 outline-none"
+                                    />
+                                    <button
+                                        onClick={() => { setCreateSectionOpen(false); setNewSectionTitle(""); }}
+                                        className="px-3 py-2 rounded-lg text-sm text-gray-400 hover:text-white dark:hover:text-black bg-white/10 dark:bg-black/10 transition-colors"
+                                    >
+                                        ✕
+                                    </button>
+                                    <button
+                                        onClick={handleCreateSection}
+                                        disabled={!newSectionTitle.trim()}
+                                        className="px-4 rounded-lg bg-[#1DB954] hover:bg-[#1aa34a] dark:text-black text-white text-sm disabled:opacity-40 transition-colors"
+                                    >
+                                        {t('saveModal.create')}
+                                    </button>
+                                </div>
+                            )}
 
                         </div>
                     )}
 
-
-                    <button
-                        onClick={handleDone}
-                        className="w-full h-10 bg-[#1DB954] hover:bg-[#1aa34a]
-                        text-white dark:text-black text-sm font-medium rounded-lg transition-colors mt-1"
-                    >
-                        {t('saveModal.done')}
-                    </button>
                 </div>
             </div>
         </Modal>

@@ -1,6 +1,7 @@
 {
   "actions": {
     "save": "Save",
+    "saved": "Saved",
     "delete": "Delete",
     "create": "Create",
     "cancel": "Cancel",
@@ -20,7 +21,11 @@
     "follow": "Follow",
     "unfollow": "Unfollow",
     "block": "Block",
+    "blockUser": "Block",
+    "blockUserDesc": "This user won't be able to see your profile, pins, or send you messages.",
     "unblock": "Unblock",
+    "unblockUser": "Unblock",
+    "unblockUserDesc": "After unblocking, this user will be able to see your profile and interact with you again.",
     "restore": "Restore",
     "unsave": "Unsave",
     "done": "Done",
@@ -74,7 +79,9 @@
     "noAurasFound": "No auras found",
     "noMoodboards": "No moodboards yet",
     "noNotifications": "No notifications",
-    "noBlockedUsers": "No blocked users"
+    "noBlockedUsers": "No blocked users",
+    "noBlockedUsersDesc": "Blocked users will appear here",
+    "blockedUsersInfo": "Blocked users can't see your profile, auras or send you messages."
   },
   "toast": {
     "linkCopied": "Link copied!",
@@ -154,6 +161,8 @@
     "editProfile": "Edit profile",
     "privateAccount": "This account is private",
     "privateAccountDesc": "Follow this account to see their auras and moodboards",
+    "blockedUser": "You've blocked this user",
+    "blockedUserDesc": "Unblock to view their profile and auras.",
     "noAuras": "No auras yet.",
     "noMoodboards": "No moodboards yet.",
     "noUsers": "No users yet",
@@ -341,6 +350,8 @@
     "adminPanelDesc": "Manage users and content",
     "blockedUsers": "Blocked Users",
     "blockedUsersDesc": "Manage who you've blocked",
+    "archivedBoards": "Archived boards",
+    "archivedBoardsDesc": "View your archived moodboards",
     "recentlyDeleted": "Recently deleted",
     "recentlyDeletedDesc": "Auras deleted in the last 30 days",
     "logout": "Logout",

@@ -36,8 +36,15 @@
     "title": "Choose Moodboard",
     "done": "Done",
     "noMoodboards": "No moodboards yet.",
+    "sectionHint": "Tap a moodboard to save to a specific section",
     "saveToBoard": "Save to moodboard",
-    "removeFromBoard": "Unsave from moodboard"
+    "removeFromBoard": "Unsave from moodboard",
+    "sections": "Sections",
+    "saveToSection": "Save to section",
+    "removeFromSection": "Remove from section",
+    "createSection": "Create section",
+    "sectionName": "Section name",
+    "create": "Create"
   },
   "preview": {
     "notFound": "Board not found.",
@@ -57,7 +64,10 @@
     "deleteDesc": "This action cannot be undone.",
     "privateBoard": "Private board",
     "noPins": "No pins yet",
-    "noPinsDesc": "Save pins to this board to see them here"
+    "noPinsDesc": "Save pins to this board to see them here",
+    "addSection": "Add section",
+    "sectionCreated": "Section created",
+    "sections": "Sections"
   },
   "moodboard": {
     "create": "Create moodboard",
@@ -78,7 +88,16 @@
     "showLess": "Show less",
     "nothingToShow": "Nothing to show here",
     "saving": "Saving...",
-    "save": "Save"
+    "save": "Save",
+    "archive": "Archive",
+    "unarchive": "Unarchive",
+    "archived": "Archived",
+    "archiveSection": "Archive",
+    "toastArchived": "Board archived",
+    "toastUnarchived": "Board unarchived",
+    "viewAll": "View all",
+    "archivedDesc": "Archived boards are hidden from your collection",
+    "noArchivedBoards": "No archived boards"
   },
   "sectionPreview": {
     "sectionUpdated": "Section updated"

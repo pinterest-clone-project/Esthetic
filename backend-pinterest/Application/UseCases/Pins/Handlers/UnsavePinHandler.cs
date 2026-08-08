@@ -38,7 +38,15 @@ public class UnsavePinHandler(
             );
         }
 
-        await boardPinRepository.DeleteAsync(boardPin.Id, cancellationToken);
+        if (request.SectionId != null)
+        {
+            boardPin.SectionId = null;
+            await boardPinRepository.UpdateAsync(boardPin, cancellationToken);
+        }
+        else
+        {
+            await boardPinRepository.DeleteAsync(boardPin.Id, cancellationToken);
+        }
 
         await RegenerateCollageAsync(board, cancellationToken);
 
@@ -51,7 +59,6 @@ public class UnsavePinHandler(
         var pinIds = await boardPinRepository.GetQueryable()
     .Where(bp =>
         bp.BoardId == board.Id &&
-        bp.SectionId == null &&
         !bp.IsDeleted)
     .OrderByDescending(bp => bp.CreatedAt)
     .Take(4)

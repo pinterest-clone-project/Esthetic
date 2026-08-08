@@ -28,7 +28,8 @@ export const api = createApi({
         "News",
         "BlockStatus",
         "BoardSections",
-        "SavedLocations"
+        "SavedLocations",
+        "ArchivedMoodboards"
     ],
     endpoints: () => ({})
 });

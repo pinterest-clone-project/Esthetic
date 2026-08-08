@@ -36,8 +36,15 @@
     "title": "Оберіть мудборд",
     "done": "Готово",
     "noMoodboards": "Мудбордів ще немає.",
+    "sectionHint": "Натисніть на мудборд, щоб зберегти в конкретну секцію",
     "saveToBoard": "Зберегти до мудборду",
-    "removeFromBoard": "Видалити з мудборду"
+    "removeFromBoard": "Видалити з мудборду",
+    "sections": "Секції",
+    "saveToSection": "Зберегти до секції",
+    "removeFromSection": "Видалити з секції",
+    "createSection": "Створити секцію",
+    "sectionName": "Назва секції",
+    "create": "Створити"
   },
   "preview": {
     "notFound": "Дошку не знайдено.",
@@ -57,7 +64,10 @@
     "deleteDesc": "Цю дію неможливо скасувати.",
     "privateBoard": "Приватна дошка",
     "noPins": "Ще немає пінів",
-    "noPinsDesc": "Додайте піни до цієї дошки, щоб побачити їх тут"
+    "noPinsDesc": "Додайте піни до цієї дошки, щоб побачити їх тут",
+    "addSection": "Додати секцію",
+    "sectionCreated": "Секцію створено",
+    "sections": "Секції"
   },
   "moodboard": {
     "create": "Створити мудборд",
@@ -78,6 +88,15 @@
     "showLess": "Показати менше",
     "nothingToShow": "Нічого не знайдено",
     "saving": "Збереження...",
-    "save": "Зберегти"
+    "save": "Зберегти",
+    "archive": "Архівувати",
+    "unarchive": "Розархівувати",
+    "archived": "Архівована",
+    "archiveSection": "Архів",
+    "toastArchived": "Дошку архівовано",
+    "toastUnarchived": "Дошку розархівовано",
+    "viewAll": "Переглянути всі",
+    "archivedDesc": "Архівовані дошки не відображаються в колекції",
+    "noArchivedBoards": "Архівованих дошок немає"
   }
 }

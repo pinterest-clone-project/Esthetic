@@ -5,6 +5,7 @@ import { useGetPinsByUserQuery } from "@/services/pinService.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
 import { useFollowMutation, useUnfollowMutation, useSendFollowRequestMutation, useCancelFollowRequestMutation } from "@/services/followService.ts";
 import { useGetPublicBoardsByUserQuery, useGetMyMoodboardsQuery } from "@/services/moodboardService.ts";
+import { useDefaultIsBlockedQuery, useDefaultBlockUserMutation, useDefaultUnblockUserMutation } from "@/services/blockService.ts";
 import PinCard from "@/components/ui/PinCard.tsx";
 import { APP_ENV } from "@/constants/env";
 import type { IUser } from "@/types/user/IUser.ts";
@@ -29,6 +30,12 @@ const UserPage = () => {
     const [unfollow] = useUnfollowMutation();
     const [sendFollowRequest] = useSendFollowRequestMutation();
     const [cancelFollowRequest] = useCancelFollowRequestMutation();
+    const [blockUser] = useDefaultBlockUserMutation();
+    const [unblockUser] = useDefaultUnblockUserMutation();
+    const { data: isBlocked } = useDefaultIsBlockedQuery(id!, { skip: isMe || !id });
+    const [showBlockConfirm, setShowBlockConfirm] = useState(false);
+    const [showUnblockConfirm, setShowUnblockConfirm] = useState(false);
+    const [showMenu, setShowMenu] = useState(false);
     const [activeTab, setActiveTab] = useState<"auras" | "moodboards">("auras");
     const [followModal, setFollowModal] = useState<"followers" | "following" | null>(null);
 
@@ -134,18 +141,44 @@ const UserPage = () => {
 
                 {!isMe && (
                     <div className="flex items-center gap-2">
-                        <button
-                            onClick={handleFollowToggle}
-                            className={`px-5 py-2 rounded-xl text-sm font-semibold transition-colors
-                                ${stats?.isFollowedByMe
-                                    ? "bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20 text-black dark:text-white border border-black/10 dark:border-white/10"
-                                    : stats?.isRequestedByMe
-                                        ? "bg-black/5 dark:bg-white/5 text-black/50 dark:text-white/50 border border-black/10 dark:border-white/10 hover:border-red-400 hover:text-red-400"
-                                        : "bg-[#4ade80] hover:bg-[#22c55e] text-black"
-                                }`}
-                        >
-                            {stats?.isFollowedByMe ? t('user.following_btn') : stats?.isRequestedByMe ? t('user.requested') : t('user.follow')}
-                        </button>
+                        {!isBlocked && (
+                            <button
+                                onClick={handleFollowToggle}
+                                className={`px-5 py-2 rounded-xl text-sm font-semibold transition-colors
+                                    ${stats?.isFollowedByMe
+                                        ? "bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20 text-black dark:text-white border border-black/10 dark:border-white/10"
+                                        : stats?.isRequestedByMe
+                                            ? "bg-black/5 dark:bg-white/5 text-black/50 dark:text-white/50 border border-black/10 dark:border-white/10 hover:border-red-400 hover:text-red-400"
+                                            : "bg-[#4ade80] hover:bg-[#22c55e] text-black"
+                                    }`}
+                            >
+                                {stats?.isFollowedByMe ? t('user.following_btn') : stats?.isRequestedByMe ? t('user.requested') : t('user.follow')}
+                            </button>
+                        )}
+                        <div className="relative">
+                            <button
+                                onClick={() => setShowMenu(v => !v)}
+                                className="w-9 h-9 flex items-center justify-center rounded-xl bg-black/5 dark:bg-white/10 text-gray-600 dark:text-white hover:bg-black/10 dark:hover:bg-white/20 transition-colors"
+                            >
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
+                                </svg>
+                            </button>
+                            {showMenu && (
+                                <>
+                                    <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
+                                    <div className="absolute right-0 top-11 z-50 bg-white dark:bg-[#1a1a1a] border border-black/10 dark:border-white/10 rounded-xl shadow-xl overflow-hidden w-44">
+                                        <button
+                                            onClick={() => { setShowMenu(false); isBlocked ? setShowUnblockConfirm(true) : setShowBlockConfirm(true); }}
+                                            className={`w-full px-4 py-3 text-left text-sm transition-colors hover:bg-black/5 dark:hover:bg-white/5
+                                                ${isBlocked ? "text-[#4ade80]" : "text-red-400"}`}
+                                        >
+                                            {isBlocked ? t('actions.unblock') : t('actions.block')}
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                        </div>
                     </div>
                 )}
 
@@ -158,6 +191,19 @@ const UserPage = () => {
                     </button>
                 )}
             </div>
+
+            {isBlocked && (
+                <div className="flex flex-col items-center gap-3 py-16 text-center">
+                    <div className="w-14 h-14 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-400">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                        </svg>
+                    </div>
+                    <p className="text-black dark:text-white text-sm font-medium">{t('user.blockedUser')}</p>
+                    <p className="text-gray-500 text-xs max-w-xs">{t('user.blockedUserDesc')}</p>
+                </div>
+            )}
 
             {user.isPrivate && !isMe && !stats?.isFollowedByMe && (
                 <div className="flex flex-col items-center gap-3 py-16 text-center">
@@ -172,7 +218,7 @@ const UserPage = () => {
                 </div>
             )}
 
-            {(!user.isPrivate || isMe || stats?.isFollowedByMe) && (
+            {!isBlocked && (!user.isPrivate || isMe || stats?.isFollowedByMe) && (
             <>
             <div className="flex items-center justify-center gap-6 mb-8">
                 {(["auras", "moodboards"] as const).map((tab) => (
@@ -254,6 +300,76 @@ const UserPage = () => {
             </>
             )}
         </div>
+
+        {showBlockConfirm && (
+            <div
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+                onClick={() => setShowBlockConfirm(false)}
+            >
+                <div
+                    className="bg-white dark:bg-[#1a1a1a] border border-black/10 dark:border-white/10 rounded-2xl w-80 p-6 shadow-2xl flex flex-col gap-4"
+                    onClick={e => e.stopPropagation()}
+                >
+                    <div className="flex flex-col gap-1">
+                        <h3 className="text-black dark:text-white text-sm font-semibold">
+                            {t('actions.blockUser')} @{user.userName}?
+                        </h3>
+                        <p className="text-gray-500 text-xs leading-relaxed">
+                            {t('actions.blockUserDesc')}
+                        </p>
+                    </div>
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => setShowBlockConfirm(false)}
+                            className="flex-1 py-2 rounded-xl text-sm border border-black/10 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
+                        >
+                            {t('actions.cancel')}
+                        </button>
+                        <button
+                            onClick={async () => { await blockUser(id!); setShowBlockConfirm(false); }}
+                            className="flex-1 py-2 rounded-xl text-sm font-semibold bg-red-500 hover:bg-red-600 text-white transition-colors"
+                        >
+                            {t('actions.block')}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {showUnblockConfirm && (
+            <div
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+                onClick={() => setShowUnblockConfirm(false)}
+            >
+                <div
+                    className="bg-white dark:bg-[#1a1a1a] border border-black/10 dark:border-white/10 rounded-2xl w-80 p-6 shadow-2xl flex flex-col gap-4"
+                    onClick={e => e.stopPropagation()}
+                >
+                    <div className="flex flex-col gap-1">
+                        <h3 className="text-black dark:text-white text-sm font-semibold">
+                            {t('actions.unblockUser')} @{user.userName}?
+                        </h3>
+                        <p className="text-gray-500 text-xs leading-relaxed">
+                            {t('actions.unblockUserDesc')}
+                        </p>
+                    </div>
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => setShowUnblockConfirm(false)}
+                            className="flex-1 py-2 rounded-xl text-sm border border-black/10 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
+                        >
+                            {t('actions.cancel')}
+                        </button>
+                        <button
+                            onClick={async () => { await unblockUser(id!); setShowUnblockConfirm(false); }}
+                            className="flex-1 py-2 rounded-xl text-sm font-semibold bg-[#4ade80] hover:bg-[#22c55e] text-black transition-colors"
+                        >
+                            {t('actions.unblock')}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )}
 
         {followModal && (
             <div
