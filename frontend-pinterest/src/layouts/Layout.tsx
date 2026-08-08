@@ -23,6 +23,7 @@ const BACK_BUTTON_ROUTES = [
     /^\/about$/,
     /^\/news$/,
     /^\/section\/preview\/.+$/,
+    /^\/settings\/blocked$/,
 ];
 
 const Layout = () => {
