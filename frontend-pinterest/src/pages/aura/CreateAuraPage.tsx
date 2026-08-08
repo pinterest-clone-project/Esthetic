@@ -6,11 +6,13 @@ import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
 import {APP_ENV} from "@/constants/env";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
+import { useLoading } from "@/context/LoadingContext";
 
 const CreateAuraPage = () => {
     const { t } = useTranslation('pins');
     const navigate = useNavigate();
-    const [createPin, { isLoading }] = useCreatePinMutation();
+    const [createPin] = useCreatePinMutation();
+    const { withLoading } = useLoading();
     const { data: categories } = useGetAllCategoriesQuery();
     const { data: tags } = useGetAllTagsQuery();
 
@@ -105,7 +107,7 @@ const CreateAuraPage = () => {
     const handleSubmit = async () => {
         if (!canSubmit) return;
         try {
-            await createPin({
+            await withLoading(() => createPin({
                 imageFile: imageFile ?? undefined,
                 mediaUrl: !imageFile && mediaUrl.trim() ? mediaUrl.trim() : undefined,
                 title: title || undefined,
@@ -113,7 +115,7 @@ const CreateAuraPage = () => {
                 sourceUrl: sourceUrl || undefined,
                 categoryId: categoryId || undefined,
                 tagIds: tagIds.length > 0 ? tagIds : undefined,
-            }).unwrap();
+            }).unwrap());
             navigate("/collections");
         } catch (e) {
             console.error(e);
@@ -129,11 +131,11 @@ const CreateAuraPage = () => {
                 </div>
                 <button
                     onClick={handleSubmit}
-                    disabled={isLoading || !canSubmit}
+                    disabled={!canSubmit}
                     className="bg-[#4ade80] hover:bg-[#22c55e] disabled:opacity-40 disabled:cursor-not-allowed
             text-black text-xs font-semibold px-5 py-2 rounded-md transition-colors"
                 >
-                    {isLoading ? t('create.creating', 'Creating...') : t('create.submit')}
+                    {t('create.submit')}
                 </button>
             </div>
 

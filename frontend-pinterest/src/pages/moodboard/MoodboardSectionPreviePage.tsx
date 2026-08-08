@@ -205,8 +205,8 @@ const MoodboardPreviewPage: React.FC = () => {
                     </>
                 ) : (
                     <div className="flex flex-col items-center justify-center h-64 text-black dark:text-[#A1A1A1]">
-                        <p className="text-lg mb-2">{t('preview.noPins')}</p>
-                        <p className="text-sm">{t('preview.noPinsDesc')}</p>
+                        <p className="text-lg mb-2">{t('preview.noSectionPins')}</p>
+                        <p className="text-sm">{t('preview.noSectionPinsDesc')}</p>
                     </div>
                 )}
             </div>
@@ -220,8 +220,8 @@ const MoodboardPreviewPage: React.FC = () => {
                         className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 w-72 shadow-2xl"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <p className="text-white text-sm font-medium mb-1">{t('preview.deleteTitle')}</p>
-                        <p className="text-gray-400 text-xs mb-5">{t('preview.deleteDesc')}</p>
+                        <p className="text-white text-sm font-medium mb-1">{t('preview.deleteSectionTitle')}</p>
+                        <p className="text-gray-400 text-xs mb-5">{t('preview.deleteSectionDesc')}</p>
                         <div className="flex gap-2">
                             <button
                                 className="flex-1 py-2 rounded-xl text-xs text-gray-300 bg-white/10 hover:bg-white/15 transition-colors"

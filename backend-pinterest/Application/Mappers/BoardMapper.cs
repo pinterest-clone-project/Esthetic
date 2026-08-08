@@ -32,7 +32,7 @@ public partial class BoardMapper(PinMapper pinMapper)
             .OrderByDescending(bp => bp.CreatedAt)
             .Select(bp => pinMapper.ToSummaryDto(bp.Pin, currentUserId))
             .ToList();
-        dto.PinsCount = dto.PreviewPins.Count;
+        dto.PinsCount = src.BoardPins.Count(bp => !bp.IsDeleted);
         return dto;
     }
 

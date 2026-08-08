@@ -19,7 +19,8 @@ public class GetPinSavedLocationsHandler(
             .Where(bp =>
                 bp.PinId == request.PinId &&
                 bp.Board.OwnerId == request.UserId &&
-                !bp.IsDeleted)
+                !bp.IsDeleted &&
+                !bp.Board.IsDeleted)
             .Select(bp => new SavedPinLocationDTO
             {
                 BoardId = bp.BoardId,

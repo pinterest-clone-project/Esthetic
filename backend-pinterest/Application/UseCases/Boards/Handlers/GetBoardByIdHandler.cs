@@ -21,11 +21,14 @@ public class GetBoardByIdHandler(
         .FirstOrDefaultAsync(b => b.Id == request.Id, cancellationToken)
         ?? throw new NotFoundException(ValidationMessages.NotFound(ValidationMessages.Board));
 
-        board.BoardPins = board.BoardPins.Where(p => p.SectionId == null).ToList();
-
         if (board.IsPrivate && board.OwnerId != request.CurrentUserId)
             throw new NotFoundException(ValidationMessages.NotFound(ValidationMessages.Board));
 
-        return boardMapper.ToDetailsDto(board, request.CurrentUserId);
+        var totalPinsCount = board.BoardPins.Count(bp => !bp.IsDeleted);
+        board.BoardPins = board.BoardPins.Where(p => p.SectionId == null).ToList();
+
+        var dto = boardMapper.ToDetailsDto(board, request.CurrentUserId);
+        dto.PinsCount = totalPinsCount;
+        return dto;
     }
 }

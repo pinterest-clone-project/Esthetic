@@ -85,6 +85,13 @@ const Header: React.FC = () => {
         }
     };
 
+    const submitSearch = () => {
+        if (searchQuery.trim()) {
+            navigate(`/aura/search?q=${encodeURIComponent(searchQuery.trim())}`);
+            setSearchQuery("");
+        }
+    };
+
 
     return (
         <header ref={headerRef} className="sticky top-0 z-50 w-full bg-white dark:bg-black py-3 relative">
@@ -106,15 +113,21 @@ const Header: React.FC = () => {
                 </div>
 
                 <div className={`flex-1 flex justify-center ${!user ? "hidden md:flex" : ""}`}>
-                    <div className="flex items-center bg-[#A2A2A2] dark:bg-[#535353] rounded-[10px] px-4 h-9 w-full max-w-[586px] h-[40px]">
-                        <img
-                            src={theme === "dark" ? searchIconDark : searchIconLight}
-                            alt=""
-                            className="w-[27px] h-[27px] opacity-70 cursor-pointer"
-                        />
+                    <div className="flex items-center bg-[#A2A2A2] dark:bg-[#535353] hover:bg-[#949494] dark:hover:bg-[#5e5e5e] focus-within:bg-[#949494] dark:focus-within:bg-[#444] focus-within:ring-2 focus-within:ring-[#1DB954]/40 rounded-[10px] px-3 w-full max-w-[586px] h-[44px] transition-all duration-200 shadow-sm">
+                        <button
+                            onClick={submitSearch}
+                            className="flex items-center justify-center w-8 h-8 rounded-[8px] hover:bg-white/10 transition-colors shrink-0"
+                            aria-label="Search"
+                        >
+                            <img
+                                src={theme === "dark" ? searchIconDark : searchIconLight}
+                                alt=""
+                                className="w-[20px] h-[20px] opacity-60"
+                            />
+                        </button>
 
                         <input
-                            className="bg-transparent text-sm outline-none placeholder:text-black dark:placeholder:text-white dark:placeholder:opacity-50 px-3 w-full"
+                            className="bg-transparent text-sm text-white outline-none placeholder:text-white/50 px-2 w-full"
                             type="text"
                             placeholder={t('placeholders.search')}
                             value={searchQuery}
@@ -122,9 +135,20 @@ const Header: React.FC = () => {
                             onKeyDown={handleSearch}
                         />
 
-                        <Link to="/aura/search">
-                            <div className="relative flex items-center justify-center w-11 h-11">
-                                <img src={theme=== "dark" ? filterIconDark : filterIconLight} alt="" className="w-[30px] h-[30px] opacity-70" />
+                        {searchQuery && (
+                            <button
+                                onClick={() => setSearchQuery("")}
+                                className="flex items-center justify-center w-7 h-7 rounded-lg hover:bg-white/10 transition-colors shrink-0"
+                            >
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-black/50 dark:text-white/50">
+                                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                            </button>
+                        )}
+
+                        <Link to="/aura/search" className="shrink-0">
+                            <div className="flex items-center justify-center w-8 h-8 rounded-[8px] hover:bg-white/10 transition-colors ml-1">
+                                <img src={theme === "dark" ? filterIconDark : filterIconLight} alt="" className="w-[22px] h-[22px] opacity-60" />
                             </div>
                         </Link>
                     </div>

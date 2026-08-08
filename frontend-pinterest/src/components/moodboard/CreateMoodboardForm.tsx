@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useCreateMoodboardMutation } from "@/services/moodboardService.ts";
+import { useLoading } from "@/context/LoadingContext";
 import {useGetMyPinsQuery} from "@/services/pinService.ts";
 import { APP_ENV } from "@/constants/env";
 import collectionIcon from "../../../src/assets/icons/collection_icon_green.svg";
@@ -49,18 +50,18 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
     };
 
 
-    const [createMoodboard, { isLoading }] = useCreateMoodboardMutation();
-
+    const [createMoodboard] = useCreateMoodboardMutation();
+    const { withLoading } = useLoading();
 
     const handleSubmit = async () => {
         if (!title.trim()) return;
         try {
-            await createMoodboard({
+            await withLoading(() => createMoodboard({
                 title: title.trim(),
                 description: description.trim() || undefined,
                 isPrivate,
                 pinIds: selectedPinIds,
-            }).unwrap();
+            }).unwrap());
 
             onSuccess();
         } catch (error) {
@@ -70,12 +71,6 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
 
     return (
         <div className="bg-black dark:bg-white rounded-[20px] px-8 py-7 w-full relative">
-            {isLoading && (
-                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-black/80 dark:bg-white/80 rounded-[20px]">
-                    <div className="w-8 h-8 rounded-full border-2 border-white/20 dark:border-black/20 border-t-[#1DB954] animate-spin" />
-                    <p className="text-white dark:text-black text-sm font-medium">{t('moodboard.creating')}</p>
-                </div>
-            )}
             {step === 1 && (
                 <>
                     <h2 className="text-center text-white dark:text-black text-lg font-semibold mb-5">
@@ -226,10 +221,9 @@ const CreateMoodboardForm: React.FC<CreateMoodboardFormProps> = ({ onSuccess }) 
                     <div className="flex justify-center">
                         <button
                             onClick={handleSubmit}
-                            disabled={isLoading}
-                            className="px-8 py-2 rounded-lg bg-[#1DB954] text-black text-sm font-medium hover:bg-[#1aa34a] transition-colors disabled:opacity-50"
+                            className="px-8 py-2 rounded-lg bg-[#1DB954] text-black text-sm font-medium hover:bg-[#1aa34a] transition-colors"
                         >
-                            {isLoading ? t('moodboard.saving') : t('moodboard.save')}
+                            {t('moodboard.save')}
                         </button>
                     </div>
                 </>

@@ -6,6 +6,7 @@ import Button from "@/components/button/Button.tsx";
 import { EyeIcon, EyeOffIcon } from "@/components/ui/Icons.tsx";
 import logo from "@/assets/logo.png";
 import { useTranslation } from "react-i18next";
+import { useLoading } from "@/context/LoadingContext";
 
 
 interface LoginFormProps {
@@ -21,7 +22,8 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
 
     const dispatch = useAppDispatch();
 
-    const [login, { isLoading, error }] = useLoginMutation();
+    const [login, { error }] = useLoginMutation();
+    const { withLoading } = useLoading();
 
     const hasMinLength = password.length >= 8;
     const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(password);
@@ -32,7 +34,7 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const account = await login({ email, password }).unwrap();
+            const account = await withLoading(() => login({ email, password }).unwrap());
             dispatch(setUser(account));
             onSuccess?.();
         } catch (err) {
@@ -103,7 +105,6 @@ const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
                 {error && <p className="text-red-500 text-xs">{t('login.invalidCredentials')}</p>}
 
                 <Button type="submit"
-                        disabled={isLoading}
                         variant={isFormValid ? "primary" : "secondary"}
                         fullWidth
                         radius={5}>

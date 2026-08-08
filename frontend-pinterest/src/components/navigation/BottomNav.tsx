@@ -100,10 +100,10 @@ const BottomNav = () => {
                         onClick={() => handleClick(item)}
                         className="flex flex-col items-center gap-0.5 px-2 py-1"
                     >
-                        <div className="relative">
+                        <div className="relative w-7 h-7 flex items-center justify-center overflow-hidden">
                             <img
                                 src={item.icon}
-                                className="w-6 h-6 object-contain"
+                                className="w-7 h-7 object-contain"
                                 style={{ filter: isActive(item) ? greenFilter : defaultFilter }}
                                 alt={t(item.labelKey)}
                             />

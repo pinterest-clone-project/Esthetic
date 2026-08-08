@@ -6,6 +6,7 @@ import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
 import { APP_ENV } from "@/constants/env";
 import { useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
+import { useLoading } from "@/context/LoadingContext";
 
 const EditAuraPage = () => {
     const { t } = useTranslation('pins');
@@ -13,7 +14,8 @@ const EditAuraPage = () => {
     const { id } = useParams<{ id: string }>();
 
     const { data: pin, isLoading: isPinLoading } = useGetPinByIdQuery(id!);
-    const [updatePin, { isLoading }] = useUpdatePinMutation();
+    const [updatePin] = useUpdatePinMutation();
+    const { withLoading } = useLoading();
     const { data: categories } = useGetAllCategoriesQuery();
     const { data: tags } = useGetAllTagsQuery();
 
@@ -118,7 +120,7 @@ const EditAuraPage = () => {
     const handleSubmit = async () => {
         if (!id) return;
         try {
-            await updatePin({
+            await withLoading(() => updatePin({
                 id,
                 title: title || undefined,
                 description: description || undefined,
@@ -127,7 +129,7 @@ const EditAuraPage = () => {
                 tagIds: tagIds.length > 0 ? tagIds : undefined,
                 imageFile: imageFile.current ?? undefined,
                 mediaUrl: !imageFile.current && mediaUrl.trim() ? mediaUrl.trim() : undefined,
-            }).unwrap();
+            }).unwrap());
             navigate(`/aura/preview/${id}`);
         } catch (e) {
             console.error(e);
@@ -157,11 +159,11 @@ const EditAuraPage = () => {
                 <h1 className="text-black dark:text-white text-sm font-medium tracking-wide">{t('edit.title')}</h1>
                 <button
                     onClick={handleSubmit}
-                    disabled={isLoading}
+                    disabled={false}
                     className="bg-[#4ade80] hover:bg-[#22c55e] disabled:opacity-40 disabled:cursor-not-allowed
                         text-black text-xs font-semibold px-5 py-2 rounded-md transition-colors"
                 >
-                    {isLoading ? t('edit.saving') : t('edit.submit')}
+                    {t('edit.submit')}
                 </button>
             </div>
 
