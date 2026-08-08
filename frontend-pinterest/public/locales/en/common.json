@@ -350,6 +350,8 @@
     "adminPanelDesc": "Manage users and content",
     "blockedUsers": "Blocked Users",
     "blockedUsersDesc": "Manage who you've blocked",
+    "archivedBoards": "Archived boards",
+    "archivedBoardsDesc": "View your archived moodboards",
     "recentlyDeleted": "Recently deleted",
     "recentlyDeletedDesc": "Auras deleted in the last 30 days",
     "logout": "Logout",

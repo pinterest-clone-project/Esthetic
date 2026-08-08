@@ -350,6 +350,8 @@
     "adminPanelDesc": "Керування користувачами та контентом",
     "blockedUsers": "Заблоковані користувачі",
     "blockedUsersDesc": "Керуйте заблокованими користувачами",
+    "archivedBoards": "Архів дошок",
+    "archivedBoardsDesc": "Перегляд архівованих мудбордів",
     "recentlyDeleted": "Нещодавно видалені",
     "recentlyDeletedDesc": "Аури видалені за останні 30 днів",
     "logout": "Вихід",

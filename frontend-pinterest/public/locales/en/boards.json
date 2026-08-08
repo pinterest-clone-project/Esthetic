@@ -94,7 +94,10 @@
     "archived": "Archived",
     "archiveSection": "Archive",
     "toastArchived": "Board archived",
-    "toastUnarchived": "Board unarchived"
+    "toastUnarchived": "Board unarchived",
+    "viewAll": "View all",
+    "archivedDesc": "Archived boards are hidden from your collection",
+    "noArchivedBoards": "No archived boards"
   },
   "sectionPreview": {
     "sectionUpdated": "Section updated"

@@ -24,6 +24,7 @@ const BACK_BUTTON_ROUTES = [
     /^\/news$/,
     /^\/section\/preview\/.+$/,
     /^\/settings\/blocked$/,
+    /^\/moodboard\/archived$/,
 ];
 
 const Layout = () => {

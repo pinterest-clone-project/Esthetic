@@ -213,23 +213,31 @@ const CollectionsPage = () => {
 
                     {!!archivedMoodboards?.items?.length && (
                         <div className="mb-10">
-                            <button
-                                onClick={(e) => { e.stopPropagation(); setArchiveSectionOpen(o => !o); }}
-                                className="flex items-center gap-2 mb-4 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
-                            >
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
-                                </svg>
-                                <span className="text-sm font-medium">
-                                    {tb('moodboard.archiveSection')} ({archivedMoodboards.items.length})
-                                </span>
-                                <svg
-                                    width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                                    className={`transition-transform duration-200 ${archiveSectionOpen ? "rotate-180" : ""}`}
+                            <div className="flex items-center justify-between mb-4">
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); setArchiveSectionOpen(o => !o); }}
+                                    className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
                                 >
-                                    <polyline points="6 9 12 15 18 9"/>
-                                </svg>
-                            </button>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
+                                    </svg>
+                                    <span className="text-sm font-medium">
+                                        {tb('moodboard.archiveSection')} ({archivedMoodboards.items.length})
+                                    </span>
+                                    <svg
+                                        width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                                        className={`transition-transform duration-200 ${archiveSectionOpen ? "rotate-180" : ""}`}
+                                    >
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </button>
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); navigate("/moodboard/archived"); }}
+                                    className="text-xs text-[#1DB954] hover:text-[#1aa34a] transition-colors"
+                                >
+                                    {tb('moodboard.viewAll')} →
+                                </button>
+                            </div>
 
                             {archiveSectionOpen && (
                                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">

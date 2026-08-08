@@ -94,6 +94,9 @@
     "archived": "Архівована",
     "archiveSection": "Архів",
     "toastArchived": "Дошку архівовано",
-    "toastUnarchived": "Дошку розархівовано"
+    "toastUnarchived": "Дошку розархівовано",
+    "viewAll": "Переглянути всі",
+    "archivedDesc": "Архівовані дошки не відображаються в колекції",
+    "noArchivedBoards": "Архівованих дошок немає"
   }
 }

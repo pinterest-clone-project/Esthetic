@@ -312,6 +312,22 @@ const Sidebar = () => {
                 </button>
 
                 <button
+                    onClick={() => { navigate('/moodboard/archived'); closeModal(); }}
+                    className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group"
+                >
+                    <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1] flex items-center justify-center transition-colors shrink-0">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
+                            className="text-black dark:text-white">
+                            <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
+                        </svg>
+                    </div>
+                    <div className="text-left">
+                        <p className="text-black dark:text-white text-sm font-medium">{t('settings.archivedBoards')}</p>
+                        <p className="text-black dark:text-[#A1A1A1] text-xs">{t('settings.archivedBoardsDesc')}</p>
+                    </div>
+                </button>
+
+                <button
                     onClick={() => { navigate('/deleted-auras'); closeModal(); }}
                     className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group"
                 >
