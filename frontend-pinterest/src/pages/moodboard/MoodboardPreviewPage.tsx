@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLoading } from "@/context/LoadingContext";
 import { useGetMoodboardByIdQuery, useDeleteMoodboardMutation, useUpdateMoodboardMutation, useArchiveMoodboardMutation, useUnarchiveMoodboardMutation } from "@/services/moodboardService.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
 import { useParams, useNavigate } from "react-router";
@@ -21,7 +22,8 @@ const MoodboardPreviewPage: React.FC = () => {
     const isOwner = !!me && !!board && me.id === board.ownerId;
 
     const [deleteBoard] = useDeleteMoodboardMutation();
-    const [updateBoard, { isLoading: isSaving }] = useUpdateMoodboardMutation();
+    const [updateBoard] = useUpdateMoodboardMutation();
+    const { withLoading } = useLoading();
     const [archiveBoard] = useArchiveMoodboardMutation();
     const [unarchiveBoard] = useUnarchiveMoodboardMutation();
     const { showToast } = useToast();
@@ -59,12 +61,12 @@ const MoodboardPreviewPage: React.FC = () => {
     const handleSave = async () => {
         if (!board || !editTitle.trim()) return;
         try {
-            await updateBoard({
+            await withLoading(() => updateBoard({
                 id: board.id,
                 title: editTitle.trim(),
                 description: editDescription.trim() || undefined,
                 isPrivate: editIsPrivate,
-            }).unwrap();
+            }).unwrap());
             setEditing(false);
             showToast(t('preview.boardUpdated'), "success");
         } catch {
@@ -179,10 +181,10 @@ const MoodboardPreviewPage: React.FC = () => {
                                 <div className="flex gap-2 mt-1">
                                     <button
                                         onClick={handleSave}
-                                        disabled={isSaving || !editTitle.trim()}
+                                        disabled={!editTitle.trim()}
                                         className="px-4 py-1.5 rounded-lg bg-[#1DB954] hover:bg-[#17a349] disabled:opacity-40 disabled:cursor-not-allowed text-black text-xs font-semibold transition-colors"
                                     >
-                                        {isSaving ? t('preview.saving') : t('preview.save')}
+                                        {t('preview.save')}
                                     </button>
                                     <button
                                         onClick={handleCancelEdit}
