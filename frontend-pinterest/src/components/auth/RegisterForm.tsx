@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useLoading } from "@/context/LoadingContext";
 import ImageCropperModal from "@/components/ui/ImageCropperModal.tsx";
 import { useGoogleLogin } from "@react-oauth/google";
 import {useGoogleLoginMutation, useRegisterMutation} from "@/services/accountService.ts";
@@ -18,18 +19,35 @@ import ComboboxInput from "@/components/ui/ComboboxInput.tsx";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { getData as getCountries } from "country-list";
-import { LANGUAGES } from "@/constants/languages.ts";
-
-const COUNTRY_NAMES = getCountries()
-    .map((c) => c.name)
-    .filter((name) => name !== "Russian Federation (the)");
+import { LANGUAGES, LANGUAGE_CODES } from "@/constants/languages.ts";
 
 interface RegisterFormProps {
     onSuccess?: () => void;
 }
 
 const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
-    const { t } = useTranslation('auth');
+    const { t, i18n } = useTranslation('auth');
+
+    const countryNames = getCountries()
+        .filter((c) => c.code !== "RU")
+        .map((c) => {
+            try {
+                const display = new Intl.DisplayNames([i18n.language], { type: "region" });
+                return display.of(c.code) ?? c.name;
+            } catch {
+                return c.name;
+            }
+        })
+        .sort((a, b) => a.localeCompare(b, i18n.language));
+
+    const languageNames = LANGUAGE_CODES.map((code) => {
+        try {
+            const display = new Intl.DisplayNames([i18n.language], { type: "language" });
+            return display.of(code) ?? LANGUAGES[LANGUAGE_CODES.indexOf(code)];
+        } catch {
+            return LANGUAGES[LANGUAGE_CODES.indexOf(code)];
+        }
+    }).sort((a, b) => a!.localeCompare(b!, i18n.language)) as string[];
     const [showPassword, setShowPassword] = useState(false);
     const [isGoogleLoading, setIsGoogleLoading] = useState(false);
     const [cropperSrc, setCropperSrc] = useState<string | null>(null);
@@ -44,7 +62,8 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
     };
 
     const dispatch = useAppDispatch();
-    const [register, { isLoading }] = useRegisterMutation();
+    const [register] = useRegisterMutation();
+    const { withLoading } = useLoading();
     const [loginByGoogle] = useGoogleLoginMutation();
 
     const hasMinLength = formData.password.length >= 8;
@@ -103,7 +122,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
     const handleSubmit = async () => {
         setRegisterError(null);
         try {
-            const account = await register({
+            const account = await withLoading(() => register({
                 UserName: formData.username,
                 FirstName: formData.firstName,
                 LastName: formData.lastName,
@@ -118,7 +137,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                 CategoryIds: formData.categoryIds,
                 ImageFile: formData.imageFile || undefined,
                 IsPrivate: formData.isPrivate,
-            }).unwrap();
+            }).unwrap());
             dispatch(setUser(account));
             setStep(7);
             setTimeout(() => {
@@ -426,7 +445,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 <ComboboxInput
                                     value={formData.country}
                                     onChange={(val) => updateField("country", val)}
-                                    options={COUNTRY_NAMES}
+                                    options={countryNames}
                                     placeholder={t('placeholders.country')}
                                     className="text-white dark:text-black"
                                 />
@@ -437,7 +456,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                                 <ComboboxInput
                                     value={formData.language}
                                     onChange={(val) => updateField("language", val)}
-                                    options={LANGUAGES}
+                                    options={languageNames}
                                     placeholder={t('placeholders.language')}
                                     className="text-white dark:text-black"
                                 />
@@ -602,18 +621,16 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
                         <Button
                             type="button"
-                            disabled={formData.categoryIds.length < 3 || isLoading}
+                            disabled={formData.categoryIds.length < 3}
                             variant={formData.categoryIds.length >= 3 ? "primary" : "secondary"}
                             fullWidth
                             radius={5}
                             onClick={handleSubmit}
                             className="mt-5"
                         >
-                            {isLoading
-                                ? t('register.creatingAccount')
-                                : formData.categoryIds.length >= 3
-                                    ? t('actions.continue', { ns: 'common' })
-                                    : t('register.selectMore', { count: 3 - formData.categoryIds.length })}
+                            {formData.categoryIds.length >= 3
+                                ? t('actions.continue', { ns: 'common' })
+                                : t('register.selectMore', { count: 3 - formData.categoryIds.length })}
                         </Button>
 
                         <button

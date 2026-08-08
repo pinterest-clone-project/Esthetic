@@ -20,13 +20,10 @@ import ComboboxInput from "@/components/ui/ComboboxInput.tsx";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { getData as getCountries } from "country-list";
-import { LANGUAGES } from "@/constants/languages.ts";
+import { LANGUAGES, LANGUAGE_CODES } from "@/constants/languages.ts";
 import { useTranslation } from "react-i18next";
 import { UploadIcon, CommentIcon } from "@/components/ui/Icons.tsx";
 
-const COUNTRY_NAMES = getCountries()
-    .map((c) => c.name)
-    .filter((name) => name !== "Russian Federation (the)");
 
 type FormValues = {
     firstName?: string;
@@ -46,6 +43,27 @@ type FormValues = {
 
 const ProfilePage = () => {
     const { t, i18n } = useTranslation('common');
+
+    const countryNames = getCountries()
+        .filter((c) => c.code !== "RU")
+        .map((c) => {
+            try {
+                const display = new Intl.DisplayNames([i18n.language], { type: "region" });
+                return display.of(c.code) ?? c.name;
+            } catch {
+                return c.name;
+            }
+        })
+        .sort((a, b) => a.localeCompare(b, i18n.language));
+
+    const languageNames = LANGUAGE_CODES.map((code) => {
+        try {
+            const display = new Intl.DisplayNames([i18n.language], { type: "language" });
+            return display.of(code) ?? LANGUAGES[LANGUAGE_CODES.indexOf(code)];
+        } catch {
+            return LANGUAGES[LANGUAGE_CODES.indexOf(code)];
+        }
+    }).sort((a, b) => a!.localeCompare(b!, i18n.language)) as string[];
 
     const schema = useMemo(() => z.object({
         firstName:   z.string().min(1, t('profile.validation.firstName')).max(50).or(z.literal("")).optional(),
@@ -425,7 +443,7 @@ if (isLoading) return <p>{t('actions.loading', 'Loading...')}</p>;
                                 <ComboboxInput
                                     value={field.value ?? ""}
                                     onChange={field.onChange}
-                                    options={COUNTRY_NAMES}
+                                    options={countryNames}
                                     placeholder={t('profile.placeholders.country')}
                                     className="text-black dark:text-white !border-[#A1A1A1] dark:!border-[#333] !rounded-xl !h-auto !px-4 !py-3 !text-base"
                                 />
@@ -441,7 +459,7 @@ if (isLoading) return <p>{t('actions.loading', 'Loading...')}</p>;
                                 <ComboboxInput
                                     value={field.value ?? ""}
                                     onChange={field.onChange}
-                                    options={LANGUAGES}
+                                    options={languageNames}
                                     placeholder={t('profile.placeholders.language')}
                                     className="text-black dark:text-white !border-[#A1A1A1] dark:!border-[#333] !rounded-xl !h-auto !px-4 !py-3 !text-base"
                                 />
@@ -453,7 +471,7 @@ if (isLoading) return <p>{t('actions.loading', 'Loading...')}</p>;
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">{t('profile.fields.gender')}</label>
-                        <select {...register("gender", { valueAsNumber: true })}
+                        <select {...register("gender", { setValueAs: (v) => v === "" ? undefined : Number(v) })}
                                 className="w-full bg-white dark:bg-[#1a1a1a] border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white text-base focus:outline-none focus:border-[#1DB954] transition">
                             <option value="">{t('profile.gender.placeholder')}</option>
                             <option value={0}>{t('profile.gender.female')}</option>

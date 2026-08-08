@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import { useTranslation } from "react-i18next";
+import { uk, enUS } from "date-fns/locale";
 
 interface BirthDatePickerProps {
     value: string; // YYYY-MM-DD
@@ -16,6 +17,7 @@ const BirthDatePicker = ({ value, onChange, className }: BirthDatePickerProps) =
     const containerRef = useRef<HTMLDivElement>(null);
 
     const selected = value ? new Date(value + "T00:00:00") : undefined;
+    const locale = i18n.language === "uk" ? uk : enUS;
 
     const formatDisplay = (date: Date) =>
         date.toLocaleDateString(i18n.language, { day: "numeric", month: "long", year: "numeric" });
@@ -185,6 +187,7 @@ const BirthDatePicker = ({ value, onChange, className }: BirthDatePickerProps) =
                         endMonth={new Date()}
                         defaultMonth={selected ?? new Date(2000, 0)}
                         disabled={{ after: new Date() }}
+                        locale={locale}
                     />
                 </div>
             )}
