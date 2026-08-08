@@ -377,46 +377,26 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                         </p>
 
                         <div className="space-y-3">
-                            <div className="flex space-x-3">
-                                <Button
-                                    type="button"
-                                    variant="primary"
-                                    fullWidth
-                                    style={{ width: "30%", height: 70 }}
-                                    radius={5}
-                                    onClick={() => {
-                                        updateField("gender", "Male");
-                                        setStep(4);
-                                    }}
-                                >
-                                    {t('register.male')}
-                                </Button>
-
-                                <Button
-                                    type="button"
-                                    variant="primary"
-                                    style={{ width: "30%", height: 70 }}
-                                    radius={5}
-                                    onClick={() => {
-                                        updateField("gender", "Other");
-                                        setStep(4);
-                                    }}
-                                >
-                                    {t('Non-Binary')}
-                                </Button>
-
-                                <Button
-                                    type="button"
-                                    variant="primary"
-                                    style={{ width: "30%", height: 70 }}
-                                    radius={5}
-                                    onClick={() => {
-                                        updateField("gender", "Female");
-                                        setStep(4);
-                                    }}
-                                >
-                                    {t('register.female')}
-                                </Button>
+                            <div className="flex gap-3">
+                                {([
+                                    { value: "Male", label: t('register.male'), icon: "♂" },
+                                    { value: "Other", label: t('register.nonBinary'), icon: "⚧" },
+                                    { value: "Female", label: t('register.female'), icon: "♀" },
+                                ] as const).map(({ value, label, icon }) => (
+                                    <button
+                                        key={value}
+                                        type="button"
+                                        onClick={() => { updateField("gender", value); setStep(4); }}
+                                        className={`flex-1 flex flex-col items-center justify-center gap-2 py-5 rounded-xl border-2 transition-all duration-150 text-sm font-medium
+                                            ${formData.gender === value
+                                                ? "border-[#1DB954] bg-[#1DB954]/15 text-[#1DB954]"
+                                                : "border-white/30 bg-white/20 text-white hover:border-[#1DB954]/60 hover:text-[#1DB954] dark:border-black/20 dark:bg-black/10 dark:text-black/70 dark:hover:border-[#1DB954]/60 dark:hover:text-[#1DB954]"
+                                            }`}
+                                    >
+                                        <span className="text-2xl">{icon}</span>
+                                        {label}
+                                    </button>
+                                ))}
                             </div>
 
                             <button
@@ -638,7 +618,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
                             onClick={() => setStep(5)}
                             className="w-full text-center text-sm text-[#A1A1A1] hover:text-white dark:hover:text-black transition mt-2"
                         >
-                            ← Back
+                            {t('register.back')}
                         </button>
                     </div>
                 )}
