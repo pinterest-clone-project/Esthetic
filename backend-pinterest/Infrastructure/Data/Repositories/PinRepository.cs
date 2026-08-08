@@ -44,7 +44,7 @@ public class PinRepository(AppDbContext db) : BaseRepository<PinEntity>(db), IPi
     public async Task<List<PinEntity>> GetSavedByUserIdAsync(Guid userId, CancellationToken ct = default)
     {
         var savedPinIds = await _db.Set<BoardPinEntity>()
-            .Where(bp => bp.Board.OwnerId == userId && !bp.IsDeleted)
+            .Where(bp => bp.Board.OwnerId == userId && !bp.IsDeleted && !bp.Board.IsDeleted)
             .Select(bp => bp.PinId)
             .Distinct()
             .ToListAsync(ct);

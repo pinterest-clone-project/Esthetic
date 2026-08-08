@@ -37,7 +37,13 @@
     "done": "Done",
     "noMoodboards": "No moodboards yet.",
     "saveToBoard": "Save to moodboard",
-    "removeFromBoard": "Unsave from moodboard"
+    "removeFromBoard": "Unsave from moodboard",
+    "sections": "Sections",
+    "saveToSection": "Save to section",
+    "removeFromSection": "Remove from section",
+    "createSection": "Create section",
+    "sectionName": "Section name",
+    "create": "Create"
   },
   "preview": {
     "notFound": "Board not found.",
@@ -57,7 +63,10 @@
     "deleteDesc": "This action cannot be undone.",
     "privateBoard": "Private board",
     "noPins": "No pins yet",
-    "noPinsDesc": "Save pins to this board to see them here"
+    "noPinsDesc": "Save pins to this board to see them here",
+    "addSection": "Section",
+    "sectionCreated": "Section created",
+    "sections": "Sections"
   },
   "moodboard": {
     "create": "Create moodboard",

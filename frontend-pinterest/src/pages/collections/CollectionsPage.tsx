@@ -34,7 +34,7 @@ const CollectionsPage = () => {
         ? "Moodboard"
         : "Aura";
 
-    const hasAuras = activeTab === "Aura" && myPins && myPins.length > 0;
+    const hasAuras = activeTab === "Aura" && ((myPins && myPins.length > 0) || (savedPins && savedPins.length > 0));
 
     const tabRoutes: Record<CollectionTab, string> = {
         "Aura": "/collections/aura",

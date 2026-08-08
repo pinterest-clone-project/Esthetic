@@ -51,7 +51,6 @@ public class UnsavePinHandler(
         var pinIds = await boardPinRepository.GetQueryable()
     .Where(bp =>
         bp.BoardId == board.Id &&
-        bp.SectionId == null &&
         !bp.IsDeleted)
     .OrderByDescending(bp => bp.CreatedAt)
     .Take(4)

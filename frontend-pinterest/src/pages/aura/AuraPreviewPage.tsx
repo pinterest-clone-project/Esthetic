@@ -71,15 +71,9 @@ const AuraPreviewPage = () => {
         }
     };
 
-    const handleSaveClick = async () => {
+    const handleSaveClick = () => {
         if (!pin) return;
-
-        if (!isSaved) {
-            setSaveModalOpen(true);
-            return;
-        }
-
-        await unsave();
+        setSaveModalOpen(true);
     };
 
 

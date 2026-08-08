@@ -8,7 +8,7 @@ import ReportModal from "@/components/ui/ReportModal.tsx";
 import { useToast } from "@/components/ui/Toast/UseToast.ts";
 import { useTranslation } from "react-i18next";
 import { ShareIcon, EditIcon, TrashIcon, ReportIcon } from "@/components/ui/Icons.tsx";
-import { useGetBoardSectionsQuery } from "@/services/boardSectionService";
+import { useGetBoardSectionsQuery, useCreateBoardSectionMutation } from "@/services/boardSectionService";
 import BoardSectionCard from "@/components/ui/BoardSectionCard.tsx";
 import { motion } from "framer-motion";
 
@@ -27,6 +27,9 @@ const MoodboardPreviewPage: React.FC = () => {
     const [reportModalOpen, setReportModalOpen] = useState(false);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const [editing, setEditing] = useState(false);
+    const [createSectionOpen, setCreateSectionOpen] = useState(false);
+    const [newSectionTitle, setNewSectionTitle] = useState("");
+    const [createSection, { isLoading: isCreatingSection }] = useCreateBoardSectionMutation();
     const [editTitle, setEditTitle] = useState("");
     const [editDescription, setEditDescription] = useState("");
     const [editIsPrivate, setEditIsPrivate] = useState(false);
@@ -73,6 +76,18 @@ const MoodboardPreviewPage: React.FC = () => {
             setEditIsPrivate(board.isPrivate ?? false);
         }
         setEditing(false);
+    };
+
+    const handleCreateSection = async () => {
+        if (!board || !newSectionTitle.trim()) return;
+        try {
+            await createSection({ boardId: board.id, title: newSectionTitle.trim() }).unwrap();
+            setNewSectionTitle("");
+            setCreateSectionOpen(false);
+            showToast(t('preview.sectionCreated'), "success");
+        } catch {
+            showToast(t('preview.saveFailed'), "error");
+        }
     };
 
     if (isLoading) return (
@@ -183,7 +198,7 @@ const MoodboardPreviewPage: React.FC = () => {
                                         navigator.clipboard.writeText(`${window.location.origin}/moodboard/preview/${board.id}`);
                                         showToast(t('preview.linkCopied'), "success");
                                     }}
-                                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/5 dark:hover:bg-white/10 hover:bg-black/5 border dark:border-white/10 dark:hover:border-white/20 border-black/10 hover:border-black/20 dark:text-gray-300 text-gray-700 dark:hover:text-white hover:text-black text-xs font-medium transition-all duration-150"
+                                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 hover:border-black/20 dark:hover:border-white/20 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white text-xs font-medium transition-all duration-150"
                                 >
                                     <ShareIcon />
                                     {t('preview.share')}
@@ -193,10 +208,19 @@ const MoodboardPreviewPage: React.FC = () => {
                                     <>
                                         <button
                                             onClick={() => setEditing(true)}
-                                            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 dark:text-gray-300 text-gray-700 dark:hover:text-white hover:text-black text-xs font-medium transition-all duration-150"
+                                            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 hover:border-black/20 dark:hover:border-white/20 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white text-xs font-medium transition-all duration-150"
                                         >
                                             <EditIcon />
                                             {t('preview.edit')}
+                                        </button>
+                                        <button
+                                            onClick={() => setCreateSectionOpen(true)}
+                                            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 hover:border-black/20 dark:hover:border-white/20 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white text-xs font-medium transition-all duration-150"
+                                        >
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                                            </svg>
+                                            {t('preview.addSection')}
                                         </button>
                                         <button
                                             onClick={() => setConfirmDeleteOpen(true)}
@@ -229,8 +253,8 @@ const MoodboardPreviewPage: React.FC = () => {
                     <div className="flex items-center gap-4 mb-6">
                         <div className="flex-1 h-px bg-black/5 dark:bg-white/5" />
                         <span className="text-gray-600 text-xs tracking-widest uppercase">
-                    Sections
-                </span>
+                            {t('preview.sections')}
+                        </span>
                         <div className="flex-1 h-px bg-black/5 dark:bg-white/5" />
                     </div>
 
@@ -280,6 +304,45 @@ const MoodboardPreviewPage: React.FC = () => {
                     </div>
                 )}
             </div>
+
+            {createSectionOpen && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+                    onClick={() => setCreateSectionOpen(false)}
+                >
+                    <div
+                        className="bg-white dark:bg-[#1a1a1a] border border-black/10 dark:border-white/10 rounded-2xl p-6 w-80 shadow-2xl flex flex-col gap-4"
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <h3 className="text-black dark:text-white text-sm font-semibold">
+                            {t('preview.addSection')}
+                        </h3>
+                        <input
+                            autoFocus
+                            value={newSectionTitle}
+                            onChange={e => setNewSectionTitle(e.target.value)}
+                            onKeyDown={e => e.key === 'Enter' && handleCreateSection()}
+                            placeholder={t('saveModal.sectionName')}
+                            className="w-full rounded-xl px-3 py-2.5 text-sm bg-black/5 dark:bg-white/5 text-black dark:text-white placeholder-gray-400 outline-none border border-transparent focus:border-[#1DB954]/40 transition-colors"
+                        />
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => { setCreateSectionOpen(false); setNewSectionTitle(""); }}
+                                className="flex-1 py-2 rounded-xl text-sm border border-black/10 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
+                            >
+                                {t('preview.cancel')}
+                            </button>
+                            <button
+                                onClick={handleCreateSection}
+                                disabled={!newSectionTitle.trim() || isCreatingSection}
+                                className="flex-1 py-2 rounded-xl text-sm font-semibold bg-[#1DB954] hover:bg-[#17a349] text-black disabled:opacity-40 transition-colors"
+                            >
+                                {t('saveModal.create')}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {reportModalOpen && (
                 <ReportModal

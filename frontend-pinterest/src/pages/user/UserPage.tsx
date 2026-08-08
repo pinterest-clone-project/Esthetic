@@ -35,6 +35,7 @@ const UserPage = () => {
     const { data: isBlocked } = useDefaultIsBlockedQuery(id!, { skip: isMe || !id });
     const [showBlockConfirm, setShowBlockConfirm] = useState(false);
     const [showUnblockConfirm, setShowUnblockConfirm] = useState(false);
+    const [showMenu, setShowMenu] = useState(false);
     const [activeTab, setActiveTab] = useState<"auras" | "moodboards">("auras");
     const [followModal, setFollowModal] = useState<"followers" | "following" | null>(null);
 
@@ -154,16 +155,30 @@ const UserPage = () => {
                                 {stats?.isFollowedByMe ? t('user.following_btn') : stats?.isRequestedByMe ? t('user.requested') : t('user.follow')}
                             </button>
                         )}
-                        <button
-                            onClick={() => isBlocked ? setShowUnblockConfirm(true) : setShowBlockConfirm(true)}
-                            className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-colors
-                                ${isBlocked
-                                    ? "border-[#4ade80]/40 text-[#4ade80] hover:bg-[#4ade80]/10 hover:border-[#4ade80]"
-                                    : "border-black/10 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:border-red-400/50 hover:text-red-400"
-                                }`}
-                        >
-                            {isBlocked ? t('actions.unblock') : t('actions.block')}
-                        </button>
+                        <div className="relative">
+                            <button
+                                onClick={() => setShowMenu(v => !v)}
+                                className="w-9 h-9 flex items-center justify-center rounded-xl bg-black/5 dark:bg-white/10 text-gray-600 dark:text-white hover:bg-black/10 dark:hover:bg-white/20 transition-colors"
+                            >
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
+                                </svg>
+                            </button>
+                            {showMenu && (
+                                <>
+                                    <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
+                                    <div className="absolute right-0 top-11 z-50 bg-white dark:bg-[#1a1a1a] border border-black/10 dark:border-white/10 rounded-xl shadow-xl overflow-hidden w-44">
+                                        <button
+                                            onClick={() => { setShowMenu(false); isBlocked ? setShowUnblockConfirm(true) : setShowBlockConfirm(true); }}
+                                            className={`w-full px-4 py-3 text-left text-sm transition-colors hover:bg-black/5 dark:hover:bg-white/5
+                                                ${isBlocked ? "text-[#4ade80]" : "text-red-400"}`}
+                                        >
+                                            {isBlocked ? t('actions.unblock') : t('actions.block')}
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                        </div>
                     </div>
                 )}
 

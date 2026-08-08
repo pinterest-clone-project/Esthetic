@@ -187,27 +187,19 @@ const PinCard = ({ pin }: { pin: IPinSummaryResponse}) => {
                             </AnimatePresence>
                         </div>
                     )}
-                        {isSaved ? (
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        unsave();
-                                    }}
-                                    className="bg-red-500 hover:bg-red-600 text-white text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors"
-                                >
-                                    {t('actions.unsave')}
-                                </button>
-                            ) : (
-                                <button
+                        <button
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         setSaveModalOpen(true);
                                     }}
-                                    className="bg-[#4ade80] hover:bg-[#22c55e] text-black text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors"
+                                    className={`text-[11px] font-semibold px-3 py-1.5 rounded-full transition-colors ${
+                                        isSaved
+                                            ? "bg-black/50 hover:bg-black/70 text-white"
+                                            : "bg-[#4ade80] hover:bg-[#22c55e] text-black"
+                                    }`}
                                 >
-                                    {t('actions.save')}
+                                    {isSaved ? t('actions.saved') : t('actions.save')}
                                 </button>
-                            )}
                 </div>
 
                 <div
