@@ -9,6 +9,7 @@ export interface Moodboard {
     title: string;
     description?: string;
     isPrivate: boolean;
+    isArchived: boolean;
     coverImageUrl: string | null;
 }
 
@@ -68,6 +69,10 @@ export const moodboardService = api.injectEndpoints({
             query: () => "Boards/my",
             providesTags: ["MyMoodboards"],
         }),
+        getMyArchivedMoodboards: builder.query<MoodboardPage, void>({
+            query: () => "Boards/my/archived",
+            providesTags: ["ArchivedMoodboards"],
+        }),
         searchMoodboards: builder.query<IPagedResult<MoodboardAdmin>, ISearchBoardsParams>({
             query: (params) => ({ url: "Boards/search", method: "GET", params }),
             providesTags: ["AllMoodboards"],
@@ -83,14 +88,8 @@ export const moodboardService = api.injectEndpoints({
         getMoodboardById: builder.query<MoodboardDetail, string>({
             query: (id) => `Boards/getById/${id}`,
             providesTags: (_result, _error, id) => [
-                {
-                    type: "MyMoodboards",
-                    id: id
-                },
-                {
-                    type: "AllMoodboards",
-                    id: id
-                }
+                { type: "MyMoodboards", id },
+                { type: "AllMoodboards", id }
             ],
         }),
         updateMoodboard: builder.mutation<MoodboardAdmin, UpdateMoodboardRequest>({
@@ -109,17 +108,34 @@ export const moodboardService = api.injectEndpoints({
                 url: `Boards/delete/${id}`,
                 method: "DELETE",
             }),
-            invalidatesTags: ["MyMoodboards", "AllMoodboards"],
+            invalidatesTags: ["MyMoodboards", "AllMoodboards", "ArchivedMoodboards"],
+        }),
+        archiveMoodboard: builder.mutation<void, string>({
+            query: (id) => ({
+                url: `Boards/archive/${id}`,
+                method: "POST",
+            }),
+            invalidatesTags: ["MyMoodboards", "ArchivedMoodboards"],
+        }),
+        unarchiveMoodboard: builder.mutation<void, string>({
+            query: (id) => ({
+                url: `Boards/unarchive/${id}`,
+                method: "POST",
+            }),
+            invalidatesTags: ["MyMoodboards", "ArchivedMoodboards"],
         }),
     }),
 });
 
 export const {
     useGetMyMoodboardsQuery,
+    useGetMyArchivedMoodboardsQuery,
     useCreateMoodboardMutation,
     useGetMoodboardByIdQuery,
     useSearchMoodboardsQuery,
     useUpdateMoodboardMutation,
     useGetPublicBoardsByUserQuery,
     useDeleteMoodboardMutation,
+    useArchiveMoodboardMutation,
+    useUnarchiveMoodboardMutation,
 } = moodboardService;

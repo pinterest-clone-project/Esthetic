@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useGetMoodboardByIdQuery, useDeleteMoodboardMutation, useUpdateMoodboardMutation } from "@/services/moodboardService.ts";
+import { useGetMoodboardByIdQuery, useDeleteMoodboardMutation, useUpdateMoodboardMutation, useArchiveMoodboardMutation, useUnarchiveMoodboardMutation } from "@/services/moodboardService.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
 import { useParams, useNavigate } from "react-router";
 import { APP_ENV } from "@/constants/env";
@@ -22,6 +22,8 @@ const MoodboardPreviewPage: React.FC = () => {
 
     const [deleteBoard] = useDeleteMoodboardMutation();
     const [updateBoard, { isLoading: isSaving }] = useUpdateMoodboardMutation();
+    const [archiveBoard] = useArchiveMoodboardMutation();
+    const [unarchiveBoard] = useUnarchiveMoodboardMutation();
     const { showToast } = useToast();
 
     const [reportModalOpen, setReportModalOpen] = useState(false);
@@ -64,6 +66,26 @@ const MoodboardPreviewPage: React.FC = () => {
             }).unwrap();
             setEditing(false);
             showToast(t('preview.boardUpdated'), "success");
+        } catch {
+            showToast(t('preview.saveFailed'), "error");
+        }
+    };
+
+    const handleArchive = async () => {
+        if (!board) return;
+        try {
+            await archiveBoard(board.id).unwrap();
+            showToast(t('moodboard.toastArchived'), "success");
+        } catch {
+            showToast(t('preview.saveFailed'), "error");
+        }
+    };
+
+    const handleUnarchive = async () => {
+        if (!board) return;
+        try {
+            await unarchiveBoard(board.id).unwrap();
+            showToast(t('moodboard.toastUnarchived'), "success");
         } catch {
             showToast(t('preview.saveFailed'), "error");
         }
@@ -171,7 +193,17 @@ const MoodboardPreviewPage: React.FC = () => {
                             </div>
                         ) : (
                             <>
-                                <h1 className="text-black dark:text-white text-2xl sm:text-3xl font-semibold">{board.title}</h1>
+                                <div className="flex items-center gap-2 flex-wrap">
+                                    <h1 className="text-black dark:text-white text-2xl sm:text-3xl font-semibold">{board.title}</h1>
+                                    {board.isArchived && (
+                                        <span className="inline-flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 px-2.5 py-1 rounded-full">
+                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/>
+                                            </svg>
+                                            {t('moodboard.archived')}
+                                        </span>
+                                    )}
+                                </div>
                                 {board.description && (
                                     <p className="text-gray-500 dark:text-gray-300 text-sm mt-1">{board.description}</p>
                                 )}
@@ -221,6 +253,15 @@ const MoodboardPreviewPage: React.FC = () => {
                                                 <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                                             </svg>
                                             {t('preview.addSection')}
+                                        </button>
+                                        <button
+                                            onClick={board.isArchived ? handleUnarchive : handleArchive}
+                                            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 hover:border-black/20 dark:hover:border-white/20 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white text-xs font-medium transition-all duration-150"
+                                        >
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
+                                            </svg>
+                                            {board.isArchived ? t('moodboard.unarchive') : t('moodboard.archive')}
                                         </button>
                                         <button
                                             onClick={() => setConfirmDeleteOpen(true)}

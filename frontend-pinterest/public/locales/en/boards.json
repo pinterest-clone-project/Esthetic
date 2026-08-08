@@ -88,7 +88,13 @@
     "showLess": "Show less",
     "nothingToShow": "Nothing to show here",
     "saving": "Saving...",
-    "save": "Save"
+    "save": "Save",
+    "archive": "Archive",
+    "unarchive": "Unarchive",
+    "archived": "Archived",
+    "archiveSection": "Archive",
+    "toastArchived": "Board archived",
+    "toastUnarchived": "Board unarchived"
   },
   "sectionPreview": {
     "sectionUpdated": "Section updated"

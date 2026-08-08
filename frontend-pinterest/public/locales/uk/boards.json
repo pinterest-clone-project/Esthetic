@@ -88,6 +88,12 @@
     "showLess": "Показати менше",
     "nothingToShow": "Нічого не знайдено",
     "saving": "Збереження...",
-    "save": "Зберегти"
+    "save": "Зберегти",
+    "archive": "Архівувати",
+    "unarchive": "Розархівувати",
+    "archived": "Архівована",
+    "archiveSection": "Архів",
+    "toastArchived": "Дошку архівовано",
+    "toastUnarchived": "Дошку розархівовано"
   }
 }

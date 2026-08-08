@@ -3,11 +3,16 @@ import { useTranslation } from "react-i18next";
 import im1 from "@/assets/defaults/def-9.jpg";
 import im2 from "@/assets/defaults/def-10.jpg";
 import im3 from "@/assets/defaults/def-11.jpg";
-import {useGetAllPinsQuery, useGetMyPinsQuery, useGetSavedPinsQuery} from "@/services/pinService.ts";
-import {useLocation, useNavigate} from "react-router";
-import {useGetMyMoodboardsQuery} from "@/services/moodboardService.ts";
+import { useGetAllPinsQuery, useGetMyPinsQuery, useGetSavedPinsQuery } from "@/services/pinService.ts";
+import { useLocation, useNavigate } from "react-router";
+import {
+    useGetMyMoodboardsQuery,
+    useGetMyArchivedMoodboardsQuery,
+    useArchiveMoodboardMutation,
+    useUnarchiveMoodboardMutation,
+} from "@/services/moodboardService.ts";
 import CreateMoodboardForm from "@/components/moodboard/CreateMoodboardForm.tsx";
-import {APP_ENV} from "@/constants/env";
+import { APP_ENV } from "@/constants/env";
 import PinCard from "@/components/ui/PinCard.tsx";
 import Modal from "@/components/ui/Modal.tsx";
 
@@ -15,6 +20,7 @@ type CollectionTab = "Aura" | "Moodboard";
 
 const CollectionsPage = () => {
     const { t } = useTranslation('common');
+    const { t: tb } = useTranslation('boards');
     const navigate = useNavigate();
 
     const tabs: CollectionTab[] = ["Aura", "Moodboard"];
@@ -22,12 +28,18 @@ const CollectionsPage = () => {
         "Aura": t('collections.tabAura'),
         "Moodboard": t('collections.tabMoodboard')
     };
+
     const [showCreateMoodboard, setShowCreateMoodboard] = useState(false);
+    const [archiveSectionOpen, setArchiveSectionOpen] = useState(false);
+
     const { data: myPins } = useGetMyPinsQuery();
     const { data: Pins } = useGetAllPinsQuery();
     const { data: moodboards } = useGetMyMoodboardsQuery();
     const { data: savedPins } = useGetSavedPinsQuery();
+    const { data: archivedMoodboards } = useGetMyArchivedMoodboardsQuery();
 
+    const [archiveMoodboard] = useArchiveMoodboardMutation();
+    const [unarchiveMoodboard] = useUnarchiveMoodboardMutation();
 
     const location = useLocation();
     const activeTab: CollectionTab = location.pathname.includes("moodboard")
@@ -40,6 +52,49 @@ const CollectionsPage = () => {
         "Aura": "/collections/aura",
         "Moodboard": "/collections/moodboard",
     };
+
+    const handleArchive = async (id: string) => {
+        await archiveMoodboard(id);
+    };
+
+    const handleUnarchive = async (id: string) => {
+        await unarchiveMoodboard(id);
+    };
+
+    const MoodboardCard = ({ mb, isArchived = false }: { mb: { id: string; title: string; coverImageUrl: string | null }; isArchived?: boolean }) => (
+        <div className={`relative group ${isArchived ? "opacity-60" : ""}`}>
+            <button
+                onClick={() => navigate(`/moodboard/preview/${mb.id}`)}
+                className="text-left w-full"
+            >
+                <div className="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-[#D1D1D1] dark:bg-[#2a2a2a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-2xl">
+                    {mb.coverImageUrl ? (
+                        <img
+                            src={`${APP_ENV.IMAGES_1200_URL}${mb.coverImageUrl}`}
+                            alt={mb.title}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                        />
+                    ) : (
+                        <div className="w-full h-full" />
+                    )}
+                </div>
+                <p className="text-black dark:text-white text-sm mt-2 truncate group-hover:text-[#1DB954] transition-colors duration-200">
+                    {mb.title}
+                </p>
+            </button>
+
+            <button
+                onClick={(e) => { e.stopPropagation(); if (isArchived) handleUnarchive(mb.id); else handleArchive(mb.id); }}
+                title={isArchived ? tb('moodboard.unarchive') : tb('moodboard.archive')}
+                className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 rounded-lg bg-black/40 text-white text-[10px] font-medium opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/60"
+            >
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
+                </svg>
+                {isArchived ? tb('moodboard.unarchive') : tb('moodboard.archive')}
+            </button>
+        </div>
+    );
 
     return (
         <div className="min-h-screen mt-4 sm:mt-11 text-black dark:text-white px-4 sm:px-8 py-6 sm:py-10">
@@ -58,23 +113,22 @@ const CollectionsPage = () => {
                 </div>
                 <div className="flex items-center justify-center w-full">
                     <div className="flex items-center gap-4">
-                    {tabs.map((tab) => (
-                        <button
-                            key={tab}
-                            onClick={() => navigate(tabRoutes[tab])}
-                            className={`text-sm transition-colors duration-150 ${
-                                activeTab === tab
-                                    ? "text-btn-primary border-b border-btn-primary pb-0.5"
-                                    : "text-black dark:text-white/50 hover:text-[#A2A2A2] dark:hover:text-white/80"
-                            }`}
-                        >
-                            {tabLabels[tab]}
-                        </button>
-                    ))}
+                        {tabs.map((tab) => (
+                            <button
+                                key={tab}
+                                onClick={() => navigate(tabRoutes[tab])}
+                                className={`text-sm transition-colors duration-150 ${
+                                    activeTab === tab
+                                        ? "text-btn-primary border-b border-btn-primary pb-0.5"
+                                        : "text-black dark:text-white/50 hover:text-[#A2A2A2] dark:hover:text-white/80"
+                                }`}
+                            >
+                                {tabLabels[tab]}
+                            </button>
+                        ))}
                     </div>
                 </div>
             </div>
-
 
             {activeTab === "Aura" &&
                 (hasAuras ? (
@@ -86,14 +140,13 @@ const CollectionsPage = () => {
                                     <PinCard pin={pin} />
                                 </div>
                             ))}
-
                             <button
                                 onClick={() => navigate("/aura/create")}
                                 className="relative w-full aspect-[3/4] rounded-xl overflow-hidden hover:opacity-90 transition-opacity break-inside-avoid mb-3 bg-[#2a2a2a]"
                             >
-                            <span className="absolute inset-0 flex items-center justify-center text-white text-lg font-medium">
-                                {t('collections.create')}
-                            </span>
+                                <span className="absolute inset-0 flex items-center justify-center text-white text-lg font-medium">
+                                    {t('collections.create')}
+                                </span>
                             </button>
                         </div>
 
@@ -139,26 +192,7 @@ const CollectionsPage = () => {
                     <h2 className="text-lg mb-3">{t('collections.yourMoodboard')}</h2>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-10">
                         {moodboards?.items?.map((mb) => (
-                            <button
-                                key={mb.id}
-                                onClick={() => navigate(`/moodboard/preview/${mb.id}`)}
-                                className="text-left group"
-                            >
-                                <div className="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-[#D1D1D1] dark:bg-[#2a2a2a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-2xl">
-                                    {mb.coverImageUrl ? (
-                                        <img
-                                            src={`${APP_ENV.IMAGES_1200_URL}${mb.coverImageUrl}`}
-                                            alt={mb.title}
-                                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full" />
-                                    )}
-                                </div>
-                                <p className="text-black dark:text-white text-sm mt-2 truncate group-hover:text-[#1DB954] transition-colors duration-200">
-                                    {mb.title}
-                                </p>
-                            </button>
+                            <MoodboardCard key={mb.id} mb={mb} />
                         ))}
 
                         <button
@@ -176,6 +210,36 @@ const CollectionsPage = () => {
                             </span>
                         </button>
                     </div>
+
+                    {!!archivedMoodboards?.items?.length && (
+                        <div className="mb-10">
+                            <button
+                                onClick={(e) => { e.stopPropagation(); setArchiveSectionOpen(o => !o); }}
+                                className="flex items-center gap-2 mb-4 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
+                            >
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
+                                </svg>
+                                <span className="text-sm font-medium">
+                                    {tb('moodboard.archiveSection')} ({archivedMoodboards.items.length})
+                                </span>
+                                <svg
+                                    width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                                    className={`transition-transform duration-200 ${archiveSectionOpen ? "rotate-180" : ""}`}
+                                >
+                                    <polyline points="6 9 12 15 18 9"/>
+                                </svg>
+                            </button>
+
+                            {archiveSectionOpen && (
+                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                                    {archivedMoodboards.items.map((mb) => (
+                                        <MoodboardCard key={mb.id} mb={mb} isArchived />
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
 
                     <h2 className="text-lg">{t('collections.randomIdeas')}</h2>
                     <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-6 gap-3">
@@ -197,8 +261,6 @@ const CollectionsPage = () => {
             >
                 <CreateMoodboardForm onSuccess={() => setShowCreateMoodboard(false)} />
             </Modal>
-
-
         </div>
     );
 };
