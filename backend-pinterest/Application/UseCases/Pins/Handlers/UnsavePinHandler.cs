@@ -38,7 +38,15 @@ public class UnsavePinHandler(
             );
         }
 
-        await boardPinRepository.DeleteAsync(boardPin.Id, cancellationToken);
+        if (request.SectionId != null)
+        {
+            boardPin.SectionId = null;
+            await boardPinRepository.UpdateAsync(boardPin, cancellationToken);
+        }
+        else
+        {
+            await boardPinRepository.DeleteAsync(boardPin.Id, cancellationToken);
+        }
 
         await RegenerateCollageAsync(board, cancellationToken);
 

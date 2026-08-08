@@ -36,6 +36,7 @@
     "title": "Choose Moodboard",
     "done": "Done",
     "noMoodboards": "No moodboards yet.",
+    "sectionHint": "Tap a moodboard to save to a specific section",
     "saveToBoard": "Save to moodboard",
     "removeFromBoard": "Unsave from moodboard",
     "sections": "Sections",

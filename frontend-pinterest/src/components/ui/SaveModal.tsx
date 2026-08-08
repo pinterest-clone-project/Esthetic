@@ -18,6 +18,7 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
     const { t: tc } = useTranslation('common');
     const { data: moodboards, isLoading: boardsLoading } = useGetMyMoodboardsQuery();
     const [savePin] = useSavePinMutation();
+    const [loadingTarget, setLoadingTarget] = useState<string | null>(null); // 'board' | sectionId
     const { showToast } = useToast();
 
     const [selectedBoardId, setSelectedBoardId] = useState<string | null>(null);
@@ -53,6 +54,8 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
     const handleSave = async (sectionId?: string) => {
         if (!selectedBoardId) return;
 
+        const target = sectionId ?? 'board';
+        setLoadingTarget(target);
         try {
             await savePin({
                 pinId,
@@ -74,18 +77,22 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                 tc('toast.somethingWentWrong'),
                 "error"
             );
+        } finally {
+            setLoadingTarget(null);
         }
     };
 
     const [unsavePin] = useUnsavePinMutation();
 
-    const handleUnsave = async () => {
+    const handleUnsave = async (sectionId?: string) => {
         if (!selectedBoardId) return;
 
+        const target = sectionId ?? 'board';
+        setLoadingTarget(target);
         try {
-            const locations = savedLocations.filter(
-                x => x.boardId === selectedBoardId
-            );
+            const locations = sectionId
+                ? savedLocations.filter(x => x.boardId === selectedBoardId && x.sectionId === sectionId)
+                : savedLocations.filter(x => x.boardId === selectedBoardId);
 
             await Promise.all(
                 locations.map(location =>
@@ -109,6 +116,8 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                 tc('toast.somethingWentWrong'),
                 "error"
             );
+        } finally {
+            setLoadingTarget(null);
         }
     };
 
@@ -232,18 +241,26 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                         </div>
                     )}
 
+                    {!selectedBoardId && !!moodboards?.items?.length && (
+                        <p className="text-[11px] text-gray-500 text-center">
+                            {t('saveModal.sectionHint')}
+                        </p>
+                    )}
+
                     {selectedBoardId && (
                         <div className="flex flex-col gap-2">
 
                             {/* Save / Remove from board */}
                             <button
                                 onClick={() => isSaved ? handleUnsave() : handleSave()}
-                                className={`w-full py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                                disabled={loadingTarget !== null}
+                                className={`w-full py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-2 ${
                                     isSaved
                                         ? "bg-white/10 hover:bg-white/20 dark:bg-black/10 dark:hover:bg-black/20 text-red-400"
                                         : "bg-[#1DB954] hover:bg-[#1aa34a] text-white dark:text-black"
-                                }`}
+                                } disabled:opacity-60`}
                             >
+                                {loadingTarget === 'board' && <div className="w-3.5 h-3.5 rounded-full border-2 border-current border-t-transparent animate-spin" />}
                                 {isSaved ? t('saveModal.removeFromBoard') : t('saveModal.saveToBoard')}
                             </button>
 
@@ -267,15 +284,18 @@ const SaveModal = ({ pinId, onClose }: SaveModalProps) => {
                                 return (
                                     <button
                                         key={section.id}
-                                        onClick={() => sectionSaved ? handleUnsave() : handleSave(section.id)}
-                                        className={`flex items-center justify-between text-left px-4 py-2.5 rounded-xl text-sm transition-colors ${
+                                        onClick={() => sectionSaved ? handleUnsave(section.id) : handleSave(section.id)}
+                                        disabled={loadingTarget !== null}
+                                        className={`flex items-center justify-between text-left px-4 py-2.5 rounded-xl text-sm transition-colors disabled:opacity-60 ${
                                             sectionSaved
                                                 ? "bg-white/10 dark:bg-black/10 text-red-400 hover:bg-white/20 dark:hover:bg-black/20"
                                                 : "bg-white/10 dark:bg-black/10 text-white dark:text-black hover:bg-white/20 dark:hover:bg-black/20"
                                         }`}
                                     >
                                         <span>{section.title}</span>
-                                        {sectionSaved && (
+                                        {loadingTarget === section.id ? (
+                                            <div className="w-3 h-3 rounded-full border-2 border-current border-t-transparent animate-spin" />
+                                        ) : sectionSaved && (
                                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                                                 <polyline points="20 6 9 17 4 12"/>
                                             </svg>

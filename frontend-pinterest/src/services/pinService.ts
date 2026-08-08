@@ -72,10 +72,7 @@ export const pinService = api.injectEndpoints({
                     type: "SavedLocations",
                     id: arg.pinId
                 },
-                {
-                    type: "BoardSections",
-                    id: arg.sectionId
-                },
+                "BoardSections",
                 {
                     type: "MyMoodboards",
                     id: arg.boardId
@@ -101,10 +98,7 @@ export const pinService = api.injectEndpoints({
                     type: "SavedLocations",
                     id: arg.pinId
                 },
-                {
-                    type: "BoardSections",
-                    id: arg.sectionId
-                },
+                "BoardSections",
                 {
                     type: "MyMoodboards",
                     id: arg.boardId
