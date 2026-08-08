@@ -18,7 +18,11 @@ public class GetUserBoardsHandler(
         var query = boardRepository.GetQueryable()
             .Where(b => b.OwnerId == request.OwnerId);
 
-        if (!request.IncludeArchived)
+        if (request.ArchivedOnly)
+        {
+            query = query.Where(b => b.IsArchived);
+        }
+        else if (!request.IncludeArchived)
         {
             query = query.Where(b => !b.IsArchived);
         }

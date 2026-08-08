@@ -90,5 +90,32 @@ public class BoardsController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(commandWithIds);
         return Ok(result);
     }
+
+    [HttpPost("archive/{id:guid}")]
+    public async Task<IActionResult> Archive(Guid id)
+    {
+        await mediator.Send(new ArchiveBoardCommand(id, CurrentUserId));
+        return NoContent();
+    }
+
+    [HttpPost("unarchive/{id:guid}")]
+    public async Task<IActionResult> Unarchive(Guid id)
+    {
+        await mediator.Send(new UnarchiveBoardCommand(id, CurrentUserId));
+        return NoContent();
+    }
+
+    [HttpGet("my/archived")]
+    public async Task<IActionResult> GetMyArchivedBoards([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    {
+        var result = await mediator.Send(new GetUserBoardsQuery
+        {
+            OwnerId = CurrentUserId,
+            ArchivedOnly = true,
+            Page = page,
+            PageSize = pageSize
+        });
+        return Ok(result);
+    }
 }
 

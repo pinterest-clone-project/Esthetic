@@ -10,6 +10,7 @@ public record GetUserBoardsQuery : IRequest<PagedResult<BoardListItemDTO>>
     public int Page { get; init; } = 1;
     public int PageSize { get; init; } = 20;
     public bool IncludeArchived { get; init; } = false;
+    public bool ArchivedOnly { get; init; } = false;
 
     [BindNever]
     public Guid OwnerId { get; init; }
