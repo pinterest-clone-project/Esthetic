@@ -103,7 +103,7 @@ const BottomNav = () => {
                         <div className="relative">
                             <img
                                 src={item.icon}
-                                className="w-6 h-6"
+                                className="w-6 h-6 object-contain"
                                 style={{ filter: isActive(item) ? greenFilter : defaultFilter }}
                                 alt={t(item.labelKey)}
                             />
