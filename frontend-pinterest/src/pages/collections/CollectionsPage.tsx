@@ -31,6 +31,7 @@ const CollectionsPage = () => {
 
     const [showCreateMoodboard, setShowCreateMoodboard] = useState(false);
     const [archiveSectionOpen, setArchiveSectionOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
 
     const { data: myPins } = useGetMyPinsQuery();
     const { data: Pins } = useGetAllPinsQuery();
@@ -189,9 +190,27 @@ const CollectionsPage = () => {
 
             {activeTab === "Moodboard" && (
                 <div className="mt-8">
+                    <div className="relative mb-5">
+                        <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder={tb('placeholders.search')}
+                            className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-[#f5f5f5] dark:bg-[#1a1a1a] text-black dark:text-white text-sm placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#1DB954]/40"
+                        />
+                        {searchQuery && (
+                            <button onClick={() => setSearchQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black dark:hover:text-white">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            </button>
+                        )}
+                    </div>
+
                     <h2 className="text-lg mb-3">{t('collections.yourMoodboard')}</h2>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-10">
-                        {moodboards?.items?.map((mb) => (
+                        {moodboards?.items?.filter(mb => mb.title.toLowerCase().includes(searchQuery.toLowerCase())).map((mb) => (
                             <MoodboardCard key={mb.id} mb={mb} />
                         ))}
 
