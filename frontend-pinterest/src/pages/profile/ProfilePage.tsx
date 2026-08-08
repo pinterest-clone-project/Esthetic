@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useLoading } from "@/context/LoadingContext";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -82,7 +83,8 @@ const ProfilePage = () => {
     }), [t]);
 
     const { data: me, isLoading } = useGetMeQuery();
-    const [editProfile, { isLoading: isSaving, error: rawError }] = useEditProfileMutation();
+    const [editProfile, { error: rawError }] = useEditProfileMutation();
+    const { withLoading } = useLoading();
     const { showToast } = useToast();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -196,7 +198,7 @@ const onSubmit = async (formValues: FormValues) => {
     if (Object.keys(patch).length === 0) return;
 
     try {
-        await editProfile(patch as Record<string, unknown>).unwrap();
+        await withLoading(() => editProfile(patch as Record<string, unknown>).unwrap());
         showToast(t('profile.toast.updated'), "success");
     } catch {
         showToast(t('profile.toast.failed'), "error");
@@ -500,9 +502,9 @@ if (isLoading) return <p>{t('actions.loading', 'Loading...')}</p>;
                         <input {...register("isPrivate")} type="checkbox" className="accent-[#1DB954] w-4 h-4" />
                         <span className="text-sm text-[#A1A1A1]">{t('profile.private')}</span>
                     </label>
-                    <button type="submit" disabled={isSaving}
+                    <button type="submit"
                             className="px-10 py-3 rounded-xl bg-[#1DB954] text-black font-semibold text-base hover:bg-[#1aa34a] disabled:opacity-50 transition">
-                        {isSaving ? t('preview.saving', { ns: 'boards' }) : t('actions.save')}
+                        {t('actions.save')}
                     </button>
                 </div>
 
