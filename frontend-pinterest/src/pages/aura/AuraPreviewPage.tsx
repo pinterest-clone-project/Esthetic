@@ -191,9 +191,9 @@ const AuraPreviewPage = () => {
                             ) : (
                                 <button
                                     onClick={handleSaveClick}
-                                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-400 hover:bg-red-500 dark:bg-red-500 dark:hover:bg-red-600 text-black text-xs font-semibold transition-all duration-150 shadow-[0_0_12px_rgba(74,222,128,0.25)] hover:shadow-[0_0_18px_rgba(74,222,128,0.4)]"
+                                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#2a2a2a] hover:bg-[#333] border border-white/10 text-gray-300 text-xs font-semibold transition-all duration-150"
                                 >
-                                    <TrashIcon/>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
                                     {t('preview.unsave')}
                                 </button>
                             )

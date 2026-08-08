@@ -87,7 +87,7 @@ const CollectionsPage = () => {
             <button
                 onClick={(e) => { e.stopPropagation(); if (isArchived) handleUnarchive(mb.id); else handleArchive(mb.id); }}
                 title={isArchived ? tb('moodboard.unarchive') : tb('moodboard.archive')}
-                className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 rounded-lg bg-black/40 text-white text-[10px] font-medium opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/60"
+                className={`absolute top-2 right-2 flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-medium opacity-0 group-hover:opacity-100 transition-opacity ${isArchived ? "bg-amber-500/80 hover:bg-amber-500 text-black" : "bg-black/40 hover:bg-black/60 text-white"}`}
             >
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>

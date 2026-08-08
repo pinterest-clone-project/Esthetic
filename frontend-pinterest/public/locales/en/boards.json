@@ -62,9 +62,13 @@
     "saveFailed": "Failed to save",
     "deleteTitle": "Delete this board?",
     "deleteDesc": "This action cannot be undone.",
+    "deleteSectionTitle": "Delete this section?",
+    "deleteSectionDesc": "Pins from the section will be moved to the board.",
     "privateBoard": "Private board",
     "noPins": "No pins yet",
     "noPinsDesc": "Save pins to this board to see them here",
+    "noSectionPins": "No pins in this section yet",
+    "noSectionPinsDesc": "Save a pin and choose this section to add it here",
     "addSection": "Add section",
     "sectionCreated": "Section created",
     "sections": "Sections"

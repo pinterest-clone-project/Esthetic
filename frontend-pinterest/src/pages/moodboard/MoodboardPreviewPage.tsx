@@ -259,7 +259,11 @@ const MoodboardPreviewPage: React.FC = () => {
                                             </button>
                                             <button
                                                 onClick={board.isArchived ? handleUnarchive : handleArchive}
-                                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white text-xs font-medium transition-all duration-150"
+                                                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition-all duration-150 ${
+                                                    board.isArchived
+                                                        ? "bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 hover:border-amber-400/60 text-amber-400 hover:text-amber-300"
+                                                        : "bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white"
+                                                }`}
                                             >
                                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                                     <polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
@@ -320,7 +324,7 @@ const MoodboardPreviewPage: React.FC = () => {
                                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                                                             {t('preview.addSection')}
                                                         </button>
-                                                        <button onClick={() => { board.isArchived ? handleUnarchive() : handleArchive(); setMobileMenuOpen(false); }} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                                                        <button onClick={() => { board.isArchived ? handleUnarchive() : handleArchive(); setMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${board.isArchived ? "text-amber-400 hover:bg-amber-500/10" : "text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5"}`}>
                                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
                                                             {board.isArchived ? t('moodboard.unarchive') : t('moodboard.archive')}
                                                         </button>
