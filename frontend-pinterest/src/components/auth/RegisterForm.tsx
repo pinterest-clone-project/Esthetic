@@ -49,7 +49,6 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
         }
     }).sort((a, b) => a!.localeCompare(b!, i18n.language)) as string[];
     const [showPassword, setShowPassword] = useState(false);
-    const [isGoogleLoading, setIsGoogleLoading] = useState(false);
     const [cropperSrc, setCropperSrc] = useState<string | null>(null);
 
     const { step, formData, imagePreview, setStep, updateField, setImagePreview, reset } =
@@ -152,15 +151,12 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
     const loginWithGoogle = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
-            setIsGoogleLoading(true);
             try {
-                const account = await loginByGoogle({ token: tokenResponse.access_token }).unwrap();
+                const account = await withLoading(() => loginByGoogle({ token: tokenResponse.access_token }).unwrap());
                 dispatch(setUser(account));
                 onSuccess?.();
             } catch (err) {
                 console.error("Google login failed", err);
-            } finally {
-                setIsGoogleLoading(false);
             }
         },
     });
@@ -271,14 +267,13 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
                             <Button
                                 type="button"
-                                disabled={isGoogleLoading}
                                 variant="primary"
                                 fullWidth
                                 radius={5}
                                 icon={<GoogleIcon />}
                                 onClick={() => loginWithGoogle()}
                             >
-                                {isGoogleLoading ? t('register.loading') : t('register.continueWithGoogle')}
+                                {t('register.continueWithGoogle')}
                             </Button>
                         </div>
 

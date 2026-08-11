@@ -248,8 +248,8 @@ const Header: React.FC = () => {
                                     </button>
                                 </div>
                                 {dropdownOpen && (
-                                    <div className="absolute right-0 top-12 bg-white dark:bg-[#1a1a1a] rounded-[10px] shadow-2xl w-48 py-2 z-50 border border-[#A1A1A1] dark:border-[#535353] animate-[dropdownIn_0.2s_ease]">
-                                        <div className="px-4 py-2 border-b border-[#A1A1A1] dark:border-[#535353] mb-1">
+                                    <div className="absolute right-0 top-12 bg-white dark:bg-[#1a1a1a] rounded-[10px] shadow-2xl w-48 z-50 border border-[#A1A1A1] dark:border-[#535353] animate-[dropdownIn_0.2s_ease] overflow-hidden">
+                                        <div className="px-4 py-2.5 border-b border-[#A1A1A1] dark:border-[#535353]">
                                             <p className="text-black dark:text-white text-sm font-medium">{user?.firstName}</p>
                                             <p className="text-[#A1A1A1] text-xs">{user?.email}</p>
                                         </div>
@@ -260,7 +260,7 @@ const Header: React.FC = () => {
                                                     setDropdownOpen(false);
                                                     navigate("/admin");
                                                 }}
-                                                className="w-full px-4 py-2 text-left text-sm text-black dark:text-white hover:bg-[#A1A1A1] dark:hover:bg-[#535353] transition flex items-center gap-2 cursor-pointer"
+                                                className="w-full px-4 py-3 text-left text-sm text-black dark:text-white hover:bg-[#D1D1D1] dark:hover:bg-[#535353] transition flex items-center gap-2 cursor-pointer"
                                             >
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                                                     <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z"/>
@@ -271,7 +271,7 @@ const Header: React.FC = () => {
 
                                         <button
                                             onClick={handleLogout}
-                                            className="w-full px-4 py-2 text-left text-sm text-red-700 dark:text-red-400 cursor-pointer hover:bg-[#A1A1A1] dark:hover:bg-[#535353] transition flex items-center gap-2"
+                                            className="w-full px-4 py-3 text-left text-sm text-red-700 dark:text-red-400 cursor-pointer hover:bg-[#D1D1D1] dark:hover:bg-[#535353] transition flex items-center gap-2"
                                         >
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>

@@ -5,6 +5,7 @@ import logo from "@/assets/logo.png";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { parseError } from "@/hooks/useApiError.ts";
 import { useTranslation } from "react-i18next";
+import { useLoading } from "@/context/LoadingContext";
 
 interface ForgotPasswordFormProps {
     onSuccess?: (email: string) => void;
@@ -16,7 +17,8 @@ const ForgotPasswordForm = ({ onSuccess, onBack }: ForgotPasswordFormProps) => {
     const [email, setEmail] = useState("");
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
+    const [forgotPassword] = useForgotPasswordMutation();
+    const { withLoading } = useLoading();
 
     const isFormValid = email.includes("@") && email.includes(".");
 
@@ -25,7 +27,7 @@ const ForgotPasswordForm = ({ onSuccess, onBack }: ForgotPasswordFormProps) => {
         setErrorMessage(null);
 
         try {
-            await forgotPassword({ email: email.trim() }).unwrap();
+            await withLoading(() => forgotPassword({ email: email.trim() }).unwrap());
             onSuccess?.(email.trim());
         } catch (err) {
             const apiError = parseError(err as FetchBaseQueryError);
@@ -65,12 +67,12 @@ const ForgotPasswordForm = ({ onSuccess, onBack }: ForgotPasswordFormProps) => {
 
                 <Button
                     type="submit"
-                    disabled={isLoading || !isFormValid}
+                    disabled={!isFormValid}
                     variant={isFormValid ? "primary" : "secondary"}
                     fullWidth
                     radius={5}
                 >
-                    {isLoading ? t('forgotPassword.sending') : t('forgotPassword.sendCode')}
+                    {t('forgotPassword.sendCode')}
                 </Button>
             </form>
 

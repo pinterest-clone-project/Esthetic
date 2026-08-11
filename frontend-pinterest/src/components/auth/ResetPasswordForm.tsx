@@ -9,6 +9,7 @@ import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { parseError } from "@/hooks/useApiError.ts";
 import { useTranslation } from "react-i18next";
 import { EyeIcon, EyeOffIcon } from "@/components/ui/Icons.tsx";
+import { useLoading } from "@/context/LoadingContext";
 
 type FormValues = {
     email: string;
@@ -28,7 +29,8 @@ const ResetPasswordForm = ({ email: initialEmail = "", onSuccess, onBack }: Rese
     const [serverError, setServerError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
 
-    const [resetPassword, { isLoading }] = useResetPasswordMutation();
+    const [resetPassword] = useResetPasswordMutation();
+    const { withLoading } = useLoading();
 
     const schema = z.object({
         email: z
@@ -69,11 +71,11 @@ const ResetPasswordForm = ({ email: initialEmail = "", onSuccess, onBack }: Rese
     const onSubmit = async (values: FormValues) => {
         setServerError(null);
         try {
-            await resetPassword({
+            await withLoading(() => resetPassword({
                 email:       values.email,
                 code:        values.code,
                 newPassword: values.password,
-            }).unwrap();
+            }).unwrap());
             setSuccess(true);
             setTimeout(() => onSuccess?.(), 1500);
         } catch (err) {
@@ -178,12 +180,11 @@ const ResetPasswordForm = ({ email: initialEmail = "", onSuccess, onBack }: Rese
 
                 <Button
                     type="submit"
-                    disabled={isLoading}
                     variant="primary"
                     fullWidth
                     radius={5}
                 >
-                    {isLoading ? t('resetPassword.saving') : t('resetPassword.submit')}
+                    {t('resetPassword.submit')}
                 </Button>
             </form>
 

@@ -352,6 +352,7 @@
     "blockedUsersDesc": "Manage who you've blocked",
     "archivedBoards": "Archived boards",
     "archivedBoardsDesc": "View your archived moodboards",
+    "adminDesc": "Manage site content",
     "recentlyDeleted": "Recently deleted",
     "recentlyDeletedDesc": "Auras deleted in the last 30 days",
     "logout": "Logout",
