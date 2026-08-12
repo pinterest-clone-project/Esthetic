@@ -473,13 +473,24 @@ if (isLoading) return <p>{t('actions.loading', 'Loading...')}</p>;
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">{t('profile.fields.gender')}</label>
-                        <select {...register("gender", { setValueAs: (v) => v === "" ? undefined : Number(v) })}
-                                className="w-full bg-white dark:bg-[#1a1a1a] border border-[#A1A1A1] dark:border-[#333] rounded-xl px-4 py-3 text-black dark:text-white text-base focus:outline-none focus:border-[#1DB954] transition">
-                            <option value="">{t('profile.gender.placeholder')}</option>
-                            <option value={0}>{t('profile.gender.female')}</option>
-                            <option value={1}>{t('profile.gender.male')}</option>
-                            <option value={2}>{t('profile.gender.other')}</option>
-                        </select>
+                        <Controller
+                            name="gender"
+                            control={control}
+                            render={({ field }) => (
+                                <ComboboxInput
+                                    value={field.value !== undefined ? String(field.value) : ""}
+                                    onChange={(val) => field.onChange(val === "" ? undefined : Number(val))}
+                                    options={[
+                                        { value: "0", label: t('profile.gender.female') },
+                                        { value: "1", label: t('profile.gender.male') },
+                                        { value: "2", label: t('profile.gender.other') },
+                                    ]}
+                                    placeholder={t('profile.gender.placeholder')}
+                                    searchable={false}
+                                    className="text-black dark:text-white bg-transparent border-[#A1A1A1] dark:border-[#333] rounded-xl h-[50px] px-4"
+                                />
+                            )}
+                        />
                     </div>
                     <div>
                         <label className="text-xs text-[#A1A1A1] mb-1.5 block">{t('profile.fields.birthDate')}</label>

@@ -12,6 +12,8 @@ import {clearUser} from "@/store/slices/authSlice.ts";
 import {useGetMeQuery} from "@/services/accountService.ts";
 import {api} from "@/services/api.ts";
 import {useAppDispatch} from "@/store";
+import { useAppSelector } from "@/store";
+import { selectIsAdmin } from "@/store/selectors/authSelectors";
 import type { IChat } from "@/types/chat/IChat";
 import {useGetChatsQuery, useGetOrCreateChatMutation} from "@/services/chatService.ts";
 import {useSearchUsersQuery} from "@/services/userService.ts";
@@ -123,6 +125,7 @@ const Sidebar = () => {
         { skip: debouncedSearch.trim().length < 2 }
     );
     const {data: me} = useGetMeQuery();
+    const isAdmin = useAppSelector(selectIsAdmin);
     const filteredSearchItems = searchResult?.items.filter((u) => u.id !== me?.id) ?? [];
     const [getOrCreateChat] = useGetOrCreateChatMutation();
 
@@ -339,6 +342,23 @@ const Sidebar = () => {
                         <p className="text-black dark:text-[#A1A1A1] text-xs">{t('sidebar.recentlyDeletedDesc')}</p>
                     </div>
                 </button>
+
+                {isAdmin && (
+                    <button
+                        onClick={() => { navigate('/admin'); closeModal(); }}
+                        className="flex items-center gap-3 w-full px-3 py-3 rounded-xl hover:bg-[#a1a1a1] dark:hover:bg-[#2a2a2a] transition-colors duration-150 group"
+                    >
+                        <div className="w-10 h-10 rounded-xl bg-[#d1d1d1] dark:bg-[#2a2a2a] dark:group-hover:bg-[#333] group-hover:bg-[#D1D1D1] flex items-center justify-center transition-colors shrink-0 text-black dark:text-white">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z"/>
+                            </svg>
+                        </div>
+                        <div className="text-left">
+                            <p className="text-black dark:text-white text-sm font-medium">{t('nav.admin')}</p>
+                            <p className="text-black dark:text-[#A1A1A1] text-xs">{t('settings.adminDesc')}</p>
+                        </div>
+                    </button>
+                )}
 
                 <div className="border-t border-black/10 dark:border-white/10 mt-1 pt-3 px-3 flex items-center justify-center gap-3">
                     <button onClick={() => { navigate('/news'); closeModal(); }} className="text-xs text-[#A1A1A1] hover:text-[#1DB954] transition-colors">{t('nav.news')}</button>

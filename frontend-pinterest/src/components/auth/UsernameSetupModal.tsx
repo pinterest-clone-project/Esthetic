@@ -4,13 +4,15 @@ import { useAppDispatch } from "@/store";
 import { setUser } from "@/store/slices/authSlice";
 import { useEditProfileMutation } from "@/services/accountService";
 import { useTranslation } from "react-i18next";
+import { useLoading } from "@/context/LoadingContext";
 
 const USERNAME_REGEX = /^[a-z0-9_]{3,30}$/i;
 
 export const UsernameSetupModal = () => {
     const { t } = useTranslation("common");
     const dispatch = useAppDispatch();
-    const [editProfile, { isLoading }] = useEditProfileMutation();
+    const [editProfile] = useEditProfileMutation();
+    const { withLoading } = useLoading();
     const [value, setValue] = useState("");
     const [error, setError] = useState<string | null>(null);
 
@@ -24,7 +26,7 @@ export const UsernameSetupModal = () => {
         const err = validate(value);
         if (err) { setError(err); return; }
         try {
-            const updated = await editProfile({ userName: value }).unwrap();
+            const updated = await withLoading(() => editProfile({ userName: value }).unwrap());
             dispatch(setUser(updated));
         } catch {
             setError(t("usernameSetup.errorTaken"));
@@ -59,10 +61,10 @@ export const UsernameSetupModal = () => {
 
                 <button
                     onClick={handleSave}
-                    disabled={isLoading || value.trim().length < 3}
+                    disabled={value.trim().length < 3}
                     className="w-full bg-[#1DB954] text-black font-semibold text-sm py-3 rounded-xl disabled:opacity-40 transition-opacity hover:brightness-95"
                 >
-                    {isLoading ? t("usernameSetup.saving") : t("usernameSetup.save")}
+                    {t("usernameSetup.save")}
                 </button>
             </div>
         </div>,
