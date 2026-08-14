@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import { useGetCommentsQuery, useCreateCommentMutation, useUpdateCommentMutation, useDeleteCommentMutation } from "../../services/commentService.ts";
+import { useGetCommentsQuery, useCreateCommentMutation, useUpdateCommentMutation, useDeleteCommentMutation, useToggleCommentReactionMutation } from "../../services/commentService.ts";
 import { useGetMeQuery } from "@/services/accountService.ts";
 import { useCommentRealtime } from "@/hooks/useCommentRealtime.ts";
 import { APP_ENV } from "@/constants/env";
 import {useNavigate} from "react-router";
 import { useTranslation } from "react-i18next";
+import { ReactionPicker } from "@/components/chat/ReactionPicker.tsx";
+import { MessageReactionBar } from "@/components/chat/MessageReactionBar.tsx";
 
 interface CommentsSectionProps {
     pinId: string;
@@ -16,6 +18,7 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
     const [createComment, { isLoading: isSubmitting }] = useCreateCommentMutation();
     const [updateComment, { isLoading: isUpdating }] = useUpdateCommentMutation();
     const [deleteComment] = useDeleteCommentMutation();
+    const [toggleReaction] = useToggleCommentReactionMutation();
     const { data: me } = useGetMeQuery();
 
     const navigate = useNavigate();
@@ -23,6 +26,7 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
     useCommentRealtime({ pinId });
 
     const [text, setText] = useState("");
+    const [picker, setPicker] = useState<{ id: string; el: HTMLElement } | null>(null);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editText, setEditText] = useState("");
     const [replyingTo, setReplyingTo] = useState<string | null>(null);
@@ -105,6 +109,14 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
 
         return (
             <div key={comment.id} className={`flex gap-2.5 items-start group ${isReply ? 'ml-9 mt-2' : ''}`}>
+                {picker?.id === comment.id && (
+                    <ReactionPicker
+                        anchorEl={picker!.el}
+                        isOwn={false}
+                        onSelect={(emoji) => toggleReaction({ commentId: comment.id, emoji, pinId })}
+                        onClose={() => setPicker(null)}
+                    />
+                )}
                 {/* Avatar */}
                 <button type="button" onClick={() => navigate(`/user/${comment.userId}`)} className="w-7 h-7 rounded-full bg-white/10 shrink-0 overflow-hidden mt-0.5 cursor-pointer">
                     {comment.userImage ? (
@@ -168,8 +180,21 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
                         </p>
                     )}
 
+                    <MessageReactionBar
+                        reactions={comment.reactions ?? []}
+                        currentUserEmoji={comment.myReaction ?? null}
+                        onToggle={(emoji) => toggleReaction({ commentId: comment.id, emoji, pinId })}
+                        isOwn={false}
+                    />
+
                     {/* Actions */}
-                    <div className="flex gap-3 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex gap-3 mt-1 items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                            onClick={(e) => setPicker(picker?.id === comment.id ? null : { id: comment.id, el: e.currentTarget })}
+                            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-sm leading-none transition-colors"
+                        >
+                            😊
+                        </button>
                         {!isReply && (
                             <button
                                 onClick={() => startReply(comment.id)}

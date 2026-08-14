@@ -6,4 +6,5 @@ namespace Application.UseCases.Comments.Queries;
 public record GetCommentsByPinQuery : IRequest<List<CommentResponseDTO>>
 {
     public Guid PinId { get; init; }
+    public Guid? CurrentUserId { get; init; }
 }

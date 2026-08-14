@@ -1,3 +1,5 @@
+import type { IReactionGroup } from "@/types/chat/IReactionGroup";
+
 export interface IComment {
     id: string;
     userId: string;
@@ -8,4 +10,6 @@ export interface IComment {
     userImage?: string;
     parentCommentId?: string;
     replies?: IComment[];
+    reactions: IReactionGroup[];
+    myReaction: string | null;
 }

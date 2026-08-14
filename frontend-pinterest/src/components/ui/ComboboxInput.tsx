@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 
 interface ComboboxOption {
     value: string;
@@ -11,8 +12,10 @@ interface ComboboxInputProps {
     options: string[] | ComboboxOption[];
     placeholder?: string;
     className?: string;
-    searchable?: boolean; // default true
+    searchable?: boolean;
 }
+
+const DROPDOWN_MAX_H = 192;
 
 const ComboboxInput = ({ value, onChange, options, placeholder, className, searchable = true }: ComboboxInputProps) => {
     const normalized: ComboboxOption[] = options.map((o) =>
@@ -21,7 +24,7 @@ const ComboboxInput = ({ value, onChange, options, placeholder, className, searc
 
     const [open, setOpen] = useState(false);
     const [query, setQuery] = useState(value);
-    const [openUpward, setOpenUpward] = useState(false);
+    const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
     const containerRef = useRef<HTMLDivElement>(null);
 
     const selectedLabel = normalized.find((o) => o.value === value)?.label ?? value;
@@ -45,11 +48,26 @@ const ComboboxInput = ({ value, onChange, options, placeholder, className, searc
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [value, selectedLabel]);
 
-    const checkDirection = () => {
-        if (containerRef.current) {
-            const rect = containerRef.current.getBoundingClientRect();
-            setOpenUpward(window.innerHeight - rect.bottom < 220);
-        }
+    const calcDropdownStyle = () => {
+        if (!containerRef.current) return;
+        const rect = containerRef.current.getBoundingClientRect();
+        const spaceBelow = window.innerHeight - rect.bottom;
+        const openUpward = spaceBelow < DROPDOWN_MAX_H + 8;
+
+        setDropdownStyle({
+            position: "fixed",
+            width: rect.width,
+            left: rect.left,
+            zIndex: 9999,
+            ...(openUpward
+                ? { bottom: window.innerHeight - rect.top + 4 }
+                : { top: rect.bottom + 4 }),
+        });
+    };
+
+    const openDropdown = () => {
+        calcDropdownStyle();
+        setOpen(true);
     };
 
     const handleSelect = (option: ComboboxOption) => {
@@ -57,6 +75,25 @@ const ComboboxInput = ({ value, onChange, options, placeholder, className, searc
         setQuery(option.label);
         setOpen(false);
     };
+
+    const dropdown = open && filtered.length > 0 && createPortal(
+        <ul
+            style={dropdownStyle}
+            className="rounded-[8px] border border-[var(--color-btn-primary)] shadow-xl overflow-auto max-h-48 bg-[#1a1a1a] dark:bg-white"
+        >
+            {filtered.map((option) => (
+                <li
+                    key={option.value}
+                    onMouseDown={() => handleSelect(option)}
+                    className={`px-4 py-2 text-sm cursor-pointer hover:bg-[var(--color-btn-primary)] hover:text-black transition
+                        ${option.value === value ? "bg-[var(--color-btn-primary)]/20 text-[var(--color-btn-primary)]" : "text-white dark:text-black"}`}
+                >
+                    {option.label}
+                </li>
+            ))}
+        </ul>,
+        document.body
+    );
 
     return (
         <div ref={containerRef} className="relative w-full">
@@ -68,16 +105,15 @@ const ComboboxInput = ({ value, onChange, options, placeholder, className, searc
                     onChange={(e) => {
                         setQuery(e.target.value);
                         onChange(e.target.value);
-                        checkDirection();
-                        setOpen(true);
+                        openDropdown();
                     }}
-                    onFocus={() => { if (query.trim()) { checkDirection(); setOpen(true); } }}
+                    onFocus={() => { if (query.trim()) openDropdown(); }}
                     className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none border border-[var(--color-btn-primary)] transition ${className ?? ""}`}
                 />
             ) : (
                 <button
                     type="button"
-                    onClick={() => { checkDirection(); setOpen((o) => !o); }}
+                    onClick={() => open ? setOpen(false) : openDropdown()}
                     className={`w-full h-10 px-4 rounded-[5px] text-sm outline-none border border-[var(--color-btn-primary)] transition flex items-center justify-between ${className ?? ""}`}
                 >
                     <span className={value ? "" : "opacity-40"}>{value ? selectedLabel : placeholder}</span>
@@ -88,20 +124,7 @@ const ComboboxInput = ({ value, onChange, options, placeholder, className, searc
                 </button>
             )}
 
-            {open && filtered.length > 0 && (
-                <ul className={`absolute z-50 w-full rounded-[8px] border border-[var(--color-btn-primary)] shadow-xl overflow-auto max-h-48 bg-[#1a1a1a] dark:bg-white ${openUpward ? "bottom-full mb-1" : "top-full mt-1"}`}>
-                    {filtered.map((option) => (
-                        <li
-                            key={option.value}
-                            onMouseDown={() => handleSelect(option)}
-                            className={`px-4 py-2 text-sm cursor-pointer hover:bg-[var(--color-btn-primary)] hover:text-black transition
-                                ${option.value === value ? "bg-[var(--color-btn-primary)]/20 text-[var(--color-btn-primary)]" : "text-white dark:text-black"}`}
-                        >
-                            {option.label}
-                        </li>
-                    ))}
-                </ul>
-            )}
+            {dropdown}
         </div>
     );
 };

@@ -19,4 +19,5 @@ public class CommentEntity : BaseEntity
     public Guid? ParentCommentId { get; set; }
     public CommentEntity? ParentComment { get; set; }
     public ICollection<CommentEntity> Replies { get; set; } = new List<CommentEntity>();
+    public ICollection<CommentReactionEntity> Reactions { get; set; } = new List<CommentReactionEntity>();
 }

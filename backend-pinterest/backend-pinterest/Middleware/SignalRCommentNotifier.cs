@@ -1,4 +1,5 @@
 using Application.Interfaces.Notifiers;
+using Application.Models.DTO.Chat;
 using Application.Models.DTO.Comment;
 using backend_pinterest.Hubs;
 using Microsoft.AspNetCore.SignalR;
@@ -15,4 +16,7 @@ public class SignalRCommentNotifier(IHubContext<CommentHub> hubContext) : IComme
 
     public Task NotifyDeletedAsync(Guid pinId, Guid commentId) =>
         hubContext.Clients.Group($"pin_{pinId}").SendAsync("CommentDeleted", commentId);
+
+    public Task NotifyReactionUpdatedAsync(Guid pinId, Guid commentId, IEnumerable<ReactionGroupDTO> reactions) =>
+        hubContext.Clients.Group($"pin_{pinId}").SendAsync("CommentReactionUpdated", new { commentId, reactions });
 }

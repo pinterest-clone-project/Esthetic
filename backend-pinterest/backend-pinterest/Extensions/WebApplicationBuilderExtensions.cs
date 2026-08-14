@@ -224,6 +224,7 @@ public static class WebApplicationBuilderExtensions
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<ILikeRepository, LikeRepository>();
         services.AddScoped<ICommentRepository, CommentRepository>();
+        services.AddScoped<ICommentReactionRepository, CommentReactionRepository>();
         services.AddScoped<IReportRepository, ReportRepository>();
         services.AddScoped<IUserBlockRepository, UserBlockRepository>();
         services.AddScoped<IBoardRepository, BoardRepository>();
