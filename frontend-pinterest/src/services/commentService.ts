@@ -43,8 +43,7 @@ export const commentService = api.injectEndpoints({
                 method: 'POST',
                 body: { emoji },
             }),
-            async onQueryStarted({ commentId, emoji, pinId }, { dispatch, queryFulfilled, getState }) {
-                // optimistic update
+            async onQueryStarted({ commentId, emoji, pinId }, { dispatch, queryFulfilled }) {
                 const patchResult = dispatch(
                     commentService.util.updateQueryData("getComments", pinId, (draft) => {
                         const updateComment = (comments: IComment[]) => {

@@ -111,7 +111,7 @@ const CommentsSection = ({ pinId }: CommentsSectionProps) => {
             <div key={comment.id} className={`flex gap-2.5 items-start group ${isReply ? 'ml-9 mt-2' : ''}`}>
                 {picker?.id === comment.id && (
                     <ReactionPicker
-                        anchorEl={picker.el}
+                        anchorEl={picker!.el}
                         isOwn={false}
                         onSelect={(emoji) => toggleReaction({ commentId: comment.id, emoji, pinId })}
                         onClose={() => setPicker(null)}
