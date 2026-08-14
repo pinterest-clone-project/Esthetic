@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260729203105_Add_MessageReaction_Entity")]
+    [Migration("20260811210828_Add_MessageReaction_Entity")]
     partial class Add_MessageReaction_Entity
     {
         /// <inheritdoc />
@@ -314,6 +314,31 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Comment.CommentReactionEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CommentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Emoji")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CommentReactions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Follow.FollowEntity", b =>
@@ -1087,6 +1112,25 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Comment.CommentReactionEntity", b =>
+                {
+                    b.HasOne("Domain.Entities.Comment.CommentEntity", "Comment")
+                        .WithMany("Reactions")
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Identity.UserEntity", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Entities.Follow.FollowEntity", b =>
                 {
                     b.HasOne("Domain.Entities.Identity.UserEntity", "Followee")
@@ -1368,6 +1412,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Comment.CommentEntity", b =>
                 {
+                    b.Navigation("Reactions");
+
                     b.Navigation("Replies");
                 });
 

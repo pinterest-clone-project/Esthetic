@@ -52,8 +52,17 @@ public class CommentsController(IMediator mediator) : ControllerBase
     [HttpGet("getComments/{pinId}")]
     public async Task<IActionResult> GetComments([FromRoute] Guid pinId)
     {
-        var query = new GetCommentsByPinQuery { PinId = pinId };
+        var currentUserId = Guid.TryParse(User.FindFirstValue(JwtClaims.Id), out var id) ? id : (Guid?)null;
+        var query = new GetCommentsByPinQuery { PinId = pinId, CurrentUserId = currentUserId };
         var result = await mediator.Send(query);
         return Ok(result);
+    }
+
+    [Authorize]
+    [HttpPost("{commentId}/reactions")]
+    public async Task<IActionResult> ToggleReaction([FromRoute] Guid commentId, [FromBody] ToggleCommentReactionCommand body)
+    {
+        var command = body with { CommentId = commentId, UserId = CurrentUserId };
+        return Ok(await mediator.Send(command));
     }
 }

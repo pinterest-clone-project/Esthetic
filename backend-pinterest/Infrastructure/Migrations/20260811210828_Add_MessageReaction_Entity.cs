@@ -12,40 +12,39 @@ namespace Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "MessageReactions",
+                name: "CommentReactions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    MessageId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CommentId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Emoji = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false)
+                    Emoji = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MessageReactions", x => x.Id);
+                    table.PrimaryKey("PK_CommentReactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MessageReactions_AspNetUsers_UserId",
+                        name: "FK_CommentReactions_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MessageReactions_Messages_MessageId",
-                        column: x => x.MessageId,
-                        principalTable: "Messages",
+                        name: "FK_CommentReactions_Comments_CommentId",
+                        column: x => x.CommentId,
+                        principalTable: "Comments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_MessageReactions_MessageId_UserId",
-                table: "MessageReactions",
-                columns: new[] { "MessageId", "UserId" },
-                unique: true);
+                name: "IX_CommentReactions_CommentId",
+                table: "CommentReactions",
+                column: "CommentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MessageReactions_UserId",
-                table: "MessageReactions",
+                name: "IX_CommentReactions_UserId",
+                table: "CommentReactions",
                 column: "UserId");
         }
 
@@ -53,7 +52,7 @@ namespace Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "MessageReactions");
+                name: "CommentReactions");
         }
     }
 }

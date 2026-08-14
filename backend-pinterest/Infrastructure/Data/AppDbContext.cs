@@ -41,6 +41,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid,
     public DbSet<PinTagEntity> PinTags { get; set; }
     public DbSet<LikeEntity> Likes { get; set; }
     public DbSet<CommentEntity> Comments { get; set; }
+    public DbSet<CommentReactionEntity> CommentReactions { get; set; }
     public DbSet<ReportEntity> Reports { get; set; }
     public DbSet<UserBlockEntity> UserBlocks { get; set; }
     public DbSet<BoardEntity> Boards { get; set; }

@@ -14,5 +14,8 @@ public partial class CommentMapper
     [MapProperty(nameof(CommentEntity.User.UserName), nameof(CommentResponseDTO.Username))]
     [MapProperty(nameof(CommentEntity.User.Image), nameof(CommentResponseDTO.UserImage))]
     [MapProperty(nameof(CommentEntity.ParentCommentId), nameof(CommentResponseDTO.ParentCommentId))]
+    [MapperIgnoreTarget(nameof(CommentResponseDTO.Reactions))]
+    [MapperIgnoreTarget(nameof(CommentResponseDTO.MyReaction))]
+    [MapperIgnoreTarget(nameof(CommentResponseDTO.Replies))]
     public partial CommentResponseDTO ToResponseDto(CommentEntity src);
 }
