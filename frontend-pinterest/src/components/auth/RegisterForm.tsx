@@ -55,8 +55,8 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
         useRegisterFormStore();
 
     const genderMap: Record<"Male" | "Female" | "Other", number> = {
-        Male: 0,
-        Female: 1,
+        Female: 0,
+        Male: 1,
         Other: 2,
     };
 
